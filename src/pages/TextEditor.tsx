@@ -8,19 +8,6 @@ import MemoryMatches from "@/components/ui/MemoryMatches";
 
 export type TranslationMemoryMatch = TranslationMatch & { id: number };
 
-// const sampleMemoryMatches = [
-//   {
-//     sourceText: "Op negentien december tweeduizend tweeëntwintig",
-//     targetText: "On the nineteenth of December two thousand and twenty-two",
-//     similarity: 102,
-//   },
-//   {
-//     sourceText: "VERKLARING VAN ERFRECHT",
-//     targetText: "DECLARATION OF INHERITANCE",
-//     similarity: 95,
-//   },
-// ];
-
 export default function TextEditor() {
   const [segments, setSegments] = useState<DocumentSegment[]>(documentSegments);
   const [matches, setMatches] = useState<TranslationMemoryMatch[]>([]);
