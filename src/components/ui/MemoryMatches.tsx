@@ -1,20 +1,18 @@
-import { TranslationMemoryMatch } from "@/pages/TextEditor";
+import { TranslationMemoryMatches } from "@/types";
 import { MemoryMatch } from "./MemoryMatch";
 
 type MemoryMatchesProps = {
   activeSegment: number;
-  matches: TranslationMemoryMatch[];
+  matches: TranslationMemoryMatches;
 };
 export default function MemoryMatches({
   activeSegment,
   matches,
 }: MemoryMatchesProps) {
-  const currentMatches = matches.filter(
-    (matchResult) => matchResult.id === activeSegment
-  )[0];
+  const currentMatches = matches[activeSegment];
 
   if (!currentMatches || currentMatches.matches.length === 0) {
-    return null;
+    return <p>Loading...</p>;
   }
 
   return (

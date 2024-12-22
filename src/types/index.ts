@@ -17,3 +17,5 @@ export type DocumentSegment = {
   target: string;
   completed: boolean;
 };
+
+export type TranslationMemoryMatches = Record<number, TranslationMatch>;

@@ -1,3 +1,5 @@
+import { convertToPercent } from "@/utils/helpers";
+
 interface MemoryMatchProps {
   sourceText: string;
   targetText: string;
@@ -9,11 +11,13 @@ export function MemoryMatch({
   targetText,
   similarityScore,
 }: MemoryMatchProps) {
+  const score = convertToPercent(similarityScore);
+
   return (
     <div className="rounded-lg border border-gray-100 bg-cat-memory p-4 animate-fade-in">
       <div className="mb-2 flex items-center justify-between">
         <span className="text-xs font-medium text-cat-accent">
-          {similarityScore}% Match
+          {score}% Match
         </span>
       </div>
       <div className="space-y-2 text-sm">
