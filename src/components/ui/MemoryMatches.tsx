@@ -13,6 +13,10 @@ export default function MemoryMatches({
     (matchResult) => matchResult.id === activeSegment
   )[0];
 
+  if (!currentMatches || currentMatches.matches.length === 0) {
+    return null;
+  }
+
   return (
     <>
       {currentMatches.matches.map((match, index) => (

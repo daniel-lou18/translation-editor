@@ -1,34 +1,17 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { TranslationSegment } from "@/components/ui/TranslationSegment";
 import { documentSegments } from "@/utils/sampleData";
 import Header from "@/components/ui/Header";
-import { getMatches } from "@/services/translationMemoryService";
 import { DocumentSegment, TranslationMatch } from "@/types";
 import MemoryMatches from "@/components/ui/MemoryMatches";
+import { useMatches } from "@/hooks/useMatches";
 
 export type TranslationMemoryMatch = TranslationMatch & { id: number };
 
 export default function TextEditor() {
   const [segments, setSegments] = useState<DocumentSegment[]>(documentSegments);
-  const [matches, setMatches] = useState<TranslationMemoryMatch[]>([]);
   const [activeSegment, setActiveSegment] = useState(1);
-
-  useEffect(() => {
-    async function fetchMatches() {
-      const currentSegments = segments.slice(0, 10);
-      const results = await getMatches({
-        searchTerms: currentSegments.map((segment) => segment.source),
-      });
-      const matches = results.map((result, idx) => ({
-        ...result,
-        id: currentSegments[idx].id,
-      }));
-      console.log(results);
-      setMatches(matches);
-    }
-
-    fetchMatches();
-  }, [segments]);
+  const { data: matches } = useMatches(segments);
 
   const handleTargetChange = (id: number, value: string) => {
     setSegments(
@@ -68,7 +51,7 @@ export default function TextEditor() {
                 Translation Memory
               </h2>
               <div className="space-y-3">
-                {matches.length > 0 ? (
+                {matches && matches.length > 0 ? (
                   <MemoryMatches
                     activeSegment={activeSegment}
                     matches={matches}
