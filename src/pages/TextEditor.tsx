@@ -1,12 +1,11 @@
-import { useEffect, useState } from "react";
-import { TranslationSegment } from "@/components/ui/TranslationSegment";
+import { useState } from "react";
 import { documentSegments } from "@/utils/sampleData";
 import Header from "@/components/ui/Header";
 import { DocumentSegment } from "@/types";
 import MemoryMatches from "@/components/ui/MemoryMatches";
 import { useMatches } from "@/hooks/useMatches";
-import { getTranslation } from "@/services/translationService";
-import { createTranslationPrompt } from "@/utils/prompts";
+import TranslationSegments from "@/components/ui/TranslationSegments";
+import { useAutoTranslation } from "@/hooks/useAutoTranslation";
 
 export default function TextEditor() {
   const [segments, setSegments] = useState<DocumentSegment[]>(documentSegments);
@@ -17,17 +16,8 @@ export default function TextEditor() {
     progress: { processedSegments, totalSegments, percentage },
   } = useMatches(segments);
 
-  async function fetchTranslation() {
-    const currentSourceText = segments[activeSegment - 1].source;
-    const currentMatches = matches[activeSegment];
-    const translationPrompt = createTranslationPrompt(
-      currentSourceText,
-      currentMatches
-    );
-
-    const result = await getTranslation(translationPrompt);
-    console.log(result);
-  }
+  const { data: autoTranslation, isPending: isTranslating } =
+    useAutoTranslation(activeSegment, segments, matches);
 
   const handleTargetChange = (id: number, value: string) => {
     setSegments(
@@ -35,7 +25,9 @@ export default function TextEditor() {
     );
   };
 
-  const handleSegmentChange = (id: number) => setActiveSegment(id);
+  const handleSegmentChange = async (id: number) => {
+    setActiveSegment(id);
+  };
 
   return (
     <div className="min-h-screen bg-white">
@@ -49,23 +41,14 @@ export default function TextEditor() {
         >{`Processing ${processedSegments} of ${totalSegments} segments (${percentage} %)`}</p>
 
         <div className="grid grid-cols-12 gap-6 relative overflow-visible">
-          <div className="col-span-8 rounded-xl border border-gray-100 bg-white shadow-sm">
-            <div className="divide-y divide-gray-100">
-              {segments.map((segment) => (
-                <TranslationSegment
-                  key={segment.id}
-                  id={segment.id}
-                  source={segment.source}
-                  target={segment.target}
-                  isCompleted={segment.completed}
-                  onTargetChange={(value) =>
-                    handleTargetChange(segment.id, value)
-                  }
-                  onClick={() => handleSegmentChange(segment.id)}
-                />
-              ))}
-            </div>
-          </div>
+          <TranslationSegments
+            segments={segments}
+            handleTargetChange={handleTargetChange}
+            handleSegmentChange={handleSegmentChange}
+            activeSegmentId={activeSegment}
+            autoTranslation={autoTranslation || null}
+            isLoading={isTranslating}
+          />
 
           <div className="col-span-4 space-y-4 sticky top-8 min-h-screen h-fit">
             <div className="rounded-xl border border-gray-100 bg-white p-4 shadow-sm">

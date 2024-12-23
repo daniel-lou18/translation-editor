@@ -6,6 +6,7 @@ interface TranslationSegmentProps {
   source: string;
   target: string;
   isCompleted?: boolean;
+  autoTranslation: string | null;
   onTargetChange: (value: string) => void;
   onClick: () => void;
 }
@@ -15,6 +16,7 @@ export function TranslationSegment({
   source,
   target,
   isCompleted = false,
+  autoTranslation,
   onTargetChange,
   onClick,
 }: TranslationSegmentProps) {
@@ -36,7 +38,7 @@ export function TranslationSegment({
             "focus:ring-2 focus:ring-cat-accent/20 segment-transition",
             "min-h-[80px] resize-none"
           )}
-          placeholder="Enter translation..."
+          placeholder={autoTranslation || "Enter translation..."}
         />
       </div>
       <div className="w-12 flex justify-center pt-3">

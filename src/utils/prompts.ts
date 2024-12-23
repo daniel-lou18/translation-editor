@@ -1,9 +1,13 @@
 import { TranslationMatch } from "@/types";
 
 export function createTranslationPrompt(
-  segment: string,
+  segment: string | null,
   examples: TranslationMatch
 ) {
+  if (!segment) {
+    throw new Error("Source segment is missing");
+  }
+
   let examplesString = "";
 
   examples.matches.forEach((match) => {
