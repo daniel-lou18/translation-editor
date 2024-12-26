@@ -1,13 +1,16 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import TextEditor from "./pages/TextEditor";
+import EditorContextProvider from "./contexts/editorContext";
 
 const queryClient = new QueryClient();
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <TextEditor />
-    </QueryClientProvider>
+    <EditorContextProvider>
+      <QueryClientProvider client={queryClient}>
+        <TextEditor />
+      </QueryClientProvider>
+    </EditorContextProvider>
   );
 }
 

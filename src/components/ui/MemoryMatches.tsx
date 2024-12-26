@@ -2,14 +2,14 @@ import { TranslationMemoryMatches } from "@/types";
 import { MemoryMatch } from "./MemoryMatch";
 
 type MemoryMatchesProps = {
-  activeSegment: number;
+  activeSegmentId: number;
   matches: TranslationMemoryMatches;
 };
 export default function MemoryMatches({
-  activeSegment,
+  activeSegmentId,
   matches,
 }: MemoryMatchesProps) {
-  const currentMatches = matches[activeSegment];
+  const currentMatches = matches[activeSegmentId];
 
   if (!currentMatches || currentMatches.matches.length === 0) {
     return <p>Loading...</p>;

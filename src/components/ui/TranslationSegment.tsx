@@ -1,25 +1,33 @@
 import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useCallback, useRef } from "react";
+import { useAutoFill } from "@/hooks/useAutoFill";
+import { DocumentSegment } from "@/types";
 
 interface TranslationSegmentProps {
-  id: number;
-  source: string;
-  target: string;
+  data: DocumentSegment;
   isCompleted?: boolean;
   autoTranslation: string | null;
   onTargetChange: (value: string) => void;
   onClick: () => void;
+  onTab: (id: number) => void;
 }
 
 export function TranslationSegment({
-  id,
-  source,
-  target,
+  data,
   isCompleted = false,
   autoTranslation,
   onTargetChange,
+  onTab,
   onClick,
 }: TranslationSegmentProps) {
+  const { id, source, target } = data;
+  const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
+  useAutoFill(
+    textAreaRef,
+    useCallback(() => onTab(id), [onTab, id])
+  );
+
   return (
     <div className="group flex items-start gap-4 p-4 hover:bg-gray-50 segment-transition">
       <div className="w-12 pt-3">
@@ -30,6 +38,7 @@ export function TranslationSegment({
       </div>
       <div className="flex-1">
         <textarea
+          ref={textAreaRef}
           value={target}
           onChange={(e) => onTargetChange(e.target.value)}
           onClick={onClick}

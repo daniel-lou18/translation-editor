@@ -21,7 +21,7 @@ export function useAutoTranslation(
       currentSourceText,
       currentMatches
     );
-    console.log(translationPrompt);
+
     const result = await getTranslation(translationPrompt);
     return result
       .trim()

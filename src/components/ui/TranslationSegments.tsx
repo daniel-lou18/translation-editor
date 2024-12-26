@@ -1,42 +1,42 @@
-import { DocumentSegment } from "@/types";
+import { useEditor } from "@/contexts/editorContext";
 import { TranslationSegment } from "./TranslationSegment";
+import { useIsFetching } from "@tanstack/react-query";
 
 type TranslationSegmentsProps = {
-  segments: DocumentSegment[];
-  handleTargetChange: (id: number, value: string) => void;
-  handleSegmentChange: (id: number) => void;
-  activeSegmentId: number;
   autoTranslation: string | null;
-  isLoading: boolean;
 };
 
 export default function TranslationSegments({
-  segments,
-  handleTargetChange,
-  handleSegmentChange,
-  activeSegmentId,
   autoTranslation,
-  isLoading,
 }: TranslationSegmentsProps) {
+  const { segments, activeSegmentId, handleValueChange, handleSegmentChange } =
+    useEditor();
+  const isLoading = useIsFetching({ queryKey: ["auto-translation"] }) > 0;
+
+  const renderAutoTranslation = (id: number) =>
+    activeSegmentId === id
+      ? isLoading
+        ? "Loading translation..."
+        : autoTranslation
+      : null;
+
+  const handleTab = (id: number) => {
+    if (!autoTranslation) return;
+    handleValueChange(id, autoTranslation);
+  };
+
   return (
     <div className="col-span-8 rounded-xl border border-gray-100 bg-white shadow-sm">
       <div className="divide-y divide-gray-100">
         {segments.map((segment) => (
           <TranslationSegment
             key={segment.id}
-            id={segment.id}
-            source={segment.source}
-            target={segment.target}
+            data={segment}
             isCompleted={segment.completed}
-            onTargetChange={(value) => handleTargetChange(segment.id, value)}
+            onTargetChange={(value) => handleValueChange(segment.id, value)}
             onClick={() => handleSegmentChange(segment.id)}
-            autoTranslation={
-              activeSegmentId === segment.id
-                ? isLoading
-                  ? "Loading translation..."
-                  : autoTranslation
-                : null
-            }
+            onTab={handleTab}
+            autoTranslation={renderAutoTranslation(segment.id)}
           />
         ))}
       </div>

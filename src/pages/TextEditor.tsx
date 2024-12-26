@@ -1,33 +1,23 @@
-import { useState } from "react";
-import { documentSegments } from "@/utils/sampleData";
 import Header from "@/components/ui/Header";
-import { DocumentSegment } from "@/types";
 import MemoryMatches from "@/components/ui/MemoryMatches";
 import { useMatches } from "@/hooks/useMatches";
 import TranslationSegments from "@/components/ui/TranslationSegments";
 import { useAutoTranslation } from "@/hooks/useAutoTranslation";
+import { useEditor } from "@/contexts/editorContext";
 
 export default function TextEditor() {
-  const [segments, setSegments] = useState<DocumentSegment[]>(documentSegments);
-  const [activeSegment, setActiveSegment] = useState(1);
+  const { segments, activeSegmentId } = useEditor();
   const {
     data: matches,
     isPending,
     progress: { processedSegments, totalSegments, percentage },
   } = useMatches(segments);
 
-  const { data: autoTranslation, isPending: isTranslating } =
-    useAutoTranslation(activeSegment, segments, matches);
-
-  const handleTargetChange = (id: number, value: string) => {
-    setSegments(
-      segments.map((seg) => (seg.id === id ? { ...seg, target: value } : seg))
-    );
-  };
-
-  const handleSegmentChange = async (id: number) => {
-    setActiveSegment(id);
-  };
+  const { data: autoTranslation } = useAutoTranslation(
+    activeSegmentId,
+    segments,
+    matches
+  );
 
   return (
     <div className="min-h-screen bg-white">
@@ -41,14 +31,7 @@ export default function TextEditor() {
         >{`Processing ${processedSegments} of ${totalSegments} segments (${percentage} %)`}</p>
 
         <div className="grid grid-cols-12 gap-6 relative overflow-visible">
-          <TranslationSegments
-            segments={segments}
-            handleTargetChange={handleTargetChange}
-            handleSegmentChange={handleSegmentChange}
-            activeSegmentId={activeSegment}
-            autoTranslation={autoTranslation || null}
-            isLoading={isTranslating}
-          />
+          <TranslationSegments autoTranslation={autoTranslation || null} />
 
           <div className="col-span-4 space-y-4 sticky top-8 min-h-screen h-fit">
             <div className="rounded-xl border border-gray-100 bg-white p-4 shadow-sm">
@@ -58,7 +41,7 @@ export default function TextEditor() {
               <div className="space-y-3">
                 {Object.keys(matches).length > 0 ? (
                   <MemoryMatches
-                    activeSegment={activeSegment}
+                    activeSegmentId={activeSegmentId}
                     matches={matches}
                   />
                 ) : null}
