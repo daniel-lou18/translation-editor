@@ -20,7 +20,7 @@ export default function MemoryMatches({
   }
 
   return (
-    <div className="col-span-4 space-y-4 sticky top-8 min-h-screen h-fit">
+    <div className="col-span-3 space-y-4 sticky top-8 min-h-screen h-fit">
       <div className="rounded-xl border border-gray-100 bg-white p-4 shadow-sm">
         <h2 className="mb-4 text-sm font-medium text-gray-900">
           Translation Memory

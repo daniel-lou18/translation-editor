@@ -16,6 +16,7 @@ type InitialState = {
 type Handlers = {
   handleSegmentChange: (id: number) => void;
   handleValueChange: (id: number, value: string) => void;
+  handleStatusChange: (id: number) => void;
 };
 
 type ContextValue = InitialState & Handlers;
@@ -31,6 +32,10 @@ type Action =
         id: number;
         value: string;
       };
+    }
+  | {
+      type: "UPDATE_STATUS";
+      payload: number;
     };
 
 const initialState = {
@@ -53,6 +58,15 @@ function reducer(state: InitialState, action: Action): InitialState {
             : segment
         ),
       };
+    case "UPDATE_STATUS":
+      return {
+        ...state,
+        segments: state.segments.map((segment) =>
+          segment.id === action.payload
+            ? { ...segment, completed: !segment.completed }
+            : segment
+        ),
+      };
     default:
       throw new Error(`Unhandled action type`);
   }
@@ -72,6 +86,10 @@ export default function EditorContextProvider({ children }: PropsWithChildren) {
     handleValueChange: useCallback(
       (id: number, value: string) =>
         dispatch({ type: "UPDATE_SEGMENTS", payload: { id, value } }),
+      []
+    ),
+    handleStatusChange: useCallback(
+      (id: number) => dispatch({ type: "UPDATE_STATUS", payload: id }),
       []
     ),
   };

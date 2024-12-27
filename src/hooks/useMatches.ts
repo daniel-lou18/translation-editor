@@ -29,7 +29,6 @@ export function useMatches(segments: DocumentSegment[]) {
     const currentMatches = Object.fromEntries(
       currentSegments.map((segment, idx) => [segment.id, results[idx]])
     );
-    console.log(currentMatches);
 
     setMatches((prevMatches) => ({
       ...prevMatches,

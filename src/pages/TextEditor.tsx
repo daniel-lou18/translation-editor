@@ -8,6 +8,7 @@ import Container from "@/components/ui/Container";
 
 export default function TextEditor() {
   const { segments } = useEditor();
+  console.log({ segments });
   const {
     data: matches,
     isPending,

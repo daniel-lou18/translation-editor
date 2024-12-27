@@ -2,6 +2,7 @@ import { useEditor } from "@/contexts/editorContext";
 import { TranslationSegment } from "./TranslationSegment";
 import { TranslationMemoryMatches } from "@/types";
 import { useAutoTranslation } from "@/hooks/useAutoTranslation";
+import Container from "./Container";
 
 type TranslationSegmentsProps = {
   matches: TranslationMemoryMatches;
@@ -10,8 +11,13 @@ type TranslationSegmentsProps = {
 export default function TranslationSegments({
   matches,
 }: TranslationSegmentsProps) {
-  const { segments, activeSegmentId, handleValueChange, handleSegmentChange } =
-    useEditor();
+  const {
+    segments,
+    activeSegmentId,
+    handleValueChange,
+    handleSegmentChange,
+    handleStatusChange,
+  } = useEditor();
   const { data: autoTranslation, isPending: isLoading } = useAutoTranslation(
     activeSegmentId,
     segments,
@@ -31,20 +37,19 @@ export default function TranslationSegments({
   };
 
   return (
-    <div className="col-span-8 rounded-xl border border-gray-100 bg-white shadow-sm">
-      <div className="divide-y divide-gray-100">
-        {segments.map((segment) => (
-          <TranslationSegment
-            key={segment.id}
-            data={segment}
-            isCompleted={segment.completed}
-            onTargetChange={(value) => handleValueChange(segment.id, value)}
-            onClick={() => handleSegmentChange(segment.id)}
-            onTab={handleTab}
-            autoTranslation={renderAutoTranslation(segment.id)}
-          />
-        ))}
-      </div>
-    </div>
+    <Container className="col-span-9 rounded-xl border border-gray-100 bg-white shadow-sm divide-y divide-gray-100">
+      {segments.map((segment) => (
+        <TranslationSegment
+          key={segment.id}
+          data={segment}
+          onTargetChange={(value) => handleValueChange(segment.id, value)}
+          onClick={() => handleSegmentChange(segment.id)}
+          onTab={() => handleTab(segment.id)}
+          onStatusChange={() => handleStatusChange(segment.id)}
+          autoTranslation={renderAutoTranslation(segment.id)}
+          active={activeSegmentId === segment.id}
+        />
+      ))}
+    </Container>
   );
 }

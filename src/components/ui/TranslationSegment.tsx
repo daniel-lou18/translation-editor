@@ -1,58 +1,74 @@
-import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useCallback, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { useAutoFill } from "@/hooks/useAutoFill";
 import { DocumentSegment } from "@/types";
+import TranslationStatus from "./TranslationStatus";
+import Container from "./Container";
 
 interface TranslationSegmentProps {
   data: DocumentSegment;
-  isCompleted?: boolean;
   autoTranslation: string | null;
   onTargetChange: (value: string) => void;
   onClick: () => void;
-  onTab: (id: number) => void;
+  onTab: () => void;
+  onStatusChange: () => void;
+  active: boolean;
 }
 
 export function TranslationSegment({
   data,
-  isCompleted = false,
   autoTranslation,
   onTargetChange,
   onTab,
   onClick,
+  onStatusChange,
+  active,
 }: TranslationSegmentProps) {
-  const { id, source, target } = data;
+  const { id, source, target, completed } = data;
+
+  const sourceDiv = useRef<HTMLDivElement | null>(null);
   const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
-  useAutoFill(
-    textAreaRef,
-    useCallback(() => onTab(id), [onTab, id])
-  );
+  useAutoFill(textAreaRef, useCallback(onTab, [onTab]));
+
+  // Function to auto-resize the textarea based on content
+  const handleInput = () => {
+    if (textAreaRef.current) {
+      textAreaRef.current.style.height = "auto";
+      textAreaRef.current.style.height = `${textAreaRef.current.scrollHeight}px`;
+    }
+  };
+
+  useEffect(() => {
+    if (sourceDiv.current && textAreaRef.current) {
+      textAreaRef.current.style.height = `${sourceDiv.current.scrollHeight}px`;
+    }
+  }, []);
 
   return (
-    <div className="group flex items-start gap-4 p-4 hover:bg-gray-50 segment-transition">
-      <div className="w-12 pt-3">
-        <span className="text-xs font-medium text-gray-400">{id}</span>
+    <Container
+      className={`min-h-0 group flex items-stretch gap-4 px-4 py-2 ${
+        active ? "bg-cat-memory/80" : ""
+      } hover:bg-gray-50 segment-transition`}
+    >
+      <div ref={sourceDiv} className="w-12 pt-2 font-medium text-gray-400">
+        {id}
       </div>
-      <div className="flex-1">
-        <div className="rounded-lg bg-cat-source p-3 text-sm">{source}</div>
-      </div>
-      <div className="flex-1">
-        <textarea
-          ref={textAreaRef}
-          value={target}
-          onChange={(e) => onTargetChange(e.target.value)}
-          onClick={onClick}
-          className={cn(
-            "w-full rounded-lg bg-cat-target p-3 text-sm outline-none ring-offset-2",
-            "focus:ring-2 focus:ring-cat-accent/20 segment-transition",
-            "min-h-[80px] resize-none"
-          )}
-          placeholder={autoTranslation || "Enter translation..."}
-        />
-      </div>
-      <div className="w-12 flex justify-center pt-3">
-        {isCompleted && <Check className="h-4 w-4 text-green-500" />}
-      </div>
-    </div>
+      <Container className="flex-1 rounded-lg p-2 text-sm">{source}</Container>
+      <textarea
+        ref={textAreaRef}
+        value={target}
+        onChange={(e) => onTargetChange(e.target.value)}
+        onClick={onClick}
+        onInput={handleInput}
+        className={cn(
+          "flex-1 h-fit rounded-lg bg-cat-target p-2 text-sm outline-none ring-offset-2",
+          "focus:ring-2 focus:ring-cat-accent/20 segment-transition",
+          "resize-none"
+        )}
+        placeholder={autoTranslation || "Enter translation..."}
+        rows={1}
+      />
+      <TranslationStatus isCompleted={completed} onClick={onStatusChange} />
+    </Container>
   );
 }
