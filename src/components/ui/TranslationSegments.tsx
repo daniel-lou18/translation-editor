@@ -1,24 +1,29 @@
 import { useEditor } from "@/contexts/editorContext";
 import { TranslationSegment } from "./TranslationSegment";
-import { useIsFetching } from "@tanstack/react-query";
+import { TranslationMemoryMatches } from "@/types";
+import { useAutoTranslation } from "@/hooks/useAutoTranslation";
 
 type TranslationSegmentsProps = {
-  autoTranslation: string | null;
+  matches: TranslationMemoryMatches;
 };
 
 export default function TranslationSegments({
-  autoTranslation,
+  matches,
 }: TranslationSegmentsProps) {
   const { segments, activeSegmentId, handleValueChange, handleSegmentChange } =
     useEditor();
-  const isLoading = useIsFetching({ queryKey: ["auto-translation"] }) > 0;
+  const { data: autoTranslation, isPending: isLoading } = useAutoTranslation(
+    activeSegmentId,
+    segments,
+    matches
+  );
 
-  const renderAutoTranslation = (id: number) =>
-    activeSegmentId === id
-      ? isLoading
-        ? "Loading translation..."
-        : autoTranslation
-      : null;
+  const renderAutoTranslation = (id: number) => {
+    if (activeSegmentId !== id) return null;
+    if (isLoading) return "Loading translation...";
+    if (!autoTranslation) return null;
+    return autoTranslation;
+  };
 
   const handleTab = (id: number) => {
     if (!autoTranslation) return;
