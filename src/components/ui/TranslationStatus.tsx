@@ -12,7 +12,7 @@ export default function TranslationStatus({
   return (
     <button
       onClick={onClick}
-      className="w-7 h-7 self-center flex items-center justify-center rounded-md border border-border hover:border-cat-accent/50"
+      className="w-7 h-7 self-center flex items-center justify-center rounded-md border border-border hover:border-2 hover:border-cat-accent/20 group-focus-within:border-2 group-focus-within:border-cat-accent/50"
     >
       {isCompleted && <Check className="h-5 w-5 text-green-500" />}
     </button>

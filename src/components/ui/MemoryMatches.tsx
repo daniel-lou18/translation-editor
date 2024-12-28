@@ -1,36 +1,50 @@
 import { TranslationMemoryMatches } from "@/types";
 import { MemoryMatch } from "./MemoryMatch";
 import { useEditor } from "@/contexts/editorContext";
+import ProgressBar from "./ProgressBar";
+import Container from "./Container";
 
 type MemoryMatchesProps = {
   matches: TranslationMemoryMatches;
   isLoading: boolean;
+  progress: {
+    totalSegments: number;
+    processedSegments: number;
+    percentage: number;
+  };
 };
 export default function MemoryMatches({
   matches,
   isLoading,
+  progress,
 }: MemoryMatchesProps) {
   const { activeSegmentId } = useEditor();
+  const { processedSegments, totalSegments, percentage } = progress;
 
-  if (Object.keys(matches).length === 0) return null;
-
-  const currentMatches = matches[activeSegmentId];
-  if (isLoading || !currentMatches || currentMatches.matches.length === 0) {
-    return <p>Loading...</p>;
-  }
+  const currentMatches = matches?.[activeSegmentId];
 
   return (
-    <div className="col-span-3 space-y-4 sticky top-8 min-h-screen h-fit">
-      <div className="rounded-xl border border-gray-100 bg-white p-4 shadow-sm">
+    <Container className="col-span-3 space-y-4 sticky top-8 min-h-screen h-fit">
+      <Container className="rounded-xl border border-gray-100 bg-white p-4 shadow-sm">
         <h2 className="mb-4 text-sm font-medium text-gray-900">
           Translation Memory
         </h2>
-        <div className="space-y-3">
-          {currentMatches.matches.map((match, index) => (
-            <MemoryMatch key={index} {...match} />
-          ))}
-        </div>
-      </div>
-    </div>
+        <Container className="space-y-3">
+          {isLoading ||
+          !currentMatches ||
+          currentMatches.matches.length === 0 ? (
+            <ProgressBar
+              processedSegments={processedSegments}
+              totalSegments={totalSegments}
+              percentage={percentage}
+            />
+          ) : (
+            currentMatches.matches.map((match, index) => (
+              <MemoryMatch key={index} {...match} />
+            ))
+          )}
+        </Container>
+      </Container>
+    </Container>
   );
 }

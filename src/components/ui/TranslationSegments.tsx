@@ -17,10 +17,11 @@ export default function TranslationSegments({
     handleValueChange,
     handleSegmentChange,
     handleStatusChange,
+    getActiveSegment,
   } = useEditor();
+  const activeSegment = getActiveSegment();
   const { data: autoTranslations, isPending: isLoading } = useAutoTranslation(
-    activeSegmentId,
-    segments,
+    activeSegment,
     matches
   );
   const autoTranslation = autoTranslations?.[activeSegmentId];

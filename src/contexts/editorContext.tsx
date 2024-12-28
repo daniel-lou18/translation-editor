@@ -17,6 +17,7 @@ type Handlers = {
   handleSegmentChange: (id: number) => void;
   handleValueChange: (id: number, value: string) => void;
   handleStatusChange: (id: number) => void;
+  getActiveSegment: () => DocumentSegment;
 };
 
 type ContextValue = InitialState & Handlers;
@@ -92,6 +93,8 @@ export default function EditorContextProvider({ children }: PropsWithChildren) {
       (id: number) => dispatch({ type: "UPDATE_STATUS", payload: id }),
       []
     ),
+    getActiveSegment: () =>
+      segments.find((segment) => segment.id === activeSegmentId) || segments[0],
   };
 
   return (

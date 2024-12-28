@@ -1,13 +1,13 @@
 import { getMatches } from "@/services/translationMemoryService";
 import { DocumentSegment, TranslationMemoryMatches } from "@/types";
 import { calculateProgress } from "@/utils/helpers";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 
 export function useMatches(segments: DocumentSegment[]) {
+  const queryClient = useQueryClient();
   const batchSize = 10;
   const [currentBatchIndex, setCurrentBatchIndex] = useState(0);
-  const [matches, setMatches] = useState<TranslationMemoryMatches>({});
 
   const progress = calculateProgress(segments, currentBatchIndex, batchSize);
 
@@ -30,10 +30,13 @@ export function useMatches(segments: DocumentSegment[]) {
       currentSegments.map((segment, idx) => [segment.id, results[idx]])
     );
 
-    setMatches((prevMatches) => ({
-      ...prevMatches,
-      ...currentMatches,
-    }));
+    queryClient.setQueryData(
+      ["matches"],
+      (prevMatches: TranslationMemoryMatches) => ({
+        ...prevMatches,
+        ...currentMatches,
+      })
+    );
 
     if (endIndex < segments.length) {
       setCurrentBatchIndex((prevIdx) => prevIdx + 1);
@@ -42,5 +45,8 @@ export function useMatches(segments: DocumentSegment[]) {
     return currentMatches;
   }
 
-  return { isPending, isError, data: matches, error, progress };
+  const allMatches =
+    queryClient.getQueryData<TranslationMemoryMatches>(["matches"]) || {};
+
+  return { isPending, isError, data: allMatches, error, progress };
 }
