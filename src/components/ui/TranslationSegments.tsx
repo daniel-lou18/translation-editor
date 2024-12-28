@@ -20,16 +20,16 @@ export default function TranslationSegments({
     getActiveSegment,
   } = useEditor();
   const activeSegment = getActiveSegment();
+  const activeMatches = matches?.[activeSegmentId];
   const { data: autoTranslations, isPending: isLoading } = useAutoTranslation(
     activeSegment,
-    matches
+    activeMatches
   );
   const autoTranslation = autoTranslations?.[activeSegmentId];
 
   const renderAutoTranslation = (id: number) => {
-    if (activeSegmentId !== id) return null;
+    if (activeSegmentId !== id || !autoTranslation) return null;
     if (isLoading) return "Loading translation...";
-    if (!autoTranslation) return null;
     return autoTranslation;
   };
 

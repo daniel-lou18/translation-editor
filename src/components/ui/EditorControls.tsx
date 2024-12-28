@@ -3,14 +3,19 @@ import { Button } from "./button";
 import Container from "./Container";
 import { useEditor } from "@/contexts/editorContext";
 import { useQueryClient } from "@tanstack/react-query";
+import { TranslationMemoryMatches } from "@/types";
 
 export default function EditorControls() {
-  const { segments } = useEditor();
+  const { getActiveSegment } = useEditor();
   const queryClient = useQueryClient();
 
-  console.log(queryClient.getQueriesData({ queryKey: ["matches"] }));
-
-  function getTranslation() {}
+  function getTranslation() {
+    const allMatches = queryClient.getQueryData<TranslationMemoryMatches>([
+      "matches",
+    ]);
+    const segment = getActiveSegment();
+    const segmentMatches = allMatches?.[segment.id];
+  }
 
   return (
     <Container className="flex w-full mb-2">

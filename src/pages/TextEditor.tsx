@@ -9,7 +9,6 @@ import ProjectControls from "@/components/ui/ProjectControls";
 export default function TextEditor() {
   const { segments } = useEditor();
   const { data: matches, isPending, progress } = useMatches(segments);
-  // console.log({ segments });
 
   return (
     <Container className="min-h-screen bg-gray-50/50">

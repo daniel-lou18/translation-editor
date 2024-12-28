@@ -2,23 +2,31 @@ import { TranslationMatch } from "@/types";
 
 export function createTranslationPrompt(
   segment: string | null,
-  examples: TranslationMatch
+  examples: TranslationMatch,
+  partialTargetText?: string
 ) {
   if (!segment) {
     throw new Error("Source segment is missing");
   }
 
   let examplesString = "";
-
   examples.matches.forEach((match) => {
     examplesString += `
     Dutch (Source):
     ${match.sourceText}
 
-    French(Target):
+    French (Target):
     ${match.targetText}
     `;
   });
+
+  let partialTargetString = null;
+  if (partialTargetText) {
+    partialTargetString = `
+    Partial French translation (Target):
+    ${partialTargetText}
+    `;
+  }
 
   return `
   Below are some key instructions for translating legal texts:
@@ -35,5 +43,7 @@ export function createTranslationPrompt(
 
   Dutch (Source):
   ${segment}
+
+  ${partialTargetString}
   `;
 }
