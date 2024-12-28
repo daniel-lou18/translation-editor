@@ -19,3 +19,5 @@ export type DocumentSegment = {
 };
 
 export type TranslationMemoryMatches = Record<number, TranslationMatch>;
+
+export type Translations = Record<number, string>;

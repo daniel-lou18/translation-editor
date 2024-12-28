@@ -42,7 +42,7 @@ export function TranslationSegment({
 
   return (
     <Container
-      className={`min-h-0 group flex items-stretch gap-4 px-4 py-2 focus-within:bg-indigo-50/70 hover:bg-gray-100 segment-transition`}
+      className={`min-h-0 group flex items-stretch gap-4 px-4 py-2 focus-within:bg-cat-accent/10 hover:bg-gray-100 segment-transition`}
     >
       <div ref={sourceDiv} className="w-12 pt-2 font-medium text-gray-400">
         {id}
