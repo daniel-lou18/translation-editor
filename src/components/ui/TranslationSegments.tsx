@@ -47,7 +47,6 @@ export default function TranslationSegments({
           onTab={() => handleTab(segment.id)}
           onStatusChange={() => handleStatusChange(segment.id)}
           autoTranslation={renderAutoTranslation(segment.id)}
-          active={activeSegmentId === segment.id}
         />
       ))}
     </Container>

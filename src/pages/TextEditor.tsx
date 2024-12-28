@@ -16,7 +16,7 @@ export default function TextEditor() {
   } = useMatches(segments);
 
   return (
-    <Container className="min-h-screen bg-white">
+    <Container className="min-h-screen bg-gray-50/50">
       <Container className="mx-auto max-w-[1600px] p-6">
         <Header />
         <ProgressBar

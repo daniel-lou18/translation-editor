@@ -1,4 +1,3 @@
-import { cn } from "@/lib/utils";
 import { useCallback, useEffect, useRef } from "react";
 import { useAutoFill } from "@/hooks/useAutoFill";
 import { DocumentSegment } from "@/types";
@@ -12,7 +11,6 @@ interface TranslationSegmentProps {
   onClick: () => void;
   onTab: () => void;
   onStatusChange: () => void;
-  active: boolean;
 }
 
 export function TranslationSegment({
@@ -22,7 +20,6 @@ export function TranslationSegment({
   onTab,
   onClick,
   onStatusChange,
-  active,
 }: TranslationSegmentProps) {
   const { id, source, target, completed } = data;
 
@@ -30,7 +27,6 @@ export function TranslationSegment({
   const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
   useAutoFill(textAreaRef, useCallback(onTab, [onTab]));
 
-  // Function to auto-resize the textarea based on content
   const handleInput = () => {
     if (textAreaRef.current) {
       textAreaRef.current.style.height = "auto";
@@ -46,9 +42,7 @@ export function TranslationSegment({
 
   return (
     <Container
-      className={`min-h-0 group flex items-stretch gap-4 px-4 py-2 ${
-        active ? "bg-cat-memory/80" : ""
-      } hover:bg-gray-50 segment-transition`}
+      className={`min-h-0 group flex items-stretch gap-4 px-4 py-2 focus-within:bg-indigo-50/70 hover:bg-gray-100 segment-transition`}
     >
       <div ref={sourceDiv} className="w-12 pt-2 font-medium text-gray-400">
         {id}
@@ -60,12 +54,8 @@ export function TranslationSegment({
         onChange={(e) => onTargetChange(e.target.value)}
         onClick={onClick}
         onInput={handleInput}
-        className={cn(
-          "flex-1 h-fit rounded-lg bg-cat-target p-2 text-sm outline-none ring-offset-2",
-          "focus:ring-2 focus:ring-cat-accent/20 segment-transition",
-          "resize-none"
-        )}
-        placeholder={autoTranslation || "Enter translation..."}
+        className={`flex-1 h-fit rounded-lg p-2 text-sm outline-none -outline-offset-2 focus:outline-2 focus:outline-cat-accent/50 hover:bg-background focus:bg-background segment-transition resize-none bg-cat-memory/30`}
+        placeholder={autoTranslation || ""}
         rows={1}
       />
       <TranslationStatus isCompleted={completed} onClick={onStatusChange} />
