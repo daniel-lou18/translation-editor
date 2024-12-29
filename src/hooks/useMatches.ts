@@ -8,13 +8,15 @@ export function useMatches(segments: DocumentSegment[]) {
   const queryClient = useQueryClient();
   const batchSize = 10;
   const [currentBatchIndex, setCurrentBatchIndex] = useState(0);
+  const [allBatchesProcessed, setAllBatchesProcessed] = useState(false);
 
   const progress = calculateProgress(segments, currentBatchIndex, batchSize);
 
   const { isPending, isError, error } = useQuery({
     queryKey: ["matches", currentBatchIndex, segments.length],
     queryFn: fetchNextBatch,
-    enabled: currentBatchIndex * batchSize < segments.length,
+    enabled:
+      !allBatchesProcessed && currentBatchIndex * batchSize < segments.length,
   });
 
   async function fetchNextBatch() {
@@ -40,6 +42,9 @@ export function useMatches(segments: DocumentSegment[]) {
 
     if (endIndex < segments.length) {
       setCurrentBatchIndex((prevIdx) => prevIdx + 1);
+    } else {
+      setAllBatchesProcessed(true);
+      setCurrentBatchIndex(0);
     }
 
     return currentMatches;

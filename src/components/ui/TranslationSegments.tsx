@@ -28,7 +28,7 @@ export default function TranslationSegments({
   const autoTranslation = autoTranslations?.[activeSegmentId];
 
   const renderAutoTranslation = (id: number) => {
-    if (activeSegmentId !== id || !autoTranslation) return null;
+    if (activeSegmentId !== id || (!autoTranslation && !isLoading)) return null;
     if (isLoading) return "Loading translation...";
     return autoTranslation;
   };

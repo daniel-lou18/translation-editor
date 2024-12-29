@@ -22,6 +22,7 @@ export default function MemoryMatches({
   const { processedSegments, totalSegments, percentage } = progress;
 
   const currentMatches = matches?.[activeSegmentId];
+  console.log(matches);
 
   return (
     <Container className="col-span-3 space-y-4 sticky top-8 min-h-screen h-fit">
