@@ -30,7 +30,7 @@ export default function TranslationSegments({
   const renderAutoTranslation = (id: number) => {
     if (activeSegmentId !== id || (!autoTranslation && !isLoading)) return null;
     if (isLoading) return "Loading translation...";
-    return autoTranslation;
+    return autoTranslation || null;
   };
 
   const handleTab = (id: number) => {

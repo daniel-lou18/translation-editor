@@ -1,6 +1,5 @@
 import { getTranslation } from "@/services/translationService";
 import { DocumentSegment, TranslationMatch, Translations } from "@/types";
-import { createTranslationPrompt } from "@/utils/prompts";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 export function useAutoTranslation(
@@ -32,17 +31,14 @@ export function useAutoTranslation(
         return cachedTranslation;
       }
 
-      const translationPrompt = createTranslationPrompt(sourceText, matches);
-      const result = await getTranslation(translationPrompt);
+      if (!sourceText || matches.matches.length === 0) {
+        throw new Error("Source text and/or matches are missing");
+      }
 
-      const parsedResult = result
-        .trim()
-        .replace("French", "")
-        .trim()
-        .replace("(Target):", "")
-        .trim();
+      const result = await getTranslation(sourceText, matches);
+      console.log(result);
 
-      return { [id]: parsedResult };
+      return { [id]: result.trim() };
     } catch (error) {
       console.error("Failed to fetch translation", error);
       throw new Error(

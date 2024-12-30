@@ -2,11 +2,10 @@ import { TranslationMatch } from "@/types";
 
 export function createTranslationPrompt(
   segment: string | null,
-  examples: TranslationMatch,
-  partialTargetText?: string
+  examples: TranslationMatch | null
 ) {
-  if (!segment) {
-    throw new Error("Source segment is missing");
+  if (!segment || !examples) {
+    throw new Error("Source segment or examples is/are missing");
   }
 
   let examplesString = "";
@@ -20,21 +19,12 @@ export function createTranslationPrompt(
     `;
   });
 
-  let partialTargetString = null;
-  if (partialTargetText) {
-    partialTargetString = `
-    Partial French translation (Target):
-    ${partialTargetText}
-    `;
-  }
-
   return `
   Below are some key instructions for translating legal texts:
-
-  Use the exact legal terminology from the examples provided.
-  For fixed expressions and terms that have legal equivalents in the target language (French in this case), use the same translations provided in the examples.
-  If a term in the new sentence corresponds to one in the examples, use the same term from the example translation, even if a more general translation exists.
-  Ensure that the translation follows the same formal, legal tone and structure as the examples.
+  - Use the exact legal terminology from the examples provided.
+  - For fixed expressions and terms that have legal equivalents in the target language (French in this case), use the same translations provided in the examples.
+  - If a term in the new sentence corresponds to one in the examples, use the same term from the example translation, even if a more general translation exists.
+  - Ensure that the translation follows the same formal, legal tone and structure as the examples.
 
   Examples:
   ${examplesString}
@@ -44,6 +34,7 @@ export function createTranslationPrompt(
   Dutch (Source):
   ${segment}
 
-  ${partialTargetString}
+
+  French (Target):
   `;
 }

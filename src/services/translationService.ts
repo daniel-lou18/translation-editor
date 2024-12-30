@@ -1,3 +1,4 @@
+import { TranslationMatch } from "@/types";
 import axios, { AxiosResponse } from "axios";
 
 const API_BASE_URL = "http://localhost:3000/api";
@@ -8,12 +9,13 @@ type ApiResponse = {
 };
 
 export async function getTranslation(
-  translationPrompt: string
+  sourceSegment: string,
+  examples: TranslationMatch
 ): Promise<string> {
   try {
     const result: AxiosResponse<ApiResponse> = await axios.post(
       `${API_BASE_URL}/translations/translate`,
-      { translationPrompt },
+      { sourceSegment, examples },
       {
         headers: {
           "Content-Type": "application/json",

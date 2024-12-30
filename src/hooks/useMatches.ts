@@ -8,15 +8,18 @@ export function useMatches(segments: DocumentSegment[]) {
   const queryClient = useQueryClient();
   const batchSize = 10;
   const [currentBatchIndex, setCurrentBatchIndex] = useState(0);
-  const [allBatchesProcessed, setAllBatchesProcessed] = useState(false);
 
   const progress = calculateProgress(segments, currentBatchIndex, batchSize);
 
   const { isPending, isError, error } = useQuery({
-    queryKey: ["matches", currentBatchIndex, segments.length],
+    queryKey: ["matches", currentBatchIndex],
     queryFn: fetchNextBatch,
     enabled:
-      !allBatchesProcessed && currentBatchIndex * batchSize < segments.length,
+      currentBatchIndex * batchSize < segments.length && segments.length > 0,
+    staleTime: Infinity,
+    gcTime: Infinity,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
   });
 
   async function fetchNextBatch() {
@@ -32,26 +35,26 @@ export function useMatches(segments: DocumentSegment[]) {
       currentSegments.map((segment, idx) => [segment.id, results[idx]])
     );
 
-    queryClient.setQueryData(
-      ["matches"],
-      (prevMatches: TranslationMemoryMatches) => ({
-        ...prevMatches,
-        ...currentMatches,
-      })
-    );
+    const prevMatches =
+      currentBatchIndex > 0
+        ? queryClient.getQueryData<TranslationMemoryMatches>([
+            "matches",
+            currentBatchIndex - 1,
+          ])
+        : {};
 
     if (endIndex < segments.length) {
       setCurrentBatchIndex((prevIdx) => prevIdx + 1);
-    } else {
-      setAllBatchesProcessed(true);
-      setCurrentBatchIndex(0);
     }
 
-    return currentMatches;
+    return { ...prevMatches, ...currentMatches };
   }
 
   const allMatches =
-    queryClient.getQueryData<TranslationMemoryMatches>(["matches"]) || {};
+    queryClient.getQueryData<TranslationMemoryMatches>([
+      "matches",
+      currentBatchIndex,
+    ]) || {};
 
   return { isPending, isError, data: allMatches, error, progress };
 }
