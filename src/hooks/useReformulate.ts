@@ -11,6 +11,11 @@ export function useReformulate(
 
   const { data, error, isPending, isError, mutate } = useMutation({
     mutationFn: () => fetchReformulation(id, translatedText, examples),
+    onSuccess: (data) =>
+      queryClient.setQueryData<Translations>(["reformulation"], (prevData) => ({
+        ...prevData,
+        ...data,
+      })),
   });
 
   async function fetchReformulation(
@@ -19,12 +24,12 @@ export function useReformulate(
     examples: string[]
   ) {
     try {
-      const cachedReformulation = queryClient.getQueryData<Translations>([
+      const cachedReformulations = queryClient.getQueryData<Translations>([
         "reformulation",
-        id,
       ]);
-      if (cachedReformulation?.[id]) {
-        return cachedReformulation;
+      console.log({ cachedReformulations });
+      if (cachedReformulations?.[id]) {
+        return { [id]: cachedReformulations?.[id] };
       }
 
       if (!translatedText) {
@@ -32,9 +37,10 @@ export function useReformulate(
       }
 
       const result = await getReformulation(translatedText, examples);
-      console.log(result);
+      const record = { [id]: result.trim() };
+      console.log({ record });
 
-      return { [id]: result.trim() };
+      return record;
     } catch (error) {
       console.error("Failed to fetch translation", error);
       throw new Error(

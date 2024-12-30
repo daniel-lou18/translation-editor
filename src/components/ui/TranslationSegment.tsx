@@ -42,7 +42,7 @@ export function TranslationSegment({
 
   return (
     <Container
-      className={`min-h-0 group flex items-stretch gap-4 px-4 py-2 focus-within:bg-cat-accent/10 hover:bg-gray-100 segment-transition`}
+      className={`min-h-0 group flex items-stretch gap-4 px-4 py-2 focus-within:bg-cat-accent/10 hover:bg-gray-100 transition-all duration-300 ease-in-out`}
     >
       <div ref={sourceDiv} className="w-12 pt-2 font-medium text-gray-400">
         {id}
@@ -54,7 +54,7 @@ export function TranslationSegment({
         onChange={(e) => onTargetChange(e.target.value)}
         onClick={onClick}
         onInput={handleInput}
-        className={`flex-1 h-fit rounded-lg p-2 text-sm outline-none -outline-offset-2 focus:outline-2 focus:outline-cat-accent/50 hover:bg-background focus:bg-background segment-transition resize-none bg-cat-memory/30`}
+        className={`flex-1 h-fit rounded-lg p-2 text-sm outline-none -outline-offset-2 focus:outline-2 focus:outline-cat-accent/50 hover:bg-background focus:bg-background transition-all resize-none bg-cat-memory/30`}
         placeholder={autoTranslation || ""}
         rows={1}
       />

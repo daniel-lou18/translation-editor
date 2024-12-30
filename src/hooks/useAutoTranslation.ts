@@ -36,7 +36,6 @@ export function useAutoTranslation(
       }
 
       const result = await getTranslation(sourceText, matches);
-      console.log(result);
 
       return { [id]: result.trim() };
     } catch (error) {

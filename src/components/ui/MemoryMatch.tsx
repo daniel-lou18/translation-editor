@@ -1,29 +1,37 @@
 import { convertToPercent } from "@/utils/helpers";
+import Container from "./Container";
+import { Bot } from "lucide-react";
 
 interface MemoryMatchProps {
-  sourceText: string;
-  targetText: string;
-  similarityScore: number;
+  match: { sourceText: string; targetText: string; similarityScore: number };
+  onClick: () => void;
+  variant: "tm" | "ai";
 }
 
 export function MemoryMatch({
-  sourceText,
-  targetText,
-  similarityScore,
+  match,
+  onClick,
+  variant = "tm",
 }: MemoryMatchProps) {
+  const { sourceText, targetText, similarityScore } = match;
   const score = convertToPercent(similarityScore);
 
   return (
-    <div className="rounded-lg border border-gray-100 bg-cat-memory p-4 animate-fade-in">
-      <div className="mb-2 flex items-center justify-between">
-        <span className="text-xs font-medium text-cat-accent">
-          {score}% Match
+    <Container
+      role="button"
+      className="rounded-lg border border-gray-100 bg-cat-memory hover:bg-cat-accent/20 p-4 animate-fade-in transition-all"
+      onClick={onClick}
+    >
+      <Container className="mb-2 flex items-center justify-between text-xs">
+        <span className="font-medium text-cat-accent">{score}% Match</span>
+        <span className="font-medium text-cat-accent">
+          {variant === "tm" ? "TM" : <Bot size={18} />}
         </span>
-      </div>
-      <div className="space-y-2 text-sm">
+      </Container>
+      <Container className="space-y-2 text-sm">
         <p className="text-gray-600">{sourceText}</p>
         <p className="font-medium">{targetText}</p>
-      </div>
-    </div>
+      </Container>
+    </Container>
   );
 }

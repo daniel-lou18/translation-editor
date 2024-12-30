@@ -11,12 +11,14 @@ import {
 type InitialState = {
   segments: DocumentSegment[];
   activeSegmentId: number;
+  allSegmentsConfirmed: boolean;
 };
 
 type Handlers = {
   handleSegmentChange: (id: number) => void;
   handleValueChange: (id: number, value: string) => void;
   handleStatusChange: (id: number) => void;
+  handleStatusChangeAll: () => void;
   getActiveSegment: () => DocumentSegment;
 };
 
@@ -37,11 +39,13 @@ type Action =
   | {
       type: "UPDATE_STATUS";
       payload: number;
-    };
+    }
+  | { type: "UPDATE_STATUS_ALL" };
 
-const initialState = {
+const initialState: InitialState = {
   segments: documentSegments,
   activeSegmentId: 1,
+  allSegmentsConfirmed: false,
 };
 
 const EditorContext = createContext<ContextValue | null>(null);
@@ -68,16 +72,23 @@ function reducer(state: InitialState, action: Action): InitialState {
             : segment
         ),
       };
+    case "UPDATE_STATUS_ALL":
+      return {
+        ...state,
+        segments: state.segments.map((segment) => ({
+          ...segment,
+          completed: !state.allSegmentsConfirmed,
+        })),
+        allSegmentsConfirmed: !state.allSegmentsConfirmed,
+      };
     default:
       throw new Error(`Unhandled action type`);
   }
 }
 
 export default function EditorContextProvider({ children }: PropsWithChildren) {
-  const [{ segments, activeSegmentId }, dispatch] = useReducer(
-    reducer,
-    initialState
-  );
+  const [{ segments, activeSegmentId, allSegmentsConfirmed }, dispatch] =
+    useReducer(reducer, initialState);
 
   const handlers = {
     handleSegmentChange: useCallback(
@@ -93,6 +104,11 @@ export default function EditorContextProvider({ children }: PropsWithChildren) {
       (id: number) => dispatch({ type: "UPDATE_STATUS", payload: id }),
       []
     ),
+    handleStatusChangeAll: useCallback(
+      () => dispatch({ type: "UPDATE_STATUS_ALL" }),
+      []
+    ),
+
     getActiveSegment: () =>
       segments.find((segment) => segment.id === activeSegmentId) || segments[0],
   };
@@ -102,6 +118,7 @@ export default function EditorContextProvider({ children }: PropsWithChildren) {
       value={{
         segments,
         activeSegmentId,
+        allSegmentsConfirmed,
         ...handlers,
       }}
     >

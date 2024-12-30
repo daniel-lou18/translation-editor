@@ -1,4 +1,9 @@
-import { FileSearch, Languages } from "lucide-react";
+import {
+  FileCheck,
+  FileSearch,
+  SquareCheckBig,
+  WandSparkles,
+} from "lucide-react";
 import { Button } from "./button";
 import Container from "./Container";
 import { useEditor } from "@/contexts/editorContext";
@@ -7,7 +12,12 @@ import { useQueryClient } from "@tanstack/react-query";
 import { TranslationMemoryMatches } from "@/types";
 
 export default function EditorControls() {
-  const { activeSegmentId, getActiveSegment } = useEditor();
+  const {
+    activeSegmentId,
+    getActiveSegment,
+    handleStatusChange,
+    handleStatusChangeAll,
+  } = useEditor();
   const segment = getActiveSegment();
   const queryClient = useQueryClient();
   const matches = queryClient.getQueryData<TranslationMemoryMatches>([
@@ -24,19 +34,31 @@ export default function EditorControls() {
     targetTexts
   );
 
-  function getTranslation() {
-    mutate();
-  }
-
   return (
     <Container className="flex w-full mb-2">
       <Button
         variant="ghost"
         size="icon"
         className="border border-transparent hover:border-cat-accent/10"
-        onClick={getTranslation}
+        onClick={() => handleStatusChange(activeSegmentId)}
       >
-        <Languages />
+        <SquareCheckBig />
+      </Button>
+      <Button
+        variant="ghost"
+        size="icon"
+        className="border border-transparent hover:border-cat-accent/10"
+        onClick={handleStatusChangeAll}
+      >
+        <FileCheck />
+      </Button>
+      <Button
+        variant="ghost"
+        size="icon"
+        className="border border-transparent hover:border-cat-accent/10"
+        onClick={() => mutate()}
+      >
+        <WandSparkles />
       </Button>
       <Button
         variant="ghost"
