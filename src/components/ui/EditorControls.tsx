@@ -2,19 +2,27 @@ import { FileSearch, Languages } from "lucide-react";
 import { Button } from "./button";
 import Container from "./Container";
 import { useEditor } from "@/contexts/editorContext";
+import { useReformulate } from "@/hooks/useReformulate";
 import { useQueryClient } from "@tanstack/react-query";
 import { TranslationMemoryMatches } from "@/types";
-import { usePartialTranslation } from "@/hooks/usePartialTranslation";
 
 export default function EditorControls() {
-  const { getActiveSegment } = useEditor();
-  const queryClient = useQueryClient();
+  const { activeSegmentId, getActiveSegment } = useEditor();
   const segment = getActiveSegment();
-  const allMatches = queryClient.getQueryData<TranslationMemoryMatches>([
-    "matches",
+  const queryClient = useQueryClient();
+  const matches = queryClient.getQueryData<TranslationMemoryMatches>([
+    "allMatches",
   ]);
-  const segmentMatches = allMatches?.[segment.id];
-  const { mutate } = usePartialTranslation(segment, segmentMatches || null);
+  const currentMatches = matches?.[activeSegmentId]?.matches;
+  const targetTexts = currentMatches
+    ? currentMatches.map((match) => match.targetText)
+    : [];
+
+  const { mutate } = useReformulate(
+    activeSegmentId,
+    segment.target,
+    targetTexts
+  );
 
   function getTranslation() {
     mutate();

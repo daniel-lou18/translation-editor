@@ -56,5 +56,17 @@ export function useMatches(segments: DocumentSegment[]) {
       currentBatchIndex,
     ]) || {};
 
+  // Set all the matches with a separate, easily accessible key that does not require a batch index to retrieve
+  queryClient.setQueryDefaults(["allMatches"], {
+    staleTime: Infinity,
+    gcTime: Infinity,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+  });
+  queryClient.setQueryData<TranslationMemoryMatches>(
+    ["allMatches"],
+    allMatches
+  );
+
   return { isPending, isError, data: allMatches, error, progress };
 }

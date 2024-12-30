@@ -14,7 +14,7 @@ export function useAutoTranslation(
     queryKey: ["auto-translation", id],
     queryFn: () => fetchTranslation(id, source, matches),
     enabled: !!segment && !!matches,
-    staleTime: 30 * 60 * 1000, // 30 minutes in milliseconds
+    staleTime: 24 * 60 * 60 * 1000, // 1 day in milliseconds
   });
 
   async function fetchTranslation(
