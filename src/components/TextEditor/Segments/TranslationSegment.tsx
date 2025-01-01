@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef } from "react";
 import { useAutoFill } from "@/hooks/useAutoFill";
 import { DocumentSegment } from "@/types";
 import TranslationStatus from "./TranslationStatus";
-import Container from "./Container";
+import Container from "@/components/ui/Container";
 
 interface TranslationSegmentProps {
   data: DocumentSegment;

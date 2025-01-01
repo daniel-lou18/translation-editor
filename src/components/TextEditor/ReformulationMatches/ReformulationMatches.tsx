@@ -1,6 +1,6 @@
 import { Match } from "@/types";
-import Container from "./Container";
-import { MemoryMatch } from "./MemoryMatch";
+import Container from "@/components/ui/Container";
+import { MemoryMatch } from "../MemoryMatch";
 import { useEditor } from "@/contexts/editorContext";
 
 type ReformulationMatchesProps = {

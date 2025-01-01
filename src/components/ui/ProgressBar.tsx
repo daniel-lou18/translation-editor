@@ -1,19 +1,16 @@
+import Container from "./Container";
+
 type ProgressBarProps = {
-  processedSegments: number;
-  totalSegments: number;
-  percentage: number;
+  progress: number;
 };
 
-export default function ProgressBar({
-  processedSegments,
-  totalSegments,
-  percentage,
-}: ProgressBarProps) {
+export default function ProgressBar({ progress }: ProgressBarProps) {
   return (
-    <p
-      className={`${
-        percentage === 100 ? "opacity-0" : ""
-      } transition duration-1000`}
-    >{`Processing ${processedSegments} of ${totalSegments} segments (${percentage} %)`}</p>
+    <Container className="max-w-32 w-full h-2 rounded-full bg-gray-300 overflow-hidden">
+      <div
+        className={`h-full bg-cat-accent`}
+        style={{ width: `${progress}%` }}
+      ></div>
+    </Container>
   );
 }

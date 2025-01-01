@@ -1,8 +1,8 @@
 import { TranslationMemoryMatches } from "@/types";
-import { MemoryMatch } from "./MemoryMatch";
+import { MemoryMatch } from "../MemoryMatch";
 import { useEditor } from "@/contexts/editorContext";
-import ProgressBar from "./ProgressBar";
-import Container from "./Container";
+import Progress from "@/components/ui/Progress";
+import Container from "@/components/ui/Container";
 
 type MemoryMatchesProps = {
   matches: TranslationMemoryMatches;
@@ -26,7 +26,7 @@ export default function MemoryMatches({
   return (
     <Container className="space-y-3">
       {isLoading || !currentMatches || currentMatches.matches.length === 0 ? (
-        <ProgressBar
+        <Progress
           processedSegments={processedSegments}
           totalSegments={totalSegments}
           percentage={percentage}

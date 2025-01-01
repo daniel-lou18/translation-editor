@@ -4,8 +4,8 @@ import {
   SquareCheckBig,
   WandSparkles,
 } from "lucide-react";
-import { Button } from "./button";
-import Container from "./Container";
+import { Button } from "../../ui/button";
+import Container from "@/components/ui/Container";
 import { useEditor } from "@/contexts/editorContext";
 import { useReformulate } from "@/hooks/useReformulate";
 import { useQueryClient } from "@tanstack/react-query";

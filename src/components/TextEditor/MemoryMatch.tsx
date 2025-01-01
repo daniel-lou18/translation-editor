@@ -1,5 +1,5 @@
 import { convertToPercent } from "@/utils/helpers";
-import Container from "./Container";
+import Container from "@/components/ui/Container";
 import { Bot } from "lucide-react";
 
 interface MemoryMatchProps {

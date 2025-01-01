@@ -2,7 +2,7 @@ import { useEditor } from "@/contexts/editorContext";
 import { TranslationSegment } from "./TranslationSegment";
 import { TranslationMemoryMatches } from "@/types";
 import { useAutoTranslation } from "@/hooks/useAutoTranslation";
-import Container from "./Container";
+import Container from "../../ui/Container";
 
 type TranslationSegmentsProps = {
   matches: TranslationMemoryMatches;

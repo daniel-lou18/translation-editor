@@ -1,5 +1,5 @@
 import { PropsWithChildren } from "react";
-import Container from "./Container";
+import Container from "@/components/ui/Container";
 
 export default function SideMenu({ children }: PropsWithChildren) {
   return (

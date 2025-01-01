@@ -20,6 +20,7 @@ type Handlers = {
   handleStatusChange: (id: number) => void;
   handleStatusChangeAll: () => void;
   getActiveSegment: () => DocumentSegment;
+  getCompletedSegments: () => number;
 };
 
 type ContextValue = InitialState & Handlers;
@@ -111,6 +112,11 @@ export default function EditorContextProvider({ children }: PropsWithChildren) {
 
     getActiveSegment: () =>
       segments.find((segment) => segment.id === activeSegmentId) || segments[0],
+    getCompletedSegments: () =>
+      segments.reduce((acc, segment) => {
+        if (segment.completed) return acc + 1;
+        else return acc;
+      }, 0),
   };
 
   return (
