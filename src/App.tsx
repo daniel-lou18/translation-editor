@@ -1,16 +1,19 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import TextEditorPage from "./pages/TextEditor";
 import EditorContextProvider from "./contexts/editorContext";
+import { BrowserRouter } from "react-router";
+import Routes from "./Routes";
 
 const queryClient = new QueryClient();
 
 function App() {
   return (
-    <EditorContextProvider>
+    <BrowserRouter>
       <QueryClientProvider client={queryClient}>
-        <TextEditorPage />
+        <EditorContextProvider>
+          <Routes />
+        </EditorContextProvider>
       </QueryClientProvider>
-    </EditorContextProvider>
+    </BrowserRouter>
   );
 }
 
