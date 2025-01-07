@@ -35,7 +35,7 @@ export default function EditorControls() {
   );
 
   return (
-    <Container className="flex w-full mb-2">
+    <Container className="flex w-full my-2">
       <Button
         variant="ghost"
         size="icon"
