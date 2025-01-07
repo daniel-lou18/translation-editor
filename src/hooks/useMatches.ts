@@ -1,10 +1,10 @@
 import { translationMemoryService } from "@/services/translationMemoryService";
-import { DocumentSegment, TranslationMemoryMatches } from "@/types";
+import { Segment, TranslationMemoryMatches } from "@/types";
 import { calculateProgress } from "@/utils/helpers";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 
-export function useMatches(segments: DocumentSegment[]) {
+export function useMatches(segments: Segment[]) {
   const queryClient = useQueryClient();
   const batchSize = 10;
   const [currentBatchIndex, setCurrentBatchIndex] = useState(0);
@@ -28,7 +28,7 @@ export function useMatches(segments: DocumentSegment[]) {
     const currentSegments = segments.slice(startIndex, endIndex);
 
     const results = await translationMemoryService.getMatches({
-      searchTerms: currentSegments.map((segment) => segment.source),
+      searchTerms: currentSegments.map((segment) => segment.sourceText),
     });
 
     const currentMatches = Object.fromEntries(

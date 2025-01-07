@@ -47,7 +47,7 @@ export function useProject(
   return {
     projectData: data?.projectData || null,
     translationData: data?.translationData || null,
-    isPending,
+    isLoading: isPending,
     isError,
     error,
   };

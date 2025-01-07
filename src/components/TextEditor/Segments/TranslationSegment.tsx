@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useRef } from "react";
 import { useAutoFill } from "@/hooks/useAutoFill";
-import { DocumentSegment } from "@/types";
+import { Segment } from "@/types";
 import TranslationStatus from "./TranslationStatus";
 import Container from "@/components/ui/Container";
 
 interface TranslationSegmentProps {
-  data: DocumentSegment;
+  data: Segment;
   autoTranslation: string | null;
   onTargetChange: (value: string) => void;
   onClick: () => void;
@@ -21,7 +21,7 @@ export function TranslationSegment({
   onClick,
   onStatusChange,
 }: TranslationSegmentProps) {
-  const { id, source, target, completed } = data;
+  const { id, sourceText, targetText, status } = data;
 
   const sourceDiv = useRef<HTMLDivElement | null>(null);
   const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
@@ -47,10 +47,12 @@ export function TranslationSegment({
       <div ref={sourceDiv} className="w-12 pt-2 font-medium text-gray-400">
         {id}
       </div>
-      <Container className="flex-1 rounded-lg p-2 text-sm">{source}</Container>
+      <Container className="flex-1 rounded-lg p-2 text-sm">
+        {sourceText}
+      </Container>
       <textarea
         ref={textAreaRef}
-        value={target}
+        value={targetText}
         onChange={(e) => onTargetChange(e.target.value)}
         onClick={onClick}
         onInput={handleInput}
@@ -58,7 +60,10 @@ export function TranslationSegment({
         placeholder={autoTranslation || ""}
         rows={1}
       />
-      <TranslationStatus isCompleted={completed} onClick={onStatusChange} />
+      <TranslationStatus
+        isCompleted={status === "translated"}
+        onClick={onStatusChange}
+      />
     </Container>
   );
 }

@@ -1,7 +1,7 @@
-import { DocumentSegment } from "@/types";
+import { Segment } from "@/types";
 
 export function calculateProgress(
-  segments: DocumentSegment[],
+  segments: Segment[],
   currentBatchIndex: number,
   batchSize: number
 ) {

@@ -29,7 +29,7 @@ export default function TextEditor() {
           <TranslationSegments matches={matches} />
           <SideMenu>
             <ReformulationMatches
-              sourceText={activeSegment.source}
+              sourceText={activeSegment.sourceText}
               reformulation={reformulation}
             />
             <MemoryMatches

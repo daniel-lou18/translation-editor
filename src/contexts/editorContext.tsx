@@ -1,17 +1,21 @@
-import { DocumentSegment } from "@/types";
-import { documentSegments } from "@/utils/sampleData";
+import { Segment } from "@/types";
 import {
   createContext,
-  PropsWithChildren,
+  ReactNode,
   useCallback,
   useContext,
   useReducer,
 } from "react";
 
 type InitialState = {
-  segments: DocumentSegment[];
+  segments: Segment[];
   activeSegmentId: number;
   allSegmentsConfirmed: boolean;
+};
+
+type EditorContextProviderProps = {
+  children: ReactNode;
+  initialSegments: Segment[];
 };
 
 type Handlers = {
@@ -19,7 +23,7 @@ type Handlers = {
   handleValueChange: (id: number, value: string) => void;
   handleStatusChange: (id: number) => void;
   handleStatusChangeAll: () => void;
-  getActiveSegment: () => DocumentSegment;
+  getActiveSegment: () => Segment;
   getCompletedSegments: () => number;
 };
 
@@ -44,7 +48,7 @@ type Action =
   | { type: "UPDATE_STATUS_ALL" };
 
 const initialState: InitialState = {
-  segments: documentSegments,
+  segments: [],
   activeSegmentId: 1,
   allSegmentsConfirmed: false,
 };
@@ -60,7 +64,7 @@ function reducer(state: InitialState, action: Action): InitialState {
         ...state,
         segments: state.segments.map((segment) =>
           segment.id === action.payload.id
-            ? { ...segment, target: action.payload.value }
+            ? { ...segment, targetText: action.payload.value }
             : segment
         ),
       };
@@ -69,7 +73,7 @@ function reducer(state: InitialState, action: Action): InitialState {
         ...state,
         segments: state.segments.map((segment) =>
           segment.id === action.payload
-            ? { ...segment, completed: !segment.completed }
+            ? { ...segment, completed: !segment.status }
             : segment
         ),
       };
@@ -78,7 +82,7 @@ function reducer(state: InitialState, action: Action): InitialState {
         ...state,
         segments: state.segments.map((segment) => ({
           ...segment,
-          completed: !state.allSegmentsConfirmed,
+          status: state.allSegmentsConfirmed ? "untranslated" : "translated",
         })),
         allSegmentsConfirmed: !state.allSegmentsConfirmed,
       };
@@ -87,9 +91,12 @@ function reducer(state: InitialState, action: Action): InitialState {
   }
 }
 
-export default function EditorContextProvider({ children }: PropsWithChildren) {
+export default function EditorContextProvider({
+  children,
+  initialSegments = [],
+}: EditorContextProviderProps) {
   const [{ segments, activeSegmentId, allSegmentsConfirmed }, dispatch] =
-    useReducer(reducer, initialState);
+    useReducer(reducer, { ...initialState, segments: initialSegments });
 
   const handlers = {
     handleSegmentChange: useCallback(
@@ -114,7 +121,7 @@ export default function EditorContextProvider({ children }: PropsWithChildren) {
       segments.find((segment) => segment.id === activeSegmentId) || segments[0],
     getCompletedSegments: () =>
       segments.reduce((acc, segment) => {
-        if (segment.completed) return acc + 1;
+        if (segment.status === "translated") return acc + 1;
         else return acc;
       }, 0),
   };

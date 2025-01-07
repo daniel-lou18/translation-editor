@@ -1,5 +1,4 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import EditorContextProvider from "./contexts/editorContext";
 import { BrowserRouter } from "react-router";
 import Routes from "./Routes";
 
@@ -9,9 +8,7 @@ function App() {
   return (
     <BrowserRouter>
       <QueryClientProvider client={queryClient}>
-        <EditorContextProvider>
-          <Routes />
-        </EditorContextProvider>
+        <Routes />
       </QueryClientProvider>
     </BrowserRouter>
   );

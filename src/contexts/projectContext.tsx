@@ -38,7 +38,7 @@ const initialState: InitialState = {
   targetLang: "",
 };
 
-const EditorContext = createContext<ContextValue | null>(null);
+const ProjectContext = createContext<ContextValue | null>(null);
 
 function reducer(state: InitialState, action: Action): InitialState {
   switch (action.type) {
@@ -51,7 +51,9 @@ function reducer(state: InitialState, action: Action): InitialState {
   }
 }
 
-export default function EditorContextProvider({ children }: PropsWithChildren) {
+export default function ProjectContextProvider({
+  children,
+}: PropsWithChildren) {
   const [
     { projectName, projectId, sourceLang, targetLang, fileName, fileId },
     dispatch,
@@ -71,7 +73,7 @@ export default function EditorContextProvider({ children }: PropsWithChildren) {
   };
 
   return (
-    <EditorContext.Provider
+    <ProjectContext.Provider
       value={{
         projectName,
         projectId,
@@ -83,15 +85,17 @@ export default function EditorContextProvider({ children }: PropsWithChildren) {
       }}
     >
       {children}
-    </EditorContext.Provider>
+    </ProjectContext.Provider>
   );
 }
 
 export function useEditor() {
-  const context = useContext(EditorContext);
+  const context = useContext(ProjectContext);
 
   if (!context) {
-    throw new Error("useEditor must be used within the EditorContext provider");
+    throw new Error(
+      "useEditor must be used within the ProjectContext provider"
+    );
   }
 
   return context;

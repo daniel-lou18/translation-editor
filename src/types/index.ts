@@ -57,3 +57,12 @@ export type Translation = {
 };
 
 export type ProjectWithTranslations = Project & { translations: Translation[] };
+
+export type Segment = {
+  id: number;
+  translationId: number;
+  sourceText: string;
+  targetText: string;
+  status: string;
+  embedding: number[] | null;
+};

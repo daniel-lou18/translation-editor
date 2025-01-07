@@ -13,20 +13,15 @@ export default function ProjectControls() {
   const totalSegments = segments.length;
   const completedSegments = getCompletedSegments();
   const { projectId, translationId } = useTranslationRoute();
-  const {
-    projectData,
-    translationData,
-    isPending: isLoadingProject,
-    isError: isErrorProject,
-    error: errorProject,
-  } = useProject(projectId, translationId);
+  const { projectData, translationData, isLoading, isError, error } =
+    useProject(projectId, translationId);
 
   return (
     <Container className="flex items-center w-full gap-12 p-2 text-muted-foreground font-semibold">
       <DataHandler
-        isLoading={isLoadingProject}
-        isError={isErrorProject}
-        error={errorProject}
+        isLoading={isLoading}
+        isError={isError}
+        error={error}
         loadingComponent={<ProjectControlsSkeleton />}
       >
         <ProjectName projectName={projectData?.name || "New project"} />

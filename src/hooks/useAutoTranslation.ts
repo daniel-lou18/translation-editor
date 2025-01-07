@@ -1,18 +1,18 @@
 import { translationService } from "@/services/translationService";
-import { DocumentSegment, TranslationMatch, Translations } from "@/types";
+import { Segment, TranslationMatch, Translations } from "@/types";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 export function useAutoTranslation(
-  segment: DocumentSegment,
+  segment: Segment,
   matches: TranslationMatch
 ) {
   const queryClient = useQueryClient();
 
-  const { id, source } = segment;
+  const { id, sourceText } = segment;
 
   const { data, error, isPending, isError } = useQuery({
     queryKey: ["auto-translation", id],
-    queryFn: () => fetchTranslation(id, source, matches),
+    queryFn: () => fetchTranslation(id, sourceText, matches),
     enabled: !!segment && !!matches,
     staleTime: 24 * 60 * 60 * 1000, // 1 day in milliseconds
   });
