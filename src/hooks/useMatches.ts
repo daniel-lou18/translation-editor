@@ -1,4 +1,4 @@
-import { getMatches } from "@/services/translationMemoryService";
+import { translationMemoryService } from "@/services/translationMemoryService";
 import { DocumentSegment, TranslationMemoryMatches } from "@/types";
 import { calculateProgress } from "@/utils/helpers";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -27,7 +27,7 @@ export function useMatches(segments: DocumentSegment[]) {
     const endIndex = Math.min(startIndex + batchSize, segments.length);
     const currentSegments = segments.slice(startIndex, endIndex);
 
-    const results = await getMatches({
+    const results = await translationMemoryService.getMatches({
       searchTerms: currentSegments.map((segment) => segment.source),
     });
 

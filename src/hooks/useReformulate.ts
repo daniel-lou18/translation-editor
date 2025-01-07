@@ -1,4 +1,4 @@
-import { getReformulation } from "@/services/reformulationService";
+import { reformulationService } from "@/services/reformulationService";
 import { Translations } from "@/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
@@ -36,7 +36,10 @@ export function useReformulate(
         throw new Error("Translated text to reformulate is missing");
       }
 
-      const result = await getReformulation(translatedText, examples);
+      const result = await reformulationService.getReformulation(
+        translatedText,
+        examples
+      );
       const record = { [id]: result.trim() };
       console.log({ record });
 

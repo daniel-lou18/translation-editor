@@ -1,4 +1,4 @@
-import { getTranslation } from "@/services/translationService";
+import { translationService } from "@/services/translationService";
 import { DocumentSegment, TranslationMatch, Translations } from "@/types";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 
@@ -35,7 +35,10 @@ export function useAutoTranslation(
         throw new Error("Source text and/or matches are missing");
       }
 
-      const result = await getTranslation(sourceText, matches);
+      const result = await translationService.getTranslation(
+        sourceText,
+        matches
+      );
 
       return { [id]: result.trim() };
     } catch (error) {

@@ -1,35 +1,14 @@
 import { SearchQuery, TranslationMatch } from "@/types";
-import axios, { AxiosResponse } from "axios";
+import { ApiService } from "./ApiService";
 
-const API_BASE_URL = "http://localhost:3000/api";
+export class TranslationMemoryService extends ApiService {
+  constructor() {
+    super(import.meta.env.VITE_API_URL);
+  }
 
-type ApiResponse = {
-  status: string;
-  data: TranslationMatch[];
-};
-
-export async function getMatches(
-  data: SearchQuery
-): Promise<TranslationMatch[]> {
-  try {
-    const result: AxiosResponse<ApiResponse> = await axios.post(
-      `${API_BASE_URL}/translations/search`,
-      data,
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-
-    return result.data.data;
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      console.error("Axios error:", error.response?.data || error.message);
-      throw new Error(error.response?.data?.message || "An error occurred");
-    } else {
-      console.error("Unexpected error:", error);
-      throw new Error("An unexpected error occurred");
-    }
+  async getMatches(data: SearchQuery): Promise<TranslationMatch[]> {
+    return await this.post("/translations/search", data);
   }
 }
+
+export const translationMemoryService = new TranslationMemoryService();

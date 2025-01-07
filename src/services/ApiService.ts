@@ -1,19 +1,9 @@
+import { ApiResponseType } from "@/types";
 import axios, { AxiosHeaders, AxiosInstance, AxiosRequestConfig } from "axios";
 
 type Config = {
   timeout: number;
   headers: Partial<AxiosHeaders>;
-};
-
-type ApiResponseType<T> = {
-  data: T;
-  status: "success" | "fail";
-};
-
-type ApiResponse<T> = {
-  data: ApiResponseType<T>;
-  status: number;
-  message?: string;
 };
 
 export class ApiService {
@@ -43,13 +33,10 @@ export class ApiService {
     }
   }
 
-  async get<T>(url: string): Promise<ApiResponse<T>> {
+  async get<T>(url: string): Promise<T> {
     try {
       const response = await this.api.get<ApiResponseType<T>>(url);
-      return {
-        data: response.data,
-        status: response.status,
-      };
+      return response.data.data;
     } catch (error) {
       throw this.handleError(error);
     }
@@ -59,17 +46,14 @@ export class ApiService {
     url: string,
     data?: unknown,
     config?: AxiosRequestConfig
-  ): Promise<ApiResponse<T>> {
+  ): Promise<T> {
     try {
       const response = await this.api.post<ApiResponseType<T>>(
         url,
         data,
         config
       );
-      return {
-        data: response.data,
-        status: response.status,
-      };
+      return response.data.data;
     } catch (error) {
       throw this.handleError(error);
     }

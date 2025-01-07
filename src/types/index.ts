@@ -21,3 +21,14 @@ export type DocumentSegment = {
 export type TranslationMemoryMatches = Record<number, TranslationMatch>;
 
 export type Translations = Record<number, string>;
+
+export type ApiResponseType<T> = {
+  data: T;
+  status: "success" | "fail";
+};
+
+export type ApiResponse<T> = {
+  data: ApiResponseType<T>;
+  status: number;
+  message?: string;
+};
