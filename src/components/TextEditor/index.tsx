@@ -4,7 +4,7 @@ import TranslationSegments from "@/components/TextEditor/Segments/TranslationSeg
 import { useEditor } from "@/contexts/editorContext";
 import Container from "@/components/ui/Container";
 import EditorControls from "@/components/TextEditor/EditorControls/EditorControls";
-import ProjectControls from "@/components/TextEditor/ProjectControls/ProjectControls";
+import ProjectControls from "@/components/TextEditor/ProjectControls";
 import SideMenu from "./SideMenu";
 import { useQuery } from "@tanstack/react-query";
 import ReformulationMatches from "@/components/TextEditor/ReformulationMatches/ReformulationMatches";

@@ -32,3 +32,28 @@ export type ApiResponse<T> = {
   status: number;
   message?: string;
 };
+
+export type Project = {
+  id: number;
+  name: string;
+  description: string | null;
+  createdAt: string;
+  lastModified: string;
+};
+
+export type Translation = {
+  id: number;
+  projectId: number;
+  name: string;
+  fileName: string;
+  sourceLang: string;
+  targetLang: string;
+  domain: string | null;
+  subdomain: string | null;
+  docType: string | null;
+  status: string | null;
+  createdAt: string;
+  lastModified: string;
+};
+
+export type ProjectWithTranslations = Project & { translations: Translation[] };
