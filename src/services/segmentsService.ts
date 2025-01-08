@@ -1,4 +1,4 @@
-import { Segment } from "@/types";
+import { Segment, UpdatedId } from "@/types";
 import { ApiService } from "./ApiService";
 
 export default class SegmentsService extends ApiService {
@@ -12,6 +12,17 @@ export default class SegmentsService extends ApiService {
   ): Promise<Segment[]> {
     return await this.get(
       `/projects/${projectId}/translations/${translationId}/segments`
+    );
+  }
+
+  async updateSegments(
+    projectId: string,
+    translationId: string,
+    segments: Segment[]
+  ): Promise<UpdatedId[]> {
+    return await this.put(
+      `/projects/${projectId}/translations/${translationId}/segments`,
+      { segments }
     );
   }
 }

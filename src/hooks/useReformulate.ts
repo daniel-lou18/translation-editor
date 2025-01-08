@@ -23,35 +23,26 @@ export function useReformulate(
     translatedText: string,
     examples: string[]
   ) {
-    try {
-      const cachedReformulations = queryClient.getQueryData<Translations>([
-        "reformulation",
-      ]);
-      console.log({ cachedReformulations });
-      if (cachedReformulations?.[id]) {
-        return { [id]: cachedReformulations?.[id] };
-      }
-
-      if (!translatedText) {
-        throw new Error("Translated text to reformulate is missing");
-      }
-
-      const result = await reformulationService.getReformulation(
-        translatedText,
-        examples
-      );
-      const record = { [id]: result.trim() };
-      console.log({ record });
-
-      return record;
-    } catch (error) {
-      console.error("Failed to fetch translation", error);
-      throw new Error(
-        error instanceof Error
-          ? error.message
-          : "Unknown error while fetching translation"
-      );
+    const cachedReformulations = queryClient.getQueryData<Translations>([
+      "reformulation",
+    ]);
+    console.log({ cachedReformulations });
+    if (cachedReformulations?.[id]) {
+      return { [id]: cachedReformulations?.[id] };
     }
+
+    if (!translatedText) {
+      throw new Error("Translated text to reformulate is missing");
+    }
+
+    const result = await reformulationService.getReformulation(
+      translatedText,
+      examples
+    );
+    const record = { [id]: result.trim() };
+    console.log({ record });
+
+    return record;
   }
 
   return { data, error, isPending, isError, mutate };

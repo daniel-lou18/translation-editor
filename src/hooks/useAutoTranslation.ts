@@ -22,33 +22,21 @@ export function useAutoTranslation(
     sourceText: string | null,
     matches: TranslationMatch
   ) {
-    try {
-      const cachedTranslation = queryClient.getQueryData<Translations>([
-        "auto-translation",
-        id,
-      ]);
-      if (cachedTranslation?.[id]) {
-        return cachedTranslation;
-      }
-
-      if (!sourceText || matches.matches.length === 0) {
-        throw new Error("Source text and/or matches are missing");
-      }
-
-      const result = await translationService.getTranslation(
-        sourceText,
-        matches
-      );
-
-      return { [id]: result.trim() };
-    } catch (error) {
-      console.error("Failed to fetch translation", error);
-      throw new Error(
-        error instanceof Error
-          ? error.message
-          : "Unknown error while fetching translation"
-      );
+    const cachedTranslation = queryClient.getQueryData<Translations>([
+      "auto-translation",
+      id,
+    ]);
+    if (cachedTranslation?.[id]) {
+      return cachedTranslation;
     }
+
+    if (!sourceText || matches.matches.length === 0) {
+      throw new Error("Source text and/or matches are missing");
+    }
+
+    const result = await translationService.getTranslation(sourceText, matches);
+
+    return { [id]: result.trim() };
   }
 
   return { data, error, isPending, isError };

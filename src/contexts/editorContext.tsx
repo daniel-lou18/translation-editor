@@ -1,11 +1,13 @@
 import { EditorActions, useEditorActions } from "@/hooks/useEditorActions";
+import { useEditorSync } from "@/hooks/useEditorSync";
 import { Segment } from "@/types";
 import { createContext, ReactNode, useContext, useReducer } from "react";
 
-type InitialState = {
+export type InitialState = {
   segments: Segment[];
   activeSegmentId: number;
   allSegmentsConfirmed: boolean;
+  pendingChanges: Set<number>;
 };
 
 type EditorContextProviderProps = {
@@ -36,12 +38,14 @@ export type Action =
       type: "UPDATE_STATUS";
       payload: number;
     }
-  | { type: "UPDATE_STATUS_ALL" };
+  | { type: "UPDATE_STATUS_ALL" }
+  | { type: "SYNC_COMPLETED" };
 
 const initialState: InitialState = {
   segments: [],
   activeSegmentId: 1,
   allSegmentsConfirmed: false,
+  pendingChanges: new Set(),
 };
 
 const EditorContext = createContext<ContextValue | null>(null);
@@ -58,6 +62,7 @@ function reducer(state: InitialState, action: Action): InitialState {
             ? { ...segment, targetText: action.payload.value }
             : segment
         ),
+        pendingChanges: state.pendingChanges.add(action.payload.id),
       };
     case "UPDATE_STATUS":
       return {
@@ -73,6 +78,7 @@ function reducer(state: InitialState, action: Action): InitialState {
               }
             : segment
         ),
+        pendingChanges: state.pendingChanges.add(action.payload),
       };
     case "UPDATE_STATUS_ALL":
       return {
@@ -83,6 +89,11 @@ function reducer(state: InitialState, action: Action): InitialState {
         })),
         allSegmentsConfirmed: !state.allSegmentsConfirmed,
       };
+    case "SYNC_COMPLETED":
+      return {
+        ...state,
+        pendingChanges: new Set(),
+      };
     default:
       throw new Error(`Unhandled action type`);
   }
@@ -92,10 +103,16 @@ export default function EditorContextProvider({
   children,
   initialSegments = [],
 }: EditorContextProviderProps) {
-  const [{ segments, activeSegmentId, allSegmentsConfirmed }, dispatch] =
-    useReducer(reducer, { ...initialState, segments: initialSegments });
+  const [
+    { segments, activeSegmentId, allSegmentsConfirmed, pendingChanges },
+    dispatch,
+  ] = useReducer(reducer, { ...initialState, segments: initialSegments });
 
   const actions = useEditorActions(dispatch);
+  useEditorSync(
+    { segments, activeSegmentId, allSegmentsConfirmed, pendingChanges },
+    dispatch
+  );
 
   const handlers = {
     getActiveSegment: () =>
@@ -113,6 +130,7 @@ export default function EditorContextProvider({
         segments,
         activeSegmentId,
         allSegmentsConfirmed,
+        pendingChanges,
         ...actions,
         ...handlers,
       }}

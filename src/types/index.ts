@@ -66,3 +66,5 @@ export type Segment = {
   status: string;
   embedding: number[] | null;
 };
+
+export type UpdatedId = { updatedId: number };

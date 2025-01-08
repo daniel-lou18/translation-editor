@@ -58,4 +58,21 @@ export class ApiService {
       throw this.handleError(error);
     }
   }
+
+  async put<T>(
+    url: string,
+    data?: unknown,
+    config?: AxiosRequestConfig
+  ): Promise<T> {
+    try {
+      const response = await this.api.put<ApiResponseType<T>>(
+        url,
+        data,
+        config
+      );
+      return response.data.data;
+    } catch (error) {
+      throw this.handleError(error);
+    }
+  }
 }
