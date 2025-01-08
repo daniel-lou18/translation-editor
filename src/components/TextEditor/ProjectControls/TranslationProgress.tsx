@@ -11,7 +11,7 @@ export default function TranslationProgress({
   total,
 }: TranslationProgressProps) {
   const progress = (current / total) * 100;
-  console.log(progress);
+
   return (
     <Container className="flex gap-2 items-center flex-1">
       <ProgressBar progress={progress} />

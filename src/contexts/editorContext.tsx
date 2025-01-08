@@ -73,7 +73,13 @@ function reducer(state: InitialState, action: Action): InitialState {
         ...state,
         segments: state.segments.map((segment) =>
           segment.id === action.payload
-            ? { ...segment, completed: !segment.status }
+            ? {
+                ...segment,
+                status:
+                  segment.status === "untranslated"
+                    ? "translated"
+                    : "untranslated",
+              }
             : segment
         ),
       };
