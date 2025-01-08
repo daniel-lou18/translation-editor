@@ -1,11 +1,6 @@
+import { EditorActions, useEditorActions } from "@/hooks/useEditorActions";
 import { Segment } from "@/types";
-import {
-  createContext,
-  ReactNode,
-  useCallback,
-  useContext,
-  useReducer,
-} from "react";
+import { createContext, ReactNode, useContext, useReducer } from "react";
 
 type InitialState = {
   segments: Segment[];
@@ -19,17 +14,13 @@ type EditorContextProviderProps = {
 };
 
 type Handlers = {
-  handleSegmentChange: (id: number) => void;
-  handleValueChange: (id: number, value: string) => void;
-  handleStatusChange: (id: number) => void;
-  handleStatusChangeAll: () => void;
   getActiveSegment: () => Segment;
   getCompletedSegments: () => number;
 };
 
-type ContextValue = InitialState & Handlers;
+type ContextValue = InitialState & Handlers & EditorActions;
 
-type Action =
+export type Action =
   | {
       type: "SET_ACTIVE_ID";
       payload: number;
@@ -104,25 +95,9 @@ export default function EditorContextProvider({
   const [{ segments, activeSegmentId, allSegmentsConfirmed }, dispatch] =
     useReducer(reducer, { ...initialState, segments: initialSegments });
 
-  const handlers = {
-    handleSegmentChange: useCallback(
-      (id: number) => dispatch({ type: "SET_ACTIVE_ID", payload: id }),
-      []
-    ),
-    handleValueChange: useCallback(
-      (id: number, value: string) =>
-        dispatch({ type: "UPDATE_SEGMENTS", payload: { id, value } }),
-      []
-    ),
-    handleStatusChange: useCallback(
-      (id: number) => dispatch({ type: "UPDATE_STATUS", payload: id }),
-      []
-    ),
-    handleStatusChangeAll: useCallback(
-      () => dispatch({ type: "UPDATE_STATUS_ALL" }),
-      []
-    ),
+  const actions = useEditorActions(dispatch);
 
+  const handlers = {
     getActiveSegment: () =>
       segments.find((segment) => segment.id === activeSegmentId) || segments[0],
     getCompletedSegments: () =>
@@ -138,6 +113,7 @@ export default function EditorContextProvider({
         segments,
         activeSegmentId,
         allSegmentsConfirmed,
+        ...actions,
         ...handlers,
       }}
     >

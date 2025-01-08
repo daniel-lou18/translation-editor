@@ -1,7 +1,7 @@
 import { segmentsService } from "@/services/segmentsService";
 import { useQuery } from "@tanstack/react-query";
 
-export function useSegments(
+export function useGetSegments(
   projectId: string | undefined,
   translationId: string | undefined
 ) {
