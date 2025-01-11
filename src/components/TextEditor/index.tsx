@@ -1,5 +1,3 @@
-import MemoryMatches from "@/components/TextEditor/MemoryMatches/MemoryMatches";
-import { useMatches } from "@/hooks/useMatches";
 import TranslationSegments from "@/components/TextEditor/Segments/TranslationSegments";
 import { useEditor } from "@/contexts/editorContext";
 import Container from "@/components/ui/Container";
@@ -9,16 +7,22 @@ import SideMenu from "./SideMenu";
 import { useQuery } from "@tanstack/react-query";
 import ReformulationMatches from "@/components/TextEditor/ReformulationMatches/ReformulationMatches";
 import { Translations } from "@/types";
+import { useSemanticMatches } from "@/hooks/useSemanticMatches";
+import MemoryMatches from "./MemoryMatches/MemoryMatches";
+import DataHandler from "../ui/DataHandler";
 
 export default function TextEditor() {
-  const { segments, getActiveSegment } = useEditor();
+  const { getActiveSegment } = useEditor();
   const activeSegment = getActiveSegment();
-  const { data: matches, isPending, progress } = useMatches(segments);
+  const { matches, isPending, isError, error } =
+    useSemanticMatches(activeSegment);
   const { data: reformulations } = useQuery<Translations>({
     queryKey: ["reformulation"],
     enabled: false,
   });
   const reformulation = reformulations?.[activeSegment.id];
+
+  console.log(matches);
 
   return (
     <Container className="min-h-screen bg-gray-50/50">
@@ -32,11 +36,9 @@ export default function TextEditor() {
               sourceText={activeSegment.sourceText}
               reformulation={reformulation}
             />
-            <MemoryMatches
-              matches={matches}
-              isLoading={isPending}
-              progress={progress}
-            />
+            <DataHandler isLoading={isPending} isError={isError} error={error}>
+              <MemoryMatches matches={matches} />
+            </DataHandler>
           </SideMenu>
         </Container>
       </Container>

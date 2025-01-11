@@ -1,11 +1,11 @@
 import { useEditor } from "@/contexts/editorContext";
 import { TranslationSegment } from "./TranslationSegment";
-import { TranslationMemoryMatches } from "@/types";
+import { SemanticMatch } from "@/types";
 import { useAutoTranslation } from "@/hooks/useAutoTranslation";
 import Container from "../../ui/Container";
 
 type TranslationSegmentsProps = {
-  matches: TranslationMemoryMatches;
+  matches: SemanticMatch[] | null;
 };
 
 export default function TranslationSegments({
@@ -20,10 +20,9 @@ export default function TranslationSegments({
     getActiveSegment,
   } = useEditor();
   const activeSegment = getActiveSegment();
-  const activeMatches = matches?.[activeSegmentId];
   const { data: autoTranslations, isPending: isLoading } = useAutoTranslation(
     activeSegment,
-    activeMatches
+    matches
   );
   const autoTranslation = autoTranslations?.[activeSegmentId];
 

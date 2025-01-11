@@ -1,4 +1,4 @@
-import { SearchQuery, TranslationMatch } from "@/types";
+import { SearchQuery, SemanticMatch } from "@/types";
 import { ApiService } from "./ApiService";
 
 export class TranslationMemoryService extends ApiService {
@@ -6,7 +6,7 @@ export class TranslationMemoryService extends ApiService {
     super(import.meta.env.VITE_API_URL);
   }
 
-  async getMatches(data: SearchQuery): Promise<TranslationMatch[]> {
+  async getMatches(data: SearchQuery): Promise<SemanticMatch[]> {
     return await this.post("/translations/search", data);
   }
 }

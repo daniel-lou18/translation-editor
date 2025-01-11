@@ -1,9 +1,10 @@
 import { convertToPercent } from "@/utils/helpers";
 import Container from "@/components/ui/Container";
 import { Bot } from "lucide-react";
+import { SemanticMatch } from "@/types";
 
 interface MemoryMatchProps {
-  match: { sourceText: string; targetText: string; similarityScore: number };
+  match: SemanticMatch;
   onClick: () => void;
   variant: "tm" | "ai";
 }

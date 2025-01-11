@@ -11,6 +11,18 @@ export type TranslationMatch = {
   matches: Match[];
 };
 
+export type SemanticMatch = {
+  id: number;
+  sourceText: string;
+  targetText: string;
+  similarityScore: number;
+  sourceLang: string;
+  targetLang: string;
+  domain: string | null;
+  subdomain: string | null;
+  docType: string | null;
+};
+
 export type DocumentSegment = {
   id: number;
   source: string;
