@@ -1,0 +1,88 @@
+import { cn } from "@/lib/utils";
+import { FileSpreadsheet, FileText } from "lucide-react";
+import { useState } from "react";
+
+type UploadAreaProps = {
+  type: "document" | "memory";
+  accept: string;
+  title: string;
+  description: string;
+  onFilesSelect: (files: File[]) => void;
+};
+
+export default function UploadArea({
+  type,
+  accept,
+  title,
+  description,
+  onFilesSelect,
+}: UploadAreaProps) {
+  const [draggingArea, setDraggingArea] = useState<
+    "document" | "memory" | null
+  >(null);
+
+  const handleDragOver = (e: React.DragEvent, type: "document" | "memory") => {
+    e.preventDefault();
+    setDraggingArea(type);
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    setDraggingArea(null);
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setDraggingArea(null);
+
+    const droppedFiles = Array.from(e.dataTransfer.files);
+    onFilesSelect(droppedFiles);
+  };
+
+  const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const selectedFiles = Array.from(e.target.files);
+      onFilesSelect(selectedFiles);
+    }
+  };
+
+  return (
+    <div
+      onDragOver={(e) => handleDragOver(e, type)}
+      onDragLeave={handleDragLeave}
+      onDrop={(e) => handleDrop(e)}
+      className={cn(
+        "border-2 border-dashed rounded-lg p-6 transition-all duration-200",
+        type === "document"
+          ? "bg-cat-source/50 hover:bg-cat-source"
+          : "bg-cat-memory/50 hover:bg-cat-memory",
+        draggingArea === type && "border-cat-accent bg-cat-accent/10",
+        "flex flex-col items-center justify-center gap-3 h-[300px]"
+      )}
+    >
+      <div className="w-12 h-12 rounded-full bg-cat-accent/10 flex items-center justify-center">
+        {type === "document" ? (
+          <FileText className="w-6 h-6 text-cat-accent" />
+        ) : (
+          <FileSpreadsheet className="w-6 h-6 text-cat-accent" />
+        )}
+      </div>
+
+      <div className="text-center">
+        <p className="text-lg font-medium text-foreground">{title}</p>
+        <p className="text-sm text-muted-foreground mt-1">{description}</p>
+      </div>
+
+      <label className="inline-flex items-center px-4 py-2 rounded-md bg-cat-accent text-cat-accent-foreground hover:bg-cat-accent/90 transition-colors cursor-pointer">
+        <input
+          type="file"
+          className="hidden"
+          multiple
+          accept={accept}
+          onChange={(e) => handleFileInput(e)}
+        />
+        Select Files
+      </label>
+    </div>
+  );
+}
