@@ -15,7 +15,7 @@ export class ApiService {
     },
   };
 
-  constructor(baseURL: string, config?: Config) {
+  constructor(baseURL: string, config?: Partial<Config>) {
     this.api = axios.create({
       baseURL,
       ...this.config,

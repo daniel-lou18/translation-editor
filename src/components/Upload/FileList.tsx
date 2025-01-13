@@ -1,44 +1,50 @@
-import { FileInfo } from "@/pages/Upload";
+import { FileInfo } from "@/components/Upload";
+import FileItem from "./FileItem";
+import Container from "../ui/Container";
+import { ReactNode } from "react";
 
-export default function FileList({ files }: { files: FileInfo[] }) {
+type FileListProps = {
+  children: ReactNode;
+  files: FileInfo[];
+  handleRemove: (index: number) => void;
+};
+
+export default function FileList({
+  children,
+  files,
+  handleRemove,
+}: FileListProps) {
   return (
     <>
       {files.length > 0 && (
-        <div className="space-y-4">
-          <h2 className="text-lg font-semibold text-foreground">
-            Uploaded Files
-          </h2>
-          <div className="grid md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <h3 className="text-sm font-medium text-muted-foreground">
-                Source Documents
-              </h3>
-              {files
-                .filter((f) => f.type === "document")
-                .map((file, index) => (
-                  <FileItem
-                    key={index}
-                    file={file}
-                    onRemove={() => removeFile(index)}
-                  />
-                ))}
-            </div>
-            <div className="space-y-2">
-              <h3 className="text-sm font-medium text-muted-foreground">
-                Translation Memory
-              </h3>
-              {files
-                .filter((f) => f.type === "memory")
-                .map((file, index) => (
-                  <FileItem
-                    key={index}
-                    file={file}
-                    onRemove={() => removeFile(index)}
-                  />
-                ))}
-            </div>
-          </div>
-        </div>
+        <Container className="w-full space-y-4">
+          <Container className="flex items-center justify-between gap-4">
+            <h2 className="text-lg font-semibold text-foreground">
+              Files to upload
+            </h2>
+            <Container>{children}</Container>
+          </Container>
+          <Container className="space-y-2">
+            {files
+              .filter((f) => f.type === "document")
+              .map((file, index) => (
+                <FileItem
+                  key={index}
+                  file={file}
+                  onRemove={() => handleRemove(index)}
+                />
+              ))}
+            {files
+              .filter((f) => f.type === "memory")
+              .map((file, index) => (
+                <FileItem
+                  key={index}
+                  file={file}
+                  onRemove={() => handleRemove(index)}
+                />
+              ))}
+          </Container>
+        </Container>
       )}
     </>
   );

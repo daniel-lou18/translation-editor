@@ -25,22 +25,20 @@ export default function TextEditor() {
   console.log(matches);
 
   return (
-    <Container className="min-h-screen bg-gray-50/50">
-      <Container className="mx-auto max-w-[1600px] p-6">
-        <ProjectControls />
-        <EditorControls />
-        <Container className="grid grid-cols-12 gap-6 relative overflow-visible">
-          <TranslationSegments matches={matches} />
-          <SideMenu>
-            <ReformulationMatches
-              sourceText={activeSegment.sourceText}
-              reformulation={reformulation}
-            />
-            <DataHandler isLoading={isPending} isError={isError} error={error}>
-              <MemoryMatches matches={matches} />
-            </DataHandler>
-          </SideMenu>
-        </Container>
+    <Container className="mx-auto max-w-[1600px] p-6">
+      <ProjectControls />
+      <EditorControls />
+      <Container className="grid grid-cols-12 gap-6 relative overflow-visible">
+        <TranslationSegments matches={matches} />
+        <SideMenu>
+          <ReformulationMatches
+            sourceText={activeSegment.sourceText}
+            reformulation={reformulation}
+          />
+          <DataHandler isLoading={isPending} isError={isError} error={error}>
+            <MemoryMatches matches={matches} />
+          </DataHandler>
+        </SideMenu>
       </Container>
     </Container>
   );

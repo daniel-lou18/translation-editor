@@ -1,10 +1,12 @@
-export default function FileItem({
-  file,
-  onRemove,
-}: {
+import { FileInfo } from "@/components/Upload";
+import { FileSpreadsheet, FileText, X } from "lucide-react";
+
+type FileItemProps = {
   file: FileInfo;
   onRemove: () => void;
-}) {
+};
+
+export default function FileItem({ file, onRemove }: FileItemProps) {
   return (
     <div className="flex items-center justify-between p-3 rounded-lg bg-cat-target hover:bg-cat-target/70 transition-colors">
       <div className="flex items-center gap-3">

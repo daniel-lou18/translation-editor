@@ -53,9 +53,7 @@ export default function UploadArea({
       onDrop={(e) => handleDrop(e)}
       className={cn(
         "border-2 border-dashed rounded-lg p-6 transition-all duration-200",
-        type === "document"
-          ? "bg-cat-source/50 hover:bg-cat-source"
-          : "bg-cat-memory/50 hover:bg-cat-memory",
+        "bg-cat-memory/50 hover:bg-cat-memory",
         draggingArea === type && "border-cat-accent bg-cat-accent/10",
         "flex flex-col items-center justify-center gap-3 h-[300px]"
       )}
@@ -69,11 +67,11 @@ export default function UploadArea({
       </div>
 
       <div className="text-center">
-        <p className="text-lg font-medium text-foreground">{title}</p>
+        <p className="font-medium text-foreground">{title}</p>
         <p className="text-sm text-muted-foreground mt-1">{description}</p>
       </div>
 
-      <label className="inline-flex items-center px-4 py-2 rounded-md bg-cat-accent text-cat-accent-foreground hover:bg-cat-accent/90 transition-colors cursor-pointer">
+      <label className="inline-flex items-center px-4 py-2 rounded-md text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 transition-colors cursor-pointer">
         <input
           type="file"
           className="hidden"
