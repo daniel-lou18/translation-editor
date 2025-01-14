@@ -17,7 +17,7 @@ export default function FileList({
   return (
     <>
       {files.length > 0 && (
-        <Container className="w-full space-y-4">
+        <Container className="w-full space-y-4 mt-4">
           <Container className="flex items-center justify-between gap-4">
             <h2 className="text-lg font-semibold text-foreground">
               Files to upload

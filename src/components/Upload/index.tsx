@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 import FileList from "@/components/Upload/FileList";
 import UploadArea from "@/components/Upload/UploadArea";
 import UploadButton from "./UploadButton";
-import Container from "../ui/Container";
+import { uploadService } from "@/services/uploadService";
 
 export interface FileInfo {
   file: File;
@@ -12,7 +12,7 @@ export interface FileInfo {
 export default function Upload() {
   const [files, setFiles] = useState<FileInfo[]>([]);
 
-  const processFiles = (newFiles: File[], type: "document" | "memory") => {
+  function processFiles(newFiles: File[], type: "document" | "memory") {
     const validExtensions = type === "document" ? [".txt"] : [".xlsx", ".xls"];
     const processedFiles = newFiles
       .filter((file) =>
@@ -21,14 +21,21 @@ export default function Upload() {
       .map((file) => ({ file, type }));
 
     setFiles((prev) => [...prev, ...processedFiles]);
-  };
+  }
 
-  const removeFile = (index: number) => {
+  function removeFile(index: number) {
     setFiles((prev) => prev.filter((_, i) => i !== index));
-  };
+  }
+
+  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    uploadService.submitSourceText(
+      files.filter((file) => file.type === "document")?.[0].file
+    );
+  }
 
   return (
-    <div className="min-h-screen p-8">
+    <form className="min-h-screen p-8" onSubmit={handleSubmit}>
       <div className="max-w-6xl mx-auto p-8 space-y-8">
         <div className="text-center space-y-2">
           <h1 className="text-2xl font-bold text-foreground">
@@ -59,6 +66,6 @@ export default function Upload() {
           <UploadButton isProcessing={false} />
         </FileList>
       </div>
-    </div>
+    </form>
   );
 }

@@ -9,10 +9,12 @@ export class UploadService extends ApiService {
     });
   }
 
-  async uploadSourceText(file: File) {
+  async submitSourceText(file: File) {
     const formData = new FormData();
     formData.append("file", file);
 
     return await this.post<string>("/upload/documents/source", formData);
   }
 }
+
+export const uploadService = new UploadService();

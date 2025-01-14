@@ -15,7 +15,7 @@ export default function MemoryMatches({ matches }: MemoryMatchesProps) {
     <Container className="space-y-3">
       {matches.map((match) => (
         <MemoryMatch
-          key={match.sourceText}
+          key={match.id}
           match={match}
           onClick={() => handleValueChange(activeSegmentId, match.targetText)}
           variant="tm"

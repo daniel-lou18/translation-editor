@@ -53,7 +53,7 @@ export default function UploadArea({
       onDrop={(e) => handleDrop(e)}
       className={cn(
         "border-2 border-dashed rounded-lg p-6 transition-all duration-200",
-        "bg-cat-memory/50 hover:bg-cat-memory",
+        "bg-cat-target/70 hover:bg-cat-target",
         draggingArea === type && "border-cat-accent bg-cat-accent/10",
         "flex flex-col items-center justify-center gap-3 h-[300px]"
       )}
