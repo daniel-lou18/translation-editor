@@ -1,10 +1,7 @@
-import { ApiResponseType } from "@/types";
-import axios, { AxiosHeaders, AxiosInstance, AxiosRequestConfig } from "axios";
+import { ApiResponseType, BlobResponse } from "@/types";
+import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 
-type Config = {
-  timeout: number;
-  headers: Partial<AxiosHeaders>;
-};
+type Config = Partial<AxiosRequestConfig>;
 
 export class ApiService {
   private api: AxiosInstance;
@@ -15,7 +12,7 @@ export class ApiService {
     },
   };
 
-  constructor(baseURL: string, config?: Partial<Config>) {
+  constructor(baseURL: string, config?: Config) {
     this.api = axios.create({
       baseURL,
       ...this.config,
@@ -28,7 +25,7 @@ export class ApiService {
       console.error("Axios error:", error.response?.data || error.message);
       return new Error(error.response?.data?.message || "An error occurred");
     } else {
-      console.error("Unexpected error:", error);
+      console.error("Unexpected error: ", error);
       return new Error("An unexpected error occurred");
     }
   }
@@ -37,6 +34,28 @@ export class ApiService {
     try {
       const response = await this.api.get<ApiResponseType<T>>(url);
       return response.data.data;
+    } catch (error) {
+      throw this.handleError(error);
+    }
+  }
+
+  async getBlob(
+    url: string,
+    config?: AxiosRequestConfig
+  ): Promise<BlobResponse> {
+    try {
+      const response = await this.api.get<Blob>(url, {
+        ...config,
+        responseType: "blob",
+        headers: { Accept: "text/plain" },
+      });
+      const { data, headers } = response;
+
+      const contentDisposition: string = headers["content-type"];
+      const fileNameMatch = contentDisposition.match(/filename="(.+)"/);
+      const fileName = fileNameMatch ? fileNameMatch[1] : `file-${Date.now()}`;
+
+      return { data, fileName };
     } catch (error) {
       throw this.handleError(error);
     }

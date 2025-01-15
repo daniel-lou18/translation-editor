@@ -1,4 +1,5 @@
 import {
+  Download,
   FileCheck,
   FileSearch,
   SquareCheckBig,
@@ -10,6 +11,7 @@ import { useEditor } from "@/contexts/editorContext";
 import { useReformulate } from "@/hooks/useReformulate";
 import { useQueryClient } from "@tanstack/react-query";
 import { TranslationMemoryMatches } from "@/types";
+import { useExportTranslation } from "@/hooks/useExportTranslation";
 
 export default function EditorControls() {
   const {
@@ -30,9 +32,11 @@ export default function EditorControls() {
 
   const { mutate } = useReformulate(
     activeSegmentId,
-    segment.target,
+    segment.targetText,
     targetTexts
   );
+
+  const { downloadFile } = useExportTranslation();
 
   return (
     <Container className="flex w-full my-2">
@@ -59,6 +63,14 @@ export default function EditorControls() {
         onClick={() => mutate()}
       >
         <WandSparkles />
+      </Button>
+      <Button
+        variant="ghost"
+        size="icon"
+        className="border border-transparent hover:border-cat-accent/10"
+        onClick={downloadFile}
+      >
+        <Download />
       </Button>
       <Button
         variant="ghost"

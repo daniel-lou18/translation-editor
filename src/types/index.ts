@@ -80,3 +80,16 @@ export type Segment = {
 };
 
 export type UpdatedId = { updatedId: number };
+
+export type ContentType =
+  (typeof outputContentTypes)[keyof typeof outputContentTypes];
+
+export type FileType = keyof typeof outputContentTypes;
+
+export const outputContentTypes = {
+  txt: "text/plain",
+  csv: "text/csv",
+  json: "application/json",
+} as const;
+
+export type BlobResponse = { data: Blob; fileName: string };
