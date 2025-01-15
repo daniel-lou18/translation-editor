@@ -1,4 +1,4 @@
-import { SemanticMatch } from "@/types";
+import { LangCode, SemanticMatch } from "@/types";
 import { ApiService } from "./ApiService";
 
 export class TranslationService extends ApiService {
@@ -8,11 +8,15 @@ export class TranslationService extends ApiService {
 
   async getTranslation(
     sourceSegment: string,
-    examples: SemanticMatch[]
+    examples: SemanticMatch[],
+    sourceLang: LangCode,
+    targetLang: LangCode
   ): Promise<string> {
     return await this.post("/translations/translate", {
       sourceSegment,
       examples,
+      sourceLang,
+      targetLang,
     });
   }
 }

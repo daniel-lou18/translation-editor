@@ -79,6 +79,8 @@ export type Segment = {
   embedding: number[] | null;
 };
 
+export type SegmentWithTranslation = Segment & { translation: Translation };
+
 export type UpdatedId = { updatedId: number };
 
 export type ContentType =
@@ -93,3 +95,12 @@ export const outputContentTypes = {
 } as const;
 
 export type BlobResponse = { data: Blob; fileName: string };
+
+export const LangCodeDictionary = {
+  nl_BE: "Dutch",
+  nl_NL: "Dutch",
+  fr_FR: "French",
+  fr_BE: "French",
+} as const;
+
+export type LangCode = keyof typeof LangCodeDictionary;

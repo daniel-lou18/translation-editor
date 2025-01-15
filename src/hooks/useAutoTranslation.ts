@@ -1,19 +1,28 @@
 import { translationService } from "@/services/translationService";
-import { Segment, SemanticMatch, Translations } from "@/types";
+import {
+  LangCode,
+  SegmentWithTranslation,
+  SemanticMatch,
+  Translations,
+} from "@/types";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 export function useAutoTranslation(
-  segment: Segment,
+  segment: SegmentWithTranslation,
   matches: SemanticMatch[] | null
 ) {
   const queryClient = useQueryClient();
 
-  const { id, sourceText } = segment;
+  const {
+    id,
+    sourceText,
+    translation: { sourceLang, targetLang },
+  } = segment;
 
   const { data, error, isPending, isError } = useQuery({
     queryKey: ["auto-translation", id],
     queryFn: () => fetchTranslation(id, sourceText, matches),
-    enabled: !!segment && !!matches?.length,
+    enabled: !!segment,
     staleTime: 24 * 60 * 60 * 1000, // 1 day in milliseconds
   });
 
@@ -30,12 +39,17 @@ export function useAutoTranslation(
     if (cachedTranslation?.[id]) {
       return cachedTranslation;
     }
-
-    if (!sourceText || !matches?.length) {
+    console.log({ matches });
+    if (!sourceText) {
       throw new Error("Source text and/or matches are missing");
     }
 
-    const result = await translationService.getTranslation(sourceText, matches);
+    const result = await translationService.getTranslation(
+      sourceText,
+      matches || [],
+      sourceLang as LangCode,
+      targetLang as LangCode
+    );
 
     return { [id]: result.trim() };
   }

@@ -3,6 +3,7 @@ import { TranslationSegment } from "./TranslationSegment";
 import { SemanticMatch } from "@/types";
 import { useAutoTranslation } from "@/hooks/useAutoTranslation";
 import Container from "../../ui/Container";
+import { useCallback } from "react";
 
 type TranslationSegmentsProps = {
   matches: SemanticMatch[] | null;
@@ -20,17 +21,22 @@ export default function TranslationSegments({
     getActiveSegment,
   } = useEditor();
   const activeSegment = getActiveSegment();
-  const { data: autoTranslations, isPending: isLoading } = useAutoTranslation(
-    activeSegment,
-    matches
-  );
+  const {
+    data: autoTranslations,
+    isPending: isLoading,
+    isError,
+  } = useAutoTranslation(activeSegment, matches);
   const autoTranslation = autoTranslations?.[activeSegmentId];
 
-  const renderAutoTranslation = (id: number) => {
-    if (activeSegmentId !== id || (!autoTranslation && !isLoading)) return null;
-    if (isLoading) return "Loading translation...";
-    return autoTranslation || null;
-  };
+  const renderAutoTranslation = useCallback(
+    (id: number) => {
+      if (activeSegmentId !== id) return null;
+      if (isLoading) return "Loading translation...";
+      if (isError) return "Could not get auto-translation";
+      return autoTranslation || null;
+    },
+    [activeSegmentId, autoTranslation, isLoading, isError]
+  );
 
   const handleTab = (id: number) => {
     if (!autoTranslation) return;
