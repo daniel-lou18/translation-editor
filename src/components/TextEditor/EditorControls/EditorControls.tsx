@@ -39,7 +39,7 @@ export default function EditorControls() {
   const { downloadFile } = useExportTranslation();
 
   return (
-    <Container className="flex w-full my-2">
+    <Container className="flex w-full">
       <Button
         variant="ghost"
         size="icon"

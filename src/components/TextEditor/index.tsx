@@ -25,10 +25,12 @@ export default function TextEditor() {
   console.log(matches);
 
   return (
-    <Container className="mx-auto max-w-[1600px] p-6">
-      <ProjectControls />
-      <EditorControls />
-      <Container className="grid grid-cols-12 gap-6 relative overflow-visible">
+    <>
+      <Container className="sticky top-0 z-10 bg-gray-50 p-4 space-y-2">
+        <ProjectControls />
+        <EditorControls />
+      </Container>
+      <Container className="mx-auto max-w-[1600px] px-4 grid grid-cols-12 gap-6 relative overflow-visible">
         <TranslationSegments matches={matches} />
         <SideMenu>
           <ReformulationMatches
@@ -40,6 +42,6 @@ export default function TextEditor() {
           </DataHandler>
         </SideMenu>
       </Container>
-    </Container>
+    </>
   );
 }

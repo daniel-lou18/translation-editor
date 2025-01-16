@@ -39,7 +39,6 @@ export function useAutoTranslation(
     if (cachedTranslation?.[id]) {
       return cachedTranslation;
     }
-    console.log({ matches });
     if (!sourceText) {
       throw new Error("Source text and/or matches are missing");
     }

@@ -9,6 +9,10 @@ export class ProjectService extends ApiService {
   async getProject(projectId: string): Promise<ProjectWithTranslations> {
     return await this.get(`/projects/${projectId}`);
   }
+
+  async getProjects(): Promise<ProjectWithTranslations[]> {
+    return await this.get("/projects");
+  }
 }
 
 export const projectService = new ProjectService();
