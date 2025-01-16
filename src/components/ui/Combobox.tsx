@@ -17,16 +17,22 @@ import {
 } from "@/components/ui/popover";
 import { useState } from "react";
 
-export type ComboDataElement = { value: string; label: string };
+export type ComboDataElement = { id: string; value: string; label: string };
 
 type ComboboxProps = {
   name: string;
-  data: ComboDataElement[];
+  items: ComboDataElement[];
+  value: string | null;
+  onChange: (currentValue: string) => void;
 };
 
-export default function Combobox({ name, data }: ComboboxProps) {
+export default function Combobox({
+  name,
+  items,
+  value,
+  onChange,
+}: ComboboxProps) {
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState("");
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -35,26 +41,24 @@ export default function Combobox({ name, data }: ComboboxProps) {
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-[200px] justify-between bg-gray-50"
+          className="min-w-[200px] justify-between bg-gray-50"
         >
-          {value
-            ? data.find((element) => element.value === value)?.label
-            : `Select ${name}`}
+          {value || `Select ${name}`}
           <ChevronsUpDown className="opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0">
+      <PopoverContent className="min-w-[200px] p-0">
         <Command>
           <CommandInput placeholder={`Search ${name}`} />
           <CommandList>
             <CommandEmpty>{`No ${name} found.`}</CommandEmpty>
             <CommandGroup>
-              {data.map((item) => (
+              {items.map((item) => (
                 <CommandItem
-                  key={item.value}
-                  value={item.value}
+                  key={item.id}
+                  value={item.id}
                   onSelect={(currentValue) => {
-                    setValue(currentValue === value ? "" : currentValue);
+                    onChange(currentValue);
                     setOpen(false);
                   }}
                 >

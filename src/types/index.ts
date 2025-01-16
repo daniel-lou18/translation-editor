@@ -67,8 +67,13 @@ export type Translation = {
   createdAt: string;
   lastModified: string;
 };
+export type NormalizedTranslations = Record<string, Translation>;
 
 export type ProjectWithTranslations = Project & { translations: Translation[] };
+export type NormalizedProjectsWithTranslations = Record<
+  string,
+  ProjectWithTranslations
+>;
 
 export type Segment = {
   id: number;

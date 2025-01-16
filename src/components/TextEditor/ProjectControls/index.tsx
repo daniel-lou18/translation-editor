@@ -6,20 +6,24 @@ import { useTranslationRoute } from "@/hooks/useTranslationRoute";
 import DataHandler from "@/components/ui/DataHandler";
 import ProjectControlsSkeleton from "./ProjectControlsSkeleton";
 import { BrainCircuit } from "lucide-react";
-import { useProjects } from "@/hooks/useProjects";
 import SelectTranslation from "./SelectTranslation";
+import { useCurrentProject } from "@/hooks/useCurrentProject";
 
 export default function ProjectControls() {
   const { segments, getCompletedSegments } = useEditor();
   const totalSegments = segments.length;
   const completedSegments = getCompletedSegments();
-  const { projectId, translationId } = useTranslationRoute();
-  const { projects, isLoading, isError, error } = useProjects();
-  const translations =
-    projects && projectId
-      ? projects.filter((project) => project.id === parseInt(projectId))[0]
-          .translations
-      : null;
+  const { projectId, translationId, navigateToTranslation } =
+    useTranslationRoute();
+  const {
+    projects,
+    currentProject,
+    currentTranslations,
+    currentTranslation,
+    isLoading,
+    isError,
+    error,
+  } = useCurrentProject(projectId, translationId);
 
   return (
     <Container className="flex items-center w-full gap-12 text-muted-foreground font-semibold">
@@ -31,8 +35,16 @@ export default function ProjectControls() {
         error={error}
         loadingComponent={<ProjectControlsSkeleton />}
       >
-        <SelectProject projects={projects || []} />
-        <SelectTranslation translations={translations || []} />
+        <SelectProject
+          projects={projects || {}}
+          currentProject={currentProject}
+          navigateTo={navigateToTranslation}
+        />
+        <SelectTranslation
+          translations={currentTranslations || {}}
+          currentTranslation={currentTranslation}
+          navigateTo={navigateToTranslation}
+        />
       </DataHandler>
       <TranslationProgress current={completedSegments} total={totalSegments} />
     </Container>
