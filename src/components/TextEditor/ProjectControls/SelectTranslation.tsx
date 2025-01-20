@@ -1,56 +1,41 @@
-import { DocumentWithTranslations } from "@/types";
+import { DocumentWithTranslations, NormalizedTranslations } from "@/types";
 import Combobox, { ComboDataElement } from "@/components/ui/Combobox";
-import { useCallback } from "react";
+import { Translation } from "@/types/Translation";
 
 type SelectTranslationProps = {
   currentDocument: DocumentWithTranslations | null;
-  navigateTo: (
-    projectId: string,
-    documentId: string,
-    translationId: string
-  ) => void;
+  translations: NormalizedTranslations;
+  currentTranslation: Translation | null;
+  onSelect: (translationId: string) => void;
 };
 
 export default function SelectTranslation({
   currentDocument,
-  navigateTo,
+  translations,
+  currentTranslation,
+  onSelect,
 }: SelectTranslationProps) {
-  const items: ComboDataElement[] = currentDocument?.translations
-    ? currentDocument.translations.map((translation) => ({
-        id: translation.id.toString(),
-        label: `${currentDocument.sourceLang} > ${translation.targetLang}`,
-        value: `${currentDocument.sourceLang} > ${translation.targetLang}`,
-      }))
-    : [];
+  if (!currentDocument || Object.values(translations).length === 0) return null;
 
-  const currentValue = currentDocument?.translations
-    ? `${currentDocument.sourceLang} > ${currentDocument.translations[0].targetLang}`
-    : null;
-
-  const handleNavigate = useCallback(
-    (translationId: string) => {
-      if (!currentDocument?.translations) return;
-
-      navigateTo(
-        currentDocument.projectId.toString(),
-        currentDocument.id.toString(),
-        translationId
-      );
-    },
-    [
-      currentDocument?.id,
-      currentDocument?.projectId,
-      currentDocument?.translations,
-      navigateTo,
-    ]
+  const items: ComboDataElement[] = Object.values(translations).map(
+    (translation) => ({
+      id: translation.id.toString(),
+      label: `${currentDocument.sourceLang} > ${translation.targetLang}`,
+      value: `${currentDocument.sourceLang} > ${translation.targetLang}`,
+    })
   );
+
+  const currentValue =
+    currentDocument.sourceLang && currentTranslation?.targetLang
+      ? `${currentDocument.sourceLang} > ${currentTranslation.targetLang}`
+      : null;
 
   return (
     <Combobox
       name="translations"
       items={items}
       value={currentValue}
-      onChange={handleNavigate}
+      onChange={onSelect}
     />
   );
 }

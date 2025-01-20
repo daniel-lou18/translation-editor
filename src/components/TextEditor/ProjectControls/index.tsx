@@ -9,6 +9,7 @@ import { BrainCircuit } from "lucide-react";
 import SelectTranslation from "./SelectTranslation";
 import { useCurrentProject } from "@/hooks/useCurrentProject";
 import SelectDocument from "./SelectDocument";
+import { useCallback } from "react";
 
 export default function ProjectControls() {
   const { segments, getCompletedSegments } = useEditor();
@@ -21,10 +22,59 @@ export default function ProjectControls() {
     currentProject,
     currentDocuments,
     currentDocument,
+    currentTranslations,
+    currentTranslation,
     isLoading,
     isError,
     error,
   } = useCurrentProject(projectId, documentId, translationId);
+
+  const handleProjectSelect = useCallback(
+    (projectId: string) => {
+      if (!projectId || !projects) return;
+
+      navigateToTranslation(
+        projectId,
+        projects[projectId].documents[0].id.toString(),
+        projects[projectId].documents[0].translations[0].id.toString()
+      );
+    },
+    [projects, navigateToTranslation]
+  );
+
+  const handleDocumentSelect = useCallback(
+    (documentId: string) => {
+      if (!currentDocument || !currentDocuments) return;
+
+      const translationId =
+        currentDocuments[documentId].translations[0].id.toString();
+
+      navigateToTranslation(
+        currentDocument.projectId.toString(),
+        documentId,
+        translationId
+      );
+    },
+    [currentDocuments, currentDocument, navigateToTranslation]
+  );
+
+  const handleTranslationSelect = useCallback(
+    (translationId: string) => {
+      if (!currentDocument?.translations) return;
+
+      navigateToTranslation(
+        currentDocument.projectId.toString(),
+        currentDocument.id.toString(),
+        translationId
+      );
+    },
+    [
+      currentDocument?.id,
+      currentDocument?.projectId,
+      currentDocument?.translations,
+      navigateToTranslation,
+    ]
+  );
 
   return (
     <Container className="flex items-center w-full gap-12 text-muted-foreground font-semibold">
@@ -39,16 +89,18 @@ export default function ProjectControls() {
         <SelectProject
           projects={projects || {}}
           currentProject={currentProject}
-          navigateTo={navigateToTranslation}
+          onSelect={handleProjectSelect}
         />
         <SelectDocument
           documents={currentDocuments || {}}
           currentDocument={currentDocument}
-          navigateTo={navigateToTranslation}
+          onSelect={handleDocumentSelect}
         />
         <SelectTranslation
           currentDocument={currentDocument}
-          navigateTo={navigateToTranslation}
+          translations={currentTranslations || {}}
+          currentTranslation={currentTranslation}
+          onSelect={handleTranslationSelect}
         />
       </DataHandler>
       <TranslationProgress current={completedSegments} total={totalSegments} />
