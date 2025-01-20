@@ -1,5 +1,6 @@
 import { DocumentWithTranslations, NormalizedDocsWithTrans } from "@/types";
 import Combobox, { ComboDataElement } from "@/components/ui/Combobox";
+import { useCallback } from "react";
 
 type SelectDocumentProps = {
   documents: NormalizedDocsWithTrans;
@@ -25,14 +26,20 @@ export default function SelectDocument({
   );
   const currentValue = currentDocument ? currentDocument.fileName : null;
 
-  function handleNavigate(documentId: string) {
-    if (!currentDocument) return;
-    navigateTo(
-      currentDocument.projectId.toString(),
-      documentId,
-      currentDocument.translations[0].id.toString()
-    );
-  }
+  const handleNavigate = useCallback(
+    (documentId: string) => {
+      if (!currentDocument) return;
+
+      const translationId = documents[documentId].translations[0].id.toString();
+
+      navigateTo(
+        currentDocument.projectId.toString(),
+        documentId,
+        translationId
+      );
+    },
+    [documents, currentDocument, navigateTo]
+  );
 
   return (
     <Combobox

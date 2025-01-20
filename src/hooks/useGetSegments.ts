@@ -4,6 +4,7 @@ import { useTranslationRoute } from "./useTranslationRoute";
 
 export function useGetSegments() {
   const { translationId } = useTranslationRoute();
+  console.log({ translationId });
   const { data, isPending, isError, error } = useQuery({
     queryKey: ["segments", translationId],
     queryFn: () => getSegmentsData(translationId),

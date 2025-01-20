@@ -1,5 +1,6 @@
 import { DocumentWithTranslations } from "@/types";
 import Combobox, { ComboDataElement } from "@/components/ui/Combobox";
+import { useCallback } from "react";
 
 type SelectTranslationProps = {
   currentDocument: DocumentWithTranslations | null;
@@ -18,7 +19,7 @@ export default function SelectTranslation({
     ? currentDocument.translations.map((translation) => ({
         id: translation.id.toString(),
         label: `${currentDocument.sourceLang} > ${translation.targetLang}`,
-        value: translation.targetLang,
+        value: `${currentDocument.sourceLang} > ${translation.targetLang}`,
       }))
     : [];
 
@@ -26,15 +27,23 @@ export default function SelectTranslation({
     ? `${currentDocument.sourceLang} > ${currentDocument.translations[0].targetLang}`
     : null;
 
-  function handleNavigate(translationId: string) {
-    if (!currentDocument?.translations) return;
+  const handleNavigate = useCallback(
+    (translationId: string) => {
+      if (!currentDocument?.translations) return;
 
-    navigateTo(
-      currentDocument.projectId.toString(),
-      currentDocument.id.toString(),
-      translationId
-    );
-  }
+      navigateTo(
+        currentDocument.projectId.toString(),
+        currentDocument.id.toString(),
+        translationId
+      );
+    },
+    [
+      currentDocument?.id,
+      currentDocument?.projectId,
+      currentDocument?.translations,
+      navigateTo,
+    ]
+  );
 
   return (
     <Combobox

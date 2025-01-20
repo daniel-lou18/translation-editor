@@ -3,6 +3,7 @@ import {
   NormalizedProjectsWithTranslations,
   ProjectWithDocsAndTrans,
 } from "@/types";
+import { useCallback } from "react";
 
 type SelectProjectProps = {
   projects: NormalizedProjectsWithTranslations;
@@ -27,14 +28,17 @@ export default function SelectProject({
 
   const currentName = currentProject ? currentProject.name : null;
 
-  function handleNavigate(projectId: string) {
-    if (!projectId) return;
-    navigateTo(
-      projectId,
-      projects[projectId].documents[0].id.toString(),
-      projects[projectId].documents[0].translations[0].id.toString()
-    );
-  }
+  const handleNavigate = useCallback(
+    (projectId: string) => {
+      if (!projectId) return;
+      navigateTo(
+        projectId,
+        projects[projectId].documents[0].id.toString(),
+        projects[projectId].documents[0].translations[0].id.toString()
+      );
+    },
+    [projects, navigateTo]
+  );
 
   return (
     <Combobox
