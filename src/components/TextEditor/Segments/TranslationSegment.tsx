@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef } from "react";
 import { useAutoFill } from "@/hooks/useAutoFill";
-import { Segment } from "@/types";
+import { Segment } from "@/types/Segment";
 import TranslationStatus from "./TranslationStatus";
 import Container from "@/components/ui/Container";
 
@@ -52,7 +52,7 @@ export function TranslationSegment({
       </Container>
       <textarea
         ref={textAreaRef}
-        value={targetText}
+        value={targetText || ""}
         onChange={(e) => onTargetChange(e.target.value)}
         onClick={onClick}
         onInput={handleInput}

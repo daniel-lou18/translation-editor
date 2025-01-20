@@ -26,7 +26,7 @@ export function useReformulate(
     const cachedReformulations = queryClient.getQueryData<Translations>([
       "reformulation",
     ]);
-    console.log({ cachedReformulations });
+
     if (cachedReformulations?.[id]) {
       return { [id]: cachedReformulations?.[id] };
     }
@@ -40,7 +40,6 @@ export function useReformulate(
       examples
     );
     const record = { [id]: result.trim() };
-    console.log({ record });
 
     return record;
   }

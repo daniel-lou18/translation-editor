@@ -1,13 +1,17 @@
 import Combobox, { ComboDataElement } from "@/components/ui/Combobox";
 import {
   NormalizedProjectsWithTranslations,
-  ProjectWithTranslations,
+  ProjectWithDocsAndTrans,
 } from "@/types";
 
 type SelectProjectProps = {
   projects: NormalizedProjectsWithTranslations;
-  currentProject: ProjectWithTranslations | null;
-  navigateTo: (projectId: string, translationId: string) => void;
+  currentProject: ProjectWithDocsAndTrans | null;
+  navigateTo: (
+    projectId: string,
+    documentId: string,
+    translationId: string
+  ) => void;
 };
 
 export default function SelectProject({
@@ -25,7 +29,11 @@ export default function SelectProject({
 
   function handleNavigate(projectId: string) {
     if (!projectId) return;
-    navigateTo(projectId, projects[projectId].translations[0].id.toString());
+    navigateTo(
+      projectId,
+      projects[projectId].documents[0].id.toString(),
+      projects[projectId].documents[0].translations[0].id.toString()
+    );
   }
 
   return (

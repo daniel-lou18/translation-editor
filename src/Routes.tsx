@@ -10,10 +10,10 @@ export default function RoutesComponent() {
     <Routes>
       <Route path="/" element={<HomePage />} />
       <Route path="/login" element={<LoginPage />} />
-      <Route path="/app/" element={<RootLayout />}>
+      <Route path="/app" element={<RootLayout />}>
         <Route path="upload" element={<Upload />} />
         <Route
-          path="projects/:projectId/translations/:translationId"
+          path="projects/:projectId/documents/:documentId/translations/:translationId"
           element={<EditorPage />}
         />
       </Route>

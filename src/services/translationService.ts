@@ -1,22 +1,52 @@
-import { LangCode, SemanticMatch } from "@/types";
+import {
+  TranslationWithJoinedSegments,
+  TranslationWithSegments,
+  UpdatedId,
+} from "@/types";
 import { ApiService } from "./ApiService";
+import { Segment } from "@/types/Segment";
 
-export class TranslationService extends ApiService {
+export default class TranslationService extends ApiService {
   constructor() {
     super(import.meta.env.VITE_API_URL);
   }
 
   async getTranslation(
-    sourceSegment: string,
-    examples: SemanticMatch[],
-    sourceLang: LangCode,
-    targetLang: LangCode
-  ): Promise<string> {
-    return await this.post("/translations/translate", {
-      sourceSegment,
-      examples,
-      sourceLang,
-      targetLang,
+    translationId: string
+  ): Promise<TranslationWithSegments> {
+    const data: TranslationWithJoinedSegments = await this.get(
+      `/translations/${translationId}`
+    );
+
+    if (!data) {
+      throw new Error("No translation data received");
+    }
+
+    return this.transformSegments(data);
+  }
+
+  private transformSegments(data: TranslationWithJoinedSegments) {
+    return {
+      ...data,
+      segments: data.segments.map(({ sourceSegment, targetSegment }) => ({
+        id: targetSegment.id,
+        translationId: targetSegment.translationId,
+        sourceText: sourceSegment.sourceText,
+        sourceLang: data.document.sourceLang,
+        embedding: sourceSegment.embedding,
+        targetText: targetSegment.targetText,
+        targetLang: data.translation.targetLang,
+        status: targetSegment.status,
+      })),
+    };
+  }
+
+  async updateSegments(
+    translationId: string,
+    segments: Segment[]
+  ): Promise<UpdatedId[]> {
+    return await this.put(`/translations/${translationId}/segments`, {
+      segments,
     });
   }
 }

@@ -1,5 +1,5 @@
-import { segmentsService } from "@/services/segmentsService";
-import { Segment } from "@/types";
+import { translationService } from "@/services/translationService";
+import { Segment } from "@/types/Segment";
 import { useMutation } from "@tanstack/react-query";
 import { useTranslationRoute } from "./useTranslationRoute";
 
@@ -23,11 +23,7 @@ export function useSaveSegments() {
       throw new Error("No segments to update");
     }
 
-    return await segmentsService.updateSegments(
-      projectId,
-      translationId,
-      segments
-    );
+    return await translationService.updateSegments(translationId, segments);
   }
 
   return {

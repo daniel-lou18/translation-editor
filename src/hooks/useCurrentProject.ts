@@ -1,14 +1,17 @@
 import {
+  DocumentWithTranslations,
+  NormalizedDocsWithTrans,
   NormalizedProjectsWithTranslations,
   NormalizedTranslations,
-  ProjectWithTranslations,
-  Translation,
+  ProjectWithDocsAndTrans,
 } from "@/types";
+import { Translation as TranslationDto } from "@/types/Translation";
 import { useProjects } from "./useProjects";
 import { useMemo } from "react";
 
 export function useCurrentProject(
   projectId: string | undefined,
+  documentId: string | undefined,
   translationId: string | undefined
 ) {
   const { data: projects, ...rest } = useProjects();
@@ -21,24 +24,38 @@ export function useCurrentProject(
       );
     }, [projects]);
 
-  const currentProject = useMemo<ProjectWithTranslations | null>(
+  const currentProject = useMemo<ProjectWithDocsAndTrans | null>(
     () =>
       normalizedProjects && projectId ? normalizedProjects[projectId] : null,
     [normalizedProjects, projectId]
   );
 
-  const currentTranslations = useMemo<NormalizedTranslations | null>(
+  const currentDocuments = useMemo<NormalizedDocsWithTrans | null>(
     () =>
       currentProject &&
+      Object.fromEntries(currentProject.documents.map((doc) => [doc.id, doc])),
+    [currentProject]
+  );
+
+  const currentDocument = useMemo<DocumentWithTranslations | null>(
+    () =>
+      currentDocuments && documentId ? currentDocuments[documentId] : null,
+    [currentDocuments, documentId]
+  );
+
+  const currentTranslations = useMemo<NormalizedTranslations | null>(
+    () =>
+      currentDocument &&
       Object.fromEntries(
-        currentProject.translations.map((translation) => [
+        currentDocument.translations.map((translation) => [
           translation.id,
           translation,
         ])
       ),
-    [currentProject]
+    [currentDocument]
   );
-  const currentTranslation = useMemo<Translation | null>(
+
+  const currentTranslation = useMemo<TranslationDto | null>(
     () =>
       currentTranslations && translationId
         ? currentTranslations[translationId]
@@ -48,6 +65,8 @@ export function useCurrentProject(
 
   return {
     projects: normalizedProjects,
+    currentDocuments,
+    currentDocument,
     currentTranslations,
     currentProject,
     currentTranslation,

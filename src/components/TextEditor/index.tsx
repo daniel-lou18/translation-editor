@@ -22,8 +22,6 @@ export default function TextEditor() {
   });
   const reformulation = reformulations?.[activeSegment.id];
 
-  console.log(matches);
-
   return (
     <>
       <Container className="sticky top-0 z-10 bg-gray-50 p-4 space-y-2">

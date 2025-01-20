@@ -1,10 +1,10 @@
 import { EditorActions, useEditorActions } from "@/hooks/useEditorActions";
 import { useEditorSync } from "@/hooks/useEditorSync";
-import { SegmentWithTranslation } from "@/types";
+import { Segment } from "@/types/Segment";
 import { createContext, ReactNode, useContext, useReducer } from "react";
 
 export type InitialState = {
-  segments: SegmentWithTranslation[];
+  segments: Segment[];
   activeSegmentId: number;
   allSegmentsConfirmed: boolean;
   pendingChanges: Set<number>;
@@ -12,11 +12,11 @@ export type InitialState = {
 
 type EditorContextProviderProps = {
   children: ReactNode;
-  initialSegments: SegmentWithTranslation[];
+  initialSegments: Segment[];
 };
 
 type Handlers = {
-  getActiveSegment: () => SegmentWithTranslation;
+  getActiveSegment: () => Segment;
   getCompletedSegments: () => number;
 };
 

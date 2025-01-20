@@ -1,23 +1,15 @@
-import { translationService } from "@/services/translationService";
-import {
-  LangCode,
-  SegmentWithTranslation,
-  SemanticMatch,
-  Translations,
-} from "@/types";
+import { translateService } from "@/services/translateService";
+import { LangCode, SemanticMatch, Translations } from "@/types";
+import { Segment } from "@/types/Segment";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 export function useAutoTranslation(
-  segment: SegmentWithTranslation,
+  segment: Segment,
   matches: SemanticMatch[] | null
 ) {
   const queryClient = useQueryClient();
 
-  const {
-    id,
-    sourceText,
-    translation: { sourceLang, targetLang },
-  } = segment;
+  const { id, sourceText, sourceLang, targetLang } = segment;
 
   const { data, error, isPending, isError } = useQuery({
     queryKey: ["auto-translation", id],
@@ -43,7 +35,7 @@ export function useAutoTranslation(
       throw new Error("Source text and/or matches are missing");
     }
 
-    const result = await translationService.getTranslation(
+    const result = await translateService.getTranslation(
       sourceText,
       matches || [],
       sourceLang as LangCode,

@@ -1,5 +1,5 @@
 import { translationMemoryService } from "@/services/translationMemoryService";
-import { Segment } from "@/types";
+import { Segment } from "@/types/Segment";
 import { useQuery } from "@tanstack/react-query";
 
 export function useSemanticMatches(segment: Segment) {

@@ -1,0 +1,23 @@
+import { SourceSegment } from "./Document";
+import { TargetSegment } from "./Translation";
+
+export type JoinedSegment = {
+  sourceSegment: SourceSegment;
+  targetSegment: TargetSegment;
+};
+
+export type ImmutableSegmentContext = {
+  id: number;
+  translationId: number;
+  sourceText: string;
+  sourceLang: string;
+  targetLang: string;
+  embedding: number[] | null;
+};
+
+export type MutableSegmentData = {
+  targetText: string | null;
+  status: string | null;
+};
+
+export type Segment = ImmutableSegmentContext & MutableSegmentData;

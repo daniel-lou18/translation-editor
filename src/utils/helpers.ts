@@ -1,4 +1,4 @@
-import { Segment } from "@/types";
+import { Segment } from "@/types/Segment";
 
 export function calculateProgress(
   segments: Segment[],

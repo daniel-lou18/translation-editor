@@ -1,3 +1,12 @@
+import { ProjectWithDocsAndTrans } from "./Project";
+import { Translation as TranslationDto } from "./Translation";
+
+export * from "./Project";
+export * from "./Document";
+export * from "./Translation";
+export * from "./Segment";
+export * from "./TranslationPair";
+
 export type SearchQuery = { searchTerms: string[] };
 
 export type Match = {
@@ -67,12 +76,11 @@ export type Translation = {
   createdAt: string;
   lastModified: string;
 };
-export type NormalizedTranslations = Record<string, Translation>;
+export type NormalizedTranslations = Record<string, TranslationDto>;
 
-export type ProjectWithTranslations = Project & { translations: Translation[] };
 export type NormalizedProjectsWithTranslations = Record<
   string,
-  ProjectWithTranslations
+  ProjectWithDocsAndTrans
 >;
 
 export type Segment = {

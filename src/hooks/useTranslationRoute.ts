@@ -2,15 +2,17 @@ import { useCallback } from "react";
 import { useNavigate, useParams } from "react-router";
 
 export function useTranslationRoute() {
-  const { projectId, translationId } = useParams();
+  const { projectId, documentId, translationId } = useParams();
   const navigate = useNavigate();
 
   const navigateToTranslation = useCallback(
-    (projectId: string, translationId: string) => {
-      navigate(`/app/projects/${projectId}/translations/${translationId}`);
+    (projectId: string, documentId: string, translationId: string) => {
+      navigate(
+        `/app/projects/${projectId}/documents/${documentId}/translations/${translationId}`
+      );
     },
     [navigate]
   );
 
-  return { projectId, translationId, navigateToTranslation };
+  return { projectId, documentId, translationId, navigateToTranslation };
 }

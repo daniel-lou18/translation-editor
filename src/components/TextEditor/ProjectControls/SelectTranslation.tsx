@@ -1,29 +1,39 @@
-import { NormalizedTranslations, Translation } from "@/types";
+import { DocumentWithTranslations } from "@/types";
 import Combobox, { ComboDataElement } from "@/components/ui/Combobox";
 
 type SelectTranslationProps = {
-  translations: NormalizedTranslations;
-  currentTranslation: Translation | null;
-  navigateTo: (projectId: string, translationId: string) => void;
+  currentDocument: DocumentWithTranslations | null;
+  navigateTo: (
+    projectId: string,
+    documentId: string,
+    translationId: string
+  ) => void;
 };
 
 export default function SelectTranslation({
-  translations,
-  currentTranslation,
+  currentDocument,
   navigateTo,
 }: SelectTranslationProps) {
-  const items: ComboDataElement[] = Object.values(translations).map(
-    (translation) => ({
-      id: translation.id.toString(),
-      label: translation.fileName,
-      value: translation.name,
-    })
-  );
-  const currentValue = currentTranslation ? currentTranslation.fileName : null;
+  const items: ComboDataElement[] = currentDocument?.translations
+    ? currentDocument.translations.map((translation) => ({
+        id: translation.id.toString(),
+        label: `${currentDocument.sourceLang} > ${translation.targetLang}`,
+        value: translation.targetLang,
+      }))
+    : [];
+
+  const currentValue = currentDocument?.translations
+    ? `${currentDocument.sourceLang} > ${currentDocument.translations[0].targetLang}`
+    : null;
 
   function handleNavigate(translationId: string) {
-    if (!currentTranslation) return;
-    navigateTo(currentTranslation.projectId.toString(), translationId);
+    if (!currentDocument?.translations) return;
+
+    navigateTo(
+      currentDocument.projectId.toString(),
+      currentDocument.id.toString(),
+      translationId
+    );
   }
 
   return (
