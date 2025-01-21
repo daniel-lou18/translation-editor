@@ -1,8 +1,8 @@
-import { useCallback, useEffect, useRef } from "react";
-import { useAutoFill } from "@/hooks/useAutoFill";
+import { KeyboardEvent } from "react";
 import { Segment } from "@/types/Segment";
 import TranslationStatus from "./TranslationStatus";
 import Container from "@/components/ui/Container";
+import { useScrollHeight } from "@/hooks/useScrollHeight";
 
 interface TranslationSegmentProps {
   data: Segment;
@@ -22,29 +22,19 @@ export function TranslationSegment({
   onStatusChange,
 }: TranslationSegmentProps) {
   const { id, sourceText, targetText, status } = data;
+  const { sourceDivRef, textAreaRef, handleInput } = useScrollHeight();
 
-  const sourceDiv = useRef<HTMLDivElement | null>(null);
-  const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
-  useAutoFill(textAreaRef, useCallback(onTab, [onTab]));
-
-  const handleInput = () => {
-    if (textAreaRef.current) {
-      textAreaRef.current.style.height = "auto";
-      textAreaRef.current.style.height = `${textAreaRef.current.scrollHeight}px`;
+  function handleKeyDown(e: KeyboardEvent<HTMLTextAreaElement>) {
+    e.preventDefault();
+    if (e.key === "Tab") {
+      onTab();
     }
-  };
-
-  useEffect(() => {
-    if (sourceDiv.current && textAreaRef.current) {
-      textAreaRef.current.style.height = `${sourceDiv.current.scrollHeight}px`;
-    }
-  }, []);
-
+  }
   return (
     <Container
       className={`min-h-0 group flex items-stretch gap-4 px-4 py-2 focus-within:bg-cat-accent/10 hover:bg-gray-100 transition-all duration-300 ease-in-out`}
     >
-      <div ref={sourceDiv} className="w-12 pt-2 font-medium text-gray-400">
+      <div ref={sourceDivRef} className="w-12 pt-2 font-medium text-gray-400">
         {id}
       </div>
       <Container className="flex-1 rounded-lg p-2 text-sm">
@@ -56,6 +46,7 @@ export function TranslationSegment({
         onChange={(e) => onTargetChange(e.target.value)}
         onClick={onClick}
         onInput={handleInput}
+        onKeyDown={handleKeyDown}
         className={`flex-1 h-fit rounded-lg p-2 text-sm outline-none -outline-offset-2 focus:outline-2 focus:outline-cat-accent/50 hover:bg-background focus:bg-background transition-all resize-none bg-cat-memory/30`}
         placeholder={autoTranslation || ""}
         rows={1}

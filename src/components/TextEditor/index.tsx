@@ -28,7 +28,7 @@ export default function TextEditor() {
         <ProjectControls />
         <EditorControls />
       </Container>
-      <Container className="mx-auto max-w-[1600px] px-4 grid grid-cols-12 gap-6 relative overflow-visible">
+      <Container className="px-4 grid grid-cols-12 gap-6 relative overflow-visible">
         <TranslationSegments matches={matches} />
         <SideMenu>
           <ReformulationMatches

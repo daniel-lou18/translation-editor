@@ -5,7 +5,6 @@ import { useGetSegments } from "@/hooks/useGetSegments";
 
 export default function EditorPage() {
   const { segments, isLoading, isError, error } = useGetSegments();
-  console.log(segments);
 
   return (
     <DataHandler isLoading={isLoading} isError={isError} error={error}>

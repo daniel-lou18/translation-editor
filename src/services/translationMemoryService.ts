@@ -7,7 +7,7 @@ export class TranslationMemoryService extends ApiService {
   }
 
   async getMatches(data: SearchQuery): Promise<SemanticMatch[]> {
-    return await this.post("/translations/search", data);
+    return await this.post("/search", data);
   }
 }
 
