@@ -1,29 +1,27 @@
 import { translationService } from "@/services/translationService";
-import { Segment } from "@/types/Segment";
+import { Update } from "@/types/Dtos";
 import { useMutation } from "@tanstack/react-query";
 import { useTranslationRoute } from "./useTranslationRoute";
 
 export function useSaveSegments() {
-  const { projectId, translationId } = useTranslationRoute();
+  const { translationId } = useTranslationRoute();
   const { mutate, data, isPending, isError, error } = useMutation({
-    mutationFn: (segments: Segment[]) =>
-      updateSegments(projectId, translationId, segments),
+    mutationFn: (updates: Update[]) => updateSegments(translationId, updates),
   });
 
   async function updateSegments(
-    projectId: string | undefined,
     translationId: string | undefined,
-    segments: Segment[]
+    updates: Update[]
   ) {
-    if (!projectId || !translationId) {
+    if (!translationId) {
       throw new Error("Project or translation id is missing");
     }
 
-    if (!segments?.length) {
+    if (!updates?.length) {
       throw new Error("No segments to update");
     }
 
-    return await translationService.updateSegments(translationId, segments);
+    return await translationService.updateSegments(translationId, updates);
   }
 
   return {

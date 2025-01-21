@@ -4,7 +4,7 @@ import {
   UpdatedId,
 } from "@/types";
 import { ApiService } from "./ApiService";
-import { Segment } from "@/types/Segment";
+import { Update } from "@/types/Dtos";
 
 export default class TranslationService extends ApiService {
   constructor() {
@@ -31,6 +31,7 @@ export default class TranslationService extends ApiService {
       segments: data.segments.map(({ sourceSegment, targetSegment }) => ({
         id: targetSegment.id,
         translationId: targetSegment.translationId,
+        sourceSegmentId: sourceSegment.id,
         sourceText: sourceSegment.sourceText,
         sourceLang: data.document.sourceLang,
         embedding: sourceSegment.embedding,
@@ -43,10 +44,10 @@ export default class TranslationService extends ApiService {
 
   async updateSegments(
     translationId: string,
-    segments: Segment[]
+    updates: Update[]
   ): Promise<UpdatedId[]> {
     return await this.put(`/translations/${translationId}/segments`, {
-      segments,
+      updates,
     });
   }
 }

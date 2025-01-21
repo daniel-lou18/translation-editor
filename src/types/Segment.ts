@@ -9,6 +9,7 @@ export type JoinedSegment = {
 export type ImmutableSegmentContext = {
   id: number;
   translationId: number;
+  sourceSegmentId: number;
   sourceText: string;
   sourceLang: string;
   targetLang: string;
