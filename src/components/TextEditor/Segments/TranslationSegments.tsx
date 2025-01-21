@@ -12,14 +12,7 @@ type TranslationSegmentsProps = {
 export default function TranslationSegments({
   matches,
 }: TranslationSegmentsProps) {
-  const {
-    segments,
-    activeSegmentId,
-    handleValueChange,
-    handleSegmentChange,
-    handleStatusChange,
-    getActiveSegment,
-  } = useEditor();
+  const { segments, activeSegmentId, getActiveSegment } = useEditor();
   const activeSegment = getActiveSegment();
   const {
     data: autoTranslations,
@@ -38,22 +31,14 @@ export default function TranslationSegments({
     [activeSegmentId, autoTranslation, isLoading, isError]
   );
 
-  const handleTab = (id: number) => {
-    if (!autoTranslation) return;
-    handleValueChange(id, autoTranslation);
-  };
-
   return (
     <Container className="col-span-9 rounded-xl border border-gray-100 bg-white shadow-sm divide-y divide-gray-100">
       {segments.map((segment) => (
         <TranslationSegment
           key={segment.id}
           data={segment}
-          onTargetChange={(value) => handleValueChange(segment.id, value)}
-          onClick={() => handleSegmentChange(segment.id)}
-          onTab={() => handleTab(segment.id)}
-          onStatusChange={() => handleStatusChange(segment.id)}
           autoTranslation={renderAutoTranslation(segment.id)}
+          activeId={activeSegmentId}
         />
       ))}
     </Container>

@@ -1,6 +1,8 @@
 import { Document } from "./Document";
 import { JoinedSegment, Segment } from "./Segment";
 
+export type SegmentStatus = "translated" | "untranslated";
+
 export type Translation = {
   id: number;
   documentId: number;
@@ -16,7 +18,7 @@ export type TargetSegment = {
   sourceSegmentId: number;
   targetText: string | null;
   embedding: number[] | null;
-  status: string | null;
+  status: SegmentStatus | null;
   createdAt: string;
   updatedAt: string;
 };

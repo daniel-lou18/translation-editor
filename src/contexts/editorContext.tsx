@@ -2,6 +2,8 @@ import { EditorActions, useEditorActions } from "@/hooks/useEditorActions";
 import { useEditorSync } from "@/hooks/useEditorSync";
 import { Segment } from "@/types/Segment";
 import { createContext, ReactNode, useContext, useReducer } from "react";
+import { editorContextUtils } from "./editorContextUtils";
+import { SegmentStatus } from "@/types";
 
 export type InitialState = {
   segments: Segment[];
@@ -15,12 +17,13 @@ type EditorContextProviderProps = {
   initialSegments: Segment[];
 };
 
-type Handlers = {
+type Utilities = {
   getActiveSegment: () => Segment;
+  toNextSegment: () => Segment;
   getCompletedSegments: () => number;
 };
 
-type ContextValue = InitialState & Handlers & EditorActions;
+type ContextValue = InitialState & Utilities & EditorActions;
 
 export type Action =
   | {
@@ -38,6 +41,7 @@ export type Action =
       type: "UPDATE_STATUS";
       payload: number;
     }
+  | { type: "SET_STATUS"; payload: { id: number; status: SegmentStatus } }
   | { type: "UPDATE_STATUS_ALL" }
   | { type: "SYNC_COMPLETED" };
 
@@ -80,6 +84,15 @@ function reducer(state: InitialState, action: Action): InitialState {
         ),
         pendingChanges: state.pendingChanges.add(action.payload),
       };
+    case "SET_STATUS":
+      return {
+        ...state,
+        segments: state.segments.map((segment) =>
+          segment.id === action.payload.id
+            ? { ...segment, status: action.payload.status }
+            : segment
+        ),
+      };
     case "UPDATE_STATUS_ALL":
       return {
         ...state,
@@ -113,16 +126,7 @@ export default function EditorContextProvider({
     { segments, activeSegmentId, allSegmentsConfirmed, pendingChanges },
     dispatch
   );
-
-  const handlers = {
-    getActiveSegment: () =>
-      segments.find((segment) => segment.id === activeSegmentId) || segments[0],
-    getCompletedSegments: () =>
-      segments.reduce((acc, segment) => {
-        if (segment.status === "translated") return acc + 1;
-        else return acc;
-      }, 0),
-  };
+  const utils = editorContextUtils(segments, activeSegmentId, actions);
 
   return (
     <EditorContext.Provider
@@ -132,7 +136,7 @@ export default function EditorContextProvider({
         allSegmentsConfirmed,
         pendingChanges,
         ...actions,
-        ...handlers,
+        ...utils,
       }}
     >
       {children}

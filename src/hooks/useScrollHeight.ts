@@ -4,7 +4,7 @@ export function useScrollHeight() {
   const sourceDivRef = useRef<HTMLDivElement | null>(null);
   const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
 
-  const handleInput = useCallback(() => {
+  const onInput = useCallback(() => {
     if (textAreaRef.current) {
       textAreaRef.current.style.height = "auto";
       textAreaRef.current.style.height = `${textAreaRef.current.scrollHeight}px`;
@@ -17,5 +17,5 @@ export function useScrollHeight() {
     }
   }, [sourceDivRef, textAreaRef]);
 
-  return { sourceDivRef, textAreaRef, handleInput };
+  return { sourceDivRef, textAreaRef, onInput };
 }

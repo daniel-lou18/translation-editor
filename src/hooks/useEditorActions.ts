@@ -1,10 +1,12 @@
 import { Action as EditorAction } from "@/contexts/editorContext";
+import { SegmentStatus } from "@/types";
 import { Dispatch, useCallback } from "react";
 
 export type EditorActions = {
   handleSegmentChange: (id: number) => void;
   handleValueChange: (id: number, value: string) => void;
   handleStatusChange: (id: number) => void;
+  setStatus: (id: number, status: SegmentStatus) => void;
   handleStatusChangeAll: () => void;
 };
 
@@ -23,6 +25,11 @@ export function useEditorActions(
     ),
     handleStatusChange: useCallback(
       (id: number) => dispatch({ type: "UPDATE_STATUS", payload: id }),
+      [dispatch]
+    ),
+    setStatus: useCallback(
+      (id: number, status: SegmentStatus) =>
+        dispatch({ type: "SET_STATUS", payload: { id, status } }),
       [dispatch]
     ),
     handleStatusChangeAll: useCallback(
