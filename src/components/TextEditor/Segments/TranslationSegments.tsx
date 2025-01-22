@@ -1,25 +1,21 @@
 import { useEditor } from "@/contexts/editorContext";
 import { TranslationSegment } from "./TranslationSegment";
-import { SemanticMatch } from "@/types";
 import { useAutoTranslation } from "@/hooks/useAutoTranslation";
 import Container from "../../ui/Container";
 import { useCallback } from "react";
+import { useSemanticMatches } from "@/hooks/useSemanticMatches";
 
-type TranslationSegmentsProps = {
-  matches: SemanticMatch[] | null;
-};
-
-export default function TranslationSegments({
-  matches,
-}: TranslationSegmentsProps) {
+export default function TranslationSegments() {
   const { segments, activeSegmentId, getActiveSegment } = useEditor();
   const activeSegment = getActiveSegment();
+  const { matches } = useSemanticMatches(activeSegment);
   const {
-    data: autoTranslations,
+    autoTranslation,
     isPending: isLoading,
     isError,
   } = useAutoTranslation(activeSegment, matches);
-  const autoTranslation = autoTranslations?.[activeSegmentId];
+
+  console.log({ matches });
 
   const renderAutoTranslation = useCallback(
     (id: number) => {

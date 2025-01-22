@@ -16,7 +16,6 @@ export function useSegmentHandlers(
 
   const onChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     const value = e.target.value;
-    console.log({ value });
     handleValueChange(segmentId, value);
   };
 

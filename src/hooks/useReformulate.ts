@@ -1,6 +1,5 @@
 import { reformulationService } from "@/services/reformulationService";
-import { TranslationRecords } from "@/types";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export function useReformulate(id: number) {
   const queryClient = useQueryClient();
@@ -17,20 +16,13 @@ export function useReformulate(id: number) {
         params.targetLang
       ),
     onSuccess: (data) =>
-      queryClient.setQueryData<TranslationRecords>(
-        ["reformulation"],
-        (prevData = {}) => ({
-          ...prevData,
-          [id]: data.trim(),
-        })
-      ),
-  });
-  const { data } = useQuery<TranslationRecords>({
-    queryKey: ["reformulation"],
+      queryClient.setQueryData(["reformulation", id], data.trim()),
   });
 
+  const reformulation = queryClient.getQueryData<string>(["reformulation", id]);
+
   return {
-    reformulation: data?.[id],
+    reformulation,
     error,
     isLoading: isPending,
     isError,

@@ -4,7 +4,7 @@ import { Bot } from "lucide-react";
 import { SemanticMatch } from "@/types";
 
 interface MemoryMatchProps {
-  match: SemanticMatch;
+  match: Pick<SemanticMatch, "sourceText" | "targetText" | "similarityScore">;
   onClick: () => void;
   variant: "tm" | "ai";
 }
