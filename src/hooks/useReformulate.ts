@@ -1,48 +1,39 @@
 import { reformulationService } from "@/services/reformulationService";
-import { Translations } from "@/types";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { TranslationRecords } from "@/types";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-export function useReformulate(
-  id: number,
-  translatedText: string,
-  examples: string[]
-) {
+export function useReformulate(id: number) {
   const queryClient = useQueryClient();
 
-  const { data, error, isPending, isError, mutate } = useMutation({
-    mutationFn: () => fetchReformulation(id, translatedText, examples),
+  const { isPending, error, isError, mutate } = useMutation({
+    mutationFn: (params: {
+      translatedText: string;
+      examples: string[];
+      targetLang?: string;
+    }) =>
+      reformulationService.getReformulation(
+        params.translatedText,
+        params.examples,
+        params.targetLang
+      ),
     onSuccess: (data) =>
-      queryClient.setQueryData<Translations>(["reformulation"], (prevData) => ({
-        ...prevData,
-        ...data,
-      })),
+      queryClient.setQueryData<TranslationRecords>(
+        ["reformulation"],
+        (prevData = {}) => ({
+          ...prevData,
+          [id]: data.trim(),
+        })
+      ),
+  });
+  const { data } = useQuery<TranslationRecords>({
+    queryKey: ["reformulation"],
   });
 
-  async function fetchReformulation(
-    id: number,
-    translatedText: string,
-    examples: string[]
-  ) {
-    const cachedReformulations = queryClient.getQueryData<Translations>([
-      "reformulation",
-    ]);
-
-    if (cachedReformulations?.[id]) {
-      return { [id]: cachedReformulations?.[id] };
-    }
-
-    if (!translatedText) {
-      throw new Error("Translated text to reformulate is missing");
-    }
-
-    const result = await reformulationService.getReformulation(
-      translatedText,
-      examples
-    );
-    const record = { [id]: result.trim() };
-
-    return record;
-  }
-
-  return { data, error, isPending, isError, mutate };
+  return {
+    reformulation: data?.[id],
+    error,
+    isLoading: isPending,
+    isError,
+    mutate,
+  };
 }

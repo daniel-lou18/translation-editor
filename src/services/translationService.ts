@@ -1,10 +1,6 @@
-import {
-  TranslationWithJoinedSegments,
-  TranslationWithSegments,
-  UpdatedId,
-} from "@/types";
+import { TranslationWithSegments, UpdatedId } from "@/types";
 import { ApiService } from "./ApiService";
-import { Update } from "@/types/Dtos";
+import { TranslationWithJoinedSegments, Update } from "@/types/Dtos";
 
 export default class TranslationService extends ApiService {
   constructor() {

@@ -3,7 +3,7 @@ import { useTranslationRoute } from "./useTranslationRoute";
 import { exportService } from "@/services/exportService";
 
 export function useExportTranslation() {
-  const { projectId, translationId } = useTranslationRoute();
+  const { translationId } = useTranslationRoute();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -12,12 +12,11 @@ export function useExportTranslation() {
       setIsLoading(true);
       setError("");
 
-      if (!projectId || !translationId) {
-        throw new Error("Project or translation id is missing");
+      if (!translationId) {
+        throw new Error("Translation id is missing");
       }
 
       const { data, fileName } = await exportService.exportTranslation(
-        projectId,
         translationId,
         "txt"
       );

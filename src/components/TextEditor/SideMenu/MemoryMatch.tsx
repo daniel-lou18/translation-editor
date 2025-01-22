@@ -29,7 +29,7 @@ export function MemoryMatch({
           {variant === "tm" ? "TM" : <Bot size={18} />}
         </span>
       </Container>
-      <Container className="space-y-2 text-sm">
+      <Container className="space-y-2 text-xs">
         <p className="text-gray-600">{sourceText}</p>
         <p className="font-medium">{targetText}</p>
       </Container>

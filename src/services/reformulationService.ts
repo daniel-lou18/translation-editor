@@ -7,11 +7,13 @@ export class ReformulationService extends ApiService {
 
   async getReformulation(
     translatedText: string,
-    examples: string[]
+    examples: string[],
+    targetLang?: string
   ): Promise<string> {
-    return await this.post("/translations/reformulate", {
+    return await this.post("/reformulate", {
       translatedText,
       examples,
+      targetLang,
     });
   }
 }

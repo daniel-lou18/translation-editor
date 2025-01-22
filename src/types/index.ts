@@ -41,7 +41,7 @@ export type DocumentSegment = {
 
 export type TranslationMemoryMatches = Record<number, TranslationMatch>;
 
-export type Translations = Record<number, string>;
+export type TranslationRecords = Record<number, string>;
 
 export type ApiResponseType<T> = {
   data: T;

@@ -1,11 +1,3 @@
-import { SourceSegment } from "./Document";
-import { TargetSegment } from "./Translation";
-
-export type JoinedSegment = {
-  sourceSegment: SourceSegment;
-  targetSegment: TargetSegment;
-};
-
 export type ImmutableSegmentContext = {
   id: number;
   translationId: number;

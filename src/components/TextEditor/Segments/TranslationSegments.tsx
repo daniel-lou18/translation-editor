@@ -33,12 +33,13 @@ export default function TranslationSegments({
 
   return (
     <Container className="col-span-9 rounded-xl border border-gray-100 bg-white shadow-sm divide-y divide-gray-100">
-      {segments.map((segment) => (
+      {segments.map((segment, idx) => (
         <TranslationSegment
           key={segment.id}
           data={segment}
           autoTranslation={renderAutoTranslation(segment.id)}
           activeId={activeSegmentId}
+          index={idx}
         />
       ))}
     </Container>

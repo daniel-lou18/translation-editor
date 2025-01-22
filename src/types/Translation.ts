@@ -1,5 +1,5 @@
 import { Document } from "./Document";
-import { JoinedSegment, Segment } from "./Segment";
+import { Segment } from "./Segment";
 
 export type SegmentStatus = "translated" | "untranslated";
 
@@ -25,12 +25,6 @@ export type TargetSegment = {
 
 export type TranslationWithTargetSegments = Translation & {
   targetSegments: TargetSegment[];
-};
-
-export type TranslationWithJoinedSegments = {
-  translation: Translation;
-  document: Document;
-  segments: JoinedSegment[];
 };
 
 export type TranslationWithSegments = {

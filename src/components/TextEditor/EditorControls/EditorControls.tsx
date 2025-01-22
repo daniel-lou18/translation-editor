@@ -30,13 +30,18 @@ export default function EditorControls() {
     ? currentMatches.map((match) => match.targetText)
     : [];
 
-  const { mutate } = useReformulate(
-    activeSegmentId,
-    segment.targetText,
-    targetTexts
-  );
+  const { mutate } = useReformulate(activeSegmentId);
 
   const { downloadFile } = useExportTranslation();
+
+  function handleReformulate() {
+    if (!segment.targetText) return;
+    mutate({
+      translatedText: segment.targetText,
+      examples: targetTexts,
+      targetLang: segment.targetLang,
+    });
+  }
 
   return (
     <Container className="flex w-full">
@@ -60,7 +65,7 @@ export default function EditorControls() {
         variant="ghost"
         size="icon"
         className="border border-transparent hover:border-cat-accent/10"
-        onClick={() => mutate()}
+        onClick={handleReformulate}
       >
         <WandSparkles />
       </Button>

@@ -7,12 +7,11 @@ export class ExportService extends ApiService {
   }
 
   async exportTranslation(
-    projectId: string,
     translationId: string,
     format: FileType
   ): Promise<BlobResponse> {
     return await this.getBlob(
-      `/projects/${projectId}/translations/${translationId}/export?format=${format}`
+      `/translations/${translationId}/export?format=${format}`
     );
   }
 }
