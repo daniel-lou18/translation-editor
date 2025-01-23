@@ -27,11 +27,17 @@ export default function Upload() {
     setFiles((prev) => prev.filter((_, i) => i !== index));
   }
 
-  function handleSubmit(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    uploadService.submitSourceText(
-      files.filter((file) => file.type === "document")?.[0].file
-    );
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
+    // TO DO: create custom tanstack hook. Navigate to editor page on success
+    try {
+      e.preventDefault();
+      const translation = await uploadService.submitSourceText(
+        files.filter((file) => file.type === "document")?.[0].file
+      );
+      console.log({ translation });
+    } catch (error) {
+      console.error("OOOOOPs", error);
+    }
   }
 
   return (

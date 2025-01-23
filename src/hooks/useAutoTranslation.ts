@@ -12,7 +12,7 @@ export function useAutoTranslation(
   const { data, error, isPending, isError } = useQuery({
     queryKey: ["auto-translation", id],
     queryFn: () => fetchTranslation(sourceText, matches),
-    enabled: !!sourceText && !!matches,
+    enabled: !!sourceText && !!matches && !(segment.status === "translated"),
     staleTime: 24 * 60 * 60 * 1000, // 1 day in milliseconds
   });
 

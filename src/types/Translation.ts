@@ -32,3 +32,5 @@ export type TranslationWithSegments = {
   document: Document;
   segments: Segment[];
 };
+
+export type TranslationWithDocument = Translation & { document: Document };

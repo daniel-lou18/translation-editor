@@ -15,8 +15,6 @@ export default function TranslationSegments() {
     isError,
   } = useAutoTranslation(activeSegment, matches);
 
-  console.log({ matches });
-
   const renderAutoTranslation = useCallback(
     (id: number) => {
       if (activeSegmentId !== id) return null;

@@ -6,7 +6,7 @@ type Config = Partial<AxiosRequestConfig>;
 export class ApiService {
   private api: AxiosInstance;
   private config: Config = {
-    timeout: 10000,
+    timeout: 30000,
     headers: {
       "Content-Type": "application/json",
     },
