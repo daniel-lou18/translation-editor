@@ -22,3 +22,15 @@ export type UpdateSegmentsDTO = {
   translationId: string;
   updates: Update[];
 };
+
+export type TmSegmentMatch = {
+  sourceSegment: {
+    id: number;
+    textContent: string;
+    similarityScore: number;
+  };
+  targetSegment: {
+    id: number;
+    textContent: string;
+  } | null; // Null if no target segment exists
+};

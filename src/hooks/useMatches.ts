@@ -1,72 +1,72 @@
-import { translationMemoryService } from "@/services/translationMemoryService";
-import { Segment, TranslationMemoryMatches } from "@/types";
-import { calculateProgress } from "@/utils/helpers";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
+// import { translationMemoryService } from "@/services/translationMemoryService";
+// import { Segment, TranslationMemoryMatches } from "@/types";
+// import { calculateProgress } from "@/utils/helpers";
+// import { useQuery, useQueryClient } from "@tanstack/react-query";
+// import { useState } from "react";
 
-export function useMatches(segments: Segment[]) {
-  const queryClient = useQueryClient();
-  const batchSize = 10;
-  const [currentBatchIndex, setCurrentBatchIndex] = useState(0);
+// export function useMatches(segments: Segment[]) {
+//   const queryClient = useQueryClient();
+//   const batchSize = 10;
+//   const [currentBatchIndex, setCurrentBatchIndex] = useState(0);
 
-  const progress = calculateProgress(segments, currentBatchIndex, batchSize);
+//   const progress = calculateProgress(segments, currentBatchIndex, batchSize);
 
-  const { isPending, isError, error } = useQuery({
-    queryKey: ["matches", currentBatchIndex],
-    queryFn: fetchNextBatch,
-    enabled:
-      currentBatchIndex * batchSize < segments.length && segments.length > 0,
-    staleTime: Infinity,
-    gcTime: Infinity,
-    refetchOnWindowFocus: false,
-    refetchOnMount: false,
-  });
+//   const { isPending, isError, error } = useQuery({
+//     queryKey: ["matches", currentBatchIndex],
+//     queryFn: fetchNextBatch,
+//     enabled:
+//       currentBatchIndex * batchSize < segments.length && segments.length > 0,
+//     staleTime: Infinity,
+//     gcTime: Infinity,
+//     refetchOnWindowFocus: false,
+//     refetchOnMount: false,
+//   });
 
-  async function fetchNextBatch() {
-    const startIndex = currentBatchIndex * batchSize;
-    const endIndex = Math.min(startIndex + batchSize, segments.length);
-    const currentSegments = segments.slice(startIndex, endIndex);
+//   async function fetchNextBatch() {
+//     const startIndex = currentBatchIndex * batchSize;
+//     const endIndex = Math.min(startIndex + batchSize, segments.length);
+//     const currentSegments = segments.slice(startIndex, endIndex);
 
-    const results = await translationMemoryService.getMatches({
-      searchTerms: currentSegments.map((segment) => segment.sourceText),
-    });
+//     const results = await translationMemoryService.getMatches({
+//       searchTerms: currentSegments.map((segment) => segment.sourceText),
+//     });
 
-    const currentMatches = Object.fromEntries(
-      currentSegments.map((segment, idx) => [segment.id, results[idx]])
-    );
+//     const currentMatches = Object.fromEntries(
+//       currentSegments.map((segment, idx) => [segment.id, results[idx]])
+//     );
 
-    const prevMatches =
-      currentBatchIndex > 0
-        ? queryClient.getQueryData<TranslationMemoryMatches>([
-            "matches",
-            currentBatchIndex - 1,
-          ])
-        : {};
+//     const prevMatches =
+//       currentBatchIndex > 0
+//         ? queryClient.getQueryData<TranslationMemoryMatches>([
+//             "matches",
+//             currentBatchIndex - 1,
+//           ])
+//         : {};
 
-    if (endIndex < segments.length) {
-      setCurrentBatchIndex((prevIdx) => prevIdx + 1);
-    }
+//     if (endIndex < segments.length) {
+//       setCurrentBatchIndex((prevIdx) => prevIdx + 1);
+//     }
 
-    return { ...prevMatches, ...currentMatches };
-  }
+//     return { ...prevMatches, ...currentMatches };
+//   }
 
-  const allMatches =
-    queryClient.getQueryData<TranslationMemoryMatches>([
-      "matches",
-      currentBatchIndex,
-    ]) || {};
+//   const allMatches =
+//     queryClient.getQueryData<TranslationMemoryMatches>([
+//       "matches",
+//       currentBatchIndex,
+//     ]) || {};
 
-  // Set all the matches with a separate, easily accessible key that does not require a batch index to retrieve
-  queryClient.setQueryDefaults(["allMatches"], {
-    staleTime: Infinity,
-    gcTime: Infinity,
-    refetchOnWindowFocus: false,
-    refetchOnMount: false,
-  });
-  queryClient.setQueryData<TranslationMemoryMatches>(
-    ["allMatches"],
-    allMatches
-  );
+//   // Set all the matches with a separate, easily accessible key that does not require a batch index to retrieve
+//   queryClient.setQueryDefaults(["allMatches"], {
+//     staleTime: Infinity,
+//     gcTime: Infinity,
+//     refetchOnWindowFocus: false,
+//     refetchOnMount: false,
+//   });
+//   queryClient.setQueryData<TranslationMemoryMatches>(
+//     ["allMatches"],
+//     allMatches
+//   );
 
-  return { isPending, isError, data: allMatches, error, progress };
-}
+//   return { isPending, isError, data: allMatches, error, progress };
+// }

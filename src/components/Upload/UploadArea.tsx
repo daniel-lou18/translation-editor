@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { FileSpreadsheet, FileText } from "lucide-react";
+import { BookType, FileText } from "lucide-react";
 import { useState } from "react";
 
 type UploadAreaProps = {
@@ -62,7 +62,7 @@ export default function UploadArea({
         {type === "document" ? (
           <FileText className="w-6 h-6 text-cat-accent" />
         ) : (
-          <FileSpreadsheet className="w-6 h-6 text-cat-accent" />
+          <BookType className="w-6 h-6 text-cat-accent" />
         )}
       </div>
 

@@ -19,6 +19,13 @@ export class UploadService extends ApiService {
       formData
     );
   }
+
+  async submitTmTexts(files: File[]) {
+    const formData = new FormData();
+    files.forEach((file) => formData.append("files", file));
+
+    return await this.post("upload/tms", formData);
+  }
 }
 
 export const uploadService = new UploadService();

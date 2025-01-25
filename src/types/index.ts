@@ -25,11 +25,11 @@ export type SemanticMatch = {
   sourceText: string;
   targetText: string;
   similarityScore: number;
-  sourceLang: string;
-  targetLang: string;
-  domain: string | null;
-  subdomain: string | null;
-  docType: string | null;
+  sourceLang?: string;
+  targetLang?: string;
+  domain?: string | null;
+  subdomain?: string | null;
+  docType?: string | null;
 };
 
 export type DocumentSegment = {
