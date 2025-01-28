@@ -10,14 +10,14 @@ export default function TranslationSegments() {
   const { segments, activeSegmentId, getActiveSegment } = useEditor();
   const activeSegment = getActiveSegment();
   const { matches } = useSemanticMatches(activeSegment);
-  const { searchResult } = useSearchGlossary(activeSegment.sourceText);
+  const { glossaryData } = useSearchGlossary(activeSegment.sourceText);
   const {
     autoTranslation,
     isPending: isLoading,
     isError,
   } = useAutoTranslation(activeSegment, matches);
 
-  console.log({ searchResult });
+  console.log({ glossaryData });
 
   const renderAutoTranslation = useCallback(
     (id: number) => {

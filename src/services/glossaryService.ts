@@ -1,4 +1,4 @@
-import { GlossaryTerm } from "@/types/GlossaryTerm";
+import { GlossarySearchResult } from "@/types/GlossaryTerm";
 import { ApiService } from "./ApiService";
 
 export class GlossaryService extends ApiService {
@@ -6,7 +6,7 @@ export class GlossaryService extends ApiService {
     super(import.meta.env.VITE_API_URL);
   }
 
-  async search(searchQuery: string): Promise<GlossaryTerm[]> {
+  async search(searchQuery: string): Promise<GlossarySearchResult[]> {
     return this.get(`/glossaries/search?q=${searchQuery}`);
   }
 }

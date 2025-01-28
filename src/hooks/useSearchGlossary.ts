@@ -7,5 +7,5 @@ export function useSearchGlossary(searchQuery: string) {
     queryFn: () => glossaryService.search(searchQuery),
   });
 
-  return { searchResult: data, isLoading: isPending, isError, error };
+  return { glossaryData: data, isLoading: isPending, isError, error };
 }

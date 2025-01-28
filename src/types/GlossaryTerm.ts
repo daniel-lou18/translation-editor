@@ -1,3 +1,5 @@
+import { TmDocumentPair } from "./Tm";
+
 export type GlossaryTerm = {
   id: number;
   createdAt: string;
@@ -7,4 +9,9 @@ export type GlossaryTerm = {
   targetTerm: string;
   type: string | null;
   context: string | null;
+};
+
+export type GlossarySearchResult = {
+  glossaryTerm: GlossaryTerm;
+  tmDocumentPair: TmDocumentPair | null;
 };
