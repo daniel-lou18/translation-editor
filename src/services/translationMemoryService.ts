@@ -11,7 +11,7 @@ export class TranslationMemoryService extends ApiService {
     const response = await this.get<TmSegmentMatch[]>(
       `/tm/matches/${sourceSegmentId}`
     );
-    console.log({ response });
+
     const formattedMatches = this.transformSemanticMatches(response);
 
     if (formattedMatches.length === 0) {

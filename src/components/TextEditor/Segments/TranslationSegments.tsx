@@ -4,16 +4,20 @@ import { useAutoTranslation } from "@/hooks/useAutoTranslation";
 import Container from "../../ui/Container";
 import { useCallback } from "react";
 import { useSemanticMatches } from "@/hooks/useSemanticMatches";
+import { useSearchGlossary } from "@/hooks/useSearchGlossary";
 
 export default function TranslationSegments() {
   const { segments, activeSegmentId, getActiveSegment } = useEditor();
   const activeSegment = getActiveSegment();
   const { matches } = useSemanticMatches(activeSegment);
+  const { searchResult } = useSearchGlossary(activeSegment.sourceText);
   const {
     autoTranslation,
     isPending: isLoading,
     isError,
   } = useAutoTranslation(activeSegment, matches);
+
+  console.log({ searchResult });
 
   const renderAutoTranslation = useCallback(
     (id: number) => {
