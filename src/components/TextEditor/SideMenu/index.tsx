@@ -10,6 +10,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TabsContent } from "@radix-ui/react-tabs";
 import Glossary from "./Glossary";
 import { useSearchGlossary } from "@/hooks/useSearchGlossary";
+import GlossarySkeletons from "./GlossarySkeletons";
 
 export default function SideMenu() {
   const { getActiveSegment } = useEditor();
@@ -20,7 +21,12 @@ export default function SideMenu() {
     isError,
     error,
   } = useSemanticMatches(activeSegment);
-  const { glossaryData } = useSearchGlossary(activeSegment.sourceText);
+  const {
+    glossaryData,
+    isLoading: isLoadingGlossary,
+    isError: isGlossaryError,
+    error: glossaryError,
+  } = useSearchGlossary(activeSegment.sourceText);
   const { reformulation, isLoading: isLoadingReformulation } = useReformulate(
     activeSegment.id
   );
@@ -29,9 +35,9 @@ export default function SideMenu() {
     <Container className="col-span-3 space-y-4 sticky top-8 min-h-screen h-fit">
       <Container className="rounded-xl border border-gray-100 bg-white p-4 shadow-sm">
         <Tabs defaultValue="tm" className="space-y-4">
-          <TabsList className="bg-cat-memory">
+          <TabsList className="bg-cat-accent/10">
             <TabsTrigger value="tm">Translation Memory</TabsTrigger>
-            <TabsTrigger value="glossary">Term Base</TabsTrigger>
+            <TabsTrigger value="glossary">Glossary</TabsTrigger>
           </TabsList>
           <TabsContent value="tm">
             <DataHandler
@@ -54,15 +60,15 @@ export default function SideMenu() {
           </TabsContent>
           <TabsContent value="glossary">
             <DataHandler
-              isLoading={isLoadingMatches || isLoadingReformulation}
-              isError={isError}
-              error={error}
+              isLoading={isLoadingGlossary}
+              isError={isGlossaryError}
+              error={glossaryError}
               errorComponent={
                 <p className="text-sm text-muted-foreground">
                   No matches found
                 </p>
               }
-              loadingComponent={<MatchSkeletons />}
+              loadingComponent={<GlossarySkeletons />}
             >
               <Glossary glossaryData={glossaryData || []} />
             </DataHandler>

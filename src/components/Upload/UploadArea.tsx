@@ -1,6 +1,7 @@
 import { cn } from "@/lib/utils";
 import { BookType, FileText } from "lucide-react";
 import { useState } from "react";
+import Container from "../ui/Container";
 
 type UploadAreaProps = {
   type: "document" | "memory";
@@ -47,7 +48,7 @@ export default function UploadArea({
   };
 
   return (
-    <div
+    <Container
       onDragOver={(e) => handleDragOver(e, type)}
       onDragLeave={handleDragLeave}
       onDrop={(e) => handleDrop(e)}
@@ -58,18 +59,18 @@ export default function UploadArea({
         "flex flex-col items-center justify-center gap-3 h-[300px]"
       )}
     >
-      <div className="w-12 h-12 rounded-full bg-cat-accent/10 flex items-center justify-center">
+      <Container className="w-12 h-12 rounded-full bg-cat-accent/10 flex items-center justify-center">
         {type === "document" ? (
           <FileText className="w-6 h-6 text-cat-accent" />
         ) : (
           <BookType className="w-6 h-6 text-cat-accent" />
         )}
-      </div>
+      </Container>
 
-      <div className="text-center">
+      <Container className="text-center">
         <p className="font-medium text-foreground">{title}</p>
         <p className="text-sm text-muted-foreground mt-1">{description}</p>
-      </div>
+      </Container>
 
       <label className="inline-flex items-center px-4 py-2 rounded-md text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 transition-colors cursor-pointer">
         <input
@@ -81,6 +82,6 @@ export default function UploadArea({
         />
         Select Files
       </label>
-    </div>
+    </Container>
   );
 }

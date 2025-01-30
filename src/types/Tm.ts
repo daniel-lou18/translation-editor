@@ -10,3 +10,8 @@ export type TmDocumentPair = {
   createdAt: string;
   updatedAt: string;
 };
+
+export type UploadResult = {
+  createdSegmentPairs: number;
+  createdGlossaryTerms: number;
+};

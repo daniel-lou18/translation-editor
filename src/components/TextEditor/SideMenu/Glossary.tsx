@@ -1,25 +1,42 @@
-import Container from "@/components/ui/Container";
 import { GlossarySearchResult } from "@/types/GlossaryTerm";
 import GlossaryRow from "./GlossaryRow";
+import {
+  Table,
+  TableBody,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 type GlossaryProps = {
   glossaryData: GlossarySearchResult[];
 };
 
 export default function Glossary({ glossaryData }: GlossaryProps) {
-  if (glossaryData.length === 0) return null;
+  if (glossaryData.length === 0)
+    return (
+      <p className="text-sm text-muted-foreground px-2 py-1">
+        No corresponding terms found
+      </p>
+    );
 
   return (
-    <Container className="grid grid-cols-2 text-xs">
-      <Container className="font-semibold text-sm border-b border-r border-t border-border p-1">
-        {glossaryData[0].tmDocumentPair?.sourceLang || ""}{" "}
-      </Container>
-      <Container className="font-semibold text-sm border-b border-t border-border p-1">
-        {glossaryData[0].tmDocumentPair?.targetLang || ""}{" "}
-      </Container>
-      {glossaryData.map(({ glossaryTerm }) => (
-        <GlossaryRow glossaryTerm={glossaryTerm} />
-      ))}
-    </Container>
+    <Table className="text-sm">
+      <TableHeader className="bg-cat-memory">
+        <TableRow className="font-bold">
+          <TableHead>
+            {glossaryData[0].tmDocumentPair?.sourceLang || ""}
+          </TableHead>
+          <TableHead>
+            {glossaryData[0].tmDocumentPair?.targetLang || ""}
+          </TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {glossaryData.map(({ glossaryTerm }) => (
+          <GlossaryRow glossaryTerm={glossaryTerm} />
+        ))}
+      </TableBody>
+    </Table>
   );
 }

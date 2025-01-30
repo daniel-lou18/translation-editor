@@ -33,11 +33,12 @@ export default function ProjectControls() {
     (projectId: string) => {
       if (!projectId || !projects) return;
 
-      navigateToTranslation(
+      navigateToTranslation({
         projectId,
-        projects[projectId].documents[0].id.toString(),
-        projects[projectId].documents[0].translations[0].id.toString()
-      );
+        documentId: projects[projectId].documents[0].id.toString(),
+        translationId:
+          projects[projectId].documents[0].translations[0].id.toString(),
+      });
     },
     [projects, navigateToTranslation]
   );
@@ -49,11 +50,11 @@ export default function ProjectControls() {
       const translationId =
         currentDocuments[documentId].translations[0].id.toString();
 
-      navigateToTranslation(
-        currentDocument.projectId.toString(),
+      navigateToTranslation({
+        projectId: currentDocument.projectId.toString(),
         documentId,
-        translationId
-      );
+        translationId,
+      });
     },
     [currentDocuments, currentDocument, navigateToTranslation]
   );
@@ -62,11 +63,11 @@ export default function ProjectControls() {
     (translationId: string) => {
       if (!currentDocument?.translations) return;
 
-      navigateToTranslation(
-        currentDocument.projectId.toString(),
-        currentDocument.id.toString(),
-        translationId
-      );
+      navigateToTranslation({
+        projectId: currentDocument.projectId.toString(),
+        documentId: currentDocument.id.toString(),
+        translationId,
+      });
     },
     [
       currentDocument?.id,

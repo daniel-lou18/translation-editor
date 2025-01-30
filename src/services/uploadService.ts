@@ -1,5 +1,6 @@
 import { TranslationWithDocument } from "@/types/Translation";
 import { ApiService } from "./ApiService";
+import { UploadResult } from "@/types/Tm";
 
 export class UploadService extends ApiService {
   constructor() {
@@ -20,7 +21,7 @@ export class UploadService extends ApiService {
     );
   }
 
-  async submitTmTexts(files: File[]) {
+  async submitTmTexts(files: File[]): Promise<UploadResult> {
     const formData = new FormData();
     files.forEach((file) => formData.append("files", file));
 
