@@ -8,12 +8,10 @@ import {
 import { Translation as TranslationDto } from "@/types/Translation";
 import { useProjects } from "./useProjects";
 import { useMemo } from "react";
+import { useTranslationRoute } from "./useTranslationRoute";
 
-export function useCurrentProject(
-  projectId: string | undefined,
-  documentId: string | undefined,
-  translationId: string | undefined
-) {
+export function useCurrentProject() {
+  const { projectId, documentId, translationId } = useTranslationRoute();
   const { data: projects, ...rest } = useProjects();
 
   const normalizedProjects =

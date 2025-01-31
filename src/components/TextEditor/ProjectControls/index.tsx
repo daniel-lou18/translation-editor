@@ -15,8 +15,7 @@ export default function ProjectControls() {
   const { segments, getCompletedSegments } = useEditor();
   const totalSegments = segments.length;
   const completedSegments = getCompletedSegments();
-  const { projectId, documentId, translationId, navigateToTranslation } =
-    useTranslationRoute();
+  const { navigateToTranslation } = useTranslationRoute();
   const {
     projects,
     currentProject,
@@ -27,7 +26,7 @@ export default function ProjectControls() {
     isLoading,
     isError,
     error,
-  } = useCurrentProject(projectId, documentId, translationId);
+  } = useCurrentProject();
 
   const handleProjectSelect = useCallback(
     (projectId: string) => {

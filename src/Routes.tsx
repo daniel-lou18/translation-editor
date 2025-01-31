@@ -13,7 +13,11 @@ export default function RoutesComponent() {
       <Route path="/login" element={<LoginPage />} />
       <Route path="/app" element={<RootLayout />}>
         <Route path="upload" element={<UploadPage />} />
-        <Route path="projects" element={<ProjectsPage />} />
+        {/* <Route path="projects" element={<ProjectsPage />} /> */}
+        <Route
+          path="projects/:projectId/documents/:documentId"
+          element={<ProjectsPage />}
+        />
         <Route
           path="projects/:projectId/documents/:documentId/translations/:translationId"
           element={<EditorPage />}
