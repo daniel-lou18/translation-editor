@@ -19,7 +19,7 @@ import {
 } from "@/types";
 import { useTranslationRoute } from "@/hooks/useTranslationRoute";
 import { Link } from "react-router";
-import { File, Text } from "lucide-react";
+import { File } from "lucide-react";
 
 type AppSidebarProps = {
   projects: NormalizedProjectsWithTranslations | null;
@@ -53,7 +53,6 @@ export function AppSidebar({
                     isActive={doc.id === parseInt(documentId || "-1")}
                     variant="outline"
                     size="lg"
-                    className="text-xs"
                   >
                     <Link to={`/app/projects/${projectId}/documents/${doc.id}`}>
                       {doc.fileName}

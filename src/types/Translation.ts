@@ -1,3 +1,4 @@
+import { LangCode } from ".";
 import { Document } from "./Document";
 import { Segment } from "./Segment";
 
@@ -6,10 +7,11 @@ export type SegmentStatus = "translated" | "untranslated";
 export type Translation = {
   id: number;
   documentId: number;
-  targetLang: string;
+  targetLang: LangCode;
   status: string | null;
   createdAt: string;
   updatedAt: string;
+  targetSegments: TargetSegment[];
 };
 
 export type TargetSegment = {
