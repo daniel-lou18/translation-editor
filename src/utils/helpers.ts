@@ -1,3 +1,5 @@
+import { ProjectCardProps } from "@/components/ProjectsTable/ProjectCard";
+import { NormalizedTranslations, ProjectWithDocsAndTrans } from "@/types";
 import { Segment } from "@/types/Segment";
 
 export function calculateProgress(
@@ -21,4 +23,39 @@ export function calculateProgress(
 
 export function convertToPercent(similarityScore: number) {
   return Math.round(similarityScore * 100);
+}
+
+export function formatTranslationsToTableRows(
+  translations: NormalizedTranslations | null
+) {
+  if (!translations) return [];
+
+  return Object.values(translations || {}).map((translation) => ({
+    ...translation,
+    id: translation.id.toString(),
+    progress: Math.round(
+      (translation.targetSegments.filter((seg) => seg.status === "translated")
+        .length /
+        translation.targetSegments.length) *
+        100
+    ),
+  }));
+}
+
+export function formatProjectsToCards(
+  projects: ProjectWithDocsAndTrans[] | undefined
+): ProjectCardProps[] | null {
+  if (!projects) return null;
+
+  return projects.map((project) => ({
+    ...project,
+    info: {
+      description: project.description,
+      documentsCount: project.documents.length,
+      translationsCount: project.documents.reduce(
+        (acc, doc) => acc + doc.translations.length,
+        0
+      ),
+    },
+  }));
 }
