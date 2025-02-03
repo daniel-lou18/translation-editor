@@ -6,6 +6,7 @@ import RootLayout from "./pages/RootLayout";
 import UploadPage from "./components/Upload";
 import TranslationsPage from "./pages/Translations";
 import ProjectsPage from "./components/Dashboard";
+import DocumentsTable from "./components/DocumentsTable";
 
 export default function RoutesComponent() {
   return (
@@ -15,6 +16,7 @@ export default function RoutesComponent() {
       <Route path="/app" element={<RootLayout />}>
         <Route path="upload" element={<UploadPage />} />
         <Route path="projects" element={<ProjectsPage />} />
+        <Route path="projects/:projectId" element={<DocumentsTable />} />
         <Route
           path="projects/:projectId/documents/:documentId"
           element={<TranslationsPage />}

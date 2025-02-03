@@ -1,4 +1,3 @@
-import { ProjectCardProps } from "@/components/Dashboard/ProjectCard";
 import { NormalizedTranslations, ProjectWithDocsAndTrans } from "@/types";
 import { Segment } from "@/types/Segment";
 
