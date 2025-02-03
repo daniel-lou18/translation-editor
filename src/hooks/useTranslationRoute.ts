@@ -11,6 +11,20 @@ export function useTranslationRoute() {
   const { projectId, documentId, translationId } = useParams();
   const navigate = useNavigate();
 
+  const navigateToProject = useCallback(
+    (projectId: number | string) => {
+      if (!projectId) {
+        throw new Error("Project id is missing");
+      }
+      navigate(
+        `/app/projects/${
+          typeof projectId === "number" ? projectId.toString() : projectId
+        }`
+      );
+    },
+    [navigate]
+  );
+
   const navigateToTranslation = useCallback(
     ({ projectId, documentId, translationId }: NavigationParams) => {
       if (!projectId || !documentId || !translationId) {
@@ -23,5 +37,11 @@ export function useTranslationRoute() {
     [navigate]
   );
 
-  return { projectId, documentId, translationId, navigateToTranslation };
+  return {
+    projectId,
+    documentId,
+    translationId,
+    navigateToTranslation,
+    navigateToProject,
+  };
 }

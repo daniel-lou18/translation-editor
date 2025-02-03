@@ -1,4 +1,4 @@
-import ProjectsTable from "@/components/ProjectsTable";
+import ProjectsTable from "@/components/Dashboard";
 
 export default function ProjectsPage() {
   return (

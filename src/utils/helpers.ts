@@ -1,4 +1,4 @@
-import { ProjectCardProps } from "@/components/ProjectsTable/ProjectCard";
+import { ProjectCardProps } from "@/components/Dashboard/ProjectCard";
 import { NormalizedTranslations, ProjectWithDocsAndTrans } from "@/types";
 import { Segment } from "@/types/Segment";
 
@@ -44,7 +44,7 @@ export function formatTranslationsToTableRows(
 
 export function formatProjectsToCards(
   projects: ProjectWithDocsAndTrans[] | undefined
-): ProjectCardProps[] | null {
+) {
   if (!projects) return null;
 
   return projects.map((project) => ({

@@ -5,7 +5,7 @@ import LoginPage from "./pages/Login";
 import RootLayout from "./pages/RootLayout";
 import UploadPage from "./components/Upload";
 import TranslationsPage from "./pages/Translations";
-import ProjectsPage from "./components/ProjectsTable";
+import ProjectsPage from "./components/Dashboard";
 
 export default function RoutesComponent() {
   return (
