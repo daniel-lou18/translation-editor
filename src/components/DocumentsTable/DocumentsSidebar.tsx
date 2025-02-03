@@ -15,22 +15,19 @@ import {
   NormalizedProjectsWithTranslations,
   ProjectWithDocsAndTrans,
 } from "@/types";
-import { useTranslationRoute } from "@/hooks/useTranslationRoute";
 import { Link } from "react-router";
-import { BookType, File, FileSpreadsheet } from "lucide-react";
+import { ChartBar, File, Languages, Settings } from "lucide-react";
 
 type AppSidebarProps = {
   projects: NormalizedProjectsWithTranslations | null;
   currentProject: ProjectWithDocsAndTrans | null;
 } & React.ComponentProps<typeof Sidebar>;
 
-export function AppSidebar({
+export default function DocumentsSidebar({
   projects,
   currentProject,
   ...props
 }: AppSidebarProps) {
-  const { projectId, documentId } = useTranslationRoute();
-
   return (
     <Sidebar {...props}>
       <SidebarHeader>
@@ -41,23 +38,30 @@ export function AppSidebar({
         <SidebarGroup>
           <SidebarMenu className="font-semibold">
             <SidebarMenuItem>
-              <SidebarMenuButton asChild>
+              <SidebarMenuButton asChild size="lg">
                 <Link to="#">
                   <File /> Documents
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
             <SidebarMenuItem>
-              <SidebarMenuButton asChild>
+              <SidebarMenuButton asChild size="lg">
                 <Link to="#">
-                  <BookType /> Translation Memory
+                  <Languages /> Languages
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
             <SidebarMenuItem>
-              <SidebarMenuButton asChild>
+              <SidebarMenuButton asChild size="lg">
                 <Link to="#">
-                  <FileSpreadsheet /> Glossaries
+                  <ChartBar /> Statistics
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarMenuButton asChild size="lg">
+                <Link to="#">
+                  <Settings /> Settings
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>

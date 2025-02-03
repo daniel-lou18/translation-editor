@@ -9,13 +9,18 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Home } from "lucide-react";
+import { Link } from "react-router";
 
-type ProjectBreadCrumbProps = {
+type TranslationsBreadCrumbProps = {
+  projectId: number;
   projectName: string;
+  fileName: string;
 };
-export default function DocumentsBreadcrumb({
+export default function TranslationsBreadcrumb({
+  projectId,
   projectName,
-}: ProjectBreadCrumbProps) {
+  fileName,
+}: TranslationsBreadCrumbProps) {
   return (
     <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4 bg-white">
       <SidebarTrigger className="-ml-1" />
@@ -23,13 +28,21 @@ export default function DocumentsBreadcrumb({
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem className="hidden md:block">
-            <BreadcrumbLink href="/app/projects" className="flex items-center">
-              <Home size={16} className="mr-1" /> Home
+            <BreadcrumbLink asChild className="flex items-center">
+              <Link to="/app/projects">
+                <Home size={16} className="mr-1" /> Home
+              </Link>
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator className="hidden md:block" />
+          <BreadcrumbItem className="hidden md:block">
+            <BreadcrumbLink asChild>
+              <Link to={`/app/projects/${String(projectId)}`}>{projectName}</Link>
             </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator className="hidden md:block" />
           <BreadcrumbItem>
-            <BreadcrumbPage>{projectName}</BreadcrumbPage>
+            <BreadcrumbPage>{fileName}</BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>

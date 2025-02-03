@@ -8,14 +8,14 @@ import {
 } from "@/components/ui/breadcrumb";
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
+import { Home } from "lucide-react";
+import { Link } from "react-router";
 
 type ProjectBreadCrumbProps = {
   projectName: string;
-  fileName: string;
 };
-export default function ProjectBreadcrumb({
+export default function DocumentsBreadcrumb({
   projectName,
-  fileName,
 }: ProjectBreadCrumbProps) {
   return (
     <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4 bg-white">
@@ -24,11 +24,15 @@ export default function ProjectBreadcrumb({
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem className="hidden md:block">
-            <BreadcrumbLink href="#">{projectName}</BreadcrumbLink>
+            <BreadcrumbLink asChild className="flex items-center">
+              <Link to="/app/projects">
+                <Home size={16} className="mr-1" /> Home
+              </Link>
+            </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator className="hidden md:block" />
           <BreadcrumbItem>
-            <BreadcrumbPage>{fileName}</BreadcrumbPage>
+            <BreadcrumbPage>{projectName}</BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>

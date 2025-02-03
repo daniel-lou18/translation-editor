@@ -13,16 +13,15 @@ export default function ProjectCards({
 
   if (!formattedProjects || formattedProjects.length === 0) return null;
 
+  console.log({ projects });
+
   return (
     <Container className="px-12 py-6 bg-muted/20">
       <ProjectsControls />
       <ul className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {formattedProjects.map((project) => (
-          <li key={project.name}>
-            <ProjectCard
-              to={`/app/projects/${project.id}/documents/${project.documents[0].id}`}
-              {...project}
-            />{" "}
+          <li key={project.id}>
+            <ProjectCard {...project} />{" "}
           </li>
         ))}{" "}
       </ul>

@@ -12,6 +12,7 @@ import Container from "../ui/Container";
 import { Link } from "react-router";
 
 export type ProjectCardProps = {
+  id: string;
   name: string;
   info: {
     description: string | null;
@@ -19,17 +20,16 @@ export type ProjectCardProps = {
     translationsCount: number;
   };
   status: ProjectStatus;
-  to: string;
 };
 
 export default function ProjectCard({
+  id,
   name,
   info: { description, documentsCount, translationsCount },
   status,
-  to,
 }: ProjectCardProps) {
   return (
-    <Link to={to}>
+    <Link to={id}>
       <Card className="hover:bg-muted hover:cursor-pointer transition-all group">
         <CardHeader className="flex-row justify-between">
           <Container className="space-y-1.5">

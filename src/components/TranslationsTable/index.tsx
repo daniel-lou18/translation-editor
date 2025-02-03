@@ -1,6 +1,6 @@
-import { AppSidebar } from "@/components/TranslationsTable/app-sidebar";
+import TranslationsSidebar from "./TranslationsSidebar";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import ProjectBreadcrumb from "./ProjectBreadcrumb";
+import TranslationsBreadcrumb from "./TranslationsBreadcrumb";
 import TranslationsTable from "./TranslationsTable";
 import { useCurrentProject } from "@/hooks/useCurrentProject";
 import { useTranslationRoute } from "@/hooks/useTranslationRoute";
@@ -9,8 +9,7 @@ import { formatTranslationsToTableRows } from "@/utils/helpers";
 export default function TranslationsPage() {
   const { projects, currentProject, currentDocument, currentTranslations } =
     useCurrentProject();
-  const { projectId, documentId, navigateToTranslation } =
-    useTranslationRoute();
+  const { navigateToTranslation } = useTranslationRoute();
 
   const translations = formatTranslationsToTableRows(currentTranslations);
 
@@ -18,17 +17,24 @@ export default function TranslationsPage() {
 
   return (
     <SidebarProvider>
-      <AppSidebar projects={projects} currentProject={currentProject} />
+      <TranslationsSidebar
+        projects={projects}
+        currentProject={currentProject}
+      />
       <SidebarInset className="bg-muted/20">
-        <ProjectBreadcrumb
+        <TranslationsBreadcrumb
+          projectId={currentProject.id}
           projectName={currentProject.name}
           fileName={currentDocument.fileName}
         />
         <TranslationsTable
           translations={translations}
           onClick={(translationId: string) => {
-            if (!projectId || !documentId) return;
-            navigateToTranslation({ projectId, documentId, translationId });
+            navigateToTranslation({
+              projectId: currentProject.id,
+              documentId: currentDocument.id,
+              translationId,
+            });
           }}
         />
       </SidebarInset>

@@ -48,6 +48,7 @@ export function formatProjectsToCards(
 
   return projects.map((project) => ({
     ...project,
+    id: project.id.toString(),
     info: {
       description: project.description,
       documentsCount: project.documents.length,

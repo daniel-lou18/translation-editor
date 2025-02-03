@@ -21,7 +21,7 @@ import { Document } from "@/types";
 
 type TranslationsTableProps = {
   documents: Document[];
-  onClick: (translationId: string) => void;
+  onClick: (documentId: number) => void;
 };
 
 export default function DocumentsTable({
@@ -35,7 +35,7 @@ export default function DocumentsTable({
         <TableHeader>
           <TableRow className="hover:bg-transparent">
             <TableHead className="pl-0">File</TableHead>
-            <TableHead>Language</TableHead>
+            <TableHead>Source</TableHead>
             <TableHead>Domain</TableHead>
             <TableHead>Type</TableHead>
             <TableHead>Created</TableHead>
@@ -47,7 +47,7 @@ export default function DocumentsTable({
             ({ id, fileName, sourceLang, domain, docType, createdAt }) => (
               <TableRow
                 key={id}
-                onClick={() => onClick(id.toString())}
+                onClick={() => onClick(id)}
                 className="hover:bg-gray-200 hover:cursor-pointer"
               >
                 <TableCell className="pl-1 rounded-l-lg">

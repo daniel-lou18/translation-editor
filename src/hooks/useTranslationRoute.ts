@@ -2,9 +2,9 @@ import { useCallback } from "react";
 import { useNavigate, useParams } from "react-router";
 
 export type NavigationParams = {
-  projectId: string;
-  documentId: string;
-  translationId: string;
+  projectId: string | number;
+  documentId: string | number;
+  translationId: string | number;
 };
 
 export function useTranslationRoute() {
@@ -17,9 +17,20 @@ export function useTranslationRoute() {
         throw new Error("Project id is missing");
       }
       navigate(
-        `/app/projects/${
-          typeof projectId === "number" ? projectId.toString() : projectId
+        `/app/projects/${String(projectId)}
         }`
+      );
+    },
+    [navigate]
+  );
+
+  const navigateToDocument = useCallback(
+    (projectId: number | string, documentId: number | string) => {
+      if (!projectId) {
+        throw new Error("Project id is missing");
+      }
+      navigate(
+        `/app/projects/${String(projectId)}/documents/${String(documentId)}`
       );
     },
     [navigate]
@@ -31,7 +42,9 @@ export function useTranslationRoute() {
         throw new Error("Id(s) is/are missing");
       }
       navigate(
-        `/app/projects/${projectId}/documents/${documentId}/translations/${translationId}`
+        `/app/projects/${String(projectId)}/documents/${String(
+          documentId
+        )}/translations/${String(translationId)}`
       );
     },
     [navigate]
@@ -42,6 +55,7 @@ export function useTranslationRoute() {
     documentId,
     translationId,
     navigateToTranslation,
+    navigateToDocument,
     navigateToProject,
   };
 }
