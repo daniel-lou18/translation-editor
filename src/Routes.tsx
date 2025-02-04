@@ -5,22 +5,22 @@ import LoginPage from "./pages/Login";
 import RootLayout from "./pages/RootLayout";
 import UploadPage from "./components/Upload";
 import TranslationsPage from "./pages/Translations";
-import ProjectsPage from "./components/Dashboard";
-import DocumentsTable from "./components/DocumentsTable";
+import DashboardPage from "./pages/Dashboard";
+import ProjectLayout from "./pages/ProjectLayout";
+import DocumentsPage from "./pages/Documents";
 
 export default function RoutesComponent() {
   return (
     <Routes>
-      <Route path="/" element={<HomePage />} />
+      <Route index element={<HomePage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/app" element={<RootLayout />}>
         <Route path="upload" element={<UploadPage />} />
-        <Route path="projects" element={<ProjectsPage />} />
-        <Route path="projects/:projectId" element={<DocumentsTable />} />
-        <Route
-          path="projects/:projectId/documents/:documentId"
-          element={<TranslationsPage />}
-        />
+        <Route path="projects" element={<DashboardPage />} />
+        <Route path="projects/:projectId" element={<ProjectLayout />}>
+          <Route index element={<DocumentsPage />} />
+          <Route path="documents/:documentId" element={<TranslationsPage />} />
+        </Route>
         <Route
           path="projects/:projectId/documents/:documentId/translations/:translationId"
           element={<EditorPage />}

@@ -1,8 +1,8 @@
-import { SidebarInset, SidebarProvider } from "../ui/sidebar";
-import ProjectCards from "./ProjectCards";
+import DashboardSidebar from "@/components/Dashboard/DashboardSidebar";
+import ProjectCards from "@/components/Dashboard/ProjectCards";
+import ProjectsPageHeader from "@/components/Dashboard/ProjectsPageHeader";
+import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { useProjects } from "@/hooks/useProjects";
-import ProjectsPageHeader from "./ProjectsPageHeader";
-import DashboardSidebar from "./DashboardSidebar";
 
 export default function DashboardPage() {
   const { data: projects } = useProjects();
