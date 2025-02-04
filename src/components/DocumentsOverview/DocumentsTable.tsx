@@ -6,9 +6,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress-bar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,66 +15,48 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Globe, MoreHorizontal } from "lucide-react";
-import { FormattedTranslation } from "@/types/Translation";
+import { File, MoreHorizontal } from "lucide-react";
+import { Document } from "@/types";
 
 type TranslationsTableProps = {
-  translations: FormattedTranslation[];
-  onClick: (documentId: string, translationId: string) => void;
+  documents: Document[];
+  onClick: (documentId: number) => void;
 };
 
-export default function TranslationsTable({
-  translations,
+export default function DocumentsTable({
+  documents,
   onClick,
 }: TranslationsTableProps) {
   return (
     <Table>
       <TableHeader>
         <TableRow className="hover:bg-transparent">
-          <TableHead className="pl-0">Language</TableHead>
-          <TableHead>Progress</TableHead>
-          <TableHead>Status</TableHead>
-          <TableHead>Last update</TableHead>
+          <TableHead className="pl-0">File</TableHead>
+          <TableHead>Source</TableHead>
+          <TableHead>Domain</TableHead>
+          <TableHead>Type</TableHead>
+          <TableHead>Created</TableHead>
           <TableHead className="w-[100px] pr-0">Actions</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
-        {translations.map(
-          ({ id, documentId, targetLang, progress, status, updatedAt }) => (
+        {documents.map(
+          ({ id, fileName, sourceLang, domain, docType, createdAt }) => (
             <TableRow
               key={id}
-              onClick={() => onClick(documentId, id)}
+              onClick={() => onClick(id)}
               className="hover:bg-gray-200 hover:cursor-pointer"
             >
               <TableCell className="pl-1 rounded-l-lg">
                 <div className="flex items-center gap-2">
-                  <Globe className="h-4 w-4" strokeWidth={1.5} />
-                  {targetLang}
+                  <File className="h-4 w-4" strokeWidth={1.5} />
+                  {fileName}
                 </div>
               </TableCell>
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Progress value={progress} className="w-[60%] h-2" />
-                  <span className="text-xs text-muted-foreground">
-                    {progress}%
-                  </span>
-                </div>
-              </TableCell>
-              <TableCell>
-                <Badge
-                  variant="outline"
-                  className={`${
-                    status === "Completed"
-                      ? "bg-green-300"
-                      : status === "In Progress"
-                      ? "bg-yellow-300"
-                      : ""
-                  }`}
-                >
-                  {status}
-                </Badge>
-              </TableCell>
-              <TableCell>{new Date(updatedAt).toLocaleDateString()}</TableCell>
+              <TableCell>{sourceLang}</TableCell>
+              <TableCell>{domain}</TableCell>
+              <TableCell>{docType || "document"}</TableCell>
+              <TableCell>{new Date(createdAt).toLocaleDateString()}</TableCell>
               <TableCell className="pr-1 rounded-r-lg">
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>

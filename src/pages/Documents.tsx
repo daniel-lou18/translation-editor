@@ -1,4 +1,4 @@
-import Documents from "@/components/DocumentsTable";
+import Documents from "@/components/DocumentsOverview";
 
 export default function DocumentsPage() {
   return <Documents />;

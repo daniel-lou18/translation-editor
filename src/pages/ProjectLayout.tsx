@@ -1,4 +1,4 @@
-import DocumentsSidebar from "@/components/DocumentsTable/DocumentsSidebar";
+import DocumentsSidebar from "@/components/DocumentsOverview/DocumentsSidebar";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { useCurrentProject } from "@/hooks/useCurrentProject";
 import { Outlet } from "react-router";

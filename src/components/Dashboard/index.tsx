@@ -1,6 +1,6 @@
 import DashboardSidebar from "@/components/Dashboard/DashboardSidebar";
-import ProjectCards from "@/components/Dashboard/ProjectCards";
-import ProjectsPageHeader from "@/components/Dashboard/ProjectsPageHeader";
+import DashboardContent from "@/components/Dashboard/DashboardContent";
+import DashboardHeader from "@/components/Dashboard/DashboardHeader";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { useProjects } from "@/hooks/useProjects";
 
@@ -11,8 +11,8 @@ export default function Dashboard() {
     <SidebarProvider>
       <DashboardSidebar />
       <SidebarInset className="bg-muted/20">
-        <ProjectsPageHeader />
-        <ProjectCards projects={projects} />{" "}
+        <DashboardHeader />
+        <DashboardContent projects={projects} />{" "}
       </SidebarInset>
     </SidebarProvider>
   );
