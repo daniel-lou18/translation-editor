@@ -19,9 +19,8 @@ export default function SelectTranslation({
 
   const items: ComboDataElement[] = Object.values(translations).map(
     (translation) => ({
-      id: translation.id.toString(),
       label: `${currentDocument.sourceLang} > ${translation.targetLang}`,
-      value: `${currentDocument.sourceLang} > ${translation.targetLang}`,
+      value: String(translation.id),
     })
   );
 

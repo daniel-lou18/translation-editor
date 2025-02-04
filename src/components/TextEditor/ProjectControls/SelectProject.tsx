@@ -16,9 +16,8 @@ export default function SelectProject({
   onSelect,
 }: SelectProjectProps) {
   const items: ComboDataElement[] = Object.values(projects).map((project) => ({
-    id: project.id.toString(),
     label: project.name,
-    value: project.name,
+    value: String(project.id),
   }));
 
   const currentName = currentProject ? currentProject.name : null;

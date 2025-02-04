@@ -1,18 +1,29 @@
-import { FileInfo } from "@/components/Upload";
 import FileItem from "./FileItem";
 import Container from "../ui/Container";
 import { ReactNode } from "react";
+import { FileInfo } from "@/hooks/useFileManager";
+import { Lang } from "@/types";
+
+export type LangData = {
+  languages: Lang[];
+  sourceLang: Lang;
+  targetLang: Lang;
+};
 
 type FileListProps = {
   children: ReactNode;
   files: FileInfo[];
-  handleRemove: (index: number) => void;
+  onRemove: (index: number) => void;
+  langData: LangData;
+  onSourceLangChange: (newLang: Lang) => void;
+  onTargetLangChange: (newLang: Lang) => void;
 };
 
 export default function FileList({
   children,
   files,
-  handleRemove,
+  onRemove,
+  ...props
 }: FileListProps) {
   return (
     <>
@@ -31,7 +42,8 @@ export default function FileList({
                 <FileItem
                   key={index}
                   file={file}
-                  onRemove={() => handleRemove(index)}
+                  onRemove={() => onRemove(index)}
+                  {...props}
                 />
               ))}
             {files
@@ -40,7 +52,8 @@ export default function FileList({
                 <FileItem
                   key={index}
                   file={file}
-                  onRemove={() => handleRemove(index)}
+                  onRemove={() => onRemove(index)}
+                  {...props}
                 />
               ))}
           </Container>

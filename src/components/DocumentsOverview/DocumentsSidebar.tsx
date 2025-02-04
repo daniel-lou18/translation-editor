@@ -54,7 +54,9 @@ export default function DocumentsSidebar({
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <Link to={`/app/projects/${String(currentProject.id)}`}>
+                  <Link
+                    to={`/app/projects/${String(currentProject.id)}/documents`}
+                  >
                     <File /> Documents
                   </Link>
                 </SidebarMenuButton>

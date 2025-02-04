@@ -14,7 +14,7 @@ import { Link } from "react-router";
 type TranslationsBreadCrumbProps = {
   projectId: number;
   projectName: string;
-  fileName: string | null;
+  fileName?: string | null;
 };
 export default function TranslationsBreadcrumb({
   projectId,
@@ -37,7 +37,7 @@ export default function TranslationsBreadcrumb({
           <BreadcrumbSeparator className="hidden md:block" />
           <BreadcrumbItem className="hidden md:block">
             <BreadcrumbLink asChild>
-              <Link to={`/app/projects/${String(projectId)}`}>
+              <Link to={`/app/projects/${String(projectId)}/documents`}>
                 {projectName}
               </Link>
             </BreadcrumbLink>

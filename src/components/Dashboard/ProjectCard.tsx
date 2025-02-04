@@ -29,7 +29,7 @@ export default function ProjectCard({
   status,
 }: ProjectCardProps) {
   return (
-    <Link to={id}>
+    <Link to={`${id}/documents`}>
       <Card className="hover:bg-muted hover:cursor-pointer transition-all group">
         <CardHeader className="flex-row justify-between">
           <Container className="space-y-1.5">

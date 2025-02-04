@@ -14,9 +14,8 @@ export default function SelectDocument({
 }: SelectDocumentProps) {
   const items: ComboDataElement[] = Object.values(documents).map(
     (document) => ({
-      id: document.id.toString(),
       label: document.fileName,
-      value: document.fileName,
+      value: String(document.id),
     })
   );
   const currentValue = currentDocument ? currentDocument.fileName : null;

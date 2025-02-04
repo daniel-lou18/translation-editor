@@ -1,3 +1,4 @@
+import { languageToCodeMap } from "@/utils/constants";
 import { ProjectWithDocsAndTrans } from "./Project";
 import { Translation as TranslationDto } from "./Translation";
 
@@ -109,11 +110,8 @@ export const outputContentTypes = {
 
 export type BlobResponse = { data: Blob; fileName: string };
 
-export const LangCodeDictionary = {
-  nl_BE: "Dutch",
-  nl_NL: "Dutch",
-  fr_FR: "French",
-  fr_BE: "French",
-} as const;
+export type LangCode = LangCodeMap[keyof LangCodeMap];
 
-export type LangCode = keyof typeof LangCodeDictionary;
+export type Lang = keyof LangCodeMap;
+
+export type LangCodeMap = typeof languageToCodeMap;

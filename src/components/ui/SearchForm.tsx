@@ -18,7 +18,7 @@ export default function SearchForm({ className, ...props }: SearchFormProps) {
           "h-8 w-full pl-8 bg-background shadow-none focus-visible:ring-2 focus-visible:ring-sidebar-ring",
           className
         )}
-        defaultValue={props.defaultValue}
+        placeholder={props.placeholder}
         {...props}
       />
       <Search className="pointer-events-none absolute left-2 top-1/2 size-4 -translate-y-1/2 select-none opacity-50" />

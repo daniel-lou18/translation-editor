@@ -8,6 +8,7 @@ import TranslationsPage from "./pages/Translations";
 import DashboardPage from "./pages/Dashboard";
 import ProjectLayout from "./pages/ProjectLayout";
 import DocumentsPage from "./pages/Documents";
+import UploadDocumentPage from "./pages/UploadDocument";
 
 export default function RoutesComponent() {
   return (
@@ -16,9 +17,11 @@ export default function RoutesComponent() {
       <Route path="/login" element={<LoginPage />} />
       <Route path="/app" element={<RootLayout />}>
         <Route path="upload" element={<UploadPage />} />
+
         <Route path="projects" element={<DashboardPage />} />
         <Route path="projects/:projectId" element={<ProjectLayout />}>
-          <Route index element={<DocumentsPage />} />
+          <Route path="documents" element={<DocumentsPage />} />
+          <Route path="documents/upload" element={<UploadDocumentPage />} />
           <Route
             path="documents/:documentId/translations"
             element={<TranslationsPage />}

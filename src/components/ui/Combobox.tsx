@@ -16,21 +16,21 @@ import {
 } from "@/components/ui/popover";
 import { useState } from "react";
 
-export type ComboDataElement = { id: string; value: string; label: string };
+export type ComboDataElement<T extends string> = { value: T; label: string };
 
-type ComboboxProps = {
+type ComboboxProps<T extends string> = {
   name: string;
-  items: ComboDataElement[];
-  value: string | null;
-  onChange: (currentValue: string) => void;
+  items: ComboDataElement<T>[];
+  value: T | null;
+  onChange: (currentValue: T) => void;
 };
 
-export default function Combobox({
+export default function Combobox<T extends string>({
   name,
   items,
   value,
   onChange,
-}: ComboboxProps) {
+}: ComboboxProps<T>) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -54,10 +54,10 @@ export default function Combobox({
             <CommandGroup>
               {items.map((item) => (
                 <CommandItem
-                  key={item.id}
-                  value={item.id}
+                  key={item.value}
+                  value={item.value}
                   onSelect={(currentValue) => {
-                    onChange(currentValue);
+                    onChange(currentValue as T);
                     setOpen(false);
                   }}
                 >
