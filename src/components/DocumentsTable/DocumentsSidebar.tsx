@@ -1,6 +1,6 @@
 import * as React from "react";
-import { SearchForm } from "@/components/TranslationsTable/search-form";
-import { VersionSwitcher } from "@/components/TranslationsTable/version-switcher";
+import { SearchForm } from "@/components/Translations/search-form";
+import { VersionSwitcher } from "@/components/Translations/version-switcher";
 import {
   Sidebar,
   SidebarContent,
@@ -39,6 +39,8 @@ export default function DocumentsSidebar({
   currentProject,
   ...props
 }: AppSidebarProps) {
+  if (!projects || !currentProject) return null;
+
   return (
     <Sidebar {...props}>
       <SidebarHeader>
@@ -52,14 +54,18 @@ export default function DocumentsSidebar({
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <Link to="#">
+                  <Link to={`/app/projects/${String(currentProject.id)}`}>
                     <File /> Documents
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <Link to="#">
+                  <Link
+                    to={`/app/projects/${String(
+                      currentProject.id
+                    )}/translations`}
+                  >
                     <Globe /> Translations
                   </Link>
                 </SidebarMenuButton>

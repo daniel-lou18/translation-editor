@@ -1,5 +1,5 @@
-import TranslationsTable from "@/components/TranslationsTable";
+import Translations from "@/components/Translations";
 
 export default function TranslationsPage() {
-  return <TranslationsTable />;
+  return <Translations />;
 }

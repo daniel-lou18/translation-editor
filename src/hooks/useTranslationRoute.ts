@@ -30,7 +30,9 @@ export function useTranslationRoute() {
         throw new Error("Project id is missing");
       }
       navigate(
-        `/app/projects/${String(projectId)}/documents/${String(documentId)}`
+        `/app/projects/${String(projectId)}/documents/${String(
+          documentId
+        )}/translations`
       );
     },
     [navigate]

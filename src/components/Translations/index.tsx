@@ -2,30 +2,34 @@ import TranslationsBreadcrumb from "./TranslationsBreadcrumb";
 import TranslationsTable from "./TranslationsTable";
 import { useCurrentProject } from "@/hooks/useCurrentProject";
 import { useTranslationRoute } from "@/hooks/useTranslationRoute";
-import { formatTranslationsToTableRows } from "@/utils/helpers";
+import {
+  formatTranslationsToTableRows,
+  getAllTranslationsFromProject,
+} from "@/utils/helpers";
 
-export default function TranslationsPage() {
+export default function Translations() {
   const { currentProject, currentDocument, currentTranslations } =
     useCurrentProject();
   const { navigateToTranslation } = useTranslationRoute();
 
-  const translations = formatTranslationsToTableRows(currentTranslations);
+  if (!currentProject) return null;
 
-  if (!currentProject || !currentDocument) return null;
+  const allTranslations = getAllTranslationsFromProject(currentProject);
+  const translations = formatTranslationsToTableRows(currentTranslations);
 
   return (
     <>
       <TranslationsBreadcrumb
         projectId={currentProject.id}
         projectName={currentProject.name}
-        fileName={currentDocument.fileName}
+        fileName={currentDocument?.fileName ?? null}
       />
       <TranslationsTable
-        translations={translations}
-        onClick={(translationId: string) => {
+        translations={currentDocument ? translations : allTranslations}
+        onClick={(documentId: string, translationId: string) => {
           navigateToTranslation({
             projectId: currentProject.id,
-            documentId: currentDocument.id,
+            documentId,
             translationId,
           });
         }}

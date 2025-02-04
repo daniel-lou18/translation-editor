@@ -1,6 +1,6 @@
 import * as React from "react";
-import { SearchForm } from "@/components/TranslationsTable/search-form";
-import { VersionSwitcher } from "@/components/TranslationsTable/version-switcher";
+import { SearchForm } from "@/components/Translations/search-form";
+import { VersionSwitcher } from "@/components/Translations/version-switcher";
 import {
   Sidebar,
   SidebarContent,

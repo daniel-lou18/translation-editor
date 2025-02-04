@@ -19,7 +19,11 @@ export default function RoutesComponent() {
         <Route path="projects" element={<DashboardPage />} />
         <Route path="projects/:projectId" element={<ProjectLayout />}>
           <Route index element={<DocumentsPage />} />
-          <Route path="documents/:documentId" element={<TranslationsPage />} />
+          <Route
+            path="documents/:documentId/translations"
+            element={<TranslationsPage />}
+          />
+          <Route path="translations" element={<TranslationsPage />} />
         </Route>
         <Route
           path="projects/:projectId/documents/:documentId/translations/:translationId"

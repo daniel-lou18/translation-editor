@@ -1,4 +1,8 @@
-import { NormalizedTranslations, ProjectWithDocsAndTrans } from "@/types";
+import {
+  NormalizedTranslations,
+  ProjectWithDocsAndTrans,
+  TranslationWithTargetSegments,
+} from "@/types";
 import { Segment } from "@/types/Segment";
 
 export function calculateProgress(
@@ -31,7 +35,8 @@ export function formatTranslationsToTableRows(
 
   return Object.values(translations || {}).map((translation) => ({
     ...translation,
-    id: translation.id.toString(),
+    id: String(translation.id),
+    documentId: String(translation.documentId),
     progress: Math.round(
       (translation.targetSegments.filter((seg) => seg.status === "translated")
         .length /
@@ -57,5 +62,25 @@ export function formatProjectsToCards(
         0
       ),
     },
+  }));
+}
+
+export function getAllTranslationsFromProject(
+  project: ProjectWithDocsAndTrans
+) {
+  const translations = project.documents.reduce<
+    TranslationWithTargetSegments[]
+  >((acc, doc) => [...acc, ...doc.translations], []);
+
+  return translations.map((translation) => ({
+    ...translation,
+    id: String(translation.id),
+    documentId: String(translation.documentId),
+    progress: Math.round(
+      (translation.targetSegments.filter((seg) => seg.status === "translated")
+        .length /
+        translation.targetSegments.length) *
+        100
+    ),
   }));
 }

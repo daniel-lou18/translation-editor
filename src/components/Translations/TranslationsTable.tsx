@@ -19,17 +19,11 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Globe, MoreHorizontal } from "lucide-react";
 import Container from "../ui/Container";
-import { LangCode } from "@/types";
+import { FormattedTranslation } from "@/types/Translation";
 
 type TranslationsTableProps = {
-  translations: {
-    id: string;
-    targetLang: LangCode;
-    progress: number;
-    status: string | null;
-    updatedAt: string;
-  }[];
-  onClick: (translationId: string) => void;
+  translations: FormattedTranslation[];
+  onClick: (documentId: string, translationId: string) => void;
 };
 
 export default function TranslationsTable({
@@ -51,10 +45,10 @@ export default function TranslationsTable({
         </TableHeader>
         <TableBody>
           {translations.map(
-            ({ id, targetLang, progress, status, updatedAt }) => (
+            ({ id, documentId, targetLang, progress, status, updatedAt }) => (
               <TableRow
                 key={id}
-                onClick={() => onClick(id)}
+                onClick={() => onClick(documentId, id)}
                 className="hover:bg-gray-200 hover:cursor-pointer"
               >
                 <TableCell className="pl-1 rounded-l-lg">

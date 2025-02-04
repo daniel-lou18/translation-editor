@@ -1,19 +1,5 @@
-import DashboardSidebar from "@/components/Dashboard/DashboardSidebar";
-import ProjectCards from "@/components/Dashboard/ProjectCards";
-import ProjectsPageHeader from "@/components/Dashboard/ProjectsPageHeader";
-import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
-import { useProjects } from "@/hooks/useProjects";
+import Dashboard from "@/components/Dashboard";
 
 export default function DashboardPage() {
-  const { data: projects } = useProjects();
-
-  return (
-    <SidebarProvider>
-      <DashboardSidebar />
-      <SidebarInset className="bg-muted/20">
-        <ProjectsPageHeader />
-        <ProjectCards projects={projects} />{" "}
-      </SidebarInset>
-    </SidebarProvider>
-  );
+  return <Dashboard />;
 }

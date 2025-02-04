@@ -14,6 +14,17 @@ export type Translation = {
   targetSegments: TargetSegment[];
 };
 
+export type FormattedTranslation = {
+  id: string;
+  documentId: string;
+  progress: number;
+  targetLang: LangCode;
+  status: string | null;
+  createdAt: string;
+  updatedAt: string;
+  targetSegments: TargetSegment[];
+};
+
 export type TargetSegment = {
   id: number;
   translationId: number;
