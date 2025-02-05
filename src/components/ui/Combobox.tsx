@@ -14,7 +14,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { useState } from "react";
+import { ComponentPropsWithoutRef, useState } from "react";
 
 export type ComboDataElement<T extends string> = { value: T; label: string };
 
@@ -23,13 +23,14 @@ type ComboboxProps<T extends string> = {
   items: ComboDataElement<T>[];
   value: T | null;
   onChange: (currentValue: T) => void;
-};
+} & Omit<ComponentPropsWithoutRef<"button">, "onChange">;
 
 export default function Combobox<T extends string>({
   name,
   items,
   value,
   onChange,
+  className,
 }: ComboboxProps<T>) {
   const [open, setOpen] = useState(false);
 
@@ -40,13 +41,13 @@ export default function Combobox<T extends string>({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="min-w-[200px] justify-between bg-gray-50"
+          className={cn("min-w-[150px] justify-between bg-gray-50", className)}
         >
           {value || `Select ${name}`}
           <ChevronsUpDown className="opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="min-w-[200px] p-0">
+      <PopoverContent className="min-w-[150px] p-0">
         <Command>
           <CommandInput placeholder={`Search ${name}`} />
           <CommandList>

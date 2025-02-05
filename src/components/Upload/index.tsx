@@ -23,63 +23,52 @@ export default function Upload({ variant = "double" }: UploadProps) {
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    mutate(files, {
-      onSuccess: (params) => navigateToTranslation(params),
-      onError: (error) => console.log(error),
-    });
+    mutate(
+      { files, languages: { sourceLang, targetLang } },
+      {
+        onSuccess: (params) => navigateToTranslation(params),
+        onError: (error) => console.log(error),
+      }
+    );
   }
 
   return (
-    <form className="min-h-screen p-8" onSubmit={handleSubmit}>
-      <Container className="max-w-6xl mx-auto p-8 space-y-8">
-        <Container className="text-center space-y-2">
-          <h1 className="text-2xl font-bold text-foreground">
-            Start a new translation
-          </h1>
-          <p className="text-muted-foreground">
-            Upload the document you want to translate, together with its TM
-            files
-          </p>
-        </Container>
-
-        <Container
-          className={`grid ${
-            variant === "double" ? "md:grid-cols-2" : ""
-          } gap-6`}
-        >
-          {variant === "document" || variant === "double" ? (
-            <UploadArea
-              type="document"
-              accept=".txt"
-              title="Source Documents"
-              description="Upload docx or txt files for translation"
-              onFilesSelect={(files) => processFiles(files, "document")}
-            />
-          ) : null}
-          {variant === "memory" || variant === "double" ? (
-            <UploadArea
-              type="memory"
-              accept=".xlsx,.xls,.txt"
-              title="Translation Memory"
-              description="Upload txt, xlsx or tmx files containing translation memory segments"
-              onFilesSelect={(files) => processFiles(files, "memory")}
-            />
-          ) : null}
-        </Container>
-        <FileList
-          files={files}
-          onRemove={removeFile}
-          langData={{
-            languages: Object.keys(languages) as Lang[],
-            sourceLang,
-            targetLang,
-          }}
-          onSourceLangChange={(newLang: Lang) => setSourceLang(newLang)}
-          onTargetLangChange={(newLang: Lang) => setTargetLang(newLang)}
-        >
-          <UploadButton isProcessing={isLoading} />
-        </FileList>
+    <form className="py-8 space-y-12" onSubmit={handleSubmit}>
+      <Container
+        className={`grid ${variant === "double" ? "md:grid-cols-2" : ""} gap-6`}
+      >
+        {variant === "document" || variant === "double" ? (
+          <UploadArea
+            type="document"
+            accept=".txt"
+            title="Source Documents"
+            description="Upload docx or txt files for translation"
+            onFilesSelect={(files) => processFiles(files, "document")}
+          />
+        ) : null}
+        {variant === "memory" || variant === "double" ? (
+          <UploadArea
+            type="memory"
+            accept=".xlsx,.xls,.txt"
+            title="Translation Memory"
+            description="Upload txt, xlsx or tmx files containing translation memory segments"
+            onFilesSelect={(files) => processFiles(files, "memory")}
+          />
+        ) : null}
       </Container>
+      <FileList
+        files={files}
+        onRemove={removeFile}
+        langData={{
+          languages: Object.keys(languages) as Lang[],
+          sourceLang,
+          targetLang,
+        }}
+        onSourceLangChange={(newLang: Lang) => setSourceLang(newLang)}
+        onTargetLangChange={(newLang: Lang) => setTargetLang(newLang)}
+      >
+        <UploadButton isProcessing={isLoading} />
+      </FileList>
       {isLoading && <Overlay />}
     </form>
   );

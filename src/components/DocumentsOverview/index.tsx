@@ -16,7 +16,7 @@ export default function Documents() {
     <>
       <PageTitle title="Documents">
         <SearchForm placeholder="Search documents" />
-        <Button size="sm">
+        <Button size="sm" asChild>
           <Link to={`/app/projects/${currentProject.id}/documents/upload`}>
             Upload Document
           </Link>

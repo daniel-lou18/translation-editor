@@ -3,7 +3,7 @@ import EditorPage from "./pages/Editor";
 import HomePage from "./pages/Home";
 import LoginPage from "./pages/Login";
 import RootLayout from "./pages/RootLayout";
-import UploadPage from "./components/Upload";
+import UploadPage from "./components/Upload/UploadLanding";
 import TranslationsPage from "./pages/Translations";
 import DashboardPage from "./pages/Dashboard";
 import ProjectLayout from "./pages/ProjectLayout";

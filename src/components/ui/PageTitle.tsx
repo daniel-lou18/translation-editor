@@ -1,7 +1,10 @@
-import { PropsWithChildren } from "react";
+import { ReactNode } from "react";
 import Container from "../ui/Container";
 
-type PageTitleProps = PropsWithChildren<{ title: string }>;
+type PageTitleProps = {
+  children?: ReactNode;
+  title: string;
+};
 
 export default function PageTitle({ children, title }: PageTitleProps) {
   return (

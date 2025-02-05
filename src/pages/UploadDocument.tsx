@@ -1,5 +1,5 @@
-import Upload from "@/components/Upload";
+import UploadDocument from "@/components/DocumentsOverview/UploadDocument";
 
-export default function UploadDocument() {
-  return <Upload variant="document" />;
+export default function UploadDocumentPage() {
+  return <UploadDocument />;
 }

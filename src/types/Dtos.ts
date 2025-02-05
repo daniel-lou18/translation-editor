@@ -1,3 +1,4 @@
+import { Lang } from ".";
 import { Document, SourceSegment } from "./Document";
 import { TargetSegment, Translation } from "./Translation";
 
@@ -33,4 +34,9 @@ export type TmSegmentMatch = {
     id: number;
     textContent: string;
   } | null; // Null if no target segment exists
+};
+
+export type LangMetadata = {
+  sourceLang?: Lang;
+  targetLang: Lang;
 };

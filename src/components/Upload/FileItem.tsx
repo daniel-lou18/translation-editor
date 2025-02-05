@@ -37,26 +37,30 @@ export default function FileItem({
         )}
         <span className="text-sm font-medium">{file.file.name}</span>
       </Container>
-      <Container className="flex gap-8">
+      <Container className="flex items-center gap-2">
+        <span className="text-sm text-muted-foreground">From:</span>
         <Combobox
           name="source"
           items={langItems}
           value={sourceLang}
           onChange={onSourceLangChange}
+          className="w-48 h-9"
         />
+        <span className="text-sm text-muted-foreground ml-8">To:</span>
         <Combobox
           name="target"
           items={langItems}
           value={targetLang}
           onChange={onTargetLangChange}
+          className="w-48 h-9 mr-2"
         />
+        <button
+          onClick={onRemove}
+          className="p-1 hover:bg-cat-accent/10 rounded-full transition-colors"
+        >
+          <X className="w-4 h-4 text-muted-foreground" />
+        </button>
       </Container>
-      <button
-        onClick={onRemove}
-        className="p-1 hover:bg-cat-accent/10 rounded-full transition-colors"
-      >
-        <X className="w-4 h-4 text-muted-foreground" />
-      </button>
     </Container>
   );
 }

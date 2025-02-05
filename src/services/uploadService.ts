@@ -1,6 +1,7 @@
 import { TranslationWithDocument } from "@/types/Translation";
 import { ApiService } from "./ApiService";
 import { UploadResult } from "@/types/Tm";
+import { LangMetadata } from "@/types/Dtos";
 
 export class UploadService extends ApiService {
   constructor() {
@@ -11,9 +12,13 @@ export class UploadService extends ApiService {
     });
   }
 
-  async submitSourceText(file: File) {
+  async submitSourceText(file: File, langMetadata: LangMetadata) {
     const formData = new FormData();
     formData.append("file", file);
+    formData.append("targetLang", langMetadata.targetLang);
+    if (langMetadata.sourceLang) {
+      formData.append("sourceLang", langMetadata.sourceLang);
+    }
 
     return await this.post<TranslationWithDocument>(
       "/upload/documents/source",
