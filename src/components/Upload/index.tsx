@@ -17,14 +17,18 @@ type UploadProps = {
 export default function Upload({ variant = "double" }: UploadProps) {
   const { files, processFiles, removeFile } = useFileManager();
   const { mutate, isLoading } = useSubmitFiles();
-  const { navigateToTranslation } = useTranslationRoute();
+  const { navigateToTranslation, projectId } = useTranslationRoute();
   const [sourceLang, setSourceLang] = useState<Lang>("English (USA)");
   const [targetLang, setTargetLang] = useState<Lang>("French (France)");
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     mutate(
-      { files, languages: { sourceLang, targetLang } },
+      {
+        files,
+        fileMetadata: { sourceLang, targetLang, projectId },
+        newProject: true,
+      },
       {
         onSuccess: (params) => navigateToTranslation(params),
         onError: (error) => console.log(error),

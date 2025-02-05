@@ -1,7 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { FileInfo } from "./useFileManager";
 import { uploadService } from "@/services/uploadService";
-import { LangMetadata } from "@/types/Dtos";
+import { FileMetadata } from "@/types/Dtos";
 
 type SubmitFileResult = {
   projectId: string;
@@ -9,7 +9,11 @@ type SubmitFileResult = {
   translationId: string;
 };
 
-type SubmitVariables = { files: FileInfo[]; languages: LangMetadata };
+type SubmitVariables = {
+  files: FileInfo[];
+  fileMetadata: FileMetadata;
+  newProject: boolean;
+};
 
 export function useSubmitFiles() {
   const { mutate, isPending, isError, error } = useMutation({
@@ -19,7 +23,7 @@ export function useSubmitFiles() {
   async function submitFiles(
     variables: SubmitVariables
   ): Promise<SubmitFileResult> {
-    const { files, languages } = variables;
+    const { files, fileMetadata } = variables;
     const documentFile = files.find((file) => file.type === "document")?.file;
     const tmFiles = files
       .filter((file) => file.type === "memory")
@@ -33,7 +37,7 @@ export function useSubmitFiles() {
     if (documentFile) {
       const docResponse = await uploadService.submitSourceText(
         documentFile,
-        languages
+        fileMetadata
       );
       result.projectId = docResponse.document.projectId.toString();
       result.documentId = docResponse.document.id.toString();

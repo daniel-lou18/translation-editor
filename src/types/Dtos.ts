@@ -36,7 +36,8 @@ export type TmSegmentMatch = {
   } | null; // Null if no target segment exists
 };
 
-export type LangMetadata = {
+export type FileMetadata = {
   sourceLang?: Lang;
   targetLang: Lang;
+  projectId?: string;
 };
