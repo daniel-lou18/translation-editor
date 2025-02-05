@@ -19,7 +19,7 @@ export class UploadService extends ApiService {
   ) {
     const formData = this.createFormData(file, fileMetadata);
 
-    if (newProject && "projectId" in fileMetadata && fileMetadata.projectId) {
+    if (!newProject && "projectId" in fileMetadata && fileMetadata.projectId) {
       formData.append("projectId", fileMetadata.projectId);
     }
 

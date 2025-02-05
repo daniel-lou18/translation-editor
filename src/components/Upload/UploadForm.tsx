@@ -1,40 +1,32 @@
-import { FormEvent, useState } from "react";
 import FileList from "@/components/Upload/FileList";
 import UploadArea from "@/components/Upload/UploadArea";
 import UploadButton from "./UploadButton";
 import Container from "../ui/Container";
-import { useFileManager } from "@/hooks/useFileManager";
-import { useSubmitFiles } from "@/hooks/useSubmitFiles";
-import { useTranslationRoute } from "@/hooks/useTranslationRoute";
 import Overlay from "../ui/Overlay";
 import { languageToCodeMap as languages } from "@/utils/constants";
 import { Lang } from "@/types";
+import { useUpload } from "@/hooks/useUpload";
 
 type UploadProps = {
   variant?: "document" | "memory" | "double";
+  newProject?: boolean;
 };
 
-export default function Upload({ variant = "double" }: UploadProps) {
-  const { files, processFiles, removeFile } = useFileManager();
-  const { mutate, isLoading } = useSubmitFiles();
-  const { navigateToTranslation, projectId } = useTranslationRoute();
-  const [sourceLang, setSourceLang] = useState<Lang>("English (USA)");
-  const [targetLang, setTargetLang] = useState<Lang>("French (France)");
-
-  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    mutate(
-      {
-        files,
-        fileMetadata: { sourceLang, targetLang, projectId },
-        newProject: true,
-      },
-      {
-        onSuccess: (params) => navigateToTranslation(params),
-        onError: (error) => console.log(error),
-      }
-    );
-  }
+export default function UploadForm({
+  variant = "double",
+  newProject = true,
+}: UploadProps) {
+  const {
+    files,
+    processFiles,
+    removeFile,
+    isLoading,
+    sourceLang,
+    setSourceLang,
+    targetLang,
+    setTargetLang,
+    handleSubmit,
+  } = useUpload(newProject);
 
   return (
     <form className="py-8 space-y-12" onSubmit={handleSubmit}>

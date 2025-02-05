@@ -1,9 +1,9 @@
-import Upload from "@/components/Upload";
+import UploadLanding from "@/components/Upload/UploadLanding";
 
 export default function UploadPage() {
   return (
     <>
-      <Upload />
+      <UploadLanding />
     </>
   );
 }

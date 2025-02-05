@@ -23,11 +23,12 @@ export function useSubmitFiles() {
   async function submitFiles(
     variables: SubmitVariables
   ): Promise<SubmitFileResult> {
-    const { files, fileMetadata } = variables;
+    const { files, fileMetadata, newProject } = variables;
     const documentFile = files.find((file) => file.type === "document")?.file;
     const tmFiles = files
       .filter((file) => file.type === "memory")
       ?.map((item) => item.file);
+
     const result: SubmitFileResult = {
       projectId: "",
       documentId: "",
@@ -37,7 +38,8 @@ export function useSubmitFiles() {
     if (documentFile) {
       const docResponse = await uploadService.submitSourceText(
         documentFile,
-        fileMetadata
+        fileMetadata,
+        newProject
       );
       result.projectId = docResponse.document.projectId.toString();
       result.documentId = docResponse.document.id.toString();
