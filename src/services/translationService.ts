@@ -1,4 +1,9 @@
-import { TranslationWithSegments, UpdatedId } from "@/types";
+import {
+  LangCode,
+  SelectTranslation,
+  TranslationWithSegments,
+  UpdatedId,
+} from "@/types";
 import { ApiService } from "./ApiService";
 import { TranslationWithJoinedSegments, Update } from "@/types/Dtos";
 
@@ -19,6 +24,15 @@ export default class TranslationService extends ApiService {
     }
 
     return this.transformSegments(data);
+  }
+
+  async createTranslation(
+    documentId: string,
+    langCode: LangCode
+  ): Promise<SelectTranslation> {
+    return await this.post(`/documents/${documentId}/translations`, {
+      langCode,
+    });
   }
 
   private transformSegments(data: TranslationWithJoinedSegments) {

@@ -1,4 +1,3 @@
-import * as React from "react";
 import { Check, ChevronsUpDown, Folder } from "lucide-react";
 
 import {
@@ -56,9 +55,7 @@ export function VersionSwitcher({
             {defaultProject
               ? Object.values(projects).map((project) => (
                   <DropdownMenuItem key={project.id} asChild>
-                    <Link
-                      to={`/app/projects/${project.id}/documents/${project.documents[0].id}`}
-                    >
+                    <Link to={`/app/projects/${project.id}/documents`}>
                       {project.name}
                       {project.id === defaultProject.id && (
                         <Check className="ml-auto" />

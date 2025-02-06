@@ -4,10 +4,13 @@ import { useTranslationRoute } from "@/hooks/useTranslationRoute";
 import {
   formatTranslationsToTableRows,
   getAllTranslationsFromProject,
+  langArrayToComboItems,
 } from "@/utils/helpers";
 import PageTitle from "../ui/PageTitle";
 import SearchForm from "../ui/SearchForm";
-import { Button } from "../ui/button";
+import TranslationCombobox from "./TranslationCombobox";
+import { languageToCodeMap as languages } from "@/utils/constants";
+import { Lang } from "@/types";
 
 export default function Translations() {
   const { currentProject, currentDocument, currentTranslations } =
@@ -18,12 +21,13 @@ export default function Translations() {
 
   const allTranslations = getAllTranslationsFromProject(currentProject);
   const translations = formatTranslationsToTableRows(currentTranslations);
+  const items = langArrayToComboItems(Object.keys(languages) as Lang[]);
 
   return (
     <>
       <PageTitle title="Translations">
         <SearchForm placeholder="Search translations" />
-        <Button size="sm">New Translation</Button>
+        <TranslationCombobox name="language" items={items} />
       </PageTitle>
       <TranslationsTable
         translations={currentDocument ? translations : allTranslations}

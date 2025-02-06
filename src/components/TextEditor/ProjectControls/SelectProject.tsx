@@ -1,4 +1,4 @@
-import Combobox, { ComboDataElement } from "@/components/ui/Combobox";
+import Combobox from "@/components/ui/Combobox";
 import {
   NormalizedProjectsWithTranslations,
   ProjectWithDocsAndTrans,
@@ -15,7 +15,7 @@ export default function SelectProject({
   currentProject,
   onSelect,
 }: SelectProjectProps) {
-  const items: ComboDataElement[] = Object.values(projects).map((project) => ({
+  const items = Object.values(projects).map((project) => ({
     label: project.name,
     value: String(project.id),
   }));
@@ -24,9 +24,9 @@ export default function SelectProject({
 
   return (
     <Combobox
-      name="projects"
+      name="project"
       items={items}
-      value={currentName}
+      value={currentName || ""}
       onChange={onSelect}
     />
   );

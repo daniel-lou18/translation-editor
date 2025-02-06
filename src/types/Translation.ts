@@ -4,6 +4,15 @@ import { Segment } from "./Segment";
 
 export type SegmentStatus = "translated" | "untranslated";
 
+export type SelectTranslation = {
+  id: number;
+  documentId: number;
+  targetLang: string;
+  status: string | null;
+  createdAt: string;
+  updatedAt: string;
+};
+
 export type Translation = {
   id: number;
   documentId: number;

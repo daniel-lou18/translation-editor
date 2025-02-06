@@ -1,5 +1,5 @@
 import { DocumentWithTranslations, NormalizedTranslations } from "@/types";
-import Combobox, { ComboDataElement } from "@/components/ui/Combobox";
+import Combobox from "@/components/ui/Combobox";
 import { Translation } from "@/types/Translation";
 
 type SelectTranslationProps = {
@@ -17,12 +17,10 @@ export default function SelectTranslation({
 }: SelectTranslationProps) {
   if (!currentDocument || Object.values(translations).length === 0) return null;
 
-  const items: ComboDataElement[] = Object.values(translations).map(
-    (translation) => ({
-      label: `${currentDocument.sourceLang} > ${translation.targetLang}`,
-      value: String(translation.id),
-    })
-  );
+  const items = Object.values(translations).map((translation) => ({
+    label: `${currentDocument.sourceLang} > ${translation.targetLang}`,
+    value: String(translation.id),
+  }));
 
   const currentValue =
     currentDocument.sourceLang && currentTranslation?.targetLang
@@ -31,9 +29,9 @@ export default function SelectTranslation({
 
   return (
     <Combobox
-      name="translations"
+      name="translation"
       items={items}
-      value={currentValue}
+      value={currentValue || ""}
       onChange={onSelect}
     />
   );

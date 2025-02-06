@@ -1,5 +1,3 @@
-import { Check, ChevronsUpDown } from "lucide-react";
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
   Command,
@@ -21,15 +19,13 @@ export type ComboDataElement<T extends string> = { value: T; label: string };
 type ComboboxProps<T extends string> = {
   name: string;
   items: ComboDataElement<T>[];
-  value: T | null;
-  onChange: (currentValue: T) => void;
+  onSelect: (value: T) => void;
 } & Omit<ComponentPropsWithoutRef<"button">, "onChange">;
 
-export default function Combobox<T extends string>({
+export default function TranslationCombobox<T extends string>({
   name,
   items,
-  value,
-  onChange,
+  onSelect,
   className,
 }: ComboboxProps<T>) {
   const [open, setOpen] = useState(false);
@@ -38,13 +34,12 @@ export default function Combobox<T extends string>({
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
-          variant="outline"
+          size="sm"
           role="combobox"
           aria-expanded={open}
-          className={cn("min-w-[150px] justify-between bg-muted", className)}
+          className={className}
         >
-          {value || `Select ${name}`}
-          <ChevronsUpDown className="opacity-50" />
+          New Translation
         </Button>
       </PopoverTrigger>
       <PopoverContent className="min-w-[150px] p-0">
@@ -52,23 +47,17 @@ export default function Combobox<T extends string>({
           <CommandInput placeholder={`Search ${name}`} />
           <CommandList>
             <CommandEmpty>{`No ${name} found.`}</CommandEmpty>
-            <CommandGroup>
+            <CommandGroup heading="Choose language to add translation">
               {items.map((item) => (
                 <CommandItem
                   key={item.value}
                   value={item.value}
                   onSelect={(currentValue) => {
-                    onChange(currentValue as T);
+                    onSelect(currentValue as T);
                     setOpen(false);
                   }}
                 >
                   {item.label}
-                  <Check
-                    className={cn(
-                      "ml-auto",
-                      value === item.value ? "opacity-100" : "opacity-0"
-                    )}
-                  />
                 </CommandItem>
               ))}
             </CommandGroup>

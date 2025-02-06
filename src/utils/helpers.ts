@@ -1,4 +1,5 @@
 import {
+  Lang,
   NormalizedTranslations,
   ProjectWithDocsAndTrans,
   TranslationWithTargetSegments,
@@ -82,5 +83,12 @@ export function getAllTranslationsFromProject(
         translation.targetSegments.length) *
         100
     ),
+  }));
+}
+
+export function langArrayToComboItems(languages: Lang[]) {
+  return languages.map((lang) => ({
+    value: lang,
+    label: lang,
   }));
 }

@@ -1,5 +1,5 @@
 import { DocumentWithTranslations, NormalizedDocsWithTrans } from "@/types";
-import Combobox, { ComboDataElement } from "@/components/ui/Combobox";
+import Combobox from "@/components/ui/Combobox";
 
 type SelectDocumentProps = {
   documents: NormalizedDocsWithTrans;
@@ -12,19 +12,17 @@ export default function SelectDocument({
   currentDocument,
   onSelect,
 }: SelectDocumentProps) {
-  const items: ComboDataElement[] = Object.values(documents).map(
-    (document) => ({
-      label: document.fileName,
-      value: String(document.id),
-    })
-  );
+  const items = Object.values(documents).map((document) => ({
+    label: document.fileName,
+    value: String(document.id),
+  }));
   const currentValue = currentDocument ? currentDocument.fileName : null;
 
   return (
     <Combobox
-      name="documents"
+      name="document"
       items={items}
-      value={currentValue}
+      value={currentValue || ""}
       onChange={onSelect}
     />
   );
