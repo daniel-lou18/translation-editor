@@ -12,6 +12,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { LoaderCircle } from "lucide-react";
 import { ComponentPropsWithoutRef, useState } from "react";
 
 export type ComboDataElement<T extends string> = { value: T; label: string };
@@ -19,13 +20,15 @@ export type ComboDataElement<T extends string> = { value: T; label: string };
 type ComboboxProps<T extends string> = {
   name: string;
   items: ComboDataElement<T>[];
-  onSelect: (value: T) => void;
+  isProcessing: boolean;
+  onSelectLang: (value: T) => void;
 } & Omit<ComponentPropsWithoutRef<"button">, "onChange">;
 
 export default function TranslationCombobox<T extends string>({
   name,
   items,
-  onSelect,
+  isProcessing,
+  onSelectLang,
   className,
 }: ComboboxProps<T>) {
   const [open, setOpen] = useState(false);
@@ -39,7 +42,11 @@ export default function TranslationCombobox<T extends string>({
           aria-expanded={open}
           className={className}
         >
-          New Translation
+          {isProcessing ? (
+            <LoaderCircle size={5} className="animate-spin" />
+          ) : (
+            "New Translation"
+          )}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="min-w-[150px] p-0">
@@ -53,7 +60,7 @@ export default function TranslationCombobox<T extends string>({
                   key={item.value}
                   value={item.value}
                   onSelect={(currentValue) => {
-                    onSelect(currentValue as T);
+                    onSelectLang(currentValue as T);
                     setOpen(false);
                   }}
                 >

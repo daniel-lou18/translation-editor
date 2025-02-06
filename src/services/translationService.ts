@@ -27,7 +27,7 @@ export default class TranslationService extends ApiService {
   }
 
   async createTranslation(
-    documentId: string,
+    documentId: number,
     langCode: LangCode
   ): Promise<SelectTranslation> {
     return await this.post(`/documents/${documentId}/translations`, {
