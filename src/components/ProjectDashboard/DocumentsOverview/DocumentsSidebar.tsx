@@ -1,6 +1,6 @@
 import * as React from "react";
-import { SearchForm } from "@/components/DocumentsOverview/search-form";
-import { VersionSwitcher } from "@/components/DocumentsOverview/version-switcher";
+import { SearchForm } from "@/components/ProjectDashboard/DocumentsOverview/search-form";
+import { VersionSwitcher } from "@/components/ProjectDashboard/DocumentsOverview/version-switcher";
 import {
   Sidebar,
   SidebarContent,
@@ -116,7 +116,9 @@ export default function DocumentsSidebar({
               </SidebarMenuItem>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <Link to="#">
+                  <Link
+                    to={`/app/projects/${String(currentProject.id)}/settings`}
+                  >
                     <Settings /> Settings
                   </Link>
                 </SidebarMenuButton>

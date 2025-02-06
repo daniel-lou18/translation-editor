@@ -9,6 +9,7 @@ import DashboardPage from "./pages/Dashboard";
 import ProjectLayout from "./pages/ProjectLayout";
 import DocumentsPage from "./pages/Documents";
 import UploadDocumentPage from "./pages/UploadDocument";
+import ProjectSettings from "./components/ProjectDashboard/Settings";
 
 export default function RoutesComponent() {
   return (
@@ -27,6 +28,7 @@ export default function RoutesComponent() {
             element={<TranslationsPage />}
           />
           <Route path="translations" element={<TranslationsPage />} />
+          <Route path="settings" element={<ProjectSettings />} />
         </Route>
         <Route
           path="projects/:projectId/documents/:documentId/translations/:translationId"

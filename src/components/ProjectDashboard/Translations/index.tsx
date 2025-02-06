@@ -6,8 +6,8 @@ import {
   getAllTranslationsFromProject,
   langArrayToComboItems,
 } from "@/utils/helpers";
-import PageTitle from "../ui/PageTitle";
-import SearchForm from "../ui/SearchForm";
+import PageTitle from "../../ui/PageTitle";
+import SearchForm from "../../ui/SearchForm";
 import TranslationCombobox from "./TranslationCombobox";
 import {
   languageToCodeMap as languages,

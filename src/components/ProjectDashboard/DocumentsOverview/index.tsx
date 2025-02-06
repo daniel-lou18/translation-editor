@@ -1,9 +1,9 @@
-import DocumentsTable from "@/components/DocumentsOverview/DocumentsTable";
+import DocumentsTable from "@/components/ProjectDashboard/DocumentsOverview/DocumentsTable";
 import { useCurrentProject } from "@/hooks/useCurrentProject";
 import { useTranslationRoute } from "@/hooks/useTranslationRoute";
-import PageTitle from "../ui/PageTitle";
-import SearchForm from "../ui/SearchForm";
-import { Button } from "../ui/button";
+import PageTitle from "../../ui/PageTitle";
+import SearchForm from "../../ui/SearchForm";
+import { Button } from "../../ui/button";
 import { Link } from "react-router";
 
 export default function Documents() {

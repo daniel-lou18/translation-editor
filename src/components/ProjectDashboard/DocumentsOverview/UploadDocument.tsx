@@ -1,6 +1,6 @@
-import Container from "../ui/Container";
-import PageTitle from "../ui/PageTitle";
-import UploadForm from "../Upload/UploadForm";
+import Container from "../../ui/Container";
+import PageTitle from "../../ui/PageTitle";
+import UploadForm from "../../Upload/UploadForm";
 
 export default function UploadDocument() {
   return (

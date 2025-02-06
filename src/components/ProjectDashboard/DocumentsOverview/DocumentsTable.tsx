@@ -6,17 +6,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { File, MoreHorizontal } from "lucide-react";
+import { File } from "lucide-react";
 import { Document } from "@/types";
+import DocumentsRowMenu from "./DocumentsRowMenu";
 
 type TranslationsTableProps = {
   documents: Document[];
@@ -44,7 +36,7 @@ export default function DocumentsTable({
           ({ id, fileName, sourceLang, domain, docType, createdAt }) => (
             <TableRow
               key={id}
-              onClick={() => onClick(id)}
+              // onClick={() => onClick(id)}
               className="hover:bg-gray-200 hover:cursor-pointer"
             >
               <TableCell className="pl-1 rounded-l-lg">
@@ -58,21 +50,7 @@ export default function DocumentsTable({
               <TableCell>{docType || "document"}</TableCell>
               <TableCell>{new Date(createdAt).toLocaleDateString()}</TableCell>
               <TableCell className="pr-1 rounded-r-lg">
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" className="h-8 w-8 p-0">
-                      <span className="sr-only">Open menu</span>
-                      <MoreHorizontal className="h-4 w-4" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                    <DropdownMenuItem>View details</DropdownMenuItem>
-                    <DropdownMenuItem>Update progress</DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem>Delete translation</DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                <DocumentsRowMenu />
               </TableCell>
             </TableRow>
           )

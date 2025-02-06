@@ -1,9 +1,9 @@
-import DocumentsSidebar from "@/components/DocumentsOverview/DocumentsSidebar";
+import DocumentsSidebar from "@/components/ProjectDashboard/DocumentsOverview/DocumentsSidebar";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { useCurrentProject } from "@/hooks/useCurrentProject";
 import { Outlet } from "react-router";
 import Container from "@/components/ui/Container";
-import TranslationsBreadcrumb from "@/components/Translations/TranslationsBreadcrumb";
+import TranslationsBreadcrumb from "@/components/ProjectDashboard/Translations/TranslationsBreadcrumb";
 
 export default function ProjectLayout() {
   const { projects, currentProject, currentDocument } = useCurrentProject();
@@ -19,7 +19,7 @@ export default function ProjectLayout() {
           projectName={currentProject.name}
           fileName={currentDocument?.fileName ?? null}
         />
-        <Container className="px-12 py-6">
+        <Container className="px-12 2xl:px-24 py-6">
           <Outlet />
         </Container>
       </SidebarInset>
