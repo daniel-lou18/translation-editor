@@ -1,4 +1,4 @@
-import { Translation } from "./Translation";
+import { Translation, TranslationWithDocument } from "./Translation";
 
 export type Document = {
   id: number;
@@ -28,4 +28,11 @@ export type DocumentWithTranslations = Document & {
   translations: Translation[];
 };
 
-export type NormalizedDocsWithTrans = Record<string, DocumentWithTranslations>;
+export type DocumentWithTranslationsWithDoc = Document & {
+  translations: TranslationWithDocument[];
+};
+
+export type NormalizedDocsWithTrans = Record<
+  string,
+  DocumentWithTranslationsWithDoc
+>;

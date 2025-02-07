@@ -1,6 +1,6 @@
 import { languageToCodeMap } from "@/utils/constants";
-import { ProjectWithDocsAndTrans } from "./Project";
-import { Translation as TranslationDto } from "./Translation";
+import { ProjectWithDocsAndTransWithDoc } from "./Project";
+import { TranslationWithDocument } from "./Translation";
 
 export * from "./Project";
 export * from "./Document";
@@ -77,11 +77,11 @@ export type Translation = {
   createdAt: string;
   lastModified: string;
 };
-export type NormalizedTranslations = Record<string, TranslationDto>;
+export type NormalizedTranslations = Record<string, TranslationWithDocument>;
 
 export type NormalizedProjectsWithTranslations = Record<
   string,
-  ProjectWithDocsAndTrans
+  ProjectWithDocsAndTransWithDoc
 >;
 
 export type Segment = {

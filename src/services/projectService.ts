@@ -1,4 +1,7 @@
-import { ProjectWithDocsAndTrans } from "@/types";
+import {
+  ProjectWithDocsAndTrans,
+  ProjectWithDocsAndTransWithDoc,
+} from "@/types";
 import { ApiService } from "./ApiService";
 
 export class ProjectService extends ApiService {
@@ -10,7 +13,7 @@ export class ProjectService extends ApiService {
     return await this.get(`/projects/${projectId}`);
   }
 
-  async getProjects(): Promise<ProjectWithDocsAndTrans[]> {
+  async getProjects(): Promise<ProjectWithDocsAndTransWithDoc[]> {
     return await this.get("/projects");
   }
 }

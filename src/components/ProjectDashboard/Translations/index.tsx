@@ -28,6 +28,9 @@ export default function Translations() {
   const translations = formatTranslationsToTableRows(currentTranslations);
   const items = langArrayToComboItems(Object.keys(languages) as Lang[]);
 
+  console.log({ currentProject });
+  console.log({ currentTranslations });
+
   function handleAddTranslation(langCode: Lang) {
     if (currentDocument?.id) {
       mutate({
@@ -41,7 +44,9 @@ export default function Translations() {
 
   return (
     <>
-      <PageTitle title="Translations">
+      <PageTitle
+        title={`${currentDocument ? "Translations" : "All translations"}`}
+      >
         <SearchForm placeholder="Search translations" />
         <TranslationCombobox
           name="language"

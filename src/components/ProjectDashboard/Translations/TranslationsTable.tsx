@@ -30,7 +30,8 @@ export default function TranslationsTable({
     <Table>
       <TableHeader>
         <TableRow className="hover:bg-transparent">
-          <TableHead className="pl-0">Language</TableHead>
+          <TableHead className="pl-0">Document</TableHead>
+          <TableHead>Language</TableHead>
           <TableHead>Progress</TableHead>
           <TableHead>Status</TableHead>
           <TableHead>Last update</TableHead>
@@ -39,15 +40,21 @@ export default function TranslationsTable({
       </TableHeader>
       <TableBody>
         {translations.map(
-          ({ id, documentId, targetLang, progress, status, updatedAt }) => (
+          ({
+            id,
+            documentId,
+            fileName,
+            targetLang,
+            progress,
+            status,
+            updatedAt,
+          }) => (
             <TableRow
               key={id}
               className="hover:bg-gray-200/50 hover:cursor-pointer"
             >
-              <TableCell
-                className="pl-1"
-                onClick={() => onClick(documentId, id)}
-              >
+              <TableCell className="pl-1">{fileName} </TableCell>
+              <TableCell onClick={() => onClick(documentId, id)}>
                 <div className="flex items-center gap-2">
                   <Globe className="h-4 w-4" strokeWidth={1.5} />
                   {targetLang}

@@ -45,7 +45,7 @@ export default function TableRowMenu({ name, items }: TableRowMenuProps) {
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
           {items.map((item) => (
-            <DropdownMenuItem>{item}</DropdownMenuItem>
+            <DropdownMenuItem key={item}>{item}</DropdownMenuItem>
           ))}
           <DropdownMenuSeparator />
           <DialogTrigger asChild>
@@ -54,7 +54,7 @@ export default function TableRowMenu({ name, items }: TableRowMenuProps) {
         </DropdownMenuContent>
       </DropdownMenu>
       <DialogContent>
-        <DialogHeader>
+        <DialogHeader className="space-y-4">
           <DialogTitle>Are you absolutely sure?</DialogTitle>
           <DialogDescription>
             {`This action cannot be undone. This will permanently delete your

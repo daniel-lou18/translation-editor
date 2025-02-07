@@ -1,11 +1,11 @@
 import {
-  DocumentWithTranslations,
+  DocumentWithTranslationsWithDoc,
   NormalizedDocsWithTrans,
   NormalizedProjectsWithTranslations,
   NormalizedTranslations,
-  ProjectWithDocsAndTrans,
+  ProjectWithDocsAndTransWithDoc,
 } from "@/types";
-import { Translation as TranslationDto } from "@/types/Translation";
+import { TranslationWithDocument } from "@/types/Translation";
 import { useProjects } from "./useProjects";
 import { useMemo } from "react";
 import { useTranslationRoute } from "./useTranslationRoute";
@@ -22,7 +22,7 @@ export function useCurrentProject() {
       );
     }, [projects]);
 
-  const currentProject = useMemo<ProjectWithDocsAndTrans | null>(
+  const currentProject = useMemo<ProjectWithDocsAndTransWithDoc | null>(
     () =>
       normalizedProjects && projectId ? normalizedProjects[projectId] : null,
     [normalizedProjects, projectId]
@@ -35,7 +35,7 @@ export function useCurrentProject() {
     [currentProject]
   );
 
-  const currentDocument = useMemo<DocumentWithTranslations | null>(
+  const currentDocument = useMemo<DocumentWithTranslationsWithDoc | null>(
     () =>
       currentDocuments && documentId ? currentDocuments[documentId] : null,
     [currentDocuments, documentId]
@@ -53,7 +53,7 @@ export function useCurrentProject() {
     [currentDocument]
   );
 
-  const currentTranslation = useMemo<TranslationDto | null>(
+  const currentTranslation = useMemo<TranslationWithDocument | null>(
     () =>
       currentTranslations && translationId
         ? currentTranslations[translationId]

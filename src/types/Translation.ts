@@ -26,6 +26,7 @@ export type Translation = {
 export type FormattedTranslation = {
   id: string;
   documentId: string;
+  fileName: string;
   progress: number;
   targetLang: LangCode;
   status: string | null;
@@ -45,7 +46,7 @@ export type TargetSegment = {
   updatedAt: string;
 };
 
-export type TranslationWithTargetSegments = Translation & {
+export type TranslationWithTargetSegments = TranslationWithDocument & {
   targetSegments: TargetSegment[];
 };
 

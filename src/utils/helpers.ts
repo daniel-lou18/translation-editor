@@ -2,6 +2,7 @@ import {
   Lang,
   NormalizedTranslations,
   ProjectWithDocsAndTrans,
+  ProjectWithDocsAndTransWithDoc,
   TranslationWithTargetSegments,
 } from "@/types";
 import { Segment } from "@/types/Segment";
@@ -38,6 +39,7 @@ export function formatTranslationsToTableRows(
     ...translation,
     id: String(translation.id),
     documentId: String(translation.documentId),
+    fileName: translation.document.fileName,
     progress: Math.round(
       (translation.targetSegments.filter((seg) => seg.status === "translated")
         .length /
@@ -67,7 +69,7 @@ export function formatProjectsToCards(
 }
 
 export function getAllTranslationsFromProject(
-  project: ProjectWithDocsAndTrans
+  project: ProjectWithDocsAndTransWithDoc
 ) {
   const translations = project.documents.reduce<
     TranslationWithTargetSegments[]
@@ -77,6 +79,7 @@ export function getAllTranslationsFromProject(
     ...translation,
     id: String(translation.id),
     documentId: String(translation.documentId),
+    fileName: translation.document.fileName,
     progress: Math.round(
       (translation.targetSegments.filter((seg) => seg.status === "translated")
         .length /

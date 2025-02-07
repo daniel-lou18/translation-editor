@@ -1,4 +1,8 @@
-import { Document, DocumentWithTranslations } from "./Document";
+import {
+  Document,
+  DocumentWithTranslations,
+  DocumentWithTranslationsWithDoc,
+} from "./Document";
 
 export type ProjectStatus = "active" | "archived";
 
@@ -29,4 +33,8 @@ export type DashboardProject = {
   createdAt: string;
   updatedAt: string;
   documents: DocumentWithTranslations[];
+};
+
+export type ProjectWithDocsAndTransWithDoc = Project & {
+  documents: DocumentWithTranslationsWithDoc[];
 };
