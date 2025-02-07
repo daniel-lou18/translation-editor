@@ -19,7 +19,7 @@ export default function ProjectLayout() {
           projectName={currentProject.name}
           fileName={currentDocument?.fileName ?? null}
         />
-        <Container className="px-12 2xl:px-24 py-6">
+        <Container className="xl:px-12 min-[1600px]:px-24 py-6">
           <Outlet />
         </Container>
       </SidebarInset>

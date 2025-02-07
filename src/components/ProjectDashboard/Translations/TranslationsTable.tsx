@@ -11,6 +11,7 @@ import { Progress } from "@/components/ui/progress-bar";
 import { Globe } from "lucide-react";
 import { FormattedTranslation } from "@/types/Translation";
 import TableRowMenu, { TableRowMenuProps } from "../TableRowMenu";
+import Container from "@/components/ui/Container";
 
 type TranslationsTableProps = {
   translations: FormattedTranslation[];
@@ -55,18 +56,24 @@ export default function TranslationsTable({
             >
               <TableCell className="pl-1">{fileName} </TableCell>
               <TableCell onClick={() => onClick(documentId, id)}>
-                <div className="flex items-center gap-2">
+                <Container className="flex items-center gap-2">
                   <Globe className="h-4 w-4" strokeWidth={1.5} />
                   {targetLang}
-                </div>
+                </Container>
               </TableCell>
-              <TableCell onClick={() => onClick(documentId, id)}>
-                <div className="flex items-center gap-2">
+              <TableCell
+                onClick={() => onClick(documentId, id)}
+                className="min-w-32"
+              >
+                <Container className="flex items-center gap-2">
                   <Progress value={progress} className="w-[60%] h-2" />
-                  <span className="text-xs text-muted-foreground">
+                  <Container
+                    as="span"
+                    className="text-xs text-muted-foreground"
+                  >
                     {progress}%
-                  </span>
-                </div>
+                  </Container>
+                </Container>
               </TableCell>
               <TableCell onClick={() => onClick(documentId, id)}>
                 <Badge

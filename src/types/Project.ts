@@ -38,3 +38,5 @@ export type DashboardProject = {
 export type ProjectWithDocsAndTransWithDoc = Project & {
   documents: DocumentWithTranslationsWithDoc[];
 };
+
+export type OptionalProjectWithId = Partial<Project> & { id: number };

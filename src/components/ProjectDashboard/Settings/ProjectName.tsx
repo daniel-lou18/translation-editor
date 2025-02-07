@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import ButtonLoader from "@/components/ui/ButtonLoader";
 import {
   Card,
   CardContent,
@@ -8,7 +9,10 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { FormEvent } from "react";
+import { useCurrentProject } from "@/hooks/useCurrentProject";
+import { useUpdateProject } from "@/hooks/useUpdateProject";
+import { projectNameSchema } from "@/utils/validationSchemas";
+import { ChangeEvent, FormEvent, useState } from "react";
 
 const projectNameData = {
   header: {
@@ -18,8 +22,37 @@ const projectNameData = {
 };
 
 export default function ProjectName() {
+  const { currentProject } = useCurrentProject();
+  const { mutate, isLoading } = useUpdateProject();
+  const [name, setName] = useState<string>(
+    currentProject?.name ?? "Your project name"
+  );
+  const [error, setError] = useState("");
+
+  function handleChange(e: ChangeEvent<HTMLInputElement>) {
+    const name = e.target.value;
+    setName(name);
+
+    const parsed = projectNameSchema.safeParse(name);
+    setError(parsed.success ? "" : parsed.error.errors[0].message);
+  }
+
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    setError("");
+    const parsed = projectNameSchema.safeParse(name);
+
+    if (!parsed.success) {
+      setError(parsed.error.errors[0].message);
+      return;
+    }
+
+    if (!currentProject) {
+      setError("Current project is missing");
+      return;
+    }
+
+    mutate({ id: currentProject.id, name });
   }
 
   return (
@@ -34,14 +67,18 @@ export default function ProjectName() {
           </CardDescription>
         </CardHeader>
         <CardContent className="pt-6">
-          <Input />
+          <Input value={name} onChange={handleChange} />
         </CardContent>
         <CardFooter className="py-4 border-t border-border justify-between">
-          <p className="text-sm text-muted-foreground">
-            Must be between 1 and 36 characters long.
+          <p
+            className={`text-sm ${
+              error ? "text-destructive" : "text-muted-foreground"
+            }`}
+          >
+            {error ? error : "Must be between 1 and 36 characters long"}
           </p>
           <Button size="sm" type="submit">
-            Save
+            <ButtonLoader isLoading={isLoading}>Save</ButtonLoader>
           </Button>
         </CardFooter>
       </Card>

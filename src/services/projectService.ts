@@ -1,4 +1,6 @@
 import {
+  OptionalProjectWithId,
+  Project,
   ProjectWithDocsAndTrans,
   ProjectWithDocsAndTransWithDoc,
 } from "@/types";
@@ -10,11 +12,15 @@ export class ProjectService extends ApiService {
   }
 
   async getProject(projectId: string): Promise<ProjectWithDocsAndTrans> {
-    return await this.get(`/projects/${projectId}`);
+    return this.get(`/projects/${projectId}`);
   }
 
   async getProjects(): Promise<ProjectWithDocsAndTransWithDoc[]> {
-    return await this.get("/projects");
+    return this.get("/projects");
+  }
+
+  async updateProject(project: OptionalProjectWithId): Promise<Project> {
+    return this.post(`/projects/${project.id}`, { project });
   }
 }
 

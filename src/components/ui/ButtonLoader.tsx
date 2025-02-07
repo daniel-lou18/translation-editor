@@ -3,7 +3,7 @@ import { ComponentType, PropsWithChildren } from "react";
 import Container from "./Container";
 
 type ButtonLoaderProps = PropsWithChildren<{
-  icon: ComponentType<{ className?: string }>;
+  icon?: ComponentType<{ className?: string }>;
   isLoading: boolean;
   iconSize?: number;
 }>;
@@ -22,9 +22,9 @@ export default function ButtonLoader({
         <LoaderCircle
           className={`w-${iconSize} h-${iconSize} mr-2 animate-spin`}
         />
-      ) : (
+      ) : Icon ? (
         <Icon className={`w-${iconSize} h-${iconSize} mr-2`} />
-      )}
+      ) : null}
       {children}
     </Container>
   );
