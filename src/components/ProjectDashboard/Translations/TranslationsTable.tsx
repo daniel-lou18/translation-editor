@@ -7,22 +7,19 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress-bar";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Globe, MoreHorizontal } from "lucide-react";
+import { Globe } from "lucide-react";
 import { FormattedTranslation } from "@/types/Translation";
+import TableRowMenu, { TableRowMenuProps } from "../TableRowMenu";
 
 type TranslationsTableProps = {
   translations: FormattedTranslation[];
   onClick: (documentId: string, translationId: string) => void;
+};
+
+const translationRowMenuData: TableRowMenuProps = {
+  name: "translation",
+  items: ["Open translation", "View details"],
 };
 
 export default function TranslationsTable({
@@ -45,16 +42,18 @@ export default function TranslationsTable({
           ({ id, documentId, targetLang, progress, status, updatedAt }) => (
             <TableRow
               key={id}
-              onClick={() => onClick(documentId, id)}
-              className="hover:bg-gray-200 hover:cursor-pointer"
+              className="hover:bg-gray-200/50 hover:cursor-pointer"
             >
-              <TableCell className="pl-1 rounded-l-lg">
+              <TableCell
+                className="pl-1"
+                onClick={() => onClick(documentId, id)}
+              >
                 <div className="flex items-center gap-2">
                   <Globe className="h-4 w-4" strokeWidth={1.5} />
                   {targetLang}
                 </div>
               </TableCell>
-              <TableCell>
+              <TableCell onClick={() => onClick(documentId, id)}>
                 <div className="flex items-center gap-2">
                   <Progress value={progress} className="w-[60%] h-2" />
                   <span className="text-xs text-muted-foreground">
@@ -62,7 +61,7 @@ export default function TranslationsTable({
                   </span>
                 </div>
               </TableCell>
-              <TableCell>
+              <TableCell onClick={() => onClick(documentId, id)}>
                 <Badge
                   variant="outline"
                   className={`${
@@ -76,23 +75,11 @@ export default function TranslationsTable({
                   {status}
                 </Badge>
               </TableCell>
-              <TableCell>{new Date(updatedAt).toLocaleDateString()}</TableCell>
-              <TableCell className="pr-1 rounded-r-lg">
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" className="h-8 w-8 p-0">
-                      <span className="sr-only">Open menu</span>
-                      <MoreHorizontal className="h-4 w-4" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                    <DropdownMenuItem>View details</DropdownMenuItem>
-                    <DropdownMenuItem>Update progress</DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem>Delete translation</DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+              <TableCell onClick={() => onClick(documentId, id)}>
+                {new Date(updatedAt).toLocaleDateString()}
+              </TableCell>
+              <TableCell className="pr-1">
+                <TableRowMenu {...translationRowMenuData} />
               </TableCell>
             </TableRow>
           )

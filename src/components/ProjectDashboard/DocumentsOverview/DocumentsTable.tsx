@@ -8,11 +8,16 @@ import {
 } from "@/components/ui/table";
 import { File } from "lucide-react";
 import { Document } from "@/types";
-import DocumentsRowMenu from "./DocumentsRowMenu";
+import TableRowMenu, { TableRowMenuProps } from "../TableRowMenu";
 
 type TranslationsTableProps = {
   documents: Document[];
   onClick: (documentId: number) => void;
+};
+
+const documentRowMenuData: TableRowMenuProps = {
+  name: "document",
+  items: ["View translations", "View details"],
 };
 
 export default function DocumentsTable({
@@ -38,10 +43,7 @@ export default function DocumentsTable({
               key={id}
               className="hover:bg-gray-200/50 hover:cursor-pointer"
             >
-              <TableCell
-                className="pl-1 rounded-l-lg"
-                onClick={() => onClick(id)}
-              >
+              <TableCell className="pl-1" onClick={() => onClick(id)}>
                 <div className="flex items-center gap-2">
                   <File className="h-4 w-4" strokeWidth={1.5} />
                   {fileName}
@@ -55,8 +57,8 @@ export default function DocumentsTable({
               <TableCell onClick={() => onClick(id)}>
                 {new Date(createdAt).toLocaleDateString()}
               </TableCell>
-              <TableCell className="pr-1 rounded-r-lg">
-                <DocumentsRowMenu />
+              <TableCell className="pr-1">
+                <TableRowMenu {...documentRowMenuData} />
               </TableCell>
             </TableRow>
           )
