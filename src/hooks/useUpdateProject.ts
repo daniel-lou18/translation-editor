@@ -14,7 +14,7 @@ export function useUpdateProject() {
 
   function handleSuccess() {
     queryClient.invalidateQueries({ queryKey: ["projects"] });
-    toast.success("Project name has been successfully updated", {
+    toast.success("Project settings have been successfully updated", {
       classNames: { toast: "bg-green-200" },
     });
   }
