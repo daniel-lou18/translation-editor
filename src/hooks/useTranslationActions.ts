@@ -11,6 +11,7 @@ import {
 import { Lang } from "@/types";
 import { useAddTranslation } from "@/hooks/useAddTranslation";
 import { useNavigate } from "react-router";
+import { ComboDataElement } from "@/components/ui/Combobox";
 
 export function useTranslationActions() {
   const { currentProject, currentDocument } = useCurrentProject();
@@ -24,10 +25,16 @@ export function useTranslationActions() {
   );
   const docSelectItems = [
     { value: "all", label: "All translations" },
-    ...allTranslations.map((trans) => ({
-      value: String(trans.documentId),
-      label: trans.document.fileName,
-    })),
+    ...allTranslations.reduce<ComboDataElement<string>[]>((acc, trans) => {
+      const value = String(trans.documentId);
+      if (!acc.find((el) => el.value === value)) {
+        acc.push({
+          value: value,
+          label: trans.document.fileName,
+        });
+      }
+      return acc;
+    }, []),
   ];
   const langItems = langArrayToComboItems(Object.keys(languages) as Lang[]);
 

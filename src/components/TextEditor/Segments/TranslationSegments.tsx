@@ -30,7 +30,7 @@ export default function TranslationSegments() {
   );
 
   return (
-    <Container className="col-span-9 rounded-xl border border-gray-100 bg-white shadow-sm divide-y divide-gray-100">
+    <Container className="col-span-9 bg-background shadow-sm divide-y divide-gray-100 border-r border-muted">
       {segments.map((segment, idx) => (
         <TranslationSegment
           key={segment.id}

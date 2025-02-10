@@ -28,6 +28,7 @@ export default function SelectProject({
       items={items}
       value={currentName || ""}
       onChange={onSelect}
+      buttonVariant="ghost"
     />
   );
 }

@@ -8,16 +8,15 @@ type SearchFormProps = ComponentProps<"input"> & { className?: string };
 
 export default function SearchForm({ className, ...props }: SearchFormProps) {
   return (
-    <form className="relative" role="search">
+    <form className={cn("relative h-8", className)} role="search">
       <Label htmlFor="search" className="sr-only">
         Search
       </Label>
       <Input
         type="search"
-        className={cn(
-          "h-8 w-full pl-8 bg-background shadow-none focus-visible:ring-2 focus-visible:ring-sidebar-ring",
-          className
-        )}
+        className={
+          "h-8 w-full pl-8 bg-background shadow-none focus-visible:ring-2 focus-visible:ring-sidebar-ring"
+        }
         placeholder={props.placeholder}
         {...props}
       />

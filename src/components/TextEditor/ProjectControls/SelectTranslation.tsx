@@ -33,6 +33,7 @@ export default function SelectTranslation({
       items={items}
       value={currentValue || ""}
       onChange={onSelect}
+      buttonVariant="ghost"
     />
   );
 }

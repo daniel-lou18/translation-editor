@@ -24,6 +24,7 @@ export default function SelectDocument({
       items={items}
       value={currentValue || ""}
       onChange={onSelect}
+      buttonVariant="ghost"
     />
   );
 }
