@@ -8,9 +8,9 @@ type PageTitleProps = {
 
 export default function PageTitle({ children, title }: PageTitleProps) {
   return (
-    <Container className="flex justify-between mb-6">
+    <Container className="flex gap-6 items-center">
       <h1 className="font-semibold text-2xl">{title}</h1>
-      <Container className="flex gap-3">{children}</Container>
+      {children}
     </Container>
   );
 }

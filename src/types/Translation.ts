@@ -24,8 +24,8 @@ export type Translation = {
 };
 
 export type FormattedTranslation = {
-  id: string;
-  documentId: string;
+  id: number;
+  documentId: number;
   fileName: string;
   progress: number;
   targetLang: LangCode;

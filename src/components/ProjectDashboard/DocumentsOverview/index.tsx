@@ -5,6 +5,8 @@ import PageTitle from "../../ui/PageTitle";
 import SearchForm from "../../ui/SearchForm";
 import { Button } from "../../ui/button";
 import { Link } from "react-router";
+import Container from "@/components/ui/Container";
+import PageControls from "@/components/ui/PageControls";
 
 export default function Documents() {
   const { currentProject, currentDocuments } = useCurrentProject();
@@ -14,14 +16,17 @@ export default function Documents() {
 
   return (
     <>
-      <PageTitle title="Documents">
-        <SearchForm placeholder="Search documents" />
-        <Button size="sm" asChild>
-          <Link to={`/app/projects/${currentProject.id}/documents/upload`}>
-            Upload Document
-          </Link>
-        </Button>
-      </PageTitle>
+      <Container className="flex justify-between mb-6">
+        <PageTitle title="Documents" />
+        <PageControls>
+          <SearchForm placeholder="Search documents" />
+          <Button size="sm" asChild>
+            <Link to={`/app/projects/${currentProject.id}/documents/upload`}>
+              Upload Document
+            </Link>
+          </Button>
+        </PageControls>
+      </Container>
       <DocumentsTable
         documents={Object.values(currentDocuments || {})}
         onClick={(documentId: number) => {

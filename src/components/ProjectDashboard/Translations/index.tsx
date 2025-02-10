@@ -2,7 +2,6 @@ import TranslationsTable from "./TranslationsTable";
 import { useCurrentProject } from "@/hooks/useCurrentProject";
 import { useTranslationRoute } from "@/hooks/useTranslationRoute";
 import {
-  formatTranslationsToTableRows,
   getAllTranslationsFromProject,
   langArrayToComboItems,
 } from "@/utils/helpers";
@@ -15,21 +14,29 @@ import {
 } from "@/utils/constants";
 import { Lang } from "@/types";
 import { useAddTranslation } from "@/hooks/useAddTranslation";
+import PageControls from "@/components/ui/PageControls";
+import Container from "@/components/ui/Container";
+import Combobox from "@/components/ui/Combobox";
+import { useNavigate } from "react-router";
 
 export default function Translations() {
-  const { currentProject, currentDocument, currentTranslations } =
-    useCurrentProject();
-  const { navigateToTranslation } = useTranslationRoute();
+  const { currentProject, currentDocument } = useCurrentProject();
+  const { navigateToDocument, navigateToTranslation } = useTranslationRoute();
+  const navigate = useNavigate();
   const { mutate, isLoading } = useAddTranslation();
 
-  if (!currentProject) return null;
-
   const allTranslations = getAllTranslationsFromProject(currentProject);
-  const translations = formatTranslationsToTableRows(currentTranslations);
+  const translations = allTranslations.filter(
+    (trans) => trans.documentId === currentDocument?.id
+  );
+  const docSelectItems = [
+    { value: "all", label: "All translations" },
+    ...allTranslations.map((trans) => ({
+      value: String(trans.documentId),
+      label: trans.document.fileName,
+    })),
+  ];
   const items = langArrayToComboItems(Object.keys(languages) as Lang[]);
-
-  console.log({ currentProject });
-  console.log({ currentTranslations });
 
   function handleAddTranslation(langCode: Lang) {
     if (currentDocument?.id) {
@@ -42,28 +49,51 @@ export default function Translations() {
     }
   }
 
+  function handleClickTranslation(documentId: number, translationId: number) {
+    if (!currentProject) return;
+
+    navigateToTranslation({
+      projectId: currentProject.id,
+      documentId,
+      translationId,
+    });
+  }
+
+  function handleSelectDocument(documentId: string) {
+    if (!currentProject) return;
+
+    if (documentId === "all") {
+      return navigate(`/app/projects/${currentProject.id}/translations`);
+    }
+
+    navigateToDocument(currentProject.id, documentId);
+  }
+
   return (
     <>
-      <PageTitle
-        title={`${currentDocument ? "Translations" : "All translations"}`}
-      >
-        <SearchForm placeholder="Search translations" />
-        <TranslationCombobox
-          name="language"
-          items={items}
-          isProcessing={isLoading}
-          onSelectLang={handleAddTranslation}
-        />
-      </PageTitle>
+      <Container className="flex justify-between mb-6">
+        <PageTitle title="Translations"></PageTitle>
+        <PageControls>
+          <SearchForm placeholder="Search translations" />
+          <Combobox
+            name="document"
+            items={docSelectItems}
+            value={currentDocument?.fileName || "All translations"}
+            onChange={handleSelectDocument}
+            buttonVariant="default"
+            className="h-8"
+          />
+          <TranslationCombobox
+            name="language"
+            items={items}
+            isProcessing={isLoading}
+            onSelectLang={handleAddTranslation}
+          />
+        </PageControls>
+      </Container>
       <TranslationsTable
         translations={currentDocument ? translations : allTranslations}
-        onClick={(documentId: string, translationId: string) => {
-          navigateToTranslation({
-            projectId: currentProject.id,
-            documentId,
-            translationId,
-          });
-        }}
+        onClick={handleClickTranslation}
       />
     </>
   );

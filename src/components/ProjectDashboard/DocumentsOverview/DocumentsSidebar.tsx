@@ -68,7 +68,7 @@ export default function DocumentsSidebar({
                       currentProject.id
                     )}/translations`}
                   >
-                    <Globe /> Translations
+                    <Globe /> All translations
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>

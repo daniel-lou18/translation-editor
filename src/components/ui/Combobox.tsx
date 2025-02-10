@@ -23,6 +23,15 @@ type ComboboxProps<T extends string> = {
   items: ComboDataElement<T>[];
   value: T | null;
   onChange: (currentValue: T) => void;
+  buttonVariant?:
+    | "link"
+    | "default"
+    | "destructive"
+    | "outline"
+    | "secondary"
+    | "ghost"
+    | null
+    | undefined;
 } & Omit<ComponentPropsWithoutRef<"button">, "onChange">;
 
 export default function Combobox<T extends string>({
@@ -30,6 +39,7 @@ export default function Combobox<T extends string>({
   items,
   value,
   onChange,
+  buttonVariant = "outline",
   className,
 }: ComboboxProps<T>) {
   const [open, setOpen] = useState(false);
@@ -38,10 +48,10 @@ export default function Combobox<T extends string>({
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
-          variant="outline"
+          variant={buttonVariant}
           role="combobox"
           aria-expanded={open}
-          className={cn("min-w-[150px] justify-between bg-muted", className)}
+          className={cn("min-w-[150px] justify-between", className)}
         >
           {value || `Select ${name}`}
           <ChevronsUpDown className="opacity-50" />

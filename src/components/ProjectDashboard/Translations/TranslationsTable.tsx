@@ -15,7 +15,7 @@ import Container from "@/components/ui/Container";
 
 type TranslationsTableProps = {
   translations: FormattedTranslation[];
-  onClick: (documentId: string, translationId: string) => void;
+  onClick: (documentId: number, translationId: number) => void;
 };
 
 const translationRowMenuData: TableRowMenuProps = {
@@ -31,8 +31,8 @@ export default function TranslationsTable({
     <Table>
       <TableHeader>
         <TableRow className="hover:bg-transparent">
-          <TableHead className="pl-0">Document</TableHead>
-          <TableHead>Language</TableHead>
+          <TableHead className="pl-0">Language</TableHead>
+          <TableHead>Document</TableHead>
           <TableHead>Progress</TableHead>
           <TableHead>Status</TableHead>
           <TableHead>Last update</TableHead>
@@ -54,16 +54,19 @@ export default function TranslationsTable({
               key={id}
               className="hover:bg-gray-200/50 hover:cursor-pointer"
             >
-              <TableCell className="pl-1">{fileName} </TableCell>
-              <TableCell onClick={() => onClick(documentId, id)}>
+              <TableCell
+                onClick={() => onClick(documentId, id)}
+                className="pl-1"
+              >
                 <Container className="flex items-center gap-2">
                   <Globe className="h-4 w-4" strokeWidth={1.5} />
                   {targetLang}
                 </Container>
               </TableCell>
+              <TableCell>{fileName} </TableCell>
               <TableCell
                 onClick={() => onClick(documentId, id)}
-                className="min-w-32"
+                className="min-w-36"
               >
                 <Container className="flex items-center gap-2">
                   <Progress value={progress} className="w-[60%] h-2" />

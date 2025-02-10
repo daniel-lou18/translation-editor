@@ -17,7 +17,7 @@ export function useTranslationRoute() {
         throw new Error("Project id is missing");
       }
       navigate(
-        `/app/projects/${String(projectId)}
+        `/app/projects/${projectId}
         }`
       );
     },
@@ -30,9 +30,7 @@ export function useTranslationRoute() {
         throw new Error("Project id is missing");
       }
       navigate(
-        `/app/projects/${String(projectId)}/documents/${String(
-          documentId
-        )}/translations`
+        `/app/projects/${projectId}/documents/${documentId}/translations`
       );
     },
     [navigate]
@@ -44,9 +42,7 @@ export function useTranslationRoute() {
         throw new Error("Id(s) is/are missing");
       }
       navigate(
-        `/app/projects/${String(projectId)}/documents/${String(
-          documentId
-        )}/translations/${String(translationId)}`
+        `/app/projects/${projectId}/documents/${documentId}/translations/${translationId}`
       );
     },
     [navigate]

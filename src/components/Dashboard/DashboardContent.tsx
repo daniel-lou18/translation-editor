@@ -6,6 +6,7 @@ import SearchForm from "../ui/SearchForm";
 import { Button } from "../ui/button";
 import ProjectCards from "./ProjectCards";
 import { Link } from "react-router";
+import PageControls from "../ui/PageControls";
 
 type DashboardContentProps = {
   projects: ProjectWithDocsAndTrans[] | undefined;
@@ -18,12 +19,15 @@ export default function DashboardContent({ projects }: DashboardContentProps) {
 
   return (
     <Container className="px-12 py-6 bg-muted/20">
-      <PageTitle title="Daniel's Projects">
-        <SearchForm />
-        <Button size="sm" asChild>
-          <Link to="#">New Project</Link>
-        </Button>
-      </PageTitle>
+      <Container className="flex justify-between mb-6">
+        <PageTitle title="Daniel's Projects" />
+        <PageControls>
+          <SearchForm />
+          <Button size="sm" asChild>
+            <Link to="#">New Project</Link>
+          </Button>
+        </PageControls>
+      </Container>
       <ProjectCards projects={formattedProjects} />
     </Container>
   );

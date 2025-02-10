@@ -69,16 +69,18 @@ export function formatProjectsToCards(
 }
 
 export function getAllTranslationsFromProject(
-  project: ProjectWithDocsAndTransWithDoc
+  project: ProjectWithDocsAndTransWithDoc | null
 ) {
+  if (!project) return [];
+
   const translations = project.documents.reduce<
     TranslationWithTargetSegments[]
   >((acc, doc) => [...acc, ...doc.translations], []);
 
   return translations.map((translation) => ({
     ...translation,
-    id: String(translation.id),
-    documentId: String(translation.documentId),
+    id: translation.id,
+    documentId: translation.documentId,
     fileName: translation.document.fileName,
     progress: Math.round(
       (translation.targetSegments.filter((seg) => seg.status === "translated")
