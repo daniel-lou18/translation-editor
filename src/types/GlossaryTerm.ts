@@ -11,7 +11,7 @@ export type GlossaryTerm = {
   context: string | null;
 };
 
-export type GlossarySearchResult = {
+export type GlossaryTermWithDocPair = {
   glossaryTerm: GlossaryTerm;
   tmDocumentPair: TmDocumentPair | null;
 };

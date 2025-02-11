@@ -3,7 +3,7 @@ import Container from "@/components/ui/Container";
 import EditorControls from "@/components/TextEditor/EditorControls/EditorControls";
 import ProjectControls from "@/components/TextEditor/ProjectControls";
 import SideMenu from "./SideMenu";
-import SearchForm from "../ui/SearchForm";
+// import SearchForm from "../ui/SearchForm";
 
 export default function TextEditor() {
   return (

@@ -1,8 +1,15 @@
 import {
+  BookOpenText,
+  CaseSensitive,
+  CircleXIcon,
+  ClipboardPaste,
+  CornerRightDown,
   Download,
   FileCheck,
   FileSearch,
+  Lock,
   SquareCheckBig,
+  SquareM,
   WandSparkles,
 } from "lucide-react";
 import { Button } from "../../ui/button";
@@ -13,6 +20,8 @@ import { useQueryClient } from "@tanstack/react-query";
 import { TranslationMemoryMatches } from "@/types";
 import { useExportTranslation } from "@/hooks/useExportTranslation";
 import SearchForm from "@/components/ui/SearchForm";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { useResources } from "@/contexts/resourcesContext";
 
 export default function EditorControls() {
   const {
@@ -34,6 +43,7 @@ export default function EditorControls() {
   const { mutate } = useReformulate(activeSegmentId);
 
   const { downloadFile } = useExportTranslation();
+  const { currentView, changeView } = useResources();
 
   function handleReformulate() {
     if (!segment.targetText) return;
@@ -45,8 +55,9 @@ export default function EditorControls() {
   }
 
   return (
-    <Container className="col-span-12 grid grid-cols-12 flex justify-between items-center px-2 py-1 border-b border-border">
-      <Container className="col-span-9">
+    // <Container className="col-span-12 grid grid-cols-12 px-2 py-1 border-b border-border">
+    <>
+      <Container className="col-span-9 px-2 py-1 border-b border-border">
         <Button
           variant="ghost"
           size="icon"
@@ -63,6 +74,47 @@ export default function EditorControls() {
         >
           <FileCheck />
         </Button>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="border border-transparent hover:border-cat-accent/10"
+          onClick={() => undefined}
+        >
+          <Lock />
+        </Button>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="border border-transparent hover:border-cat-accent/10"
+          onClick={() => undefined}
+        >
+          <CornerRightDown />
+        </Button>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="border border-transparent hover:border-cat-accent/10"
+          onClick={() => undefined}
+        >
+          <ClipboardPaste />
+        </Button>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="border border-transparent hover:border-cat-accent/10"
+          onClick={() => undefined}
+        >
+          <CircleXIcon />
+        </Button>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="border border-transparent hover:border-cat-accent/10"
+          onClick={() => undefined}
+        >
+          <CaseSensitive />
+        </Button>
+
         <Button
           variant="ghost"
           size="icon"
@@ -87,7 +139,21 @@ export default function EditorControls() {
           <FileSearch />
         </Button>
       </Container>
-      <SearchForm placeholder="Search document" className="h-8" />
-    </Container>
+      <Container className="col-span-3 flex justify-between items-center px-4 border-b border-border">
+        <SearchForm placeholder="Search glossary" className="h-8" />
+        <ToggleGroup
+          type="single"
+          value={currentView}
+          onValueChange={changeView}
+        >
+          <ToggleGroupItem value="tm">
+            <SquareM />
+          </ToggleGroupItem>
+          <ToggleGroupItem value="glossary">
+            <BookOpenText />
+          </ToggleGroupItem>
+        </ToggleGroup>
+      </Container>
+    </>
   );
 }

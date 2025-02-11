@@ -1,4 +1,4 @@
-import { GlossarySearchResult } from "@/types/GlossaryTerm";
+import { GlossaryTermWithDocPair } from "@/types/GlossaryTerm";
 import GlossaryRow from "./GlossaryRow";
 import {
   Table,
@@ -9,13 +9,13 @@ import {
 } from "@/components/ui/table";
 
 type GlossaryProps = {
-  glossaryData: GlossarySearchResult[];
+  glossaryData: GlossaryTermWithDocPair[];
 };
 
 export default function Glossary({ glossaryData }: GlossaryProps) {
   if (glossaryData.length === 0)
     return (
-      <p className="text-sm text-muted-foreground px-2 py-1">
+      <p className="text-sm text-muted-foreground px-2 py-4">
         No corresponding terms found
       </p>
     );

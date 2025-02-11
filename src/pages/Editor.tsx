@@ -1,6 +1,7 @@
 import TextEditor from "@/components/TextEditor";
 import DataHandler from "@/components/ui/DataHandler";
 import EditorContextProvider from "@/contexts/editorContext";
+import ResourcesContextProvider from "@/contexts/resourcesContext";
 import { useGetSegments } from "@/hooks/useGetSegments";
 
 export default function EditorPage() {
@@ -13,7 +14,9 @@ export default function EditorPage() {
           initialSegments={segments}
           key={segments?.[0].id}
         >
-          <TextEditor />
+          <ResourcesContextProvider>
+            <TextEditor />
+          </ResourcesContextProvider>
         </EditorContextProvider>
       ) : null}
     </DataHandler>
