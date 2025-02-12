@@ -57,7 +57,7 @@ export default function EditorControls() {
   return (
     // <Container className="col-span-12 grid grid-cols-12 px-2 py-1 border-b border-border">
     <>
-      <Container className="col-span-9 px-2 py-1 border-b border-border">
+      <Container className="sticky top-[49px] z-10 col-span-9 px-2 py-1 border-b border-border bg-gray-50">
         <Button
           variant="ghost"
           size="icon"
@@ -139,17 +139,23 @@ export default function EditorControls() {
           <FileSearch />
         </Button>
       </Container>
-      <Container className="col-span-3 flex justify-between items-center px-4 border-b border-border">
+      <Container className="sticky top-[49px] z-10 col-span-3 flex justify-between items-center px-4 border-b border-border bg-gray-50">
         <SearchForm placeholder="Search glossary" className="h-8" />
         <ToggleGroup
           type="single"
           value={currentView}
           onValueChange={changeView}
         >
-          <ToggleGroupItem value="tm">
+          <ToggleGroupItem
+            value="tm"
+            className="data-[state=on]:bg-cat-accent/10"
+          >
             <SquareM />
           </ToggleGroupItem>
-          <ToggleGroupItem value="glossary">
+          <ToggleGroupItem
+            value="glossary"
+            className="data-[state=on]:bg-cat-accent/10"
+          >
             <BookOpenText />
           </ToggleGroupItem>
         </ToggleGroup>

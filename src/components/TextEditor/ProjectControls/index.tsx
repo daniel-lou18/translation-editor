@@ -77,7 +77,7 @@ export default function ProjectControls() {
   );
 
   return (
-    <Container className="col-span-12 flex items-center w-full gap-6 px-2 py-1 text-muted-foreground font-semibold border-b border-border">
+    <Container className="sticky top-0 z-10 col-span-12 flex items-center w-full gap-6 px-2 py-1 text-muted-foreground font-semibold border-b border-border bg-gray-50">
       <BrainCircuit className="text-cat-accent ml-2" size={20} />
 
       <DataHandler

@@ -8,7 +8,7 @@ import SideMenu from "./SideMenu";
 export default function TextEditor() {
   return (
     <>
-      <Container className="sticky top-0 z-10 grid grid-cols-12 bg-gray-50 border-b border-border">
+      <Container className="grid grid-cols-12 border-b border-border">
         <ProjectControls />
         <EditorControls />
         {/* <SearchForm placeholder="Search resources" className="col-span-3" /> */}
