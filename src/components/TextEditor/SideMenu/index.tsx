@@ -32,9 +32,9 @@ export default function SideMenu() {
   const { currentView } = useResources();
 
   return (
-    <Container className="col-span-3 sticky top-0 min-h-screen h-fit px-4 space-y-4 bg-background">
+    <Container className="col-span-3 sticky top-0 min-h-screen h-fit space-y-4 bg-background">
       {currentView === "tm" ? (
-        <Container className="mt-4">
+        <Container className="mt-4 px-4">
           <DataHandler
             isLoading={isLoadingMatches || isLoadingReformulation}
             isError={isError}

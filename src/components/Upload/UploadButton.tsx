@@ -17,23 +17,6 @@ export default function UploadButton({ isProcessing }: UploadButtonProps) {
           Translate
         </ButtonLoader>
       </button>
-      {/* <Button
-        onClick={onClick}
-        disabled={isProcessing}
-        className={cn("disabled:opacity-50 disabled:cursor-not-allowed")}
-      >
-        {isProcessing ? (
-          <>
-            <Loader2 className="w-5 h-5 animate-spin" />
-            Processing Files...
-          </>
-        ) : (
-          <>
-            <Upload className="w-5 h-5" />
-            Start translation
-          </>
-        )}
-      </Button> */}
     </Container>
   );
 }

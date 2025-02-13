@@ -55,7 +55,6 @@ export default function EditorControls() {
   }
 
   return (
-    // <Container className="col-span-12 grid grid-cols-12 px-2 py-1 border-b border-border">
     <>
       <Container className="sticky top-[49px] z-10 col-span-9 px-2 py-1 border-b border-border bg-gray-50">
         <Button

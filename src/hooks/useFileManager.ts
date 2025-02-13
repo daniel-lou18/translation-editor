@@ -10,7 +10,9 @@ export function useFileManager() {
 
   function processFiles(newFiles: File[], type: "document" | "memory") {
     const validExtensions =
-      type === "document" ? [".txt"] : [".xlsx", ".xls", ".txt"];
+      type === "document"
+        ? [".txt", ".pdf", ".png", ".bmp", ".jpg", ".jpeg"]
+        : [".xlsx", ".xls", ".txt"];
     const processedFiles = newFiles
       .filter((file) =>
         validExtensions.some((ext) => file.name.toLowerCase().endsWith(ext))

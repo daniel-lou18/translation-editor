@@ -1,6 +1,7 @@
 import {
   createContext,
   PropsWithChildren,
+  useCallback,
   useContext,
   useReducer,
 } from "react";
@@ -43,8 +44,10 @@ export default function ResourcesContextProvider({
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const actions: ResourcesActions = {
-    changeView: (newView: View) =>
-      dispatch({ type: "CHANGE_VIEW", payload: newView }),
+    changeView: useCallback(
+      (newView: View) => dispatch({ type: "CHANGE_VIEW", payload: newView }),
+      [dispatch]
+    ),
   };
 
   return (
