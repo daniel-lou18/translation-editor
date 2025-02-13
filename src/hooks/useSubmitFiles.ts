@@ -46,8 +46,8 @@ export function useSubmitFiles() {
       result.translationId = docResponse.id.toString();
     }
 
-    if (documentFile && documentFile.type.startsWith("image/")) {
-      const response = await uploadService.submitImageFile(
+    if (documentFile) {
+      const response = await uploadService.submitFile(
         documentFile,
         fileMetadata,
         newProject
@@ -55,14 +55,6 @@ export function useSubmitFiles() {
       console.log(response);
     }
 
-    if (documentFile && documentFile.type === "application/pdf") {
-      const response = await uploadService.submitPdfFile(
-        documentFile,
-        fileMetadata,
-        newProject
-      );
-      console.log(response);
-    }
     if (tmFiles.length > 0) {
       const tmResponse = await uploadService.submitTmTexts(tmFiles);
       console.log({ tmResponse });

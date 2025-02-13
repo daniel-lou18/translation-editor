@@ -25,24 +25,10 @@ export class UploadService extends ApiService {
     );
   }
 
-  async submitPdfFile(
-    file: File,
-    fileMetadata: FileMetadata,
-    newProject = true
-  ) {
+  async submitFile(file: File, fileMetadata: FileMetadata, newProject = true) {
     const formData = this.createFormData(file, fileMetadata, newProject);
 
-    return this.post(`/upload/documents/pdf`, formData);
-  }
-
-  async submitImageFile(
-    file: File,
-    fileMetadata: FileMetadata,
-    newProject = true
-  ) {
-    const formData = this.createFormData(file, fileMetadata, newProject);
-
-    return this.post(`/upload/documents/image`, formData);
+    return this.post(`/upload/documents/file`, formData);
   }
 
   async submitTmTexts(files: File[]): Promise<UploadResult> {

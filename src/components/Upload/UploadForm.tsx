@@ -37,8 +37,8 @@ export default function UploadForm({
           <UploadArea
             type="document"
             accept=".txt,.pdf,.png,.jpg,.jpeg,.bmp"
-            title="Source Documents"
-            description="Upload docx or txt files for translation"
+            title="Source Document"
+            description="Allowed file types: TXT, PDF, PNG, JPG, JPEG, BMP, WEBP"
             onFilesSelect={(files) => processFiles(files, "document")}
           />
         ) : null}
