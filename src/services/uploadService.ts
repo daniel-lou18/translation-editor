@@ -2,6 +2,7 @@ import { TranslationWithDocument } from "@/types/Translation";
 import { ApiService } from "./ApiService";
 import { UploadResult } from "@/types/Tm";
 import { FileMetadata } from "@/types/Dtos";
+import { FullLangsDomain } from "@/types";
 
 export class UploadService extends ApiService {
   constructor() {
@@ -28,7 +29,11 @@ export class UploadService extends ApiService {
   async submitFile(file: File, fileMetadata: FileMetadata, newProject = true) {
     const formData = this.createFormData(file, fileMetadata, newProject);
 
-    return this.post(`/upload/documents/file`, formData);
+    return this.post<TranslationWithDocument>(
+      `/upload/documents/file`,
+      formData,
+      { timeout: 60000 }
+    );
   }
 
   async submitTmTexts(files: File[]): Promise<UploadResult> {
@@ -36,6 +41,18 @@ export class UploadService extends ApiService {
     files.forEach((file) => formData.append("files", file));
 
     return this.post("upload/tms", formData);
+  }
+
+  async submitDocPair(files: File[], filesMetadata: FullLangsDomain) {
+    const formData = new FormData();
+    files.forEach((file) => formData.append("files", file));
+    formData.append("sourceLang", filesMetadata.sourceLang);
+    formData.append("targetLang", filesMetadata.targetLang);
+    formData.append("domain", filesMetadata.domain);
+
+    return this.post("upload/documents/docpair", formData, {
+      timeout: 60000,
+    });
   }
 
   private createFormData(

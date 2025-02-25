@@ -5,6 +5,7 @@ import {
   ClipboardPaste,
   CornerRightDown,
   Download,
+  Eye,
   FileCheck,
   FileSearch,
   Lock,
@@ -22,6 +23,9 @@ import { useExportTranslation } from "@/hooks/useExportTranslation";
 import SearchForm from "@/components/ui/SearchForm";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { useResources } from "@/contexts/resourcesContext";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import Preview from "./Preview";
+import { usePreview } from "@/hooks/usePreview";
 
 export default function EditorControls() {
   const {
@@ -44,6 +48,7 @@ export default function EditorControls() {
 
   const { downloadFile } = useExportTranslation();
   const { currentView, changeView } = useResources();
+  const { html, isLoading: isLoadingPreview } = usePreview();
 
   function handleReformulate() {
     if (!segment.targetText) return;
@@ -122,6 +127,20 @@ export default function EditorControls() {
         >
           <WandSparkles />
         </Button>
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="border border-transparent hover:border-cat-accent/10"
+            >
+              <Eye />
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="max-w-full w-[60vh] h-[90vh]">
+            <Preview html={isLoadingPreview ? "LOADING..." : html ?? "error"} />
+          </DialogContent>
+        </Dialog>
         <Button
           variant="ghost"
           size="icon"

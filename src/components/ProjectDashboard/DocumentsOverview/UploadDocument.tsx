@@ -6,7 +6,7 @@ export default function UploadDocument() {
   return (
     <Container>
       <PageTitle title="Upload document" />
-      <UploadForm variant="document" newProject={false} />
+      <UploadForm variant="memory" newProject={false} />
     </Container>
   );
 }

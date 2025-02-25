@@ -147,3 +147,59 @@ export const languageToCodeMap = {
 
   Indonesian: "id_ID",
 } as const;
+
+export const allowedDocumentTypes = [
+  ".txt",
+  ".pdf",
+  ".png",
+  ".bmp",
+  ".jpg",
+  ".jpeg",
+  ".docx",
+  ".doc",
+] as const;
+
+export const allowedMemoryTypes = [
+  ".xlsx",
+  ".xls",
+  ".txt",
+  ".pdf",
+  ".png",
+  ".bmp",
+  ".jpg",
+  ".jpeg",
+  ".docx",
+  ".doc",
+] as const;
+
+export const domains = [
+  "legal",
+  "medical",
+  "healthcare",
+  "technical",
+  "engineering",
+  "financial",
+  "business",
+  "scientific",
+  "creative",
+  "marketing",
+  "media",
+  "subtitling",
+  "literary",
+  "education",
+  "government",
+  "technology",
+  "ecommerce",
+  "travel",
+  "hospitality",
+  "tourism",
+  "automotive",
+  "energy",
+  "construction",
+  "fashion",
+  "lifestyle",
+  "religion",
+  "history",
+  "culture",
+  "agriculture",
+] as const;

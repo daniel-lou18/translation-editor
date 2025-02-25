@@ -6,7 +6,7 @@ type Config = Partial<AxiosRequestConfig>;
 export class ApiService {
   private api: AxiosInstance;
   private config: Config = {
-    timeout: 30000,
+    timeout: 15000,
     headers: {
       "Content-Type": "application/json",
     },
@@ -30,9 +30,9 @@ export class ApiService {
     }
   }
 
-  async get<T>(url: string): Promise<T> {
+  async get<T>(url: string, config?: AxiosRequestConfig): Promise<T> {
     try {
-      const response = await this.api.get<ApiResponseType<T>>(url);
+      const response = await this.api.get<ApiResponseType<T>>(url, config);
       return response.data.data;
     } catch (error) {
       throw this.handleError(error);

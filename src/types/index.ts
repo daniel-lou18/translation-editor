@@ -1,4 +1,4 @@
-import { languageToCodeMap } from "@/utils/constants";
+import { domains, languageToCodeMap } from "@/utils/constants";
 import { ProjectWithDocsAndTransWithDoc } from "./Project";
 import { TranslationWithDocument } from "./Translation";
 
@@ -115,3 +115,15 @@ export type LangCode = LangCodeMap[keyof LangCodeMap];
 export type Lang = keyof LangCodeMap;
 
 export type LangCodeMap = typeof languageToCodeMap;
+
+export type Domain = (typeof domains)[number];
+
+export type FullLang = keyof typeof languageToCodeMap;
+
+export type LangDomain = { lang: Lang; domain: Domain };
+
+export type FullLangsDomain = {
+  sourceLang: FullLang;
+  targetLang: FullLang;
+  domain: Domain;
+};

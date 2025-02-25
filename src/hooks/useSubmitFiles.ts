@@ -2,6 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import { FileInfo } from "./useFileManager";
 import { uploadService } from "@/services/uploadService";
 import { FileMetadata } from "@/types/Dtos";
+import { getIdsFromTranslation } from "@/utils/helpers";
 
 type SubmitFileResult = {
   projectId: string;
@@ -29,38 +30,31 @@ export function useSubmitFiles() {
       .filter((file) => file.type === "memory")
       ?.map((item) => item.file);
 
-    const result: SubmitFileResult = {
-      projectId: "",
-      documentId: "",
-      translationId: "",
-    };
+    if (tmFiles.length > 0) {
+      const tmResponse = await uploadService.submitDocPair(tmFiles, fileMetadata);
+      console.log({ tmResponse });
 
-    if (documentFile && documentFile.type === "text/plain") {
-      const docResponse = await uploadService.submitSourceText(
-        documentFile,
-        fileMetadata,
-        newProject
-      );
-      result.projectId = docResponse.document.projectId.toString();
-      result.documentId = docResponse.document.id.toString();
-      result.translationId = docResponse.id.toString();
+      return tmResponse;
     }
 
     if (documentFile) {
-      const response = await uploadService.submitFile(
-        documentFile,
-        fileMetadata,
-        newProject
-      );
-      console.log(response);
+      const translation =
+        documentFile.type === "text/plain"
+          ? await uploadService.submitSourceText(
+              documentFile,
+              fileMetadata,
+              newProject
+            )
+          : await uploadService.submitFile(
+              documentFile,
+              fileMetadata,
+              newProject
+            );
+
+      return getIdsFromTranslation(translation);
     }
 
-    if (tmFiles.length > 0) {
-      const tmResponse = await uploadService.submitTmTexts(tmFiles);
-      console.log({ tmResponse });
-    }
-
-    return result;
+    throw new Error("Could not submit files");
   }
 
   return { mutate, isLoading: isPending, isError, error };

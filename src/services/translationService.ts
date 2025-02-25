@@ -26,11 +26,15 @@ export default class TranslationService extends ApiService {
     return this.transformSegments(data);
   }
 
+  async previewTranslation(translationId: string): Promise<string> {
+    return this.get(`/translations/${translationId}/preview`);
+  }
+
   async createTranslation(
     documentId: number,
     langCode: LangCode
   ): Promise<SelectTranslation> {
-    return await this.post(`/documents/${documentId}/translations`, {
+    return this.post(`/documents/${documentId}/translations`, {
       langCode,
     });
   }
@@ -56,7 +60,7 @@ export default class TranslationService extends ApiService {
     translationId: string,
     updates: Update[]
   ): Promise<UpdatedId[]> {
-    return await this.put(`/translations/${translationId}/segments`, {
+    return this.put(`/translations/${translationId}/segments`, {
       updates,
     });
   }

@@ -3,6 +3,7 @@ import {
   NormalizedTranslations,
   ProjectWithDocsAndTrans,
   ProjectWithDocsAndTransWithDoc,
+  TranslationWithDocument,
   TranslationWithTargetSegments,
 } from "@/types";
 import { Segment } from "@/types/Segment";
@@ -96,4 +97,12 @@ export function langArrayToComboItems(languages: Lang[]) {
     value: lang,
     label: lang,
   }));
+}
+
+export function getIdsFromTranslation(translation: TranslationWithDocument) {
+  return {
+    projectId: translation.document.projectId.toString(),
+    documentId: translation.document.id.toString(),
+    translationId: translation.id.toString(),
+  };
 }

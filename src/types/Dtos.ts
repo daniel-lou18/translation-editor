@@ -1,4 +1,4 @@
-import { Lang } from ".";
+import { Lang, Domain } from ".";
 import { Document, SourceSegment } from "./Document";
 import { TargetSegment, Translation } from "./Translation";
 
@@ -37,7 +37,13 @@ export type TmSegmentMatch = {
 };
 
 export type FileMetadata = {
-  sourceLang?: Lang;
+  sourceLang: Lang;
   targetLang: Lang;
+  domain: Domain;
   projectId?: string;
+};
+
+export type Languages = {
+  sourceLang: Lang;
+  targetLang: Lang;
 };

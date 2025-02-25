@@ -1,30 +1,37 @@
 import { FileSpreadsheet, FileText, X } from "lucide-react";
 import Container from "../ui/Container";
 import { FileInfo } from "@/hooks/useFileManager";
-import { Lang } from "@/types";
+import { Lang, Domain } from "@/types";
 import Combobox from "../ui/Combobox";
-import { LangData } from "./FileList";
+import { FileItemData } from "./FileList";
 
 type FileItemProps = {
   file: FileInfo;
-  langData: LangData;
+  itemData: FileItemData;
   onSourceLangChange: (newLang: Lang) => void;
   onTargetLangChange: (newLang: Lang) => void;
+  onDomainChange: (newDomain: Domain) => void;
   onRemove: () => void;
 };
 
 export default function FileItem({
   file,
-  langData,
+  itemData,
   onSourceLangChange,
   onTargetLangChange,
+  onDomainChange,
   onRemove,
 }: FileItemProps) {
-  const { languages, sourceLang, targetLang } = langData;
+  const { languages, domains, sourceLang, targetLang, domain } = itemData;
 
   const langItems = languages.map((lang) => ({
     value: lang,
     label: lang,
+  }));
+
+  const domainItems = domains.map((domain) => ({
+    value: domain,
+    label: domain,
   }));
 
   return (
@@ -52,6 +59,14 @@ export default function FileItem({
           items={langItems}
           value={targetLang}
           onChange={onTargetLangChange}
+          className="w-48 h-9 mr-2"
+        />
+        <span className="text-sm text-muted-foreground ml-8">Domain:</span>
+        <Combobox
+          name="domain"
+          items={domainItems}
+          value={domain}
+          onChange={onDomainChange}
           className="w-48 h-9 mr-2"
         />
         <button

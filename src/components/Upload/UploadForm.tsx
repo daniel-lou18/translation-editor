@@ -3,8 +3,13 @@ import UploadArea from "@/components/Upload/UploadArea";
 import UploadButton from "./UploadButton";
 import Container from "../ui/Container";
 import Overlay from "../ui/Overlay";
-import { languageToCodeMap as languages } from "@/utils/constants";
-import { Lang } from "@/types";
+import {
+  allowedDocumentTypes,
+  allowedMemoryTypes,
+  languageToCodeMap as languages,
+  domains,
+} from "@/utils/constants";
+import { Lang, Domain } from "@/types";
 import { useUpload } from "@/hooks/useUpload";
 
 type UploadProps = {
@@ -25,6 +30,8 @@ export default function UploadForm({
     setSourceLang,
     targetLang,
     setTargetLang,
+    domain,
+    setDomain,
     handleSubmit,
   } = useUpload(newProject);
 
@@ -36,7 +43,7 @@ export default function UploadForm({
         {variant === "document" || variant === "double" ? (
           <UploadArea
             type="document"
-            accept=".txt,.pdf,.png,.jpg,.jpeg,.bmp"
+            accept={allowedDocumentTypes.join(",")}
             title="Source Document"
             description="Allowed file types: TXT, PDF, PNG, JPG, JPEG, BMP, WEBP"
             onFilesSelect={(files) => processFiles(files, "document")}
@@ -45,9 +52,9 @@ export default function UploadForm({
         {variant === "memory" || variant === "double" ? (
           <UploadArea
             type="memory"
-            accept=".xlsx,.xls,.txt"
-            title="Translation Memory"
-            description="Upload txt, xlsx or tmx files containing translation memory segments"
+            accept={allowedMemoryTypes.join(",")}
+            title="Translation Resources"
+            description="Allowed file types: TXT, PDF, PNG, JPG, JPEG, BMP, WEBP"
             onFilesSelect={(files) => processFiles(files, "memory")}
           />
         ) : null}
@@ -55,13 +62,16 @@ export default function UploadForm({
       <FileList
         files={files}
         onRemove={removeFile}
-        langData={{
+        itemData={{
           languages: Object.keys(languages) as Lang[],
+          domains: [...domains] as Domain[],
           sourceLang,
           targetLang,
+          domain,
         }}
         onSourceLangChange={(newLang: Lang) => setSourceLang(newLang)}
         onTargetLangChange={(newLang: Lang) => setTargetLang(newLang)}
+        onDomainChange={(newDomain: Domain) => setDomain(newDomain)}
       >
         <UploadButton isProcessing={isLoading} />
       </FileList>
