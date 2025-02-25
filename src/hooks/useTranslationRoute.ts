@@ -16,6 +16,7 @@ export function useTranslationRoute() {
       if (!projectId) {
         throw new Error("Project id is missing");
       }
+
       navigate(
         `/app/projects/${projectId}
         }`
@@ -29,6 +30,7 @@ export function useTranslationRoute() {
       if (!projectId) {
         throw new Error("Project id is missing");
       }
+
       navigate(
         `/app/projects/${projectId}/documents/${documentId}/translations`
       );
@@ -41,12 +43,33 @@ export function useTranslationRoute() {
       if (!projectId || !documentId || !translationId) {
         throw new Error("Id(s) is/are missing");
       }
+
       navigate(
         `/app/projects/${projectId}/documents/${documentId}/translations/${translationId}`
       );
     },
     [navigate]
   );
+
+  const navigateToTm = useCallback((documentPairId: number) => {
+    if (!documentPairId || !projectId) {
+      throw new Error("Id(s) is/are missing");
+    }
+
+    navigate(
+      `/app/projects/${projectId}/tms/${documentPairId}`
+    );
+  }, [navigate])
+
+  const navigateToTms = useCallback(() => {
+    if (!projectId) {
+      throw new Error("Project id is missing");
+    }
+
+    navigate(
+      `/app/projects/${projectId}/tms`
+    );
+  }, [navigate])
 
   return {
     projectId,
@@ -55,5 +78,7 @@ export function useTranslationRoute() {
     navigateToTranslation,
     navigateToDocument,
     navigateToProject,
+    navigateToTm,
+    navigateToTms,
   };
 }

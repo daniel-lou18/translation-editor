@@ -30,7 +30,6 @@ export default function FileList({
   onSourceLangChange,
   onTargetLangChange,
   onDomainChange,
-  ...props
 }: FileListProps) {
   return (
     <>

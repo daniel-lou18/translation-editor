@@ -1,15 +1,20 @@
 import { SemanticMatch } from "@/types";
 import { ApiService } from "./ApiService";
 import { TmSegmentMatch } from "@/types/Dtos";
+import { TmDocumentPair } from "@/types/Tm";
 
-export class TranslationMemoryService extends ApiService {
+export class TmService extends ApiService {
   constructor() {
     super(import.meta.env.VITE_API_URL);
   }
 
+  async getTms(): Promise<TmDocumentPair[]> {
+    return this.get(`/tms`);
+  }
+
   async getMatches(sourceSegmentId: number): Promise<SemanticMatch[]> {
     const response = await this.get<TmSegmentMatch[]>(
-      `/tm/matches/${sourceSegmentId}`
+      `/tms/matches/${sourceSegmentId}`
     );
 
     const formattedMatches = this.transformSemanticMatches(response);
@@ -34,4 +39,4 @@ export class TranslationMemoryService extends ApiService {
   }
 }
 
-export const translationMemoryService = new TranslationMemoryService();
+export const tmService = new TmService();

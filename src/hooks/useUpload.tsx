@@ -1,17 +1,35 @@
-import { FormEvent, useState } from "react";
+import { FormEvent, useState, useCallback } from "react";
 import { useFileManager } from "@/hooks/useFileManager";
-import { useSubmitFiles } from "@/hooks/useSubmitFiles";
+import { SubmitFileResult, useSubmitFiles } from "@/hooks/useSubmitFiles";
 import { useTranslationRoute } from "@/hooks/useTranslationRoute";
 import { Lang, Domain } from "@/types";
 import { toast } from "sonner";
-
+import { useQueryClient } from "@tanstack/react-query";
 export function useUpload(newProject = true) {
+  const queryClient = useQueryClient();
   const { files, processFiles, removeFile } = useFileManager();
   const { mutate, isLoading } = useSubmitFiles();
-  const { navigateToTranslation, projectId } = useTranslationRoute();
+  const { navigateToTranslation, navigateToTms, projectId } = useTranslationRoute();
   const [sourceLang, setSourceLang] = useState<Lang>("English (USA)");
   const [targetLang, setTargetLang] = useState<Lang>("French (France)");
   const [domain, setDomain] = useState<Domain>("legal");
+
+  const handleSuccess = useCallback((params: SubmitFileResult) => {
+    if ("documentPairId" in params) {
+      queryClient.invalidateQueries({ queryKey: ["tms"] });
+      return navigateToTms();
+    }
+
+    return navigateToTranslation(params);
+  }, [navigateToTms, navigateToTranslation, queryClient]);
+
+  const handleError = useCallback((error: Error) => {
+    toast.error(`Could not upload file: ${error}`, {
+      classNames: {
+        toast: "bg-red-200",
+      },
+    });
+  }, []);
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -22,13 +40,8 @@ export function useUpload(newProject = true) {
         newProject,
       },
       {
-        onSuccess: (params) => navigateToTranslation(params),
-        onError: (error) =>
-          toast.error(`Could not upload file: ${error}`, {
-            classNames: {
-              toast: "bg-red-200",
-            },
-          }),
+        onSuccess: handleSuccess,
+        onError: handleError,
       }
     );
   }

@@ -40,7 +40,7 @@ export default function TranslationsTable({
         </TableRow>
       </TableHeader>
       <TableBody>
-        {translations.map(
+        {translations.length > 0 ? translations.map(
           ({
             id,
             documentId,
@@ -100,6 +100,12 @@ export default function TranslationsTable({
               </TableCell>
             </TableRow>
           )
+        ) : (
+          <TableRow>
+            <TableCell colSpan={6} className="h-24 text-center">
+              No translations found
+            </TableCell>
+          </TableRow>
         )}
       </TableBody>
     </Table>

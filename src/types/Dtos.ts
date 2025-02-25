@@ -47,3 +47,7 @@ export type Languages = {
   sourceLang: Lang;
   targetLang: Lang;
 };
+
+export type DocumentPairId = {
+  documentPairId: number;
+};

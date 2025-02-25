@@ -28,7 +28,6 @@ import {
   Languages,
   Settings,
 } from "lucide-react";
-
 type AppSidebarProps = {
   projects: NormalizedProjectsWithTranslations | null;
   currentProject: ProjectWithDocsAndTrans | null;
@@ -81,7 +80,9 @@ export default function DocumentsSidebar({
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <Link to="#">
+                  <Link to={`/app/projects/${String(
+                      currentProject.id
+                    )}/tms`}>
                     <BookType /> Translation Memory
                   </Link>
                 </SidebarMenuButton>

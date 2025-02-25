@@ -1,14 +1,16 @@
 import { useMutation } from "@tanstack/react-query";
 import { FileInfo } from "./useFileManager";
 import { uploadService } from "@/services/uploadService";
-import { FileMetadata } from "@/types/Dtos";
+import { FileMetadata, DocumentPairId } from "@/types/Dtos";
 import { getIdsFromTranslation } from "@/utils/helpers";
 
-type SubmitFileResult = {
+type SubmitDocumentResult = {
   projectId: string;
   documentId: string;
   translationId: string;
 };
+
+export type SubmitFileResult = SubmitDocumentResult | DocumentPairId;
 
 type SubmitVariables = {
   files: FileInfo[];

@@ -1,7 +1,7 @@
 import { TranslationWithDocument } from "@/types/Translation";
 import { ApiService } from "./ApiService";
 import { UploadResult } from "@/types/Tm";
-import { FileMetadata } from "@/types/Dtos";
+import { FileMetadata, DocumentPairId } from "@/types/Dtos";
 import { FullLangsDomain } from "@/types";
 
 export class UploadService extends ApiService {
@@ -17,7 +17,7 @@ export class UploadService extends ApiService {
     file: File,
     fileMetadata: FileMetadata,
     newProject = true
-  ) {
+  ): Promise<TranslationWithDocument> {
     const formData = this.createFormData(file, fileMetadata, newProject);
 
     return this.post<TranslationWithDocument>(
@@ -26,7 +26,11 @@ export class UploadService extends ApiService {
     );
   }
 
-  async submitFile(file: File, fileMetadata: FileMetadata, newProject = true) {
+  async submitFile(
+    file: File,
+    fileMetadata: FileMetadata,
+    newProject = true
+  ): Promise<TranslationWithDocument> {
     const formData = this.createFormData(file, fileMetadata, newProject);
 
     return this.post<TranslationWithDocument>(
@@ -43,7 +47,10 @@ export class UploadService extends ApiService {
     return this.post("upload/tms", formData);
   }
 
-  async submitDocPair(files: File[], filesMetadata: FullLangsDomain) {
+  async submitDocPair(
+    files: File[],
+    filesMetadata: FullLangsDomain
+  ): Promise<DocumentPairId> {
     const formData = new FormData();
     files.forEach((file) => formData.append("files", file));
     formData.append("sourceLang", filesMetadata.sourceLang);
