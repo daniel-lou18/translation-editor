@@ -49,5 +49,5 @@ export type Languages = {
 };
 
 export type DocumentPairId = {
-  documentPairId: number;
+  tmId: number;
 };

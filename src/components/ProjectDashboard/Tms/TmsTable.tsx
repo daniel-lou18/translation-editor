@@ -6,30 +6,31 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { File } from "lucide-react";
 import TableRowMenu, { TableRowMenuProps } from "../TableRowMenu";
-import { TmDocumentPair } from "@/types/Tm";
+import { Tm } from "@/types/Tm";
+import Container from "@/components/ui/Container";
+import { BookType } from "lucide-react";
 
 type TmsTableProps = {
-  documentPairs: TmDocumentPair[];
-  onClick: (documentPairId: number) => void;
+  tms: Tm[];
+  onClick: (tmId: number) => void;
 };
 
 const tmsRowMenuData: TableRowMenuProps = {
-  name: "document pair",
+  name: "tm",
   items: ["View details", "Export"],
 };
 
 export default function TmsTable({
-  documentPairs,
+  tms,
   onClick,
 }: TmsTableProps) {
   return (
     <Table>
       <TableHeader>
         <TableRow className="hover:bg-transparent">
-          <TableHead className="pl-0">Source file</TableHead>
-          <TableHead>Target file</TableHead>
+          <TableHead className="pl-0">Name</TableHead>
+          <TableHead>Description</TableHead>
           <TableHead>Source lang</TableHead>
           <TableHead>Target lang</TableHead>
           <TableHead>Domain</TableHead>
@@ -38,20 +39,23 @@ export default function TmsTable({
         </TableRow>
       </TableHeader>
       <TableBody>
-        {documentPairs.length > 0 ? documentPairs.map(
-          ({ id, sourceFile, targetFile, sourceLang, targetLang, domain, createdAt }) => (
+        {tms.length > 0 ? tms.map(
+          ({ id, name, description, sourceLang, targetLang, domain, createdAt }) => (
             <TableRow
               key={id}
               className="hover:bg-gray-200/50 hover:cursor-pointer"
             >
-              <TableCell className="pl-1 text-xs" onClick={() => onClick(id)}>
+              <TableCell className="pl-1" onClick={() => onClick(id)}>
+                <Container className="flex items-center gap-2">
+                  <BookType className="h-4 w-4" strokeWidth={1.5} />
                 <div className="flex items-center gap-2">
-                  {sourceFile}
+                  {name.length > 50 ? `${name.slice(0, 50)}...` : name}
                 </div>
+                </Container>
               </TableCell>
-              <TableCell className="text-xs" onClick={() => onClick(id)}>
+              <TableCell onClick={() => onClick(id)}>
                 <div className="flex items-center gap-2">
-                  {targetFile}
+                  {description && description.length > 50 ? `${description.slice(0, 50)}...` : description}
                 </div>
               </TableCell>
               <TableCell onClick={() => onClick(id)}>{sourceLang}</TableCell>

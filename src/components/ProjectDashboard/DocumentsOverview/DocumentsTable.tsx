@@ -6,7 +6,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { File } from "lucide-react";
+import { FileText } from "lucide-react";
 import { Document } from "@/types";
 import TableRowMenu, { TableRowMenuProps } from "../TableRowMenu";
 
@@ -45,7 +45,7 @@ export default function DocumentsTable({
             >
               <TableCell className="pl-1" onClick={() => onClick(id)}>
                 <div className="flex items-center gap-2">
-                  <File className="h-4 w-4" strokeWidth={1.5} />
+                  <FileText className="h-4 w-4" strokeWidth={1.5} />
                   {fileName}
                 </div>
               </TableCell>

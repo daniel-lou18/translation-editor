@@ -8,7 +8,7 @@ export function useTms() {
   });
 
   return {
-    documentPairs: data || [],
+    tms: data || [],
     isLoading: isPending,
     isError,
     error,

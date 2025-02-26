@@ -15,3 +15,15 @@ export type UploadResult = {
   createdSegmentPairs: number;
   createdGlossaryTerms: number;
 };
+
+export type Tm = {
+  id: number;
+  name: string;
+  description: string | null;
+  sourceLang: string;
+  targetLang: string;
+  domain: string | null;
+  subdomain: string | null;
+  createdAt: string;
+  updatedAt: string;
+};

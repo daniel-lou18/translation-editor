@@ -10,7 +10,7 @@ import { useTms } from "@/hooks/useTms";
 
 export default function Tms() {
   const { projectId, navigateToTm } = useTranslationRoute();
-  const { documentPairs } = useTms();
+  const { tms } = useTms();
 
   if (!projectId) return null;
 
@@ -28,10 +28,10 @@ export default function Tms() {
         </PageControls>
       </Container>
       <TmsTable
-        documentPairs={Object.values(documentPairs || {})}
-        onClick={(documentPairId: number) => {
-          if (!projectId || !documentPairId) return;
-          navigateToTm(documentPairId);
+        tms={tms}
+        onClick={(tmId: number) => {
+          if (!projectId || !tmId) return;
+          navigateToTm(tmId);
         }}
       />
     </>

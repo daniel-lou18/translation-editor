@@ -21,9 +21,9 @@ import {
 import { Link } from "react-router";
 import {
   BookType,
+  BookOpenText,
   ChartBar,
-  File,
-  FileSpreadsheet,
+  FileText,
   Globe,
   Languages,
   Settings,
@@ -56,7 +56,7 @@ export default function DocumentsSidebar({
                   <Link
                     to={`/app/projects/${String(currentProject.id)}/documents`}
                   >
-                    <File /> Documents
+                    <FileText /> Documents
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -90,7 +90,7 @@ export default function DocumentsSidebar({
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
                   <Link to="#">
-                    <FileSpreadsheet /> Glossaries
+                    <BookOpenText /> Glossaries
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>

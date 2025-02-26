@@ -47,7 +47,7 @@ export class UploadService extends ApiService {
     return this.post("upload/tms", formData);
   }
 
-  async submitDocPair(
+  async submitTm(
     files: File[],
     filesMetadata: FullLangsDomain
   ): Promise<DocumentPairId> {
@@ -70,6 +70,7 @@ export class UploadService extends ApiService {
     const formData = new FormData();
     formData.append("file", file);
     formData.append("targetLang", fileMetadata.targetLang);
+    formData.append("domain", fileMetadata.domain);
 
     if (fileMetadata.sourceLang) {
       formData.append("sourceLang", fileMetadata.sourceLang);

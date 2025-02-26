@@ -15,7 +15,7 @@ export function useUpload(newProject = true) {
   const [domain, setDomain] = useState<Domain>("legal");
 
   const handleSuccess = useCallback((params: SubmitFileResult) => {
-    if ("documentPairId" in params) {
+    if ("tmId" in params) {
       queryClient.invalidateQueries({ queryKey: ["tms"] });
       return navigateToTms();
     }

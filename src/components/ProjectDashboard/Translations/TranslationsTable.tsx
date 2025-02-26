@@ -63,7 +63,7 @@ export default function TranslationsTable({
                   {targetLang}
                 </Container>
               </TableCell>
-              <TableCell>{fileName} </TableCell>
+              <TableCell onClick={() => onClick(documentId, id)}>{fileName} </TableCell>
               <TableCell
                 onClick={() => onClick(documentId, id)}
                 className="min-w-36"

@@ -51,13 +51,13 @@ export function useTranslationRoute() {
     [navigate]
   );
 
-  const navigateToTm = useCallback((documentPairId: number) => {
-    if (!documentPairId || !projectId) {
+  const navigateToTm = useCallback((tmId: number) => {
+    if (!tmId || !projectId) {
       throw new Error("Id(s) is/are missing");
     }
 
     navigate(
-      `/app/projects/${projectId}/tms/${documentPairId}`
+      `/app/projects/${projectId}/tms/${tmId}`
     );
   }, [navigate])
 

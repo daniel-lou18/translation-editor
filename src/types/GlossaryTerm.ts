@@ -1,10 +1,10 @@
-import { TmDocumentPair } from "./Tm";
+import { Tm } from "./Tm";
 
 export type GlossaryTerm = {
   id: number;
   createdAt: string;
   updatedAt: string;
-  documentPairId: number;
+  tmId: number;
   sourceTerm: string;
   targetTerm: string;
   type: string | null;
@@ -13,5 +13,5 @@ export type GlossaryTerm = {
 
 export type GlossaryTermWithDocPair = {
   glossaryTerm: GlossaryTerm;
-  tmDocumentPair: TmDocumentPair | null;
+  tm: Tm | null;
 };
