@@ -1,26 +1,43 @@
 import { uploadService } from "@/services/uploadService";
-import { DocumentPairId } from "@/types/Dtos";
+import { DocumentPairId, AddTmPairsDTO } from "@/types/Dtos";
 
 import { FileMetadata } from "@/types/Dtos";
 import { useMutation } from "@tanstack/react-query";
 
 export function useSubmitTm() {
-  type SubmitTmVariables = {
+  type CreateTmVariables = {
     files: File[];
     fileMetadata: FileMetadata;
   };
 
-  const { mutate, isPending, isError, error } = useMutation({
-    mutationFn: (variables: SubmitTmVariables) => submitTm(variables),
+  type AddTmPairsVariables = {
+    files: File[];
+    fileMetadata: AddTmPairsDTO;
+  };
+
+  const { mutate: createTm, isPending, isError, error } = useMutation({
+    mutationFn: (variables: CreateTmVariables) => createTranslationMemory(variables),
   });
 
-  async function submitTm(
-    variables: SubmitTmVariables
+  const { mutate: addTmSegments, isPending: isAddingTmPairs, isError: isAddingTmPairsError, error: addingTmPairsError } = useMutation({
+    mutationFn: (variables: AddTmPairsVariables) => addTmPairs(variables),
+  });
+
+  async function createTranslationMemory(
+    variables: CreateTmVariables
   ): Promise<DocumentPairId> {
     const { files, fileMetadata } = variables;
-    const tmResponse = await uploadService.submitTm(files, fileMetadata);
+    const tmResponse = await uploadService.createTm(files, fileMetadata);
     return tmResponse;
   }
 
-  return { mutate, isLoading: isPending, isError, error };
+  async function addTmPairs(
+    variables: AddTmPairsVariables
+  ): Promise<DocumentPairId> {
+    const { files, fileMetadata } = variables;
+    const tmResponse = await uploadService.addTmPairs(files, fileMetadata);
+    return tmResponse;
+  }
+
+  return { createTm, addTmSegments, isLoading: isPending, isError, error };
 }

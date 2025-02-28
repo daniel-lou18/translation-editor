@@ -1,7 +1,7 @@
 import { TranslationWithDocument } from "@/types/Translation";
 import { ApiService } from "./ApiService";
 import { UploadResult } from "@/types/Tm";
-import { FileMetadata, DocumentPairId } from "@/types/Dtos";
+import { FileMetadata, DocumentPairId, AddTmPairsDTO } from "@/types/Dtos";
 import { FullLangsDomain } from "@/types";
 
 export class UploadService extends ApiService {
@@ -47,7 +47,7 @@ export class UploadService extends ApiService {
     return this.post("upload/tms", formData);
   }
 
-  async submitTm(
+  async createTm(
     files: File[],
     filesMetadata: FullLangsDomain
   ): Promise<DocumentPairId> {
@@ -58,6 +58,22 @@ export class UploadService extends ApiService {
     formData.append("domain", filesMetadata.domain);
 
     return this.post("upload/documents/docpair", formData, {
+      timeout: 60000,
+    });
+  }
+
+  async addTmPairs(
+    files: File[],
+    filesMetadata: AddTmPairsDTO
+  ): Promise<DocumentPairId> {
+    const formData = new FormData();
+    files.forEach((file) => formData.append("files", file));
+    formData.append("sourceLang", filesMetadata.sourceLang);
+    formData.append("targetLang", filesMetadata.targetLang);
+    formData.append("domain", filesMetadata.domain);
+    formData.append("tmId", filesMetadata.tmId.toString());
+
+    return this.post("upload/tms/segments", formData, {
       timeout: 60000,
     });
   }

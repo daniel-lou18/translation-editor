@@ -33,7 +33,7 @@ export function useSubmitFiles() {
       ?.map((item) => item.file);
 
     if (tmFiles.length > 0) {
-      const tmResponse = await uploadService.submitTm(tmFiles, fileMetadata);
+      const tmResponse = await uploadService.createTm(tmFiles, fileMetadata);
       console.log({ tmResponse });
 
       return tmResponse;

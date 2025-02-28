@@ -51,3 +51,10 @@ export type Languages = {
 export type DocumentPairId = {
   tmId: number;
 };
+
+export type AddTmPairsDTO = {
+  tmId: number;
+  sourceLang: Lang;
+  targetLang: Lang;
+  domain: Domain;
+};

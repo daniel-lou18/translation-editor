@@ -16,9 +16,9 @@ import {
 } from "@/components/ui/popover";
 import { ComponentPropsWithoutRef, useState } from "react";
 
-export type ComboDataElement<T extends string> = { value: T; label: string };
+export type ComboDataElement<T extends (string | number)> = { value: T; label: string };
 
-type ComboboxProps<T extends string> = {
+type ComboboxProps<T extends (string | number)> = {
   name: string;
   items: ComboDataElement<T>[];
   value: T | null;
@@ -34,7 +34,7 @@ type ComboboxProps<T extends string> = {
     | undefined;
 } & Omit<ComponentPropsWithoutRef<"button">, "onChange">;
 
-export default function Combobox<T extends string>({
+export default function Combobox<T extends (string | number)>({
   name,
   items,
   value,
@@ -43,6 +43,9 @@ export default function Combobox<T extends string>({
   className,
 }: ComboboxProps<T>) {
   const [open, setOpen] = useState(false);
+
+  const selectedItem = value ? items.find(item => item.value === value) : null;
+
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -53,8 +56,12 @@ export default function Combobox<T extends string>({
           aria-expanded={open}
           className={cn("min-w-[150px] justify-between", className)}
         >
-          {value || `Select ${name}`}
-          <ChevronsUpDown className="opacity-50" />
+          {selectedItem
+            ? (selectedItem.label.length > 30
+                ? `${selectedItem.label.slice(0, 30)}...`
+                : selectedItem.label)
+            :  `Select ${name}`}
+          <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="min-w-[150px] p-0">
@@ -66,9 +73,9 @@ export default function Combobox<T extends string>({
               {items.map((item) => (
                 <CommandItem
                   key={item.value}
-                  value={item.value}
-                  onSelect={(currentValue) => {
-                    onChange(currentValue as T);
+                  value={item.label}
+                  onSelect={() => {
+                    onChange(item.value);
                     setOpen(false);
                   }}
                 >

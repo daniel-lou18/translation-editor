@@ -11,7 +11,8 @@ import DocumentsPage from "./pages/Documents";
 import UploadDocumentPage from "./pages/UploadDocument";
 import ProjectSettings from "./components/ProjectDashboard/Settings";
 import TmsPage from "./pages/Tms";
-import UploadTmPage from "./pages/UploadTm";
+import CreateTmPage from "./pages/CreateTm";
+import AddTmPairsPage from "./pages/AddTmPairs";
 
 export default function RoutesComponent() {
   return (
@@ -31,7 +32,8 @@ export default function RoutesComponent() {
           />
           <Route path="translations" element={<TranslationsPage />} />
           <Route path="tms" element={<TmsPage />} />
-          <Route path="tms/upload" element={<UploadTmPage />} />
+          <Route path="tms/create" element={<CreateTmPage />} />
+          <Route path="tms/add-segments" element={<AddTmPairsPage />} />
           <Route path="settings" element={<ProjectSettings />} />
         </Route>
         <Route

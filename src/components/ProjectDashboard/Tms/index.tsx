@@ -36,13 +36,13 @@ export default function Tms() {
             </DropdownMenuTrigger>
             <DropdownMenuContent>
               <DropdownMenuItem asChild>
-                <Link to={`/app/projects/${projectId}/tms/new`}>
+                <Link to={`/app/projects/${projectId}/tms/create`}>
                   Create new TM
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
-                <Link to={`/app/projects/${projectId}/tms/upload`}>
-                  Add to existing TM
+                <Link to={`/app/projects/${projectId}/tms/add-segments`}>
+                  Add segment pairs
                 </Link>
               </DropdownMenuItem>
             </DropdownMenuContent>
