@@ -1,8 +1,9 @@
-import FileItem from "./FileItem";
 import Container from "../ui/Container";
 import { ReactNode } from "react";
 import { FileInfo } from "@/hooks/useFileManager";
 import { Lang, Domain } from "@/types";
+import DocumentFileItem from "./DocumentFileItem";
+import MemoryFileItem from "./MemoryFileItem";
 
 export type FileItemData = {
   languages: Lang[];
@@ -45,7 +46,7 @@ export default function FileList({
             {files
               .filter((f) => f.type === "document")
               .map((file, index) => (
-                <FileItem
+                <DocumentFileItem
                   key={index}
                   file={file}
                   itemData={itemData}
@@ -58,7 +59,7 @@ export default function FileList({
             {files
               .filter((f) => f.type === "memory")
               .map((file, index) => (
-                <FileItem
+                <MemoryFileItem
                   key={index}
                   file={file}
                   itemData={itemData}

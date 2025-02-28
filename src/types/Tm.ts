@@ -27,3 +27,8 @@ export type Tm = {
   createdAt: string;
   updatedAt: string;
 };
+
+export type TmFiles = {
+  sourceFile: File;
+  targetFile: File;
+};

@@ -9,6 +9,7 @@ type UploadAreaProps = {
   title: string;
   description: string;
   onFilesSelect: (files: File[]) => void;
+  className?: string;
 };
 
 export default function UploadArea({
@@ -17,6 +18,7 @@ export default function UploadArea({
   title,
   description,
   onFilesSelect,
+  className,
 }: UploadAreaProps) {
   const [draggingArea, setDraggingArea] = useState<
     "document" | "memory" | null
@@ -56,7 +58,8 @@ export default function UploadArea({
         "border-2 border-dashed rounded-lg p-6 transition-all duration-200",
         "bg-cat-target/70 hover:bg-cat-target",
         draggingArea === type && "border-cat-accent bg-cat-accent/10",
-        "flex flex-col items-center justify-center gap-3 h-[300px]"
+        "flex flex-col items-center justify-center gap-3 h-[300px]",
+        className
       )}
     >
       <Container className="w-12 h-12 rounded-full bg-cat-accent/10 flex items-center justify-center">
@@ -80,7 +83,7 @@ export default function UploadArea({
           accept={accept}
           onChange={(e) => handleFileInput(e)}
         />
-        Select Files
+        Select File
       </label>
     </Container>
   );

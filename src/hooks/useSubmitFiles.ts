@@ -4,7 +4,7 @@ import { uploadService } from "@/services/uploadService";
 import { FileMetadata, DocumentPairId } from "@/types/Dtos";
 import { getIdsFromTranslation } from "@/utils/helpers";
 
-type SubmitDocumentResult = {
+export type SubmitDocumentResult = {
   projectId: string;
   documentId: string;
   translationId: string;
