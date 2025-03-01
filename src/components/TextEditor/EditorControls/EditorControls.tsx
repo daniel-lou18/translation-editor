@@ -137,7 +137,7 @@ export default function EditorControls() {
               <Eye />
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-w-full w-[60vh] h-[90vh]">
+          <DialogContent className="max-w-[90vw]">
             <Preview html={isLoadingPreview ? "LOADING..." : html ?? "error"} />
           </DialogContent>
         </Dialog>

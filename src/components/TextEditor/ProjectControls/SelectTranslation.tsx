@@ -22,16 +22,13 @@ export default function SelectTranslation({
     value: String(translation.id),
   }));
 
-  const currentValue =
-    currentDocument.sourceLang && currentTranslation?.targetLang
-      ? `${currentDocument.sourceLang} > ${currentTranslation.targetLang}`
-      : null;
+  const currentId = currentTranslation ? String(currentTranslation.id) : null;
 
   return (
     <Combobox
       name="translation"
       items={items}
-      value={currentValue || ""}
+      value={currentId || ""}
       onChange={onSelect}
       buttonVariant="ghost"
     />

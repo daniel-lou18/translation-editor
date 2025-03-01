@@ -15,19 +15,21 @@ import { PropsWithChildren } from "react";
 type UploadTmFormProps = PropsWithChildren<{
   handleSubmit: (e: React.FormEvent<HTMLFormElement>) => Promise<void>;
   isLoading: boolean;
+  buttonText?: string;
 }>;
 
 function UploadTmForm({
   children,
   handleSubmit,
   isLoading,
+  buttonText = "Upload",
 }: UploadTmFormProps) {
   return (
     <form onSubmit={handleSubmit}>
       <Container className="my-8 rounded-lg border border-gray-200 bg-card overflow-hidden">
         {children}
       </Container>
-      <UploadButton isProcessing={isLoading} />
+      <UploadButton isProcessing={isLoading}>{buttonText}</UploadButton>
       {isLoading && <Overlay />}
     </form>
   );

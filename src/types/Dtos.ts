@@ -53,7 +53,7 @@ export type DocumentPairId = {
 };
 
 export type AddTmPairsDTO = {
-  tmId: number;
+  tmId: string;
   sourceLang: Lang;
   targetLang: Lang;
   domain: Domain;

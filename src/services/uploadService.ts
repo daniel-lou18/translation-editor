@@ -71,7 +71,7 @@ export class UploadService extends ApiService {
     formData.append("sourceLang", filesMetadata.sourceLang);
     formData.append("targetLang", filesMetadata.targetLang);
     formData.append("domain", filesMetadata.domain);
-    formData.append("tmId", filesMetadata.tmId.toString());
+    formData.append("tmId", filesMetadata.tmId);
 
     return this.post("upload/tms/segments", formData, {
       timeout: 60000,

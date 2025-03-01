@@ -2,12 +2,17 @@ import { Globe } from "lucide-react";
 import Container from "../ui/Container";
 import ButtonLoader from "../ui/ButtonLoader";
 import { cn } from "@/lib/utils";
-type UploadButtonProps = {
+import { PropsWithChildren } from "react";
+type UploadButtonProps = PropsWithChildren<{
   isProcessing: boolean;
   className?: string;
-};
+}>;
 
-export default function UploadButton({ isProcessing, className }: UploadButtonProps) {
+export default function UploadButton({
+  children,
+  isProcessing,
+  className,
+}: UploadButtonProps) {
   return (
     <Container className={cn("flex justify-center", className)}>
       <button
@@ -15,7 +20,7 @@ export default function UploadButton({ isProcessing, className }: UploadButtonPr
         disabled={isProcessing}
       >
         <ButtonLoader isLoading={isProcessing} icon={Globe}>
-          Translate
+          {children}
         </ButtonLoader>
       </button>
     </Container>

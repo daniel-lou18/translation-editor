@@ -16,9 +16,9 @@ import {
 } from "@/components/ui/popover";
 import { ComponentPropsWithoutRef, useState } from "react";
 
-export type ComboDataElement<T extends (string | number)> = { value: T; label: string };
+export type ComboDataElement<T extends string> = { value: T; label: string };
 
-type ComboboxProps<T extends (string | number)> = {
+type ComboboxProps<T extends string> = {
   name: string;
   items: ComboDataElement<T>[];
   value: T | null;
@@ -34,7 +34,7 @@ type ComboboxProps<T extends (string | number)> = {
     | undefined;
 } & Omit<ComponentPropsWithoutRef<"button">, "onChange">;
 
-export default function Combobox<T extends (string | number)>({
+export default function Combobox<T extends string>({
   name,
   items,
   value,
@@ -44,8 +44,9 @@ export default function Combobox<T extends (string | number)>({
 }: ComboboxProps<T>) {
   const [open, setOpen] = useState(false);
 
-  const selectedItem = value ? items.find(item => item.value === value) : null;
-
+  const selectedItem = value
+    ? items.find((item) => item.value === value)
+    : null;
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -57,10 +58,10 @@ export default function Combobox<T extends (string | number)>({
           className={cn("min-w-[150px] justify-between", className)}
         >
           {selectedItem
-            ? (selectedItem.label.length > 30
-                ? `${selectedItem.label.slice(0, 30)}...`
-                : selectedItem.label)
-            :  `Select ${name}`}
+            ? selectedItem.label.length > 30
+              ? `${selectedItem.label.slice(0, 30)}...`
+              : selectedItem.label
+            : `Select ${name}`}
           <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
         </Button>
       </PopoverTrigger>

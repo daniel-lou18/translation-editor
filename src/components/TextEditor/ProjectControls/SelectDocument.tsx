@@ -16,13 +16,13 @@ export default function SelectDocument({
     label: document.fileName,
     value: String(document.id),
   }));
-  const currentValue = currentDocument ? currentDocument.fileName : null;
+  const currentId = currentDocument ? String(currentDocument.id) : null;
 
   return (
     <Combobox
       name="document"
       items={items}
-      value={currentValue || ""}
+      value={currentId || ""}
       onChange={onSelect}
       buttonVariant="ghost"
     />

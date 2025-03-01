@@ -20,13 +20,13 @@ export default function SelectProject({
     value: String(project.id),
   }));
 
-  const currentName = currentProject ? currentProject.name : null;
+  const currentId = currentProject ? String(currentProject.id) : null;
 
   return (
     <Combobox
       name="project"
       items={items}
-      value={currentName || ""}
+      value={currentId || ""}
       onChange={onSelect}
       buttonVariant="ghost"
     />

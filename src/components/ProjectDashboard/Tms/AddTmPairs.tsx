@@ -4,9 +4,7 @@ import PageTitle from "../../ui/PageTitle";
 import { BookType } from "lucide-react";
 import Combobox from "@/components/ui/Combobox";
 import { Earth } from "lucide-react";
-import { domains } from "@/utils/constants";
-import { useTmUpload } from "@/hooks/useTmUpload";
-import { useSelectTm } from "@/hooks/useSelectTm";
+import { useAddTmSegments } from "@/hooks/useTmSegmentUpload";
 
 export default function AddTmPairs() {
   const {
@@ -17,24 +15,27 @@ export default function AddTmPairs() {
     removeSourceFile,
     removeTargetFile,
     isLoading,
-    sourceLang,
-    targetLang,
-    domain,
     handleSubmit,
     onSourceLangChange,
     onTargetLangChange,
     onDomainChange,
-  } = useTmUpload();
-  const { tmItems, tmId, onTmChange } = useSelectTm();
+    tmItems,
+    tmId,
+    onTmChange,
+    sourceLang,
+    targetLang,
+    domain,
+    domainItems,
+  } = useAddTmSegments();
 
-  const domainItems = domains.map((domain) => ({
-    value: domain,
-    label: domain,
-  }));
   return (
     <Container>
       <PageTitle title="Add segments to TM" />
-      <UploadTmForm handleSubmit={handleSubmit} isLoading={isLoading}>
+      <UploadTmForm
+        handleSubmit={handleSubmit}
+        isLoading={isLoading}
+        buttonText="Add segments"
+      >
         <UploadTmForm.Header title="Upload source and target segments from documents to your TM">
           <div className="flex items-center gap-2">
             <BookType className="w-4 h-4 text-muted-foreground" />

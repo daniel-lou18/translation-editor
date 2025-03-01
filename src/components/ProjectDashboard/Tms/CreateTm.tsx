@@ -3,10 +3,9 @@ import Container from "../../ui/Container";
 import PageTitle from "../../ui/PageTitle";
 import Combobox from "@/components/ui/Combobox";
 import { Earth } from "lucide-react";
-import { domains } from "@/utils/constants";
 import { useTmUpload } from "@/hooks/useTmUpload";
 
-export default function AddTmPairs() {
+export default function CreateTm() {
   const {
     sourceFile,
     targetFile,
@@ -22,16 +21,17 @@ export default function AddTmPairs() {
     onSourceLangChange,
     onTargetLangChange,
     onDomainChange,
+    domainItems,
   } = useTmUpload();
 
-  const domainItems = domains.map((domain) => ({
-    value: domain,
-    label: domain,
-  }));
   return (
     <Container>
       <PageTitle title="Create new translation memory" />
-      <UploadTmForm handleSubmit={handleSubmit} isLoading={isLoading}>
+      <UploadTmForm
+        handleSubmit={handleSubmit}
+        isLoading={isLoading}
+        buttonText="Create TM"
+      >
         <UploadTmForm.Header title="Upload source and target documents to create a new TM">
           <div className="flex items-center gap-2">
             <Earth className="w-4 h-4 text-muted-foreground" />

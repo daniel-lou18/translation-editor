@@ -73,7 +73,7 @@ export default function UploadForm({
         onTargetLangChange={(newLang: Lang) => setTargetLang(newLang)}
         onDomainChange={(newDomain: Domain) => setDomain(newDomain)}
       >
-        <UploadButton isProcessing={isLoading} />
+        <UploadButton isProcessing={isLoading}>Upload</UploadButton>
       </FileList>
       {isLoading && <Overlay />}
     </form>

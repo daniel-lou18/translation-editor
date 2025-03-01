@@ -2,14 +2,14 @@ import { useTms } from "./useTms";
 import { useState } from "react";
 export function useSelectTm() {
   const { tms } = useTms();
-  const [tmId, setTmId] = useState(0);
+  const [tmId, setTmId] = useState<string>("");
 
   const tmItems = tms.map((tm) => ({
-    value: tm.id,
+    value: String(tm.id),
     label: tm.name,
   }));
 
-  function onTmChange(value: number) {
+  function onTmChange(value: string) {
     setTmId(value);
   }
 

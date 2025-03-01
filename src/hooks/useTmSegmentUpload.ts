@@ -6,17 +6,23 @@ import { useAddTmPairs } from "./useAddTmPairs";
 import { useSelectTm } from "./useSelectTm";
 import { Domain } from "@/types";
 import { Lang } from "@/types";
+import { domains } from "@/utils/constants";
 
 export function useAddTmSegments() {
   const queryClient = useQueryClient();
   const { mutate, isPending } = useAddTmPairs();
-  const { tmId } = useSelectTm();
+  const { tmItems, tmId, onTmChange } = useSelectTm();
   const { navigateToTms } = useTranslationRoute();
   const [sourceFile, setSourceFile] = useState<File | null>(null);
   const [targetFile, setTargetFile] = useState<File | null>(null);
   const [sourceLang, setSourceLang] = useState<Lang>("English (USA)");
   const [targetLang, setTargetLang] = useState<Lang>("French (France)");
   const [domain, setDomain] = useState<Domain>("legal");
+
+  const domainItems = domains.map((domain) => ({
+    value: domain,
+    label: domain,
+  }));
 
   const handleSuccess = useCallback(() => {
     queryClient.invalidateQueries({ queryKey: ["tms"] });
@@ -86,5 +92,15 @@ export function useAddTmSegments() {
     removeTargetFile,
     isLoading: isPending,
     handleSubmit,
+    onSourceLangChange,
+    onTargetLangChange,
+    onDomainChange,
+    tmItems,
+    tmId,
+    onTmChange,
+    sourceLang,
+    targetLang,
+    domain,
+    domainItems,
   };
 }
