@@ -1,13 +1,16 @@
 import { FormEvent, useState, useCallback } from "react";
 import { useTranslationRoute } from "@/hooks/useTranslationRoute";
-import { Lang, Domain } from "@/types";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
-import { useCreateTm } from "./useCreateTm";
+import { useAddTmPairs } from "./useAddTmPairs";
+import { useSelectTm } from "./useSelectTm";
+import { Domain } from "@/types";
+import { Lang } from "@/types";
 
-export function useTmUpload() {
+export function useAddTmSegments() {
   const queryClient = useQueryClient();
-  const { mutate, isPending: isLoading } = useCreateTm();
+  const { mutate, isPending } = useAddTmPairs();
+  const { tmId } = useSelectTm();
   const { navigateToTms } = useTranslationRoute();
   const [sourceFile, setSourceFile] = useState<File | null>(null);
   const [targetFile, setTargetFile] = useState<File | null>(null);
@@ -17,11 +20,12 @@ export function useTmUpload() {
 
   const handleSuccess = useCallback(() => {
     queryClient.invalidateQueries({ queryKey: ["tms"] });
+    toast.success("Successfully added segments to translation memory");
     return navigateToTms();
   }, [navigateToTms, queryClient]);
 
   const handleError = useCallback((error: Error) => {
-    toast.error(`Could not upload translation memory: ${error}`, {
+    toast.error(`Could not add segments to translation memory: ${error}`, {
       classNames: {
         toast: "bg-red-200",
       },
@@ -36,10 +40,15 @@ export function useTmUpload() {
       return;
     }
 
+    if (!tmId) {
+      toast.error("Please select a translation memory");
+      return;
+    }
+
     mutate(
       {
         files: [sourceFile, targetFile],
-        fileMetadata: { sourceLang, targetLang, domain },
+        fileMetadata: { tmId, sourceLang, targetLang, domain },
       },
       {
         onSuccess: handleSuccess,
@@ -75,16 +84,7 @@ export function useTmUpload() {
     setTargetFile,
     removeSourceFile,
     removeTargetFile,
-    isLoading,
-    sourceLang,
-    setSourceLang,
-    targetLang,
-    setTargetLang,
-    domain,
-    setDomain,
+    isLoading: isPending,
     handleSubmit,
-    onSourceLangChange,
-    onTargetLangChange,
-    onDomainChange,
   };
 }
