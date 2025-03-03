@@ -1,5 +1,6 @@
 import {
   BookOpenText,
+  Bot,
   CaseSensitive,
   CircleXIcon,
   ClipboardPaste,
@@ -26,6 +27,8 @@ import { useResources } from "@/contexts/resourcesContext";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import Preview from "./Preview";
 import { usePreview } from "@/hooks/usePreview";
+import { useImprove } from "@/hooks/useImprove";
+import { useCurrentProject } from "@/hooks/useCurrentProject";
 
 export default function EditorControls() {
   const {
@@ -35,6 +38,7 @@ export default function EditorControls() {
     handleStatusChangeAll,
   } = useEditor();
   const segment = getActiveSegment();
+  const { currentDocument } = useCurrentProject();
   const queryClient = useQueryClient();
   const matches = queryClient.getQueryData<TranslationMemoryMatches>([
     "allMatches",
@@ -45,6 +49,7 @@ export default function EditorControls() {
     : [];
 
   const { mutate } = useReformulate(activeSegmentId);
+  const { mutate: mutateImprove } = useImprove(activeSegmentId);
 
   const { downloadFile } = useExportTranslation();
   const { currentView, changeView } = useResources();
@@ -59,6 +64,22 @@ export default function EditorControls() {
     });
   }
 
+  function handleImprove() {
+    if (!segment.targetText || !currentDocument?.domain) return;
+    mutateImprove({
+      segment: {
+        sourceText: segment.sourceText,
+        targetText: segment.targetText,
+      },
+      metadata: {
+        sourceLang: segment.sourceLang,
+        targetLang: segment.targetLang,
+        domain: currentDocument.domain,
+      },
+    });
+  }
+
+  console.log(segment);
   return (
     <>
       <Container className="sticky top-[49px] z-10 col-span-9 px-2 py-1 border-b border-border bg-gray-50">
@@ -126,6 +147,14 @@ export default function EditorControls() {
           onClick={handleReformulate}
         >
           <WandSparkles />
+        </Button>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="border border-transparent hover:border-cat-accent/10"
+          onClick={handleImprove}
+        >
+          <Bot />
         </Button>
         <Dialog>
           <DialogTrigger asChild>

@@ -58,3 +58,5 @@ export type AddTmPairsDTO = {
   targetLang: Lang;
   domain: Domain;
 };
+
+export type TextSegment = { sourceText: string; targetText: string };

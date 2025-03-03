@@ -1,10 +1,12 @@
+import { LangCode } from ".";
+
 export type ImmutableSegmentContext = {
   id: number;
   translationId: number;
   sourceSegmentId: number;
   sourceText: string;
-  sourceLang: string;
-  targetLang: string;
+  sourceLang: LangCode;
+  targetLang: LangCode;
   embedding: number[] | null;
 };
 

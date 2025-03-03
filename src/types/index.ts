@@ -118,12 +118,16 @@ export type LangCodeMap = typeof languageToCodeMap;
 
 export type Domain = (typeof domains)[number];
 
-export type FullLang = keyof typeof languageToCodeMap;
-
 export type LangDomain = { lang: Lang; domain: Domain };
 
 export type FullLangsDomain = {
-  sourceLang: FullLang;
-  targetLang: FullLang;
+  sourceLang: Lang;
+  targetLang: Lang;
+  domain: Domain;
+};
+
+export type LangCodesDomain = {
+  sourceLang: LangCode;
+  targetLang: LangCode;
   domain: Domain;
 };

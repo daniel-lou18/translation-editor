@@ -1,11 +1,12 @@
 import { Translation, TranslationWithDocument } from "./Translation";
+import { Domain, LangCode } from ".";
 
 export type Document = {
   id: number;
   projectId: number;
   fileName: string;
-  sourceLang: string;
-  domain: string | null;
+  sourceLang: LangCode;
+  domain: Domain | null;
   subdomain: string | null;
   docType: string | null;
   createdAt: string;
