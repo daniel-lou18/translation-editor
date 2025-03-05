@@ -1,10 +1,11 @@
-import UploadTmForm from "@/components/Upload/UploadTmForm";
+import UploadTmForm from "@/components/ProjectDashboard/Tms/UploadTmForm";
 import Container from "../../ui/Container";
-import PageTitle from "../../ui/PageTitle";
 import { BookType } from "lucide-react";
 import Combobox from "@/components/ui/Combobox";
 import { Earth } from "lucide-react";
 import { useAddTmSegments } from "@/hooks/useTmSegmentUpload";
+import { useTmFileFormat } from "@/hooks/useTmFileFormat";
+import UploadTmTitle from "./UploadTmTitle";
 
 export default function AddTmPairs() {
   const {
@@ -16,28 +17,35 @@ export default function AddTmPairs() {
     removeTargetFile,
     isLoading,
     handleSubmit,
-    onSourceLangChange,
-    onTargetLangChange,
     onDomainChange,
     tmItems,
     tmId,
     onTmChange,
-    sourceLang,
-    targetLang,
     domain,
     domainItems,
+    ...otherProps
   } = useAddTmSegments();
+  const { tmFormat, toggleTmFormat, tmFormats } = useTmFileFormat(
+    setSourceFile,
+    setTargetFile
+  );
 
   return (
-    <Container>
-      <PageTitle title="Add segments to TM" />
+    <UploadTmTitle
+      title="Add segments to TM"
+      tmFormat={tmFormat}
+      toggleTmFormat={toggleTmFormat}
+      tmFormats={tmFormats}
+      setSourceFile={setSourceFile}
+      setTargetFile={setTargetFile}
+    >
       <UploadTmForm
         handleSubmit={handleSubmit}
         isLoading={isLoading}
         buttonText="Add segments"
       >
         <UploadTmForm.Header title="Upload source and target segments from documents to your TM">
-          <div className="flex items-center gap-2">
+          <Container className="flex items-center gap-2">
             <BookType className="w-4 h-4 text-muted-foreground" />
             <span className="text-sm text-muted-foreground">TM:</span>
             <Combobox
@@ -47,9 +55,9 @@ export default function AddTmPairs() {
               onChange={onTmChange}
               className="w-80 h-8"
             />
-          </div>
+          </Container>
 
-          <div className="flex items-center gap-2">
+          <Container className="flex items-center gap-2">
             <Earth className="w-4 h-4 text-muted-foreground" />
             <span className="text-sm text-muted-foreground">Domain:</span>
             <Combobox
@@ -59,22 +67,19 @@ export default function AddTmPairs() {
               onChange={onDomainChange}
               className="w-48 h-8"
             />
-          </div>
+          </Container>
         </UploadTmForm.Header>
-
         <UploadTmForm.Upload
+          variant={tmFormat === "sheet" ? "single" : "double"}
           sourceFile={sourceFile}
           targetFile={targetFile}
           setSourceFile={setSourceFile}
           setTargetFile={setTargetFile}
           removeSourceFile={removeSourceFile}
           removeTargetFile={removeTargetFile}
-          sourceLang={sourceLang}
-          targetLang={targetLang}
-          onSourceLangChange={onSourceLangChange}
-          onTargetLangChange={onTargetLangChange}
+          {...otherProps}
         />
       </UploadTmForm>
-    </Container>
+    </UploadTmTitle>
   );
 }

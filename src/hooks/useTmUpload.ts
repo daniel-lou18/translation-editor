@@ -1,25 +1,29 @@
-import { FormEvent, useState, useCallback } from "react";
+import { FormEvent, useCallback } from "react";
 import { useTranslationRoute } from "@/hooks/useTranslationRoute";
 import { Lang, Domain } from "@/types";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
 import { useCreateTm } from "./useCreateTm";
-import { domains } from "@/utils/constants";
+import { useUploadDouble } from "./useUploadDouble";
 
 export function useTmUpload() {
+  const {
+    sourceFile,
+    targetFile,
+    sourceLang,
+    targetLang,
+    domain,
+    setSourceFile,
+    setTargetFile,
+    setSourceLang,
+    setTargetLang,
+    setDomain,
+    domainItems,
+    langItems,
+  } = useUploadDouble();
   const queryClient = useQueryClient();
   const { mutate, isPending: isLoading } = useCreateTm();
   const { navigateToTms } = useTranslationRoute();
-  const [sourceFile, setSourceFile] = useState<File | null>(null);
-  const [targetFile, setTargetFile] = useState<File | null>(null);
-  const [sourceLang, setSourceLang] = useState<Lang>("English (USA)");
-  const [targetLang, setTargetLang] = useState<Lang>("French (France)");
-  const [domain, setDomain] = useState<Domain>("legal");
-
-  const domainItems = domains.map((domain) => ({
-    value: domain,
-    label: domain,
-  }));
 
   const handleSuccess = useCallback(() => {
     queryClient.invalidateQueries({ queryKey: ["tms"] });
@@ -93,5 +97,6 @@ export function useTmUpload() {
     onTargetLangChange,
     onDomainChange,
     domainItems,
+    langItems,
   };
 }

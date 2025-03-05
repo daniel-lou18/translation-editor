@@ -47,7 +47,7 @@ export function useSubmitFiles() {
               fileMetadata,
               newProject
             )
-          : await uploadService.submitFile(
+          : await uploadService.submitDocumentFile(
               documentFile,
               fileMetadata,
               newProject

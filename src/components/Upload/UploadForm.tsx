@@ -10,33 +10,30 @@ import {
   domains,
 } from "@/utils/constants";
 import { Lang, Domain } from "@/types";
-import { useUpload } from "@/hooks/useUpload";
+import { useUploadSingle } from "@/hooks/useUploadSingle";
 
 type UploadProps = {
   variant?: "document" | "memory" | "double";
   newProject?: boolean;
 };
 
-export default function UploadForm({
-  variant = "double",
-  newProject = true,
-}: UploadProps) {
+export default function UploadForm({ variant = "double" }: UploadProps) {
   const {
     files,
     processFiles,
     removeFile,
-    isLoading,
     sourceLang,
     setSourceLang,
     targetLang,
     setTargetLang,
     domain,
     setDomain,
-    handleSubmit,
-  } = useUpload(newProject);
+    langItems,
+    domainItems,
+  } = useUploadSingle();
 
   return (
-    <form className="py-8 space-y-12" onSubmit={handleSubmit}>
+    <form className="py-8 space-y-12" onSubmit={() => undefined}>
       <Container
         className={`grid ${variant === "double" ? "md:grid-cols-2" : ""} gap-6`}
       >
@@ -63,8 +60,8 @@ export default function UploadForm({
         files={files}
         onRemove={removeFile}
         itemData={{
-          languages: Object.keys(languages) as Lang[],
-          domains: [...domains] as Domain[],
+          langItems,
+          domainItems,
           sourceLang,
           targetLang,
           domain,
@@ -73,9 +70,9 @@ export default function UploadForm({
         onTargetLangChange={(newLang: Lang) => setTargetLang(newLang)}
         onDomainChange={(newDomain: Domain) => setDomain(newDomain)}
       >
-        <UploadButton isProcessing={isLoading}>Upload</UploadButton>
+        <UploadButton isProcessing={false}>Upload</UploadButton>
       </FileList>
-      {isLoading && <Overlay />}
+      {false && <Overlay />}
     </form>
   );
 }

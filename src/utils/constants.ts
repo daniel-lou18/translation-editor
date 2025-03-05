@@ -157,6 +157,8 @@ export const allowedDocumentTypes = [
   ".jpeg",
   ".docx",
   ".doc",
+  ".html",
+  ".xml",
 ] as const;
 
 export const allowedMemoryTypes = [
@@ -170,6 +172,8 @@ export const allowedMemoryTypes = [
   ".jpeg",
   ".docx",
   ".doc",
+  ".html",
+  ".xml",
 ] as const;
 
 export const domains = [

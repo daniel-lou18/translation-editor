@@ -9,8 +9,7 @@ import {
 } from "@/utils/constants";
 import { Lang, Domain } from "@/types";
 import { useTmUpload } from "@/hooks/useTmUpload";
-import MemoryFileItem from "./MemoryFileItem";
-
+import MemoryFileItem from "../ProjectDashboard/Tms/MemoryFileItem";
 
 export default function UploadTmForm() {
   const {

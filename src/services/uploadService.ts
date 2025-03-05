@@ -26,7 +26,7 @@ export class UploadService extends ApiService {
     );
   }
 
-  async submitFile(
+  async submitDocumentFile(
     file: File,
     fileMetadata: FileMetadata,
     newProject = true

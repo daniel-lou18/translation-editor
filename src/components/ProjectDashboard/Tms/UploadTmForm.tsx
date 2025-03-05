@@ -1,15 +1,11 @@
 import UploadArea from "@/components/Upload/UploadArea";
-import Overlay from "../ui/Overlay";
-import {
-  allowedDocumentTypes,
-  allowedMemoryTypes,
-  languageToCodeMap as languages,
-} from "@/utils/constants";
+import Overlay from "../../ui/Overlay";
+import { allowedDocumentTypes, allowedMemoryTypes } from "@/utils/constants";
 import { Lang } from "@/types";
 import MemoryFileItem from "./MemoryFileItem";
 import { ArrowRight } from "lucide-react";
-import UploadButton from "./UploadButton";
-import Container from "../ui/Container";
+import UploadButton from "../../Upload/UploadButton";
+import Container from "../../ui/Container";
 import { PropsWithChildren } from "react";
 
 type UploadTmFormProps = PropsWithChildren<{
@@ -49,6 +45,7 @@ function Header({ children, title }: HeaderProps) {
 }
 
 type UploadAreaContainerProps = {
+  variant?: "single" | "double";
   sourceFile: File | null;
   targetFile: File | null;
   setSourceFile: (file: File) => void;
@@ -59,9 +56,11 @@ type UploadAreaContainerProps = {
   targetLang: Lang;
   onSourceLangChange: (lang: Lang) => void;
   onTargetLangChange: (lang: Lang) => void;
+  langItems: { value: Lang; label: Lang }[];
 };
 
 function Upload({
+  variant = "single",
   sourceFile,
   targetFile,
   setSourceFile,
@@ -72,13 +71,18 @@ function Upload({
   targetLang,
   onSourceLangChange,
   onTargetLangChange,
+  langItems,
 }: UploadAreaContainerProps) {
   return (
-    <div className="relative p-4 grid grid-cols-2 gap-4">
+    <div
+      className={`relative p-4 ${
+        variant === "double" ? "grid grid-cols-2 gap-4" : ""
+      }`}
+    >
       {sourceFile ? (
         <MemoryFileItem
           file={sourceFile}
-          languages={Object.keys(languages) as Lang[]}
+          langItems={langItems}
           currentLang={sourceLang}
           onRemoveFile={removeSourceFile}
           onLangChange={onSourceLangChange}
@@ -96,30 +100,34 @@ function Upload({
         />
       )}
 
-      {targetFile ? (
-        <MemoryFileItem
-          file={targetFile}
-          languages={Object.keys(languages) as Lang[]}
-          currentLang={targetLang}
-          onRemoveFile={removeTargetFile}
-          onLangChange={onTargetLangChange}
-        />
-      ) : (
-        <UploadArea
-          type="memory"
-          accept={allowedMemoryTypes.join(",")}
-          title="Target Document"
-          description={`Allowed file types: ${allowedMemoryTypes
-            .map((type) => type.slice(1).toUpperCase())
-            .join(", ")}`}
-          onFilesSelect={(files) => setTargetFile(files[0])}
-          className="h-[200px] bg-cat-memory/70 hover:bg-cat-memory"
-        />
-      )}
+      {variant === "double" ? (
+        targetFile ? (
+          <MemoryFileItem
+            file={targetFile}
+            langItems={langItems}
+            currentLang={targetLang}
+            onRemoveFile={removeTargetFile}
+            onLangChange={onTargetLangChange}
+          />
+        ) : (
+          <UploadArea
+            type="memory"
+            accept={allowedMemoryTypes.join(",")}
+            title="Target Document"
+            description={`Allowed file types: ${allowedMemoryTypes
+              .map((type) => type.slice(1).toUpperCase())
+              .join(", ")}`}
+            onFilesSelect={(files) => setTargetFile(files[0])}
+            className="h-[200px] bg-cat-memory/70 hover:bg-cat-memory"
+          />
+        )
+      ) : null}
 
-      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-full p-1 shadow-md">
-        <ArrowRight size={28} className="text-gray-500" />
-      </div>
+      {variant === "double" ? (
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-full p-1 shadow-md">
+          <ArrowRight size={28} className="text-gray-500" />
+        </div>
+      ) : null}
     </div>
   );
 }

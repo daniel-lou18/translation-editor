@@ -22,17 +22,7 @@ export default function DocumentFileItem({
   onDomainChange,
   onRemove,
 }: DocumentFileItemProps) {
-  const { languages, domains, sourceLang, targetLang, domain } = itemData;
-
-  const langItems = languages.map((lang) => ({
-    value: lang,
-    label: lang,
-  }));
-
-  const domainItems = domains.map((domain) => ({
-    value: domain,
-    label: domain,
-  }));
+  const { sourceLang, targetLang, domain, langItems, domainItems } = itemData;
 
   return (
     <Container className="flex items-center justify-between p-3 rounded-lg bg-cat-target hover:bg-cat-target/70 transition-colors">

@@ -1,22 +1,34 @@
-import { FormEvent, useState, useCallback } from "react";
-import { useFileManager } from "@/hooks/useFileManager";
+import { FormEvent, useCallback } from "react";
 import { SubmitDocumentResult } from "@/hooks/useSubmitFiles";
 import { useTranslationRoute } from "@/hooks/useTranslationRoute";
-import { Lang, Domain } from "@/types";
 import { toast } from "sonner";
 import { useSubmitDocument } from "./useSubmitDocument";
+import { useUploadSingle } from "./useUploadSingle";
 
 export function useDocumentUpload(newProject = true) {
-  const { files, processFiles, removeFile } = useFileManager();
+  const {
+    files,
+    file,
+    processFiles,
+    removeFile,
+    sourceLang,
+    setSourceLang,
+    targetLang,
+    setTargetLang,
+    domain,
+    setDomain,
+    domainItems,
+    langItems,
+  } = useUploadSingle();
   const { mutate, isLoading } = useSubmitDocument();
   const { navigateToTranslation, projectId } = useTranslationRoute();
-  const [sourceLang, setSourceLang] = useState<Lang>("English (USA)");
-  const [targetLang, setTargetLang] = useState<Lang>("French (France)");
-  const [domain, setDomain] = useState<Domain>("legal");
 
-  const handleSuccess = useCallback((params: SubmitDocumentResult) => {
-    return navigateToTranslation(params);
-  }, [navigateToTranslation]);
+  const handleSuccess = useCallback(
+    (params: SubmitDocumentResult) => {
+      return navigateToTranslation(params);
+    },
+    [navigateToTranslation]
+  );
 
   const handleError = useCallback((error: Error) => {
     toast.error(`Could not upload document: ${error}`, {
@@ -30,7 +42,7 @@ export function useDocumentUpload(newProject = true) {
     e.preventDefault();
     mutate(
       {
-        file: files[0].file,
+        file,
         fileMetadata: { sourceLang, targetLang, domain, projectId },
         newProject,
       },
@@ -53,5 +65,7 @@ export function useDocumentUpload(newProject = true) {
     domain,
     setDomain,
     handleSubmit,
+    domainItems,
+    langItems,
   };
 }

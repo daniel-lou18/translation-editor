@@ -29,6 +29,8 @@ export default function UploadDocumentForm({
     domain,
     setDomain,
     handleSubmit,
+    domainItems,
+    langItems,
   } = useDocumentUpload(newProject);
 
   return (
@@ -37,15 +39,17 @@ export default function UploadDocumentForm({
         type="document"
         accept={allowedDocumentTypes.join(",")}
         title="Source Document"
-        description="Allowed file types: TXT, PDF, PNG, JPG, JPEG, BMP, WEBP"
+        description={`Allowed file types: ${allowedDocumentTypes
+          .map((type) => `${type.slice(1).toUpperCase()}`)
+          .join(", ")}`}
         onFilesSelect={(files) => processFiles(files, "document")}
       />
       <FileList
         files={files}
         onRemove={removeFile}
         itemData={{
-          languages: Object.keys(languages) as Lang[],
-          domains: [...domains] as Domain[],
+          langItems,
+          domainItems,
           sourceLang,
           targetLang,
           domain,

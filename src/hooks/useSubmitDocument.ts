@@ -17,15 +17,23 @@ type SubmitDocumentVariables = {
 
 export function useSubmitDocument() {
   const { mutate, isPending, isError, error } = useMutation({
-    mutationFn: (variables: SubmitDocumentVariables) => submitDocument(variables),
+    mutationFn: (variables: SubmitDocumentVariables) =>
+      submitDocument(variables),
   });
 
-  async function submitDocument(variables: SubmitDocumentVariables): Promise<SubmitDocumentResult> {
+  async function submitDocument(
+    variables: SubmitDocumentVariables
+  ): Promise<SubmitDocumentResult> {
     const { file, fileMetadata, newProject } = variables;
 
-    const translation = file.type === "text/plain"
-      ? await uploadService.submitSourceText(file, fileMetadata, newProject)
-      : await uploadService.submitFile(file, fileMetadata, newProject);
+    const translation =
+      file.type === "text/plain"
+        ? await uploadService.submitSourceText(file, fileMetadata, newProject)
+        : await uploadService.submitDocumentFile(
+            file,
+            fileMetadata,
+            newProject
+          );
 
     return getIdsFromTranslation(translation);
   }
