@@ -5,6 +5,8 @@ import { Earth } from "lucide-react";
 import { useTmUpload } from "@/hooks/useTmUpload";
 import { useTmFileFormat } from "@/hooks/useTmFileFormat";
 import UploadTmTitle from "./UploadTmTitle";
+import { allowedMemoryTypes } from "@/utils/constants";
+import { AllowedMemoryType } from "@/types/Files";
 
 export default function CreateTm() {
   const {
@@ -19,7 +21,11 @@ export default function CreateTm() {
     handleSubmit,
     onDomainChange,
     domainItems,
-    ...otherProps
+    langItems,
+    sourceLang,
+    targetLang,
+    onSourceLangChange,
+    onTargetLangChange,
   } = useTmUpload();
   const { tmFormat, toggleTmFormat, tmFormats } = useTmFileFormat(
     setSourceFile,
@@ -56,13 +62,23 @@ export default function CreateTm() {
 
         <UploadTmForm.Upload
           variant={tmFormat === "sheet" ? "single" : "double"}
-          sourceFile={sourceFile}
-          targetFile={targetFile}
-          setSourceFile={setSourceFile}
-          setTargetFile={setTargetFile}
-          removeSourceFile={removeSourceFile}
-          removeTargetFile={removeTargetFile}
-          {...otherProps}
+          source={{
+            file: sourceFile,
+            setFile: setSourceFile,
+            removeFile: removeSourceFile,
+            lang: sourceLang,
+            onChange: onSourceLangChange,
+            acceptedTypes: [...allowedMemoryTypes] as AllowedMemoryType[],
+          }}
+          target={{
+            file: targetFile,
+            setFile: setTargetFile,
+            removeFile: removeTargetFile,
+            lang: targetLang,
+            onChange: onTargetLangChange,
+            acceptedTypes: [...allowedMemoryTypes] as AllowedMemoryType[],
+          }}
+          langItems={langItems}
         />
       </UploadTmForm>
     </UploadTmTitle>
