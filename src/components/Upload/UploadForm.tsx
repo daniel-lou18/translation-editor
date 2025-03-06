@@ -3,14 +3,9 @@ import UploadArea from "@/components/Upload/UploadArea";
 import UploadButton from "./UploadButton";
 import Container from "../ui/Container";
 import Overlay from "../ui/Overlay";
-import {
-  allowedDocumentTypes,
-  allowedMemoryTypes,
-  languageToCodeMap as languages,
-  domains,
-} from "@/utils/constants";
+import { allowedDocumentTypes, allowedMemoryTypes } from "@/utils/constants";
 import { Lang, Domain } from "@/types";
-import { useUploadSingle } from "@/hooks/useUploadSingle";
+import { useUploadDouble } from "@/hooks/useUploadDouble";
 
 type UploadProps = {
   variant?: "document" | "memory" | "double";
@@ -19,18 +14,26 @@ type UploadProps = {
 
 export default function UploadForm({ variant = "double" }: UploadProps) {
   const {
-    files,
-    processFiles,
-    removeFile,
+    sourceFile,
+    targetFile,
     sourceLang,
-    setSourceLang,
     targetLang,
-    setTargetLang,
     domain,
+    setSourceFile,
+    setTargetFile,
+    setSourceLang,
+    setTargetLang,
     setDomain,
-    langItems,
     domainItems,
-  } = useUploadSingle();
+    langItems,
+  } = useUploadDouble();
+
+  const sourceFileInfo = sourceFile
+    ? { file: sourceFile, type: "document" }
+    : null;
+  const targetFileInfo = targetFile
+    ? { file: targetFile, type: "memory" }
+    : null;
 
   return (
     <form className="py-8 space-y-12" onSubmit={() => undefined}>
@@ -43,7 +46,7 @@ export default function UploadForm({ variant = "double" }: UploadProps) {
             accept={allowedDocumentTypes.join(",")}
             title="Source Document"
             description="Allowed file types: TXT, PDF, PNG, JPG, JPEG, BMP, WEBP"
-            onFilesSelect={(files) => processFiles(files, "document")}
+            onFilesSelect={(files) => setSourceFile(files[0])}
           />
         ) : null}
         {variant === "memory" || variant === "double" ? (
@@ -52,13 +55,13 @@ export default function UploadForm({ variant = "double" }: UploadProps) {
             accept={allowedMemoryTypes.join(",")}
             title="Translation Resources"
             description="Allowed file types: TXT, PDF, PNG, JPG, JPEG, BMP, WEBP"
-            onFilesSelect={(files) => processFiles(files, "memory")}
+            onFilesSelect={(files) => setTargetFile(files[0])}
           />
         ) : null}
       </Container>
       <FileList
-        files={files}
-        onRemove={removeFile}
+        files={[sourceFileInfo, targetFileInfo]}
+        onRemove={() => {}}
         itemData={{
           langItems,
           domainItems,

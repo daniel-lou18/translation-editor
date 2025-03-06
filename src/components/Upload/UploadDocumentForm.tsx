@@ -2,13 +2,10 @@ import FileList from "@/components/Upload/FileList";
 import UploadArea from "@/components/Upload/UploadArea";
 import UploadButton from "./UploadButton";
 import Overlay from "../ui/Overlay";
-import {
-  allowedDocumentTypes,
-  languageToCodeMap as languages,
-  domains,
-} from "@/utils/constants";
+import { allowedDocumentTypes } from "@/utils/constants";
 import { Lang, Domain } from "@/types";
 import { useDocumentUpload } from "@/hooks/useDocumentUpload";
+import { useLangsDomain } from "@/hooks/useLangsDomain";
 
 type UploadDocumentProps = {
   newProject?: boolean;
@@ -18,20 +15,22 @@ export default function UploadDocumentForm({
   newProject = true,
 }: UploadDocumentProps) {
   const {
-    files,
-    processFiles,
-    removeFile,
-    isLoading,
     sourceLang,
-    setSourceLang,
     targetLang,
-    setTargetLang,
     domain,
+    setSourceLang,
+    setTargetLang,
     setDomain,
-    handleSubmit,
     domainItems,
     langItems,
-  } = useDocumentUpload(newProject);
+  } = useLangsDomain();
+  const { file, setFile, removeFile, isLoading, handleSubmit } =
+    useDocumentUpload({
+      sourceLang,
+      targetLang,
+      domain,
+      newProject,
+    });
 
   return (
     <form className="py-8 space-y-12" onSubmit={handleSubmit}>
@@ -42,24 +41,26 @@ export default function UploadDocumentForm({
         description={`Allowed file types: ${allowedDocumentTypes
           .map((type) => `${type.slice(1).toUpperCase()}`)
           .join(", ")}`}
-        onFilesSelect={(files) => processFiles(files, "document")}
+        onFilesSelect={(files) => setFile(files[0])}
       />
-      <FileList
-        files={files}
-        onRemove={removeFile}
-        itemData={{
-          langItems,
-          domainItems,
-          sourceLang,
-          targetLang,
-          domain,
-        }}
-        onSourceLangChange={(newLang: Lang) => setSourceLang(newLang)}
-        onTargetLangChange={(newLang: Lang) => setTargetLang(newLang)}
-        onDomainChange={(newDomain: Domain) => setDomain(newDomain)}
-      >
-        <UploadButton isProcessing={isLoading}>Translate</UploadButton>
-      </FileList>
+      {file ? (
+        <FileList
+          files={[{ file, type: "document" }]}
+          onRemove={removeFile}
+          itemData={{
+            langItems,
+            domainItems,
+            sourceLang,
+            targetLang,
+            domain,
+          }}
+          onSourceLangChange={(newLang: Lang) => setSourceLang(newLang)}
+          onTargetLangChange={(newLang: Lang) => setTargetLang(newLang)}
+          onDomainChange={(newDomain: Domain) => setDomain(newDomain)}
+        >
+          <UploadButton isProcessing={isLoading}>Translate</UploadButton>
+        </FileList>
+      ) : null}
       {isLoading && <Overlay />}
     </form>
   );

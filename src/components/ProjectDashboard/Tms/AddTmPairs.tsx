@@ -9,9 +9,21 @@ import { allowedExcelTypes, allowedMemoryTypes } from "@/utils/constants";
 import { AllowedMemoryType } from "@/types/Files";
 import { useSelectTm } from "@/hooks/useSelectTm";
 import { useTmUpload } from "@/hooks/useTmUpload";
+import { useTmExcelUpload } from "@/hooks/useTmExcelUpload";
+import { useLangsDomain } from "@/hooks/useLangsDomain";
 
 export default function AddTmPairs() {
   const { tmItems, tmId, onTmChange } = useSelectTm();
+  const {
+    sourceLang,
+    targetLang,
+    domain,
+    domainItems,
+    langItems,
+    setSourceLang,
+    setTargetLang,
+    setDomain,
+  } = useLangsDomain();
   const {
     sourceFile,
     targetFile,
@@ -21,15 +33,14 @@ export default function AddTmPairs() {
     removeTargetFile,
     isLoading,
     handleSubmit,
-    onDomainChange,
-    domain,
-    domainItems,
-    sourceLang,
-    targetLang,
-    onSourceLangChange,
-    onTargetLangChange,
-    langItems,
-  } = useTmUpload({ type: "add", tmId });
+  } = useTmUpload({ type: "add", tmId, sourceLang, targetLang, domain });
+  const {
+    file,
+    setFile,
+    removeFile,
+    isLoading: isLoadingExcel,
+    handleSubmit: handleSubmitExcel,
+  } = useTmExcelUpload({ type: "add", tmId, sourceLang, targetLang, domain });
 
   const { tmFormat, toggleTmFormat, tmFormats } = useTmFileFormat(
     setSourceFile,
@@ -46,8 +57,8 @@ export default function AddTmPairs() {
       setTargetFile={setTargetFile}
     >
       <UploadTmForm
-        handleSubmit={handleSubmit}
-        isLoading={isLoading}
+        handleSubmit={tmFormat === "sheet" ? handleSubmitExcel : handleSubmit}
+        isLoading={isLoading || isLoadingExcel}
         buttonText="Add segments"
       >
         <UploadTmForm.Header title="Upload segments to a TM">
@@ -70,7 +81,7 @@ export default function AddTmPairs() {
               name="domain"
               items={domainItems}
               value={domain}
-              onChange={onDomainChange}
+              onChange={(value) => setDomain(value)}
               className="w-48 h-8"
             />
           </Container>
@@ -79,18 +90,18 @@ export default function AddTmPairs() {
         {tmFormat === "sheet" ? (
           <UploadTmForm.UploadSingle
             file={{
-              file: sourceFile,
-              setFile: setSourceFile,
-              removeFile: removeSourceFile,
+              file,
+              setFile,
+              removeFile,
               acceptedTypes: [...allowedExcelTypes] as AllowedMemoryType[],
             }}
             sourceLang={{
               lang: sourceLang,
-              onChange: onSourceLangChange,
+              onChange: (value) => setSourceLang(value),
             }}
             targetLang={{
               lang: targetLang,
-              onChange: onTargetLangChange,
+              onChange: (value) => setTargetLang(value),
             }}
             langItems={langItems}
           />
@@ -101,7 +112,7 @@ export default function AddTmPairs() {
               setFile: setSourceFile,
               removeFile: removeSourceFile,
               lang: sourceLang,
-              onChange: onSourceLangChange,
+              onChange: (value) => setSourceLang(value),
               acceptedTypes: [...allowedMemoryTypes] as AllowedMemoryType[],
             }}
             target={{
@@ -109,7 +120,7 @@ export default function AddTmPairs() {
               setFile: setTargetFile,
               removeFile: removeTargetFile,
               lang: targetLang,
-              onChange: onTargetLangChange,
+              onChange: (value) => setTargetLang(value),
               acceptedTypes: [...allowedMemoryTypes] as AllowedMemoryType[],
             }}
             langItems={langItems}

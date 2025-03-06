@@ -4,6 +4,8 @@ import AddTmPairs from "../AddTmPairs";
 import { useTmUpload } from "@/hooks/useTmUpload";
 import { useTmFileFormat } from "@/hooks/useTmFileFormat";
 import { useSelectTm } from "@/hooks/useSelectTm";
+import { useLangsDomain } from "@/hooks/useLangsDomain";
+import { useTmExcelUpload } from "@/hooks/useTmExcelUpload";
 
 // Mock child components
 vi.mock("../UploadTmForm", () => {
@@ -52,9 +54,20 @@ vi.mock("../UploadTmForm", () => {
 });
 
 vi.mock("../UploadTmTitle", () => ({
-  default: ({ children, title }: any) => (
+  default: ({ children, title, tmFormat, toggleTmFormat, tmFormats }: any) => (
     <div>
       <h1>{title}</h1>
+      <select
+        data-testid="format-selector"
+        value={tmFormat}
+        onChange={(e) => toggleTmFormat(e.target.value)}
+      >
+        {tmFormats.map((format: any) => (
+          <option key={format.value} value={format.value}>
+            {format.label}
+          </option>
+        ))}
+      </select>
       {children}
     </div>
   ),
@@ -81,6 +94,10 @@ vi.mock("@/hooks/useTmUpload", () => ({
   useTmUpload: vi.fn(),
 }));
 
+vi.mock("@/hooks/useTmExcelUpload", () => ({
+  useTmExcelUpload: vi.fn(),
+}));
+
 vi.mock("@/hooks/useTmFileFormat", () => ({
   useTmFileFormat: vi.fn(),
 }));
@@ -89,16 +106,23 @@ vi.mock("@/hooks/useSelectTm", () => ({
   useSelectTm: vi.fn(),
 }));
 
+vi.mock("@/hooks/useLangsDomain", () => ({
+  useLangsDomain: vi.fn(),
+}));
+
 describe("AddTmPairs", () => {
   const mockHandleSubmit = vi.fn();
+  const mockHandleSubmitExcel = vi.fn();
   const mockSetSourceFile = vi.fn();
   const mockSetTargetFile = vi.fn();
   const mockRemoveSourceFile = vi.fn();
   const mockRemoveTargetFile = vi.fn();
-  const mockOnDomainChange = vi.fn();
-  const mockOnSourceLangChange = vi.fn();
-  const mockOnTargetLangChange = vi.fn();
+  const mockSetDomain = vi.fn();
+  const mockSetSourceLang = vi.fn();
+  const mockSetTargetLang = vi.fn();
   const mockToggleTmFormat = vi.fn();
+  const mockSetFile = vi.fn();
+  const mockRemoveFile = vi.fn();
   const mockOnTmChange = vi.fn();
 
   beforeEach(() => {
@@ -113,6 +137,20 @@ describe("AddTmPairs", () => {
       onTmChange: mockOnTmChange,
     });
 
+    (useLangsDomain as any).mockReturnValue({
+      sourceLang: "English (USA)",
+      targetLang: "French (France)",
+      domain: "legal",
+      setSourceLang: mockSetSourceLang,
+      setTargetLang: mockSetTargetLang,
+      setDomain: mockSetDomain,
+      domainItems: [{ value: "legal", label: "Legal" }],
+      langItems: [
+        { value: "English (USA)", label: "English (USA)" },
+        { value: "French (France)", label: "French (France)" },
+      ],
+    });
+
     (useTmUpload as any).mockReturnValue({
       sourceFile: null,
       targetFile: null,
@@ -121,18 +159,15 @@ describe("AddTmPairs", () => {
       removeSourceFile: mockRemoveSourceFile,
       removeTargetFile: mockRemoveTargetFile,
       isLoading: false,
-      domain: "legal",
       handleSubmit: mockHandleSubmit,
-      onDomainChange: mockOnDomainChange,
-      domainItems: [{ value: "legal", label: "Legal" }],
-      langItems: [
-        { value: "English (USA)", label: "English (USA)" },
-        { value: "French (France)", label: "French (France)" },
-      ],
-      sourceLang: "English (USA)",
-      targetLang: "French (France)",
-      onSourceLangChange: mockOnSourceLangChange,
-      onTargetLangChange: mockOnTargetLangChange,
+    });
+
+    (useTmExcelUpload as any).mockReturnValue({
+      file: null,
+      setFile: mockSetFile,
+      removeFile: mockRemoveFile,
+      isLoading: false,
+      handleSubmit: mockHandleSubmitExcel,
     });
 
     (useTmFileFormat as any).mockReturnValue({
@@ -186,14 +221,32 @@ describe("AddTmPairs", () => {
     expect(screen.getByText("Excel File")).toBeInTheDocument();
   });
 
-  it("handles form submission", () => {
+  it("handles parallel files form submission", () => {
     render(<AddTmPairs />);
     const form = screen.getByRole("form");
     fireEvent.submit(form);
     expect(mockHandleSubmit).toHaveBeenCalled();
+    expect(mockHandleSubmitExcel).not.toHaveBeenCalled();
   });
 
-  it("shows loading state when submitting", () => {
+  it("handles excel file form submission", () => {
+    (useTmFileFormat as any).mockReturnValue({
+      tmFormat: "sheet",
+      toggleTmFormat: mockToggleTmFormat,
+      tmFormats: [
+        { value: "parallel", label: "Parallel Files" },
+        { value: "sheet", label: "Excel Sheet" },
+      ],
+    });
+
+    render(<AddTmPairs />);
+    const form = screen.getByRole("form");
+    fireEvent.submit(form);
+    expect(mockHandleSubmitExcel).toHaveBeenCalled();
+    expect(mockHandleSubmit).not.toHaveBeenCalled();
+  });
+
+  it("shows loading state when submitting parallel files", () => {
     (useTmUpload as any).mockReturnValue({
       sourceFile: null,
       targetFile: null,
@@ -202,18 +255,30 @@ describe("AddTmPairs", () => {
       removeSourceFile: mockRemoveSourceFile,
       removeTargetFile: mockRemoveTargetFile,
       isLoading: true,
-      domain: "legal",
       handleSubmit: mockHandleSubmit,
-      onDomainChange: mockOnDomainChange,
-      domainItems: [{ value: "legal", label: "Legal" }],
-      langItems: [
-        { value: "English (USA)", label: "English (USA)" },
-        { value: "French (France)", label: "French (France)" },
+    });
+
+    render(<AddTmPairs />);
+    const submitButton = screen.getByRole("button", { name: "Add segments" });
+    expect(submitButton).toBeDisabled();
+  });
+
+  it("shows loading state when submitting excel file", () => {
+    (useTmFileFormat as any).mockReturnValue({
+      tmFormat: "sheet",
+      toggleTmFormat: mockToggleTmFormat,
+      tmFormats: [
+        { value: "parallel", label: "Parallel Files" },
+        { value: "sheet", label: "Excel Sheet" },
       ],
-      sourceLang: "English (USA)",
-      targetLang: "French (France)",
-      onSourceLangChange: mockOnSourceLangChange,
-      onTargetLangChange: mockOnTargetLangChange,
+    });
+
+    (useTmExcelUpload as any).mockReturnValue({
+      file: null,
+      setFile: mockSetFile,
+      removeFile: mockRemoveFile,
+      isLoading: true,
+      handleSubmit: mockHandleSubmitExcel,
     });
 
     render(<AddTmPairs />);
@@ -232,6 +297,13 @@ describe("AddTmPairs", () => {
     render(<AddTmPairs />);
     const domainCombobox = screen.getByRole("combobox", { name: "domain" });
     fireEvent.change(domainCombobox, { target: { value: "medical" } });
-    expect(mockOnDomainChange).toHaveBeenCalledWith("medical");
+    expect(mockSetDomain).toHaveBeenCalledWith("medical");
+  });
+
+  it("allows switching between parallel and excel formats", () => {
+    render(<AddTmPairs />);
+    const formatSelector = screen.getByTestId("format-selector");
+    fireEvent.change(formatSelector, { target: { value: "sheet" } });
+    expect(mockToggleTmFormat).toHaveBeenCalledWith("sheet");
   });
 });

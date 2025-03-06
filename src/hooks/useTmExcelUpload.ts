@@ -2,14 +2,13 @@ import { FormEvent } from "react";
 import { useTranslationRoute } from "@/hooks/useTranslationRoute";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
-import { useUploadDouble } from "./useUploadDouble";
+import { useUploadSingle } from "./useUploadSingle";
 import { useBaseMutation } from "./useBaseMutation";
 import { DocumentPairId, FileMetadata } from "@/types/Dtos";
 import { uploadService } from "@/services/uploadService";
 import { FullLangsDomain } from "@/types";
-
-export type CreateTmVariables = {
-  files: File[];
+export type CreateTmExcelVariables = {
+  file: File;
   fileMetadata: FileMetadata;
 };
 
@@ -18,30 +17,29 @@ type UploadConfig = {
   tmId?: string;
 } & FullLangsDomain;
 
-export function useTmUpload(config: UploadConfig) {
+export function useTmExcelUpload(config: UploadConfig) {
   const { sourceLang, targetLang, domain, type, tmId } = config;
-  const { sourceFile, targetFile, setSourceFile, setTargetFile } =
-    useUploadDouble();
+  const { file, setFile } = useUploadSingle();
   const queryClient = useQueryClient();
   const { navigateToTms } = useTranslationRoute();
 
   const { mutate, isPending: isLoading } = useBaseMutation({
     mutationFn: async (
-      variables: CreateTmVariables
+      variables: CreateTmExcelVariables
     ): Promise<DocumentPairId> => {
-      const { files, fileMetadata } = variables;
+      const { file, fileMetadata } = variables;
 
       if (type === "create") {
-        return await uploadService.createTm(files, fileMetadata);
+        return await uploadService.createTm([file], fileMetadata);
       }
 
-      if (!tmId) {
+      if (!config.tmId) {
         throw new Error("TM ID is required for adding segments to a TM");
       }
 
-      return await uploadService.addTmPairs(files, {
+      return await uploadService.addTmPairs([file], {
         ...fileMetadata,
-        tmId: tmId,
+        tmId: config.tmId,
       });
     },
     onSuccess: () => {
@@ -65,32 +63,25 @@ export function useTmUpload(config: UploadConfig) {
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    if (!sourceFile || !targetFile) {
-      toast.error("Please select both source and target files");
+    if (!file) {
+      toast.error("Please select an Excel file");
       return;
     }
 
     mutate({
-      files: [sourceFile, targetFile],
+      file,
       fileMetadata: { sourceLang, targetLang, domain, tmId },
     });
   }
 
-  function removeSourceFile() {
-    setSourceFile(null);
-  }
-
-  function removeTargetFile() {
-    setTargetFile(null);
+  function removeFile() {
+    setFile(null);
   }
 
   return {
-    sourceFile,
-    targetFile,
-    setSourceFile,
-    setTargetFile,
-    removeSourceFile,
-    removeTargetFile,
+    file,
+    setFile,
+    removeFile,
     isLoading,
     handleSubmit,
   };

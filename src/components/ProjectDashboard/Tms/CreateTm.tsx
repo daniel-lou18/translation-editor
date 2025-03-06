@@ -7,27 +7,41 @@ import { useTmFileFormat } from "@/hooks/useTmFileFormat";
 import UploadTmTitle from "./UploadTmTitle";
 import { allowedExcelTypes, allowedMemoryTypes } from "@/utils/constants";
 import { AllowedMemoryType } from "@/types/Files";
-
+import { useLangsDomain } from "@/hooks/useLangsDomain";
+import { useTmExcelUpload } from "@/hooks/useTmExcelUpload";
 export default function CreateTm() {
+  const {
+    sourceLang,
+    targetLang,
+    domain,
+    domainItems,
+    langItems,
+    setSourceLang,
+    setTargetLang,
+    setDomain,
+  } = useLangsDomain();
   const {
     sourceFile,
     targetFile,
-    setSourceFile,
-    setTargetFile,
     removeSourceFile,
     removeTargetFile,
     isLoading,
-    domain,
     handleSubmit,
-    onDomainChange,
-    domainItems,
-    langItems,
+    setSourceFile,
+    setTargetFile,
+  } = useTmUpload({ type: "create", sourceLang, targetLang, domain });
+  const {
+    file,
+    setFile,
+    removeFile,
+    handleSubmit: handleSubmitExcel,
+    isLoading: isLoadingExcel,
+  } = useTmExcelUpload({
+    type: "create",
     sourceLang,
     targetLang,
-    onSourceLangChange,
-    onTargetLangChange,
-  } = useTmUpload({ type: "create" });
-
+    domain,
+  });
   const { tmFormat, toggleTmFormat, tmFormats } = useTmFileFormat(
     setSourceFile,
     setTargetFile
@@ -43,8 +57,8 @@ export default function CreateTm() {
       setTargetFile={setTargetFile}
     >
       <UploadTmForm
-        handleSubmit={handleSubmit}
-        isLoading={isLoading}
+        handleSubmit={tmFormat === "sheet" ? handleSubmitExcel : handleSubmit}
+        isLoading={isLoading || isLoadingExcel}
         buttonText="Create TM"
       >
         <UploadTmForm.Header title="Upload source and target segments to create a new TM">
@@ -55,7 +69,7 @@ export default function CreateTm() {
               name="domain"
               items={domainItems}
               value={domain}
-              onChange={onDomainChange}
+              onChange={(value) => setDomain(value)}
               className="w-48 h-8"
             />
           </Container>
@@ -64,18 +78,18 @@ export default function CreateTm() {
         {tmFormat === "sheet" ? (
           <UploadTmForm.UploadSingle
             file={{
-              file: sourceFile,
-              setFile: setSourceFile,
-              removeFile: removeSourceFile,
+              file,
+              setFile,
+              removeFile,
               acceptedTypes: [...allowedExcelTypes] as AllowedMemoryType[],
             }}
             sourceLang={{
               lang: sourceLang,
-              onChange: onSourceLangChange,
+              onChange: (value) => setSourceLang(value),
             }}
             targetLang={{
               lang: targetLang,
-              onChange: onTargetLangChange,
+              onChange: (value) => setTargetLang(value),
             }}
             langItems={langItems}
           />
@@ -86,7 +100,7 @@ export default function CreateTm() {
               setFile: setSourceFile,
               removeFile: removeSourceFile,
               lang: sourceLang,
-              onChange: onSourceLangChange,
+              onChange: (value) => setSourceLang(value),
               acceptedTypes: [...allowedMemoryTypes] as AllowedMemoryType[],
             }}
             target={{
@@ -94,7 +108,7 @@ export default function CreateTm() {
               setFile: setTargetFile,
               removeFile: removeTargetFile,
               lang: targetLang,
-              onChange: onTargetLangChange,
+              onChange: (value) => setTargetLang(value),
               acceptedTypes: [...allowedMemoryTypes] as AllowedMemoryType[],
             }}
             langItems={langItems}
