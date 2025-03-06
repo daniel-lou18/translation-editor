@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { useFileManager } from "@/hooks/useFileManager";
 import { Lang, Domain } from "@/types";
-import { domains } from "@/utils/constants";
-import { languages } from "@/utils/constants";
+import { domains, languageToCodeMap } from "@/utils/constants";
 
 export function useUploadSingle() {
   const { files, processFiles, removeFile } = useFileManager();
@@ -16,7 +15,7 @@ export function useUploadSingle() {
   }));
 
   const langItems: Array<{ value: Lang; label: Lang }> = Object.keys(
-    languages
+    languageToCodeMap
   ).map((lang) => ({
     value: lang as Lang,
     label: lang as Lang,

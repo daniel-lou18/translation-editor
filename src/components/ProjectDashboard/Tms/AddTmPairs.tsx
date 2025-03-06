@@ -6,7 +6,7 @@ import { Earth } from "lucide-react";
 import { useAddTmSegments } from "@/hooks/useTmSegmentUpload";
 import { useTmFileFormat } from "@/hooks/useTmFileFormat";
 import UploadTmTitle from "./UploadTmTitle";
-import { allowedMemoryTypes } from "@/utils/constants";
+import { allowedExcelTypes, allowedMemoryTypes } from "@/utils/constants";
 import { AllowedMemoryType } from "@/types/Files";
 export default function AddTmPairs() {
   const {
@@ -49,7 +49,7 @@ export default function AddTmPairs() {
         isLoading={isLoading}
         buttonText="Add segments"
       >
-        <UploadTmForm.Header title="Upload source and target segments from documents to your TM">
+        <UploadTmForm.Header title="Upload segments to a TM">
           <Container className="flex items-center gap-2">
             <BookType className="w-4 h-4 text-muted-foreground" />
             <span className="text-sm text-muted-foreground">TM:</span>
@@ -74,26 +74,46 @@ export default function AddTmPairs() {
             />
           </Container>
         </UploadTmForm.Header>
-        <UploadTmForm.Upload
-          variant={tmFormat === "sheet" ? "single" : "double"}
-          source={{
-            file: sourceFile,
-            setFile: setSourceFile,
-            removeFile: removeSourceFile,
-            lang: sourceLang,
-            onChange: onSourceLangChange,
-            acceptedTypes: [...allowedMemoryTypes] as AllowedMemoryType[],
-          }}
-          target={{
-            file: targetFile,
-            setFile: setTargetFile,
-            removeFile: removeTargetFile,
-            lang: targetLang,
-            onChange: onTargetLangChange,
-            acceptedTypes: [...allowedMemoryTypes] as AllowedMemoryType[],
-          }}
-          langItems={langItems}
-        />
+
+        {tmFormat === "sheet" ? (
+          <UploadTmForm.UploadSingle
+            file={{
+              file: sourceFile,
+              setFile: setSourceFile,
+              removeFile: removeSourceFile,
+              acceptedTypes: [...allowedExcelTypes] as AllowedMemoryType[],
+            }}
+            sourceLang={{
+              lang: sourceLang,
+              onChange: onSourceLangChange,
+            }}
+            targetLang={{
+              lang: targetLang,
+              onChange: onTargetLangChange,
+            }}
+            langItems={langItems}
+          />
+        ) : (
+          <UploadTmForm.UploadDouble
+            source={{
+              file: sourceFile,
+              setFile: setSourceFile,
+              removeFile: removeSourceFile,
+              lang: sourceLang,
+              onChange: onSourceLangChange,
+              acceptedTypes: [...allowedMemoryTypes] as AllowedMemoryType[],
+            }}
+            target={{
+              file: targetFile,
+              setFile: setTargetFile,
+              removeFile: removeTargetFile,
+              lang: targetLang,
+              onChange: onTargetLangChange,
+              acceptedTypes: [...allowedMemoryTypes] as AllowedMemoryType[],
+            }}
+            langItems={langItems}
+          />
+        )}
       </UploadTmForm>
     </UploadTmTitle>
   );

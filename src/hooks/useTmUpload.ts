@@ -1,10 +1,17 @@
-import { FormEvent, useCallback } from "react";
+import { FormEvent } from "react";
 import { useTranslationRoute } from "@/hooks/useTranslationRoute";
 import { Lang, Domain } from "@/types";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
-import { useCreateTm } from "./useCreateTm";
 import { useUploadDouble } from "./useUploadDouble";
+import { useBaseMutation } from "./useBaseMutation";
+import { DocumentPairId, FileMetadata } from "@/types/Dtos";
+import { uploadService } from "@/services/uploadService";
+
+export type CreateTmVariables = {
+  files: File[];
+  fileMetadata: FileMetadata;
+};
 
 export function useTmUpload() {
   const {
@@ -22,21 +29,27 @@ export function useTmUpload() {
     langItems,
   } = useUploadDouble();
   const queryClient = useQueryClient();
-  const { mutate, isPending: isLoading } = useCreateTm();
+
+  const { mutate, isPending: isLoading } = useBaseMutation({
+    mutationFn: async (
+      variables: CreateTmVariables
+    ): Promise<DocumentPairId> => {
+      const { files, fileMetadata } = variables;
+      return await uploadService.createTm(files, fileMetadata);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["tms"] });
+      return navigateToTms();
+    },
+    onError: (error: Error) => {
+      toast.error(`Could not upload translation memory: ${error}`, {
+        classNames: {
+          toast: "bg-red-200",
+        },
+      });
+    },
+  });
   const { navigateToTms } = useTranslationRoute();
-
-  const handleSuccess = useCallback(() => {
-    queryClient.invalidateQueries({ queryKey: ["tms"] });
-    return navigateToTms();
-  }, [navigateToTms, queryClient]);
-
-  const handleError = useCallback((error: Error) => {
-    toast.error(`Could not upload translation memory: ${error}`, {
-      classNames: {
-        toast: "bg-red-200",
-      },
-    });
-  }, []);
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -46,16 +59,10 @@ export function useTmUpload() {
       return;
     }
 
-    mutate(
-      {
-        files: [sourceFile, targetFile],
-        fileMetadata: { sourceLang, targetLang, domain },
-      },
-      {
-        onSuccess: handleSuccess,
-        onError: handleError,
-      }
-    );
+    mutate({
+      files: [sourceFile, targetFile],
+      fileMetadata: { sourceLang, targetLang, domain },
+    });
   }
 
   function onSourceLangChange(lang: Lang) {

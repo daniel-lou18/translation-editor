@@ -5,7 +5,7 @@ import { Earth } from "lucide-react";
 import { useTmUpload } from "@/hooks/useTmUpload";
 import { useTmFileFormat } from "@/hooks/useTmFileFormat";
 import UploadTmTitle from "./UploadTmTitle";
-import { allowedMemoryTypes } from "@/utils/constants";
+import { allowedExcelTypes, allowedMemoryTypes } from "@/utils/constants";
 import { AllowedMemoryType } from "@/types/Files";
 
 export default function CreateTm() {
@@ -46,7 +46,7 @@ export default function CreateTm() {
         isLoading={isLoading}
         buttonText="Create TM"
       >
-        <UploadTmForm.Header title="Upload source and target documents to create a new TM">
+        <UploadTmForm.Header title="Upload source and target segments to create a new TM">
           <Container className="flex items-center gap-2">
             <Earth className="w-4 h-4 text-muted-foreground" />
             <span className="text-sm text-muted-foreground">Domain:</span>
@@ -60,26 +60,45 @@ export default function CreateTm() {
           </Container>
         </UploadTmForm.Header>
 
-        <UploadTmForm.Upload
-          variant={tmFormat === "sheet" ? "single" : "double"}
-          source={{
-            file: sourceFile,
-            setFile: setSourceFile,
-            removeFile: removeSourceFile,
-            lang: sourceLang,
-            onChange: onSourceLangChange,
-            acceptedTypes: [...allowedMemoryTypes] as AllowedMemoryType[],
-          }}
-          target={{
-            file: targetFile,
-            setFile: setTargetFile,
-            removeFile: removeTargetFile,
-            lang: targetLang,
-            onChange: onTargetLangChange,
-            acceptedTypes: [...allowedMemoryTypes] as AllowedMemoryType[],
-          }}
-          langItems={langItems}
-        />
+        {tmFormat === "sheet" ? (
+          <UploadTmForm.UploadSingle
+            file={{
+              file: sourceFile,
+              setFile: setSourceFile,
+              removeFile: removeSourceFile,
+              acceptedTypes: [...allowedExcelTypes] as AllowedMemoryType[],
+            }}
+            sourceLang={{
+              lang: sourceLang,
+              onChange: onSourceLangChange,
+            }}
+            targetLang={{
+              lang: targetLang,
+              onChange: onTargetLangChange,
+            }}
+            langItems={langItems}
+          />
+        ) : (
+          <UploadTmForm.UploadDouble
+            source={{
+              file: sourceFile,
+              setFile: setSourceFile,
+              removeFile: removeSourceFile,
+              lang: sourceLang,
+              onChange: onSourceLangChange,
+              acceptedTypes: [...allowedMemoryTypes] as AllowedMemoryType[],
+            }}
+            target={{
+              file: targetFile,
+              setFile: setTargetFile,
+              removeFile: removeTargetFile,
+              lang: targetLang,
+              onChange: onTargetLangChange,
+              acceptedTypes: [...allowedMemoryTypes] as AllowedMemoryType[],
+            }}
+            langItems={langItems}
+          />
+        )}
       </UploadTmForm>
     </UploadTmTitle>
   );

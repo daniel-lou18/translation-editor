@@ -1,6 +1,6 @@
 import { Lang } from "@/types";
 import { Domain } from "@/types";
-import { domains, languages } from "@/utils/constants";
+import { domains, languageToCodeMap } from "@/utils/constants";
 import { useState } from "react";
 
 export function useUploadDouble() {
@@ -16,7 +16,7 @@ export function useUploadDouble() {
   }));
 
   const langItems: Array<{ value: Lang; label: Lang }> = Object.keys(
-    languages
+    languageToCodeMap
   ).map((lang) => ({
     value: lang as Lang,
     label: lang as Lang,

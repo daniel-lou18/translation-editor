@@ -1,7 +1,7 @@
 import { FileText, X } from "lucide-react";
 import Container from "../../ui/Container";
-import { ElementType, PropsWithChildren } from "react";
-
+import { ComponentType, PropsWithChildren } from "react";
+import { cn } from "@/lib/utils";
 function MemoryFileItem({ children }: PropsWithChildren) {
   return (
     <Container className="rounded-lg border border-gray-200 overflow-hidden relative">
@@ -14,7 +14,7 @@ function MemoryFileItem({ children }: PropsWithChildren) {
 
 type HeaderProps = PropsWithChildren<{
   onRemoveFile: () => void;
-  icon?: ElementType;
+  icon?: ComponentType<{ className?: string }>;
 }>;
 
 function Header({ onRemoveFile, icon, children }: HeaderProps) {
@@ -36,17 +36,23 @@ function Header({ onRemoveFile, icon, children }: HeaderProps) {
   );
 }
 
-function Body({ children }: PropsWithChildren) {
+function Body({
+  children,
+  className,
+}: PropsWithChildren<{ className?: string }>) {
   return (
-    <Container className="text-sm truncate text-gray-600 mb-3">
+    <Container className={cn("text-sm truncate text-gray-600 mb-3", className)}>
       {children}
     </Container>
   );
 }
 
-function Footer({ children }: PropsWithChildren) {
+function Footer({
+  children,
+  className,
+}: PropsWithChildren<{ className?: string }>) {
   return (
-    <Container className="flex items-center gap-2 mt-auto">
+    <Container className={cn("flex items-center gap-12 mt-auto", className)}>
       {children}
     </Container>
   );
@@ -57,31 +63,3 @@ MemoryFileItem.Body = Body;
 MemoryFileItem.Footer = Footer;
 
 export default MemoryFileItem;
-
-// <Container className="flex items-center justify-between mb-3">
-//   <Container className="flex items-center gap-2">
-//     <FileText className="w-5 h-5 text-primary" />
-//     <span className="font-medium text-primary">Source Document</span>
-//   </Container>
-//   <button
-//     onClick={onRemoveFile}
-//     className="p-1 hover:bg-primary/10 rounded-full transition-colors"
-//   >
-//     <X className="w-4 h-4 text-primary" />
-//   </button>
-// </Container>
-
-// <Container className="text-sm truncate text-gray-600 mb-3">
-//   {file.name}
-// </Container>
-
-// <Container className="flex items-center gap-2 mt-auto">
-// <span className="text-sm text-gray-600">Language:</span>
-// <Combobox
-//   name="source-language"
-//   items={langItems}
-//   value={currentLang}
-//   onChange={onLangChange}
-//   className="w-full h-9"
-// />
-// </Container>

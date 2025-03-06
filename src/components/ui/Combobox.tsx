@@ -61,7 +61,7 @@ export default function Combobox<T extends string>({
             ? selectedItem.label.length > 30
               ? `${selectedItem.label.slice(0, 30)}...`
               : selectedItem.label
-            : `Select ${name}`}
+            : `Select ${name.split("_").join(" ")}`}
           <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
         </Button>
       </PopoverTrigger>

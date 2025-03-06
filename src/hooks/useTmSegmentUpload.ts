@@ -1,12 +1,20 @@
-import { FormEvent, useCallback } from "react";
+import { FormEvent } from "react";
 import { useTranslationRoute } from "@/hooks/useTranslationRoute";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
-import { useAddTmPairs } from "./useAddTmPairs";
 import { useSelectTm } from "./useSelectTm";
 import { Domain } from "@/types";
 import { Lang } from "@/types";
 import { useUploadDouble } from "./useUploadDouble";
+import { useBaseMutation } from "./useBaseMutation";
+import { DocumentPairId, AddTmPairsDTO } from "@/types/Dtos";
+import { uploadService } from "@/services/uploadService";
+
+export type AddTmPairsVariables = {
+  files: File[];
+  fileMetadata: AddTmPairsDTO;
+};
+
 export function useAddTmSegments() {
   const {
     sourceFile,
@@ -23,23 +31,30 @@ export function useAddTmSegments() {
     langItems,
   } = useUploadDouble();
   const queryClient = useQueryClient();
-  const { mutate, isPending } = useAddTmPairs();
+
+  const { mutate, isPending } = useBaseMutation({
+    mutationFn: async (
+      variables: AddTmPairsVariables
+    ): Promise<DocumentPairId> => {
+      const { files, fileMetadata } = variables;
+      return await uploadService.addTmPairs(files, fileMetadata);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["tms"] });
+      toast.success("Successfully added segments to translation memory");
+      return navigateToTms();
+    },
+    onError: (error: Error) => {
+      toast.error(`Could not add segments to translation memory: ${error}`, {
+        classNames: {
+          toast: "bg-red-200",
+        },
+      });
+    },
+  });
+
   const { tmItems, tmId, onTmChange } = useSelectTm();
   const { navigateToTms } = useTranslationRoute();
-
-  const handleSuccess = useCallback(() => {
-    queryClient.invalidateQueries({ queryKey: ["tms"] });
-    toast.success("Successfully added segments to translation memory");
-    return navigateToTms();
-  }, [navigateToTms, queryClient]);
-
-  const handleError = useCallback((error: Error) => {
-    toast.error(`Could not add segments to translation memory: ${error}`, {
-      classNames: {
-        toast: "bg-red-200",
-      },
-    });
-  }, []);
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -54,16 +69,10 @@ export function useAddTmSegments() {
       return;
     }
 
-    mutate(
-      {
-        files: [sourceFile, targetFile],
-        fileMetadata: { tmId, sourceLang, targetLang, domain },
-      },
-      {
-        onSuccess: handleSuccess,
-        onError: handleError,
-      }
-    );
+    mutate({
+      files: [sourceFile, targetFile],
+      fileMetadata: { tmId, sourceLang, targetLang, domain },
+    });
   }
 
   function onSourceLangChange(lang: Lang) {
