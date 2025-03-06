@@ -2,7 +2,6 @@ import { FormEvent } from "react";
 import { useTranslationRoute } from "@/hooks/useTranslationRoute";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
-import { useSelectTm } from "./useSelectTm";
 import { Domain } from "@/types";
 import { Lang } from "@/types";
 import { useUploadDouble } from "./useUploadDouble";
@@ -15,7 +14,7 @@ export type AddTmPairsVariables = {
   fileMetadata: AddTmPairsDTO;
 };
 
-export function useAddTmSegments() {
+export function useAddTmSegments(tmId: string) {
   const {
     sourceFile,
     targetFile,
@@ -53,7 +52,6 @@ export function useAddTmSegments() {
     },
   });
 
-  const { tmItems, tmId, onTmChange } = useSelectTm();
   const { navigateToTms } = useTranslationRoute();
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
@@ -107,9 +105,6 @@ export function useAddTmSegments() {
     onSourceLangChange,
     onTargetLangChange,
     onDomainChange,
-    tmItems,
-    tmId,
-    onTmChange,
     sourceLang,
     targetLang,
     domain,

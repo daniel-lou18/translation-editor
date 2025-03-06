@@ -26,7 +26,8 @@ export default function CreateTm() {
     targetLang,
     onSourceLangChange,
     onTargetLangChange,
-  } = useTmUpload();
+  } = useTmUpload({ type: "create" });
+
   const { tmFormat, toggleTmFormat, tmFormats } = useTmFileFormat(
     setSourceFile,
     setTargetFile

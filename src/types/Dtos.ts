@@ -41,6 +41,7 @@ export type FileMetadata = {
   targetLang: Lang;
   domain: Domain;
   projectId?: string;
+  tmId?: string;
 };
 
 export type Languages = {

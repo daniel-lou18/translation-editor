@@ -13,7 +13,12 @@ export type CreateTmVariables = {
   fileMetadata: FileMetadata;
 };
 
-export function useTmUpload() {
+type UploadConfig = {
+  type: "create" | "add";
+  tmId?: string;
+};
+
+export function useTmUpload(config: UploadConfig) {
   const {
     sourceFile,
     targetFile,
@@ -29,16 +34,27 @@ export function useTmUpload() {
     langItems,
   } = useUploadDouble();
   const queryClient = useQueryClient();
+  const { navigateToTms } = useTranslationRoute();
 
   const { mutate, isPending: isLoading } = useBaseMutation({
     mutationFn: async (
       variables: CreateTmVariables
     ): Promise<DocumentPairId> => {
+      const uploadFunction =
+        config.type === "create"
+          ? uploadService.createTm
+          : uploadService.addTmPairs;
       const { files, fileMetadata } = variables;
-      return await uploadService.createTm(files, fileMetadata);
+
+      return await uploadFunction(files, fileMetadata);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["tms"] });
+      toast.success(
+        config.type === "create"
+          ? "Successfully created translation memory"
+          : "Successfully added segments to translation memory"
+      );
       return navigateToTms();
     },
     onError: (error: Error) => {
@@ -49,7 +65,6 @@ export function useTmUpload() {
       });
     },
   });
-  const { navigateToTms } = useTranslationRoute();
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -61,7 +76,7 @@ export function useTmUpload() {
 
     mutate({
       files: [sourceFile, targetFile],
-      fileMetadata: { sourceLang, targetLang, domain },
+      fileMetadata: { sourceLang, targetLang, domain, tmId: config.tmId },
     });
   }
 

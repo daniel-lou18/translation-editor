@@ -3,12 +3,15 @@ import Container from "../../ui/Container";
 import { BookType } from "lucide-react";
 import Combobox from "@/components/ui/Combobox";
 import { Earth } from "lucide-react";
-import { useAddTmSegments } from "@/hooks/useTmSegmentUpload";
 import { useTmFileFormat } from "@/hooks/useTmFileFormat";
 import UploadTmTitle from "./UploadTmTitle";
 import { allowedExcelTypes, allowedMemoryTypes } from "@/utils/constants";
 import { AllowedMemoryType } from "@/types/Files";
+import { useSelectTm } from "@/hooks/useSelectTm";
+import { useTmUpload } from "@/hooks/useTmUpload";
+
 export default function AddTmPairs() {
+  const { tmItems, tmId, onTmChange } = useSelectTm();
   const {
     sourceFile,
     targetFile,
@@ -19,9 +22,6 @@ export default function AddTmPairs() {
     isLoading,
     handleSubmit,
     onDomainChange,
-    tmItems,
-    tmId,
-    onTmChange,
     domain,
     domainItems,
     sourceLang,
@@ -29,7 +29,8 @@ export default function AddTmPairs() {
     onSourceLangChange,
     onTargetLangChange,
     langItems,
-  } = useAddTmSegments();
+  } = useTmUpload({ type: "add", tmId });
+
   const { tmFormat, toggleTmFormat, tmFormats } = useTmFileFormat(
     setSourceFile,
     setTargetFile
