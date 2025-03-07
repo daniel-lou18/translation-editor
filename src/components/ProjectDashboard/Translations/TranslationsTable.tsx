@@ -10,7 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress-bar";
 import { Globe } from "lucide-react";
 import { FormattedTranslation } from "@/types/Translation";
-import TableRowMenu, { TableRowMenuProps } from "../TableRowMenu";
+import TableRowMenu, { TableRowMenuProps } from "../../ui/Table/TableRowMenu";
 import Container from "@/components/ui/Container";
 
 type TranslationsTableProps = {

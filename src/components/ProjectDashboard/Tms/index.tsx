@@ -6,7 +6,6 @@ import { Button } from "../../ui/button";
 import { Link } from "react-router";
 import Container from "@/components/ui/Container";
 import PageControls from "@/components/ui/PageControls";
-import { useTms } from "@/hooks/useTms";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -16,15 +15,9 @@ import {
 import { ChevronDown } from "lucide-react";
 
 export default function Tms() {
-  const { projectId, navigateToTm } = useTranslationRoute();
-  const { tms } = useTms();
+  const { projectId } = useTranslationRoute();
 
   if (!projectId) return null;
-
-  const onRowClick = (tmId: number) => {
-    if (!projectId || !tmId) return;
-    navigateToTm(tmId);
-  };
 
   return (
     <>
@@ -54,7 +47,7 @@ export default function Tms() {
           </DropdownMenu>
         </PageControls>
       </Container>
-      <TmsTable tms={tms} onRowClick={onRowClick} />
+      <TmsTable />
     </>
   );
 }

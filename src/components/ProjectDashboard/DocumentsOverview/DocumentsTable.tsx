@@ -8,35 +8,58 @@ import {
 } from "@/components/ui/table";
 import { FileText } from "lucide-react";
 import { Document } from "@/types";
-import TableRowMenu, { TableRowMenuProps } from "../TableRowMenu";
-
+import TableRowMenu from "../../ui/Table/TableRowMenu";
+import { useEditTable } from "@/hooks/useEditTable";
+import { useTranslationRoute } from "@/hooks/useTranslationRoute";
+import Container from "@/components/ui/Container";
+import EditableCell from "../../ui/Table/EditableCell";
+import TableRowControls from "@/components/ui/Table/TableRowControls";
 type TranslationsTableProps = {
   documents: Document[];
   onClick: (documentId: number) => void;
-};
-
-const documentRowMenuData: TableRowMenuProps = {
-  name: "document",
-  items: [
-    {
-      value: "View translations",
-      onClick: () => {},
-    },
-    {
-      value: "View details",
-      onClick: () => {},
-    },
-    {
-      value: "Delete",
-      onClick: () => {},
-    },
-  ],
 };
 
 export default function DocumentsTable({
   documents,
   onClick,
 }: TranslationsTableProps) {
+  const { navigateToTranslations } = useTranslationRoute();
+  const {
+    editingId,
+    editFormData,
+    setEditingId,
+    setEditFormData,
+    handleInputChange,
+    handleCancel,
+    handleSave,
+  } = useEditTable<Document>(() => {});
+
+  const documentRowMenuData = {
+    name: "document",
+    items: [
+      {
+        value: "Edit",
+        onClick: (doc: Document) => {
+          setEditingId(doc.id);
+          setEditFormData({ ...doc });
+        },
+      },
+      {
+        value: "View translations",
+        onClick: (doc: Document) => {
+          navigateToTranslations(doc.id);
+        },
+      },
+      {
+        value: "View details",
+        onClick: () => {},
+      },
+      {
+        value: "Delete",
+        onClick: () => {},
+      },
+    ],
+  };
   return (
     <Table>
       <TableHeader>
@@ -51,17 +74,29 @@ export default function DocumentsTable({
       </TableHeader>
       <TableBody>
         {documents.length > 0 ? (
-          documents.map(
-            ({ id, fileName, sourceLang, domain, docType, createdAt }) => (
+          documents.map((doc) => {
+            const { id, fileName, sourceLang, domain, docType, createdAt } =
+              doc;
+            return (
               <TableRow
                 key={id}
                 className="hover:bg-gray-200/50 hover:cursor-pointer"
               >
                 <TableCell className="pl-1" onClick={() => onClick(id)}>
-                  <div className="flex items-center gap-2">
+                  <Container className="flex items-center gap-2">
                     <FileText className="h-4 w-4" strokeWidth={1.5} />
-                    {fileName}
-                  </div>
+                    <EditableCell
+                      inputConfig={{
+                        field: "fileName",
+                        onChange: handleInputChange,
+                        editFormData: editFormData,
+                      }}
+                      displayConfig={{
+                        value: fileName,
+                      }}
+                      isEditing={editingId === id}
+                    />
+                  </Container>
                 </TableCell>
                 <TableCell onClick={() => onClick(id)}>{sourceLang}</TableCell>
                 <TableCell onClick={() => onClick(id)}>{domain}</TableCell>
@@ -72,11 +107,19 @@ export default function DocumentsTable({
                   {new Date(createdAt).toLocaleDateString()}
                 </TableCell>
                 <TableCell className="pr-1">
-                  <TableRowMenu {...documentRowMenuData} />
+                  {isEditing ? (
+                    <TableRowControls
+                      handleSave={handleSave}
+                      handleCancel={handleCancel}
+                      isSaving={isSaving}
+                    />
+                  ) : (
+                    <TableRowMenu {...documentRowMenuData} data={doc} />
+                  )}
                 </TableCell>
               </TableRow>
-            )
-          )
+            );
+          })
         ) : (
           <TableRow>
             <TableCell colSpan={6} className="h-24 text-center">
