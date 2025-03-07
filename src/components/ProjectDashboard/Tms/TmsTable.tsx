@@ -11,16 +11,18 @@ import { Tm } from "@/types/Tm";
 import Container from "@/components/ui/Container";
 import { BookType, Save, X } from "lucide-react";
 import EditableCell from "./EditableCell";
-import { useState } from "react";
+import { MouseEvent, useState } from "react";
 import { useDeleteTm } from "@/hooks/useDeleteTm";
 import { Button } from "@/components/ui/button";
+import { useUpdateTm } from "@/hooks/useUpdateTm";
 type TmsTableProps = {
   tms: Tm[];
   onRowClick: (tmId: number) => void;
 };
 
 export default function TmsTable({ tms, onRowClick }: TmsTableProps) {
-  const { mutate: deleteTm } = useDeleteTm();
+  const { deleteTm } = useDeleteTm();
+  const { updateTm } = useUpdateTm();
   const [editingId, setEditingId] = useState<number | null>(null);
   const [editFormData, setEditFormData] = useState<Partial<Tm>>({});
 
@@ -34,6 +36,11 @@ export default function TmsTable({ tms, onRowClick }: TmsTableProps) {
   const handleCancel = () => {
     setEditingId(null);
     setEditFormData({});
+  };
+
+  const handleSave = (e: MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    updateTm(editFormData);
   };
 
   const tmsRowMenuData = {
@@ -137,12 +144,16 @@ export default function TmsTable({ tms, onRowClick }: TmsTableProps) {
                 <TableCell className="pr-1">
                   {isEditing ? (
                     <Container className="flex items-center gap-1">
-                      <Button variant="ghost" className="w-4 h-4">
+                      <Button
+                        variant="ghost"
+                        className="w-8 h-8"
+                        onClick={handleSave}
+                      >
                         <Save />
                       </Button>
                       <Button
                         variant="ghost"
-                        className="w-4 h-4"
+                        className="w-8 h-8"
                         onClick={handleCancel}
                       >
                         <X />

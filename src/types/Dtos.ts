@@ -1,5 +1,6 @@
 import { Lang, Domain } from ".";
 import { Document, SourceSegment } from "./Document";
+import { Tm } from "./Tm";
 import { TargetSegment, Translation } from "./Translation";
 
 export type JoinedSegment = {
@@ -61,3 +62,5 @@ export type AddTmPairsDTO = {
 };
 
 export type TextSegment = { sourceText: string; targetText: string };
+
+export type UpdateTmDto = Partial<Tm> & { id: number };

@@ -17,5 +17,5 @@ export function useDeleteTm() {
     },
   });
 
-  return { mutate };
+  return { deleteTm: mutate };
 }
