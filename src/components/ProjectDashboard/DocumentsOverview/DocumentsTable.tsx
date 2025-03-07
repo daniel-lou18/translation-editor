@@ -17,7 +17,20 @@ type TranslationsTableProps = {
 
 const documentRowMenuData: TableRowMenuProps = {
   name: "document",
-  items: ["View translations", "View details"],
+  items: [
+    {
+      value: "View translations",
+      onClick: () => {},
+    },
+    {
+      value: "View details",
+      onClick: () => {},
+    },
+    {
+      value: "Delete",
+      onClick: () => {},
+    },
+  ],
 };
 
 export default function DocumentsTable({
@@ -37,30 +50,32 @@ export default function DocumentsTable({
         </TableRow>
       </TableHeader>
       <TableBody>
-        {documents.length > 0 ? documents.map(
-          ({ id, fileName, sourceLang, domain, docType, createdAt }) => (
-            <TableRow
-              key={id}
-              className="hover:bg-gray-200/50 hover:cursor-pointer"
-            >
-              <TableCell className="pl-1" onClick={() => onClick(id)}>
-                <div className="flex items-center gap-2">
-                  <FileText className="h-4 w-4" strokeWidth={1.5} />
-                  {fileName}
-                </div>
-              </TableCell>
-              <TableCell onClick={() => onClick(id)}>{sourceLang}</TableCell>
-              <TableCell onClick={() => onClick(id)}>{domain}</TableCell>
-              <TableCell onClick={() => onClick(id)}>
-                {docType || "document"}
-              </TableCell>
-              <TableCell onClick={() => onClick(id)}>
-                {new Date(createdAt).toLocaleDateString()}
-              </TableCell>
-              <TableCell className="pr-1">
-                <TableRowMenu {...documentRowMenuData} />
-              </TableCell>
-            </TableRow>
+        {documents.length > 0 ? (
+          documents.map(
+            ({ id, fileName, sourceLang, domain, docType, createdAt }) => (
+              <TableRow
+                key={id}
+                className="hover:bg-gray-200/50 hover:cursor-pointer"
+              >
+                <TableCell className="pl-1" onClick={() => onClick(id)}>
+                  <div className="flex items-center gap-2">
+                    <FileText className="h-4 w-4" strokeWidth={1.5} />
+                    {fileName}
+                  </div>
+                </TableCell>
+                <TableCell onClick={() => onClick(id)}>{sourceLang}</TableCell>
+                <TableCell onClick={() => onClick(id)}>{domain}</TableCell>
+                <TableCell onClick={() => onClick(id)}>
+                  {docType || "document"}
+                </TableCell>
+                <TableCell onClick={() => onClick(id)}>
+                  {new Date(createdAt).toLocaleDateString()}
+                </TableCell>
+                <TableCell className="pr-1">
+                  <TableRowMenu {...documentRowMenuData} />
+                </TableCell>
+              </TableRow>
+            )
           )
         ) : (
           <TableRow>

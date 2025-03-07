@@ -94,4 +94,13 @@ export class ApiService {
       throw this.handleError(error);
     }
   }
+
+  async delete<T>(url: string, config?: AxiosRequestConfig): Promise<T> {
+    try {
+      const response = await this.api.delete<ApiResponseType<T>>(url, config);
+      return response.data.data;
+    } catch (error) {
+      throw this.handleError(error);
+    }
+  }
 }

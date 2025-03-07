@@ -8,8 +8,12 @@ export class TmService extends ApiService {
     super(import.meta.env.VITE_API_URL);
   }
 
-    async getTms(): Promise<Tm[]> {
+  async getTms(): Promise<Tm[]> {
     return this.get(`/tms`);
+  }
+
+  async deleteTm(tmId: number): Promise<void> {
+    return this.delete(`/tms/${tmId}`);
   }
 
   async getMatches(sourceSegmentId: number): Promise<SemanticMatch[]> {

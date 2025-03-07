@@ -20,7 +20,20 @@ type TranslationsTableProps = {
 
 const translationRowMenuData: TableRowMenuProps = {
   name: "translation",
-  items: ["Open translation", "View details"],
+  items: [
+    {
+      value: "Open translation",
+      onClick: () => {},
+    },
+    {
+      value: "View details",
+      onClick: () => {},
+    },
+    {
+      value: "Delete",
+      onClick: () => {},
+    },
+  ],
 };
 
 export default function TranslationsTable({
@@ -40,65 +53,69 @@ export default function TranslationsTable({
         </TableRow>
       </TableHeader>
       <TableBody>
-        {translations.length > 0 ? translations.map(
-          ({
-            id,
-            documentId,
-            fileName,
-            targetLang,
-            progress,
-            status,
-            updatedAt,
-          }) => (
-            <TableRow
-              key={id}
-              className="hover:bg-gray-200/50 hover:cursor-pointer"
-            >
-              <TableCell
-                onClick={() => onClick(documentId, id)}
-                className="pl-1"
+        {translations.length > 0 ? (
+          translations.map(
+            ({
+              id,
+              documentId,
+              fileName,
+              targetLang,
+              progress,
+              status,
+              updatedAt,
+            }) => (
+              <TableRow
+                key={id}
+                className="hover:bg-gray-200/50 hover:cursor-pointer"
               >
-                <Container className="flex items-center gap-2">
-                  <Globe className="h-4 w-4" strokeWidth={1.5} />
-                  {targetLang}
-                </Container>
-              </TableCell>
-              <TableCell onClick={() => onClick(documentId, id)}>{fileName} </TableCell>
-              <TableCell
-                onClick={() => onClick(documentId, id)}
-                className="min-w-36"
-              >
-                <Container className="flex items-center gap-2">
-                  <Progress value={progress} className="w-[60%] h-2" />
-                  <Container
-                    as="span"
-                    className="text-xs text-muted-foreground"
-                  >
-                    {progress}%
-                  </Container>
-                </Container>
-              </TableCell>
-              <TableCell onClick={() => onClick(documentId, id)}>
-                <Badge
-                  variant="outline"
-                  className={`${
-                    status === "Completed"
-                      ? "bg-green-300"
-                      : status === "In Progress"
-                      ? "bg-yellow-300"
-                      : ""
-                  }`}
+                <TableCell
+                  onClick={() => onClick(documentId, id)}
+                  className="pl-1"
                 >
-                  {status}
-                </Badge>
-              </TableCell>
-              <TableCell onClick={() => onClick(documentId, id)}>
-                {new Date(updatedAt).toLocaleDateString()}
-              </TableCell>
-              <TableCell className="pr-1">
-                <TableRowMenu {...translationRowMenuData} />
-              </TableCell>
-            </TableRow>
+                  <Container className="flex items-center gap-2">
+                    <Globe className="h-4 w-4" strokeWidth={1.5} />
+                    {targetLang}
+                  </Container>
+                </TableCell>
+                <TableCell onClick={() => onClick(documentId, id)}>
+                  {fileName}{" "}
+                </TableCell>
+                <TableCell
+                  onClick={() => onClick(documentId, id)}
+                  className="min-w-36"
+                >
+                  <Container className="flex items-center gap-2">
+                    <Progress value={progress} className="w-[60%] h-2" />
+                    <Container
+                      as="span"
+                      className="text-xs text-muted-foreground"
+                    >
+                      {progress}%
+                    </Container>
+                  </Container>
+                </TableCell>
+                <TableCell onClick={() => onClick(documentId, id)}>
+                  <Badge
+                    variant="outline"
+                    className={`${
+                      status === "Completed"
+                        ? "bg-green-300"
+                        : status === "In Progress"
+                        ? "bg-yellow-300"
+                        : ""
+                    }`}
+                  >
+                    {status}
+                  </Badge>
+                </TableCell>
+                <TableCell onClick={() => onClick(documentId, id)}>
+                  {new Date(updatedAt).toLocaleDateString()}
+                </TableCell>
+                <TableCell className="pr-1">
+                  <TableRowMenu {...translationRowMenuData} />
+                </TableCell>
+              </TableRow>
+            )
           )
         ) : (
           <TableRow>

@@ -19,15 +19,21 @@ import {
 import { MoreHorizontal } from "lucide-react";
 import { FormEvent } from "react";
 
-export type TableRowMenuProps = {
-  name: string;
-  items: string[];
+export type DropdownMenuItem = {
+  value: string;
+  onClick: (tmId: number) => void;
 };
 
-export default function TableRowMenu({ name, items }: TableRowMenuProps) {
+export type TableRowMenuProps = {
+  name: string;
+  id: number;
+  items: DropdownMenuItem[];
+};
+
+export default function TableRowMenu({ name, id, items }: TableRowMenuProps) {
   function handleDelete(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    console.log("delete");
+    items[items.length - 1].onClick(id);
   }
 
   return (
@@ -44,8 +50,16 @@ export default function TableRowMenu({ name, items }: TableRowMenuProps) {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
-          {items.map((item) => (
-            <DropdownMenuItem key={item}>{item}</DropdownMenuItem>
+          {items.slice(0, -1).map((item) => (
+            <DropdownMenuItem
+              key={item.value}
+              onSelect={(e) => {
+                e.preventDefault();
+                item.onClick(id);
+              }}
+            >
+              {item.value}
+            </DropdownMenuItem>
           ))}
           <DropdownMenuSeparator />
           <DialogTrigger asChild>

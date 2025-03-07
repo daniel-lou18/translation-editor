@@ -13,17 +13,14 @@ import { BookType } from "lucide-react";
 
 type TmsTableProps = {
   tms: Tm[];
-  onClick: (tmId: number) => void;
-};
-
-const tmsRowMenuData: TableRowMenuProps = {
-  name: "tm",
-  items: ["View details", "Export"],
+  onRowClick: (tmId: number) => void;
+  rowMenuConfig: Omit<TableRowMenuProps, "id">;
 };
 
 export default function TmsTable({
   tms,
-  onClick,
+  onRowClick,
+  rowMenuConfig,
 }: TmsTableProps) {
   return (
     <Table>
@@ -39,35 +36,51 @@ export default function TmsTable({
         </TableRow>
       </TableHeader>
       <TableBody>
-        {tms.length > 0 ? tms.map(
-          ({ id, name, description, sourceLang, targetLang, domain, createdAt }) => (
-            <TableRow
-              key={id}
-              className="hover:bg-gray-200/50 hover:cursor-pointer"
-            >
-              <TableCell className="pl-1" onClick={() => onClick(id)}>
-                <Container className="flex items-center gap-2">
-                  <BookType className="h-4 w-4" strokeWidth={1.5} />
-                <div className="flex items-center gap-2">
-                  {name.length > 50 ? `${name.slice(0, 50)}...` : name}
-                </div>
-                </Container>
-              </TableCell>
-              <TableCell onClick={() => onClick(id)}>
-                <div className="flex items-center gap-2">
-                  {description && description.length > 50 ? `${description.slice(0, 50)}...` : description}
-                </div>
-              </TableCell>
-              <TableCell onClick={() => onClick(id)}>{sourceLang}</TableCell>
-              <TableCell onClick={() => onClick(id)}>{targetLang}</TableCell>
-              <TableCell onClick={() => onClick(id)}>{domain}</TableCell>
-              <TableCell onClick={() => onClick(id)}>
-                {new Date(createdAt).toLocaleDateString()}
-              </TableCell>
-              <TableCell className="pr-1">
-                <TableRowMenu {...tmsRowMenuData} />
-              </TableCell>
-            </TableRow>
+        {tms.length > 0 ? (
+          tms.map(
+            ({
+              id,
+              name,
+              description,
+              sourceLang,
+              targetLang,
+              domain,
+              createdAt,
+            }) => (
+              <TableRow
+                key={id}
+                className="hover:bg-gray-200/50 hover:cursor-pointer"
+              >
+                <TableCell className="pl-1" onClick={() => onRowClick(id)}>
+                  <Container className="flex items-center gap-2">
+                    <BookType className="h-4 w-4" strokeWidth={1.5} />
+                    <div className="flex items-center gap-2">
+                      {name.length > 50 ? `${name.slice(0, 50)}...` : name}
+                    </div>
+                  </Container>
+                </TableCell>
+                <TableCell onClick={() => onRowClick(id)}>
+                  <div className="flex items-center gap-2">
+                    {description && description.length > 50
+                      ? `${description.slice(0, 50)}...`
+                      : description}
+                  </div>
+                </TableCell>
+                <TableCell onClick={() => onRowClick(id)}>
+                  {sourceLang}
+                </TableCell>
+                <TableCell onClick={() => onRowClick(id)}>
+                  {targetLang}
+                </TableCell>
+                <TableCell onClick={() => onRowClick(id)}>{domain}</TableCell>
+                <TableCell onClick={() => onRowClick(id)}>
+                  {new Date(createdAt).toLocaleDateString()}
+                </TableCell>
+                <TableCell className="pr-1">
+                  <TableRowMenu {...rowMenuConfig} id={id} />
+                </TableCell>
+              </TableRow>
+            )
           )
         ) : (
           <TableRow>
