@@ -16,9 +16,8 @@ export class TmService extends ApiService {
     return this.delete(`/tms/${tmId}`);
   }
 
-  async updateTm(tm: UpdateTmDto): Promise<{ tmId: number }> {
-    return { tmId: tm.id };
-    // return this.put(`/tms/${tm.id}`, tm);
+  async updateTm(tm: UpdateTmDto): Promise<Tm> {
+    return this.put(`/tms/${tm.id}`, { tm });
   }
 
   async getMatches(sourceSegmentId: number): Promise<SemanticMatch[]> {

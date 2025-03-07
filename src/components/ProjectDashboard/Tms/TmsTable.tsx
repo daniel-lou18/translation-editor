@@ -15,6 +15,8 @@ import { MouseEvent, useState } from "react";
 import { useDeleteTm } from "@/hooks/useDeleteTm";
 import { Button } from "@/components/ui/button";
 import { useUpdateTm } from "@/hooks/useUpdateTm";
+import { UpdateTmDto } from "@/types/Dtos";
+
 type TmsTableProps = {
   tms: Tm[];
   onRowClick: (tmId: number) => void;
@@ -22,9 +24,9 @@ type TmsTableProps = {
 
 export default function TmsTable({ tms, onRowClick }: TmsTableProps) {
   const { deleteTm } = useDeleteTm();
-  const { updateTm } = useUpdateTm();
+  const { updateTm, isSaving } = useUpdateTm();
   const [editingId, setEditingId] = useState<number | null>(null);
-  const [editFormData, setEditFormData] = useState<Partial<Tm>>({});
+  const [editFormData, setEditFormData] = useState<UpdateTmDto>({ id: 0 });
 
   const handleInputChange = (field: keyof Tm, value: string) => {
     setEditFormData((prev) => ({
@@ -35,11 +37,13 @@ export default function TmsTable({ tms, onRowClick }: TmsTableProps) {
 
   const handleCancel = () => {
     setEditingId(null);
-    setEditFormData({});
+    setEditFormData({ id: 0 });
   };
 
   const handleSave = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+    if (editFormData.id === 0) return;
+    setEditingId(null);
     updateTm(editFormData);
   };
 
@@ -143,11 +147,12 @@ export default function TmsTable({ tms, onRowClick }: TmsTableProps) {
                 </TableCell>
                 <TableCell className="pr-1">
                   {isEditing ? (
-                    <Container className="flex items-center gap-1">
+                    <Container className="flex items-center">
                       <Button
                         variant="ghost"
                         className="w-8 h-8"
                         onClick={handleSave}
+                        disabled={isSaving}
                       >
                         <Save />
                       </Button>

@@ -22,9 +22,10 @@ export default function EditableCell<T>({
       {isEditing ? (
         <Input
           value={String(inputConfig.editFormData[inputConfig.field])}
-          onChange={(e) =>
-            inputConfig.onChange(inputConfig.field, e.target.value)
-          }
+          onChange={(e) => {
+            e.stopPropagation();
+            inputConfig.onChange(inputConfig.field, e.target.value);
+          }}
           className="h-8"
           onClick={(e) => e.stopPropagation()}
         />
