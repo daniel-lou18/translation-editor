@@ -14,39 +14,16 @@ import {
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
 import { ChevronDown } from "lucide-react";
-import { TableRowMenuProps } from "../TableRowMenu";
-import { useDeleteTm } from "@/hooks/useDeleteTm";
 
 export default function Tms() {
   const { projectId, navigateToTm } = useTranslationRoute();
   const { tms } = useTms();
-  const { mutate: deleteTm } = useDeleteTm();
 
   if (!projectId) return null;
 
   const onRowClick = (tmId: number) => {
     if (!projectId || !tmId) return;
     navigateToTm(tmId);
-  };
-
-  const tmsRowMenuData = {
-    name: "tm",
-    items: [
-      {
-        value: "View details",
-        onClick: () => {},
-      },
-      {
-        value: "Export",
-        onClick: () => {},
-      },
-      {
-        value: "Delete",
-        onClick: (tmId: number) => {
-          deleteTm(tmId);
-        },
-      },
-    ],
   };
 
   return (
@@ -77,11 +54,7 @@ export default function Tms() {
           </DropdownMenu>
         </PageControls>
       </Container>
-      <TmsTable
-        tms={tms}
-        rowMenuConfig={tmsRowMenuData}
-        onRowClick={onRowClick}
-      />
+      <TmsTable tms={tms} onRowClick={onRowClick} />
     </>
   );
 }

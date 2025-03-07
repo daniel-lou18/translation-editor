@@ -6,22 +6,63 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import TableRowMenu, { TableRowMenuProps } from "../TableRowMenu";
+import TableRowMenu from "../TableRowMenu";
 import { Tm } from "@/types/Tm";
 import Container from "@/components/ui/Container";
-import { BookType } from "lucide-react";
-
+import { BookType, Save, X } from "lucide-react";
+import EditableCell from "./EditableCell";
+import { useState } from "react";
+import { useDeleteTm } from "@/hooks/useDeleteTm";
+import { Button } from "@/components/ui/button";
 type TmsTableProps = {
   tms: Tm[];
   onRowClick: (tmId: number) => void;
-  rowMenuConfig: Omit<TableRowMenuProps, "id">;
 };
 
-export default function TmsTable({
-  tms,
-  onRowClick,
-  rowMenuConfig,
-}: TmsTableProps) {
+export default function TmsTable({ tms, onRowClick }: TmsTableProps) {
+  const { mutate: deleteTm } = useDeleteTm();
+  const [editingId, setEditingId] = useState<number | null>(null);
+  const [editFormData, setEditFormData] = useState<Partial<Tm>>({});
+
+  const handleInputChange = (field: keyof Tm, value: string) => {
+    setEditFormData((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+
+  const handleCancel = () => {
+    setEditingId(null);
+    setEditFormData({});
+  };
+
+  const tmsRowMenuData = {
+    name: "tm",
+    items: [
+      {
+        value: "View details",
+        onClick: () => {},
+      },
+      {
+        value: "Edit",
+        onClick: (tm: Tm) => {
+          setEditingId(tm.id);
+          setEditFormData({ ...tm });
+        },
+      },
+      {
+        value: "Export",
+        onClick: () => {},
+      },
+      {
+        value: "Delete",
+        onClick: (tm: Tm) => {
+          deleteTm(tm.id);
+        },
+      },
+    ],
+  };
+
   return (
     <Table>
       <TableHeader>
@@ -37,8 +78,8 @@ export default function TmsTable({
       </TableHeader>
       <TableBody>
         {tms.length > 0 ? (
-          tms.map(
-            ({
+          tms.map((tm) => {
+            const {
               id,
               name,
               description,
@@ -46,7 +87,10 @@ export default function TmsTable({
               targetLang,
               domain,
               createdAt,
-            }) => (
+            } = tm;
+            const isEditing = editingId === id;
+
+            return (
               <TableRow
                 key={id}
                 className="hover:bg-gray-200/50 hover:cursor-pointer"
@@ -54,17 +98,31 @@ export default function TmsTable({
                 <TableCell className="pl-1" onClick={() => onRowClick(id)}>
                   <Container className="flex items-center gap-2">
                     <BookType className="h-4 w-4" strokeWidth={1.5} />
-                    <div className="flex items-center gap-2">
-                      {name.length > 50 ? `${name.slice(0, 50)}...` : name}
-                    </div>
+                    <EditableCell
+                      inputConfig={{
+                        field: "name",
+                        onChange: handleInputChange,
+                        editFormData: editFormData,
+                      }}
+                      displayConfig={{
+                        value: name,
+                      }}
+                      isEditing={isEditing}
+                    />
                   </Container>
                 </TableCell>
                 <TableCell onClick={() => onRowClick(id)}>
-                  <div className="flex items-center gap-2">
-                    {description && description.length > 50
-                      ? `${description.slice(0, 50)}...`
-                      : description}
-                  </div>
+                  <EditableCell
+                    inputConfig={{
+                      field: "description",
+                      editFormData: editFormData,
+                      onChange: handleInputChange,
+                    }}
+                    displayConfig={{
+                      value: description || "No description",
+                    }}
+                    isEditing={isEditing}
+                  />
                 </TableCell>
                 <TableCell onClick={() => onRowClick(id)}>
                   {sourceLang}
@@ -77,11 +135,26 @@ export default function TmsTable({
                   {new Date(createdAt).toLocaleDateString()}
                 </TableCell>
                 <TableCell className="pr-1">
-                  <TableRowMenu {...rowMenuConfig} id={id} />
+                  {isEditing ? (
+                    <Container className="flex items-center gap-1">
+                      <Button variant="ghost" className="w-4 h-4">
+                        <Save />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        className="w-4 h-4"
+                        onClick={handleCancel}
+                      >
+                        <X />
+                      </Button>
+                    </Container>
+                  ) : (
+                    <TableRowMenu {...tmsRowMenuData} data={tm} />
+                  )}
                 </TableCell>
               </TableRow>
-            )
-          )
+            );
+          })
         ) : (
           <TableRow>
             <TableCell colSpan={7} className="h-24 text-center">

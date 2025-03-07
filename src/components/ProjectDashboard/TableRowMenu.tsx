@@ -21,19 +21,27 @@ import { FormEvent } from "react";
 
 export type DropdownMenuItem = {
   value: string;
-  onClick: (tmId: number) => void;
+  onClick: (param: any) => void;
 };
 
-export type TableRowMenuProps = {
-  name: string;
+export type DataType = {
   id: number;
+};
+
+export type TableRowMenuProps<T extends DataType> = {
+  name: string;
+  data: T;
   items: DropdownMenuItem[];
 };
 
-export default function TableRowMenu({ name, id, items }: TableRowMenuProps) {
+export default function TableRowMenu<T extends DataType>({
+  name,
+  data,
+  items,
+}: TableRowMenuProps<T>) {
   function handleDelete(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    items[items.length - 1].onClick(id);
+    items[items.length - 1].onClick(data);
   }
 
   return (
@@ -55,7 +63,7 @@ export default function TableRowMenu({ name, id, items }: TableRowMenuProps) {
               key={item.value}
               onSelect={(e) => {
                 e.preventDefault();
-                item.onClick(id);
+                item.onClick(data);
               }}
             >
               {item.value}
