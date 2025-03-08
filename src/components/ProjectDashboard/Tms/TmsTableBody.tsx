@@ -9,7 +9,7 @@ type TmsTableBodyProps = {
 };
 
 export default function TmsTableBody({ tms }: TmsTableBodyProps) {
-  const { deleteTm } = useDeleteTm();
+  const { deleteTm, isDeleting } = useDeleteTm();
   const { updateTm, isSaving } = useUpdateTm();
   const { setEditingId, setEditFormData, ...restProps } =
     useEditTable<Tm>(updateTm);
@@ -44,9 +44,9 @@ export default function TmsTableBody({ tms }: TmsTableBodyProps) {
   return tms.map((tm) => (
     <TmsTableRow
       key={tm.id}
-      tm={tm}
-      isSaving={isSaving}
-      tmsRowMenuData={tmsRowMenuData}
+      data={tm}
+      isSaving={isSaving || isDeleting}
+      rowMenuData={tmsRowMenuData}
       {...restProps}
     />
   ));

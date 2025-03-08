@@ -26,7 +26,7 @@ export function useTranslationRoute() {
   );
 
   const navigateToDocument = useCallback(
-    (projectId: number | string, documentId: number | string) => {
+    (documentId: number | string) => {
       if (!projectId) {
         throw new Error("Project id is missing");
       }

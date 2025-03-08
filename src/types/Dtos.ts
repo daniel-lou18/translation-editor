@@ -64,3 +64,5 @@ export type AddTmPairsDTO = {
 export type TextSegment = { sourceText: string; targetText: string };
 
 export type UpdateTmDto = Partial<Tm> & { id: number };
+
+export type UpdateDocDto = Partial<Document> & { id: number };

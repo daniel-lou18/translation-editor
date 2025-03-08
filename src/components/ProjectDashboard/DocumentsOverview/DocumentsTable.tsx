@@ -6,60 +6,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { FileText } from "lucide-react";
-import { Document } from "@/types";
-import TableRowMenu from "../../ui/Table/TableRowMenu";
-import { useEditTable } from "@/hooks/useEditTable";
-import { useTranslationRoute } from "@/hooks/useTranslationRoute";
-import Container from "@/components/ui/Container";
-import EditableCell from "../../ui/Table/EditableCell";
-import TableRowControls from "@/components/ui/Table/TableRowControls";
-type TranslationsTableProps = {
-  documents: Document[];
-  onClick: (documentId: number) => void;
-};
+import DocumentsTableBody from "./DocumentsTableBody";
+import { useCurrentProject } from "@/hooks/useCurrentProject";
 
-export default function DocumentsTable({
-  documents,
-  onClick,
-}: TranslationsTableProps) {
-  const { navigateToTranslations } = useTranslationRoute();
-  const {
-    editingId,
-    editFormData,
-    setEditingId,
-    setEditFormData,
-    handleInputChange,
-    handleCancel,
-    handleSave,
-  } = useEditTable<Document>(() => {});
+export default function DocumentsTable() {
+  const { currentDocuments } = useCurrentProject();
+  const documents = Object.values(currentDocuments || {});
 
-  const documentRowMenuData = {
-    name: "document",
-    items: [
-      {
-        value: "Edit",
-        onClick: (doc: Document) => {
-          setEditingId(doc.id);
-          setEditFormData({ ...doc });
-        },
-      },
-      {
-        value: "View translations",
-        onClick: (doc: Document) => {
-          navigateToTranslations(doc.id);
-        },
-      },
-      {
-        value: "View details",
-        onClick: () => {},
-      },
-      {
-        value: "Delete",
-        onClick: () => {},
-      },
-    ],
-  };
   return (
     <Table>
       <TableHeader>
@@ -74,52 +27,7 @@ export default function DocumentsTable({
       </TableHeader>
       <TableBody>
         {documents.length > 0 ? (
-          documents.map((doc) => {
-            const { id, fileName, sourceLang, domain, docType, createdAt } =
-              doc;
-            return (
-              <TableRow
-                key={id}
-                className="hover:bg-gray-200/50 hover:cursor-pointer"
-              >
-                <TableCell className="pl-1" onClick={() => onClick(id)}>
-                  <Container className="flex items-center gap-2">
-                    <FileText className="h-4 w-4" strokeWidth={1.5} />
-                    <EditableCell
-                      inputConfig={{
-                        field: "fileName",
-                        onChange: handleInputChange,
-                        editFormData: editFormData,
-                      }}
-                      displayConfig={{
-                        value: fileName,
-                      }}
-                      isEditing={editingId === id}
-                    />
-                  </Container>
-                </TableCell>
-                <TableCell onClick={() => onClick(id)}>{sourceLang}</TableCell>
-                <TableCell onClick={() => onClick(id)}>{domain}</TableCell>
-                <TableCell onClick={() => onClick(id)}>
-                  {docType || "document"}
-                </TableCell>
-                <TableCell onClick={() => onClick(id)}>
-                  {new Date(createdAt).toLocaleDateString()}
-                </TableCell>
-                <TableCell className="pr-1">
-                  {isEditing ? (
-                    <TableRowControls
-                      handleSave={handleSave}
-                      handleCancel={handleCancel}
-                      isSaving={isSaving}
-                    />
-                  ) : (
-                    <TableRowMenu {...documentRowMenuData} data={doc} />
-                  )}
-                </TableCell>
-              </TableRow>
-            );
-          })
+          <DocumentsTableBody docs={documents} />
         ) : (
           <TableRow>
             <TableCell colSpan={6} className="h-24 text-center">

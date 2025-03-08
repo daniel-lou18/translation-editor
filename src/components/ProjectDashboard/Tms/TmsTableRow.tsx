@@ -1,7 +1,4 @@
 import TableRowControls from "@/components/ui/Table/TableRowControls";
-import TableRowMenu, {
-  TableRowMenuProps,
-} from "@/components/ui/Table/TableRowMenu";
 import { TableRow } from "@/components/ui/table";
 import { TableCell } from "@/components/ui/table";
 import Container from "@/components/ui/Container";
@@ -9,29 +6,24 @@ import EditableCell from "@/components/ui/Table/EditableCell";
 import { BookType } from "lucide-react";
 import { Tm } from "@/types/Tm";
 import { useTranslationRoute } from "@/hooks/useTranslationRoute";
-type TmsTableRowProps = {
-  tm: Tm;
-  editingId: number | null;
-  handleInputChange: (field: keyof Tm, value: string) => void;
-  editFormData: Tm;
-  handleSave: (e: React.MouseEvent<HTMLButtonElement>) => void;
-  handleCancel: () => void;
-  isSaving: boolean;
-  tmsRowMenuData: Omit<TableRowMenuProps<Tm>, "data">;
-};
+import { TableRowProps } from "@/components/ui/Table/types";
+import TableRowMenu from "@/components/ui/Table/TableRowMenu";
+
+type TmsTableRowProps = TableRowProps<Tm>;
+
 export default function TmsTableRow({
-  tm,
+  data,
   editingId,
   handleInputChange,
   editFormData,
   handleSave,
   handleCancel,
   isSaving,
-  tmsRowMenuData,
+  rowMenuData,
 }: TmsTableRowProps) {
   const { navigateToTm } = useTranslationRoute();
   const { id, name, description, sourceLang, targetLang, domain, createdAt } =
-    tm;
+    data;
   const isEditing = editingId === id;
 
   const onRowClick = (tmId: number) => {
@@ -84,7 +76,7 @@ export default function TmsTableRow({
             isSaving={isSaving}
           />
         ) : (
-          <TableRowMenu {...tmsRowMenuData} data={tm} />
+          <TableRowMenu {...rowMenuData} data={data} />
         )}
       </TableCell>
     </TableRow>

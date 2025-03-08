@@ -6,7 +6,7 @@ import { toast } from "sonner";
 export function useDeleteTm() {
   const queryClient = useQueryClient();
 
-  const { mutate } = useBaseMutation({
+  const { mutate, isPending } = useBaseMutation({
     mutationFn: (tmId: number) => tmService.deleteTm(tmId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["tms"] });
@@ -17,5 +17,5 @@ export function useDeleteTm() {
     },
   });
 
-  return { deleteTm: mutate };
+  return { deleteTm: mutate, isDeleting: isPending };
 }

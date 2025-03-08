@@ -66,7 +66,7 @@ export function useTranslationActions() {
       return navigate(`/app/projects/${currentProject.id}/translations`);
     }
 
-    navigateToDocument(currentProject.id, documentId);
+    navigateToDocument(documentId);
   }
 
   return {

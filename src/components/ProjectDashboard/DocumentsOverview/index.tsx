@@ -1,6 +1,5 @@
 import DocumentsTable from "@/components/ProjectDashboard/DocumentsOverview/DocumentsTable";
 import { useCurrentProject } from "@/hooks/useCurrentProject";
-import { useTranslationRoute } from "@/hooks/useTranslationRoute";
 import PageTitle from "../../ui/PageTitle";
 import SearchForm from "../../ui/SearchForm";
 import { Button } from "../../ui/button";
@@ -9,8 +8,7 @@ import Container from "@/components/ui/Container";
 import PageControls from "@/components/ui/PageControls";
 
 export default function Documents() {
-  const { currentProject, currentDocuments } = useCurrentProject();
-  const { projectId, navigateToDocument } = useTranslationRoute();
+  const { currentProject } = useCurrentProject();
 
   if (!currentProject) return null;
 
@@ -27,13 +25,7 @@ export default function Documents() {
           </Button>
         </PageControls>
       </Container>
-      <DocumentsTable
-        documents={Object.values(currentDocuments || {})}
-        onClick={(documentId: number) => {
-          if (!projectId || !documentId) return;
-          navigateToDocument(projectId, documentId);
-        }}
-      />
+      <DocumentsTable />
     </>
   );
 }
