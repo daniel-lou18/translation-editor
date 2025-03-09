@@ -136,6 +136,7 @@ describe("useDocumentUpload", () => {
         targetLang: "French (France)",
         domain: "legal",
         projectId: "project123",
+        tmId: undefined,
       }),
       true
     );
@@ -159,6 +160,7 @@ describe("useDocumentUpload", () => {
         targetLang: "French (France)",
         domain: "legal",
         projectId: "project123",
+        tmId: undefined,
       }),
       true
     );
@@ -207,8 +209,35 @@ describe("useDocumentUpload", () => {
         targetLang: "French (France)",
         domain: "legal",
         projectId: "project123",
+        tmId: undefined,
       }),
       false
+    );
+  });
+
+  it("should include tmId in fileMetadata when provided", async () => {
+    const { result } = renderHook(() =>
+      useDocumentUpload({ ...defaultConfig, tmId: "tm123" })
+    );
+
+    act(() => {
+      result.current.setFile(mockDocFile);
+    });
+
+    await act(async () => {
+      await result.current.handleSubmit(mockEvent);
+    });
+
+    expect(uploadService.submitDocumentFile).toHaveBeenCalledWith(
+      mockDocFile,
+      expect.objectContaining({
+        sourceLang: "English (USA)",
+        targetLang: "French (France)",
+        domain: "legal",
+        projectId: "project123",
+        tmId: "tm123",
+      }),
+      true
     );
   });
 });

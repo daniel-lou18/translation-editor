@@ -27,25 +27,33 @@ vi.mock("../UploadTmForm", () => {
     </div>
   );
 
-  UploadTmForm.UploadSingle = ({
-    file,
-    sourceLang,
-    targetLang,
-    langItems,
-  }: any) => (
+  UploadTmForm.UploadSingle = ({ file, langConfig, titles }: any) => (
     <div>
-      <div>Excel File</div>
-      <div>Source Language: {sourceLang.lang}</div>
-      <div>Target Language: {targetLang.lang}</div>
+      <div>{titles.uploadTitle}</div>
+      <div>{titles.fileTitle}</div>
+      <div>Source Language: {langConfig.sourceLang.lang}</div>
+      <div>Target Language: {langConfig.targetLang.lang}</div>
+      <button onClick={() => file.setFile(new File([], "test.xlsx"))}>
+        Select File
+      </button>
+      <button onClick={() => file.removeFile()}>Remove File</button>
     </div>
   );
 
-  UploadTmForm.UploadDouble = ({ source, target }: any) => (
+  UploadTmForm.UploadDouble = ({ source, target, langItems }: any) => (
     <div>
       <div>Source File</div>
       <div>Target File</div>
       <div>Source Language: {source.lang}</div>
       <div>Target Language: {target.lang}</div>
+      <button onClick={() => source.setFile(new File([], "source.txt"))}>
+        Select Source
+      </button>
+      <button onClick={() => target.setFile(new File([], "target.txt"))}>
+        Select Target
+      </button>
+      <button onClick={() => source.removeFile()}>Remove Source</button>
+      <button onClick={() => target.removeFile()}>Remove Target</button>
     </div>
   );
 
@@ -53,7 +61,15 @@ vi.mock("../UploadTmForm", () => {
 });
 
 vi.mock("../UploadTmTitle", () => ({
-  default: ({ children, title, tmFormat, toggleTmFormat, tmFormats }: any) => (
+  default: ({
+    children,
+    title,
+    tmFormat,
+    toggleTmFormat,
+    tmFormats,
+    setSourceFile,
+    setTargetFile,
+  }: any) => (
     <div>
       <h1>{title}</h1>
       <select
@@ -195,7 +211,10 @@ describe("CreateTm", () => {
     });
 
     render(<CreateTm />);
-    expect(screen.getByText("Excel File")).toBeInTheDocument();
+    expect(
+      screen.getByText("Excel sheet containing source and target segments")
+    ).toBeInTheDocument();
+    expect(screen.getByText("Source Document")).toBeInTheDocument();
   });
 
   it("handles parallel files form submission", () => {
@@ -275,5 +294,46 @@ describe("CreateTm", () => {
     const formatSelector = screen.getByTestId("format-selector");
     fireEvent.change(formatSelector, { target: { value: "sheet" } });
     expect(mockToggleTmFormat).toHaveBeenCalledWith("sheet");
+  });
+
+  it("handles file selection and removal in excel mode", () => {
+    (useTmFileFormat as any).mockReturnValue({
+      tmFormat: "sheet",
+      toggleTmFormat: mockToggleTmFormat,
+      tmFormats: [
+        { value: "parallel", label: "Parallel Files" },
+        { value: "sheet", label: "Excel Sheet" },
+      ],
+    });
+
+    render(<CreateTm />);
+
+    const selectFileButton = screen.getByText("Select File");
+    fireEvent.click(selectFileButton);
+    expect(mockSetFile).toHaveBeenCalled();
+
+    const removeFileButton = screen.getByText("Remove File");
+    fireEvent.click(removeFileButton);
+    expect(mockRemoveFile).toHaveBeenCalled();
+  });
+
+  it("handles file selection and removal in parallel mode", () => {
+    render(<CreateTm />);
+
+    const selectSourceButton = screen.getByText("Select Source");
+    fireEvent.click(selectSourceButton);
+    expect(mockSetSourceFile).toHaveBeenCalled();
+
+    const selectTargetButton = screen.getByText("Select Target");
+    fireEvent.click(selectTargetButton);
+    expect(mockSetTargetFile).toHaveBeenCalled();
+
+    const removeSourceButton = screen.getByText("Remove Source");
+    fireEvent.click(removeSourceButton);
+    expect(mockRemoveSourceFile).toHaveBeenCalled();
+
+    const removeTargetButton = screen.getByText("Remove Target");
+    fireEvent.click(removeTargetButton);
+    expect(mockRemoveTargetFile).toHaveBeenCalled();
   });
 });

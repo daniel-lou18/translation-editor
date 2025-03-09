@@ -95,15 +95,21 @@ export default function AddTmPairs() {
               removeFile,
               acceptedTypes: [...allowedExcelTypes] as AllowedMemoryType[],
             }}
-            sourceLang={{
-              lang: sourceLang,
-              onChange: (value) => setSourceLang(value),
+            langConfig={{
+              sourceLang: {
+                lang: sourceLang,
+                onChange: (value) => setSourceLang(value),
+              },
+              targetLang: {
+                lang: targetLang,
+                onChange: (value) => setTargetLang(value),
+              },
+              langItems,
             }}
-            targetLang={{
-              lang: targetLang,
-              onChange: (value) => setTargetLang(value),
+            titles={{
+              uploadTitle: "Excel sheet containing source and target segments",
+              fileTitle: "Source Document",
             }}
-            langItems={langItems}
           />
         ) : (
           <UploadTmForm.UploadDouble

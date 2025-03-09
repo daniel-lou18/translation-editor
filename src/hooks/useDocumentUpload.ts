@@ -22,10 +22,11 @@ type SubmitDocumentVariables = {
 
 type DocumentUploadConfig = {
   newProject?: boolean;
+  tmId?: string;
 } & FullLangsDomain;
 
 export function useDocumentUpload(config: DocumentUploadConfig) {
-  const { sourceLang, targetLang, domain, newProject = true } = config;
+  const { sourceLang, targetLang, domain, newProject = true, tmId } = config;
   const { navigateToTranslation, projectId } = useTranslationRoute();
   const { file, setFile, removeFile } = useUploadSingle();
   const { mutate, isPending: isLoading } = useBaseMutation({
@@ -67,7 +68,7 @@ export function useDocumentUpload(config: DocumentUploadConfig) {
     e.preventDefault();
     mutate({
       file,
-      fileMetadata: { sourceLang, targetLang, domain, projectId },
+      fileMetadata: { sourceLang, targetLang, domain, projectId, tmId },
       newProject,
     });
   }

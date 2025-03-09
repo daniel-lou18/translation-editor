@@ -60,10 +60,13 @@ type LangConfig = {
 type LangItem = { value: Lang; label: Lang };
 
 type UploadSingleProps = {
+  titles: { uploadTitle: string; fileTitle: string };
   file: FileConfig;
-  sourceLang: LangConfig;
-  targetLang: LangConfig;
-  langItems: LangItem[];
+  langConfig: {
+    sourceLang: LangConfig;
+    targetLang: LangConfig;
+    langItems: LangItem[];
+  };
 };
 
 type UploadDoubleProps = {
@@ -72,18 +75,13 @@ type UploadDoubleProps = {
   langItems: LangItem[];
 };
 
-function UploadSingle({
-  file,
-  sourceLang,
-  targetLang,
-  langItems,
-}: UploadSingleProps) {
+function UploadSingle({ file, langConfig, titles }: UploadSingleProps) {
   return (
     <Container className={`relative p-4 grid grid-cols-1 gap-4`}>
       {file.file ? (
         <MemoryFileItem>
           <MemoryFileItem.Header onRemoveFile={file.removeFile} icon={Sheet}>
-            Source and Target Segments
+            {titles.fileTitle}
           </MemoryFileItem.Header>
           <MemoryFileItem.Body>{file.file.name}</MemoryFileItem.Body>
           <MemoryFileItem.Footer>
@@ -91,9 +89,9 @@ function UploadSingle({
               <span className="text-sm text-gray-600">Source:</span>
               <Combobox
                 name="source_language"
-                items={langItems}
-                value={sourceLang.lang}
-                onChange={sourceLang.onChange}
+                items={langConfig.langItems}
+                value={langConfig.sourceLang.lang}
+                onChange={langConfig.sourceLang.onChange}
                 className="w-full h-9"
               />
             </Container>
@@ -101,9 +99,9 @@ function UploadSingle({
               <span className="text-sm text-gray-600">Target:</span>
               <Combobox
                 name="target_language"
-                items={langItems}
-                value={targetLang.lang}
-                onChange={targetLang.onChange}
+                items={langConfig.langItems}
+                value={langConfig.targetLang.lang}
+                onChange={langConfig.targetLang.onChange}
                 className="w-full h-9"
               />
             </Container>
@@ -113,12 +111,14 @@ function UploadSingle({
         <UploadArea
           type="memory"
           accept={file.acceptedTypes.join(",")}
-          title="Excel sheet containing source and target segments"
+          title={titles.uploadTitle}
           description={`Allowed file types: ${file.acceptedTypes
             .map((type) => type.slice(1).toUpperCase())
-            .join(
-              ", "
-            )}. 1st column: source segments, 2nd column: target segments`}
+            .join(", ")}. ${
+            file.acceptedTypes.includes(".xlsx")
+              ? "1st column: source segments, 2nd column: target segments"
+              : ""
+          }`}
           onFilesSelect={(files) => file.setFile(files[0])}
           className="h-[200px] bg-cat-memory/70 hover:bg-cat-memory"
         />
