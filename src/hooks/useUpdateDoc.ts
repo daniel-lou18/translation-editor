@@ -10,7 +10,7 @@ export function useUpdateDoc() {
   const { mutate, isPending } = useBaseMutation({
     mutationFn: (doc: Document) => documentService.updateDoc(doc),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["documents"] });
+      queryClient.invalidateQueries({ queryKey: ["projects"] });
       toast.success("Document updated successfully");
     },
     onError: () => {

@@ -7,7 +7,7 @@ export class DocumentService extends ApiService {
   }
 
   async updateDoc(doc: UpdateDocDto) {
-    return this.put(`/documents/${doc.id}`, doc);
+    return this.put(`/documents/${doc.id}`, { doc });
   }
 
   async deleteDoc(docId: number) {
