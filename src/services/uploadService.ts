@@ -31,6 +31,7 @@ export class UploadService extends ApiService {
     fileMetadata: FileMetadata,
     newProject = true
   ): Promise<TranslationWithDocument> {
+    console.log("fileMetadata", fileMetadata);
     const formData = this.createFormData(file, fileMetadata, newProject);
 
     return this.post<TranslationWithDocument>(
@@ -90,6 +91,10 @@ export class UploadService extends ApiService {
 
     if (fileMetadata.sourceLang) {
       formData.append("sourceLang", fileMetadata.sourceLang);
+    }
+
+    if (fileMetadata.tmId) {
+      formData.append("tmId", fileMetadata.tmId);
     }
 
     if (!newProject && "projectId" in fileMetadata && fileMetadata.projectId) {

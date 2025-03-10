@@ -1,4 +1,4 @@
-import { BlobResponse, FileType } from "@/types";
+import { BlobResponse, ExportFileType, outputContentTypes } from "@/types";
 import { ApiService } from "./ApiService";
 
 export class ExportService extends ApiService {
@@ -8,10 +8,11 @@ export class ExportService extends ApiService {
 
   async exportTranslation(
     translationId: string,
-    format: FileType
+    format: ExportFileType
   ): Promise<BlobResponse> {
     return await this.getBlob(
-      `/translations/${translationId}/export?format=${format}`
+      `/translations/${translationId}/export?format=${format}`,
+      { headers: { Accept: outputContentTypes[format] } }
     );
   }
 }

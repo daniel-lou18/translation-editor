@@ -9,7 +9,13 @@ import { useDocumentUpload } from "@/hooks/useDocumentUpload";
 import { BookType, Earth } from "lucide-react";
 import { useSelectTm } from "@/hooks/useSelectTm";
 
-export default function UploadDocument() {
+type UploadDocumentProps = {
+  newProject?: boolean;
+};
+
+export default function UploadDocument({
+  newProject = true,
+}: UploadDocumentProps) {
   const { tmItems, tmId, onTmChange } = useSelectTm();
   const {
     sourceLang,
@@ -27,6 +33,7 @@ export default function UploadDocument() {
       targetLang,
       domain,
       tmId,
+      newProject,
     });
 
   return (
@@ -35,7 +42,7 @@ export default function UploadDocument() {
       <UploadTmForm
         handleSubmit={handleSubmit}
         isLoading={isLoading}
-        buttonText="Create TM"
+        buttonText="Translate"
       >
         <UploadTmForm.Header title="Upload source document to translate">
           <Container className="flex items-center gap-2">

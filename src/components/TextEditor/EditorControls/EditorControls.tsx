@@ -9,6 +9,7 @@ import {
   Eye,
   FileCheck,
   FileSearch,
+  FileText,
   Lock,
   SquareCheckBig,
   SquareM,
@@ -79,7 +80,6 @@ export default function EditorControls() {
     });
   }
 
-  console.log(segment);
   return (
     <>
       <Container className="sticky top-[49px] z-10 col-span-9 px-2 py-1 border-b border-border bg-gray-50">
@@ -174,9 +174,17 @@ export default function EditorControls() {
           variant="ghost"
           size="icon"
           className="border border-transparent hover:border-cat-accent/10"
-          onClick={downloadFile}
+          onClick={() => downloadFile("txt")}
         >
           <Download />
+        </Button>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="border border-transparent hover:border-cat-accent/10"
+          onClick={() => downloadFile("pdf")}
+        >
+          <FileText />
         </Button>
         <Button
           variant="ghost"

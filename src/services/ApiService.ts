@@ -47,7 +47,7 @@ export class ApiService {
       const response = await this.api.get<Blob>(url, {
         ...config,
         responseType: "blob",
-        headers: { Accept: "text/plain" },
+        headers: { Accept: config?.headers?.Accept || "text/plain" },
       });
       const { data, headers } = response;
 
