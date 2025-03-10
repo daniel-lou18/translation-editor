@@ -1,7 +1,7 @@
 import { SemanticMatch } from "@/types";
 import { ApiService } from "./ApiService";
 import { TmSegmentMatch, UpdateTmDto } from "@/types/Dtos";
-import { Tm } from "@/types/Tm";
+import { Tm, TmSegmentPair } from "@/types/Tm";
 
 export class TmService extends ApiService {
   constructor() {
@@ -10,6 +10,10 @@ export class TmService extends ApiService {
 
   async getTms(): Promise<Tm[]> {
     return this.get(`/tms`);
+  }
+
+  async getTmSegments(tmId: string): Promise<TmSegmentPair[]> {
+    return this.get(`/tms/${tmId}/segments`);
   }
 
   async deleteTm(tmId: number): Promise<void> {

@@ -4,20 +4,23 @@ import { useAutoTranslation } from "@/hooks/useAutoTranslation";
 import Container from "../../ui/Container";
 import { useCallback } from "react";
 import { useSemanticMatches } from "@/hooks/useSemanticMatches";
-import { useSearchGlossary } from "@/hooks/useSearchGlossary";
+import { useSegmentHandlers } from "@/hooks/useSegmentHandlers";
 
 export default function TranslationSegments() {
   const { segments, activeSegmentId, getActiveSegment } = useEditor();
   const activeSegment = getActiveSegment();
   const { matches } = useSemanticMatches(activeSegment);
-  const { glossaryData } = useSearchGlossary(activeSegment.sourceText);
   const {
     autoTranslation,
     isPending: isLoading,
     isError,
   } = useAutoTranslation(activeSegment, matches);
+  const { onChange, onClick, onStatusChange, onKeyDown } = useSegmentHandlers(
+    activeSegment.id,
+    autoTranslation ?? null
+  );
 
-  console.log({ glossaryData });
+  console.log({ activeSegment });
 
   const renderAutoTranslation = useCallback(
     (id: number) => {
@@ -38,6 +41,12 @@ export default function TranslationSegments() {
           autoTranslation={renderAutoTranslation(segment.id)}
           activeId={activeSegmentId}
           index={idx}
+          handlers={{
+            onChange,
+            onClick: () => onClick(segment.id),
+            onStatusChange: () => onStatusChange(segment.id),
+            onKeyDown,
+          }}
         />
       ))}
     </Container>

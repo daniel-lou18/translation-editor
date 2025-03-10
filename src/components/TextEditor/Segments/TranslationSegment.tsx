@@ -1,15 +1,20 @@
-import { Segment } from "@/types/Segment";
+import { EditorSegment } from "@/types/Segment";
 import TranslationStatus from "./TranslationStatus";
 import Container from "@/components/ui/Container";
 import { useFocus } from "@/hooks/useFocus";
 import { useScrollHeight } from "@/hooks/useScrollHeight";
-import { useSegmentHandlers } from "@/hooks/useSegmentHandlers";
 
 interface TranslationSegmentProps {
-  data: Segment;
+  data: EditorSegment;
   autoTranslation: string | null;
   activeId: number;
   index: number;
+  handlers: {
+    onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+    onClick: () => void;
+    onStatusChange: () => void;
+    onKeyDown: (e: React.KeyboardEvent<HTMLTextAreaElement>) => void;
+  };
 }
 
 export function TranslationSegment({
@@ -17,13 +22,10 @@ export function TranslationSegment({
   autoTranslation,
   activeId,
   index,
+  handlers,
 }: TranslationSegmentProps) {
   const { id, sourceText, targetText, status } = data;
   const { textAreaRef, sourceDivRef, onInput } = useScrollHeight();
-  const { onChange, onClick, onStatusChange, onKeyDown } = useSegmentHandlers(
-    id,
-    autoTranslation
-  );
   useFocus(textAreaRef, activeId, id);
 
   return (
@@ -39,17 +41,17 @@ export function TranslationSegment({
       <textarea
         ref={textAreaRef}
         value={targetText || ""}
-        onChange={onChange}
-        onClick={onClick}
+        onChange={handlers.onChange}
+        onClick={handlers.onClick}
         onInput={onInput}
-        onKeyDown={onKeyDown}
+        onKeyDown={handlers.onKeyDown}
         className={`flex-1 h-fit rounded-lg p-2 text-sm outline-none -outline-offset-2 focus:outline-2 focus:outline-cat-accent/50 hover:bg-background focus:bg-background transition-all resize-none bg-cat-memory/30`}
         placeholder={autoTranslation || ""}
         rows={1}
       />
       <TranslationStatus
         isCompleted={status === "translated"}
-        onClick={onStatusChange}
+        onClick={handlers.onStatusChange}
       />
     </Container>
   );

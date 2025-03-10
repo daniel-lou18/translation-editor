@@ -16,3 +16,10 @@ export type MutableSegmentData = {
 };
 
 export type Segment = ImmutableSegmentContext & MutableSegmentData;
+
+export type EditorSegment = {
+  id: number;
+  sourceText: string;
+  targetText: string | null;
+  status: string | null;
+};

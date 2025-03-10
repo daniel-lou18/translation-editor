@@ -19,9 +19,9 @@ export function useSegmentHandlers(
     handleValueChange(segmentId, value);
   };
 
-  const onClick = () => handleSegmentChange(segmentId);
+  const onClick = (segmentId: number) => handleSegmentChange(segmentId);
 
-  const onStatusChange = () => handleStatusChange(segmentId);
+  const onStatusChange = (segmentId: number) => handleStatusChange(segmentId);
 
   const onKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Tab") {

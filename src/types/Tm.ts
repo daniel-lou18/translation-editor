@@ -32,3 +32,24 @@ export type TmFiles = {
   sourceFile: File;
   targetFile: File;
 };
+
+export type TmSegment = {
+  sourceSegment: string;
+  targetSegment: string;
+};
+
+export type TmSegmentType = {
+  id: number;
+  createdAt: string;
+  updatedAt: string;
+  embedding: number[] | null;
+  tmId: number;
+  textContent: string;
+  isSource: boolean | null;
+  documentIndex: number | null;
+};
+
+export type TmSegmentPair = {
+  sourceSegment: TmSegmentType;
+  targetSegment: TmSegmentType;
+};

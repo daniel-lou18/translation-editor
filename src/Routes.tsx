@@ -13,6 +13,7 @@ import ProjectSettings from "./components/ProjectDashboard/Settings";
 import TmsPage from "./pages/Tms";
 import CreateTmPage from "./pages/CreateTm";
 import AddTmPairsPage from "./pages/AddTmPairs";
+import TmEditorPage from "./pages/TmEditor";
 
 export default function RoutesComponent() {
   return (
@@ -40,6 +41,7 @@ export default function RoutesComponent() {
           path="projects/:projectId/documents/:documentId/translations/:translationId"
           element={<EditorPage />}
         />
+        <Route path="tms/:tmId" element={<TmEditorPage />} />
       </Route>
     </Routes>
   );

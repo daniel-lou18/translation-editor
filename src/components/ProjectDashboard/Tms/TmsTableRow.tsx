@@ -5,10 +5,9 @@ import Container from "@/components/ui/Container";
 import EditableCell from "@/components/ui/Table/EditableCell";
 import { BookType } from "lucide-react";
 import { Tm } from "@/types/Tm";
-import { useTranslationRoute } from "@/hooks/useTranslationRoute";
 import { TableRowProps } from "@/components/ui/Table/types";
 import TableRowMenu from "@/components/ui/Table/TableRowMenu";
-
+import { useTmRoute } from "@/hooks/useTmRoute";
 type TmsTableRowProps = TableRowProps<Tm>;
 
 export default function TmsTableRow({
@@ -21,7 +20,7 @@ export default function TmsTableRow({
   isSaving,
   rowMenuData,
 }: TmsTableRowProps) {
-  const { navigateToTm } = useTranslationRoute();
+  const { navigateToTm } = useTmRoute();
   const { id, name, description, sourceLang, targetLang, domain, createdAt } =
     data;
   const isEditing = editingId === id;

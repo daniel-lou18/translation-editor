@@ -1,4 +1,5 @@
-import { ApiResponseType, BlobResponse } from "@/types";
+import { ApiResponseType } from "@/types";
+import { BlobResponse } from "@/types/Files";
 import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 
 type Config = Partial<AxiosRequestConfig>;

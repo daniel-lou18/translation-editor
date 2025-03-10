@@ -1,4 +1,8 @@
-import { BlobResponse, ExportFileType, outputContentTypes } from "@/types";
+import {
+  BlobResponse,
+  ExportFileType,
+  outputContentTypes,
+} from "@/types/Files";
 import { ApiService } from "./ApiService";
 
 export class ExportService extends ApiService {

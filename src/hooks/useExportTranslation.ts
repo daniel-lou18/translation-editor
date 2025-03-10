@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useTranslationRoute } from "./useTranslationRoute";
 import { exportService } from "@/services/exportService";
-import { ExportFileType } from "@/types";
+import { ExportFileType } from "@/types/Files";
 
 export function useExportTranslation() {
   const { translationId } = useTranslationRoute();
@@ -23,10 +23,12 @@ export function useExportTranslation() {
       );
 
       const downloadUrl = window.URL.createObjectURL(data);
+
       const link = document.createElement("a");
       link.href = downloadUrl;
       link.download = fileName;
       link.click();
+
       window.URL.revokeObjectURL(downloadUrl);
     } catch (err) {
       const error = err instanceof Error ? err : new Error("Unknown error");

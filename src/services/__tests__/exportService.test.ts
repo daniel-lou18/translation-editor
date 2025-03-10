@@ -1,8 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { ExportService } from "../exportService";
 import { ApiService } from "../ApiService";
-import { outputContentTypes } from "@/types";
-
+import { outputContentTypes } from "@/types/Files";
 // Create a mock class that extends ApiService
 class MockApiService extends ApiService {
   constructor() {

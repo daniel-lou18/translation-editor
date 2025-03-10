@@ -7,7 +7,8 @@ import {
   TranslationWithTargetSegments,
 } from "@/types";
 import { Segment } from "@/types/Segment";
-
+import { TmSegmentPair } from "@/types/Tm";
+import { EditorSegment } from "@/types/Segment";
 export function calculateProgress(
   segments: Segment[],
   currentBatchIndex: number,
@@ -105,4 +106,19 @@ export function getIdsFromTranslation(translation: TranslationWithDocument) {
     documentId: translation.document.id.toString(),
     translationId: translation.id.toString(),
   };
+}
+
+export function formatTmSegmentsToEditorSegments(
+  tmSegments: TmSegmentPair[] | null
+): EditorSegment[] {
+  if (!tmSegments) return [];
+
+  console.log({ tmSegments });
+
+  return tmSegments.map(({ sourceSegment, targetSegment }) => ({
+    id: sourceSegment.id,
+    sourceText: sourceSegment.textContent,
+    targetText: targetSegment?.textContent || null,
+    status: "translated",
+  }));
 }
