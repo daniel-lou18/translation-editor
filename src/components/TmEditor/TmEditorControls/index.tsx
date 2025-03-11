@@ -14,7 +14,8 @@ import Container from "@/components/ui/Container";
 import { useExportTranslation } from "@/hooks/useExportTranslation";
 import SearchForm from "@/components/ui/SearchForm";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-
+import EditorbarContainer from "@/components/ui/Editor/EditorbarContainer";
+import TmbarContainer from "@/components/ui/Editor/TmbarContainer";
 export default function TmEditorControls() {
   // const {
   //   activeSegmentId,
@@ -27,81 +28,70 @@ export default function TmEditorControls() {
 
   return (
     <>
-      <Container className="sticky top-[49px] z-10 col-span-9 px-2 py-1 border-b border-border bg-gray-50">
-        <Button
-          variant="ghost"
-          size="icon"
-          className="border border-transparent hover:border-cat-accent/10"
-          // onClick={() => handleStatusChange(activeSegmentId)}
-        >
-          <SquareCheckBig />
-        </Button>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="border border-transparent hover:border-cat-accent/10"
-          // onClick={handleStatusChangeAll}
-        >
-          <FileCheck />
-        </Button>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="border border-transparent hover:border-cat-accent/10"
-          onClick={() => undefined}
-        >
-          <Lock />
-        </Button>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="border border-transparent hover:border-cat-accent/10"
-          onClick={() => undefined}
-        >
-          <ClipboardPaste />
-        </Button>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="border border-transparent hover:border-cat-accent/10"
-          onClick={() => undefined}
-        >
-          <CircleXIcon />
-        </Button>
+      <EditorbarContainer>
+        <Container className="inline-flex items-center rounded-md border border-border p-0.5 mr-2">
+          <Button
+            variant="ghost"
+            className="h-8 w-8"
+            // onClick={() => handleStatusChange(activeSegmentId)}
+          >
+            <SquareCheckBig />
+          </Button>
+          <Button
+            variant="ghost"
+            className="h-8 w-8"
+            // onClick={handleStatusChangeAll}
+          >
+            <FileCheck />
+          </Button>
+          <Button variant="ghost" className="h-8 w-8" onClick={() => undefined}>
+            <Lock />
+          </Button>
+        </Container>
+        <Container className="inline-flex items-center rounded-md border border-border p-0.5 mr-2">
+          <Button variant="ghost" className="h-8 w-8" onClick={() => undefined}>
+            <ClipboardPaste />
+          </Button>
+          <Button variant="ghost" className="h-8 w-8" onClick={() => undefined}>
+            <CircleXIcon />
+          </Button>
+        </Container>
 
-        <Button
-          variant="ghost"
-          size="icon"
-          className="border border-transparent hover:border-cat-accent/10"
-          onClick={() => downloadFile("txt")}
-        >
-          <Download />
-        </Button>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="border border-transparent hover:border-cat-accent/10"
-        >
-          <FileSearch />
-        </Button>
-      </Container>
-      <Container className="sticky top-[49px] z-10 col-span-3 flex justify-between items-center px-4 border-b border-border bg-gray-50">
+        <Container className="inline-flex items-center rounded-md border border-border p-0.5 mr-2">
+          <Button
+            variant="ghost"
+            className="h-8 w-8"
+            onClick={() => downloadFile("txt")}
+          >
+            <Download />
+          </Button>
+          <Button variant="ghost" className="h-8 w-8">
+            <FileSearch />
+          </Button>
+        </Container>
+      </EditorbarContainer>
+      <TmbarContainer>
         <SearchForm placeholder="Search glossary" className="h-8" />
-        <ToggleGroup type="single" value={"tm"} onValueChange={() => undefined}>
+        <ToggleGroup
+          type="single"
+          value={"tm"}
+          onValueChange={() => undefined}
+          className="rounded-md border border-border p-0.5 mr-2"
+        >
           <ToggleGroupItem
             value="tm"
-            className="data-[state=on]:bg-cat-accent/10"
+            className="h-8 w-8 data-[state=on]:bg-cat-accent/10"
           >
             <SquareM />
           </ToggleGroupItem>
           <ToggleGroupItem
             value="glossary"
-            className="data-[state=on]:bg-cat-accent/10"
+            className="h-8 w-8 data-[state=on]:bg-cat-accent/10"
           >
             <BookOpenText />
           </ToggleGroupItem>
         </ToggleGroup>
-      </Container>
+      </TmbarContainer>
     </>
   );
 }

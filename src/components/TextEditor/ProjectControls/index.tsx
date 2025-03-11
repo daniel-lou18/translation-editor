@@ -1,15 +1,15 @@
-import Container from "@/components/ui/Container";
 import { useEditor } from "@/contexts/editorContext";
 import TranslationProgress from "./TranslationProgress";
 import SelectProject from "./SelectProject";
 import { useTranslationRoute } from "@/hooks/useTranslationRoute";
 import DataHandler from "@/components/ui/DataHandler";
 import ProjectControlsSkeleton from "./ProjectControlsSkeleton";
-import { BrainCircuit } from "lucide-react";
 import SelectTranslation from "./SelectTranslation";
 import { useCurrentProject } from "@/hooks/useCurrentProject";
 import SelectDocument from "./SelectDocument";
 import { useCallback } from "react";
+import { Separator } from "@/components/ui/separator";
+import TopbarContainer from "@/components/ui/Editor/TopbarContainer";
 
 export default function ProjectControls() {
   const { segments, getCompletedSegments } = useEditor();
@@ -77,9 +77,7 @@ export default function ProjectControls() {
   );
 
   return (
-    <Container className="sticky top-0 z-10 col-span-12 flex items-center w-full gap-6 px-2 py-1 text-muted-foreground font-semibold border-b border-border bg-gray-50">
-      <BrainCircuit className="text-cat-accent ml-2" size={20} />
-
+    <TopbarContainer>
       <DataHandler
         isLoading={isLoading}
         isError={isError}
@@ -91,11 +89,14 @@ export default function ProjectControls() {
           currentProject={currentProject}
           onSelect={handleProjectSelect}
         />
+        <Separator orientation="vertical" className="h-6" />
         <SelectDocument
           documents={currentDocuments || {}}
           currentDocument={currentDocument}
           onSelect={handleDocumentSelect}
         />
+        <Separator orientation="vertical" className="h-6" />
+
         <SelectTranslation
           currentDocument={currentDocument}
           translations={currentTranslations || {}}
@@ -103,7 +104,8 @@ export default function ProjectControls() {
           onSelect={handleTranslationSelect}
         />
       </DataHandler>
+      <Separator orientation="vertical" className="h-6" />
       <TranslationProgress current={completedSegments} total={totalSegments} />
-    </Container>
+    </TopbarContainer>
   );
 }

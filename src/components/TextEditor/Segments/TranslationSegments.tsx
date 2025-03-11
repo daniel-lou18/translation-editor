@@ -28,7 +28,7 @@ export default function TranslationSegments() {
   );
 
   return (
-    <Container className="col-span-9 bg-background shadow-sm divide-y divide-gray-100 border-r border-muted">
+    <Container className="col-span-9 bg-background shadow-sm divide-y divide-gray-100 border-r border-border">
       {segments.map((segment, idx) => (
         <EditorSegment
           key={segment.id}

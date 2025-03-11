@@ -30,6 +30,8 @@ import Preview from "./Preview";
 import { usePreview } from "@/hooks/usePreview";
 import { useImprove } from "@/hooks/useImprove";
 import { useCurrentProject } from "@/hooks/useCurrentProject";
+import EditorbarContainer from "@/components/ui/Editor/EditorbarContainer";
+import TmbarContainer from "@/components/ui/Editor/TmbarContainer";
 
 export default function EditorControls() {
   const {
@@ -82,120 +84,90 @@ export default function EditorControls() {
 
   return (
     <>
-      <Container className="sticky top-[49px] z-10 col-span-9 px-2 py-1 border-b border-border bg-gray-50">
-        <Button
-          variant="ghost"
-          size="icon"
-          className="border border-transparent hover:border-cat-accent/10"
-          onClick={() => handleStatusChange(activeSegmentId)}
-        >
-          <SquareCheckBig />
-        </Button>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="border border-transparent hover:border-cat-accent/10"
-          onClick={handleStatusChangeAll}
-        >
-          <FileCheck />
-        </Button>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="border border-transparent hover:border-cat-accent/10"
-          onClick={() => undefined}
-        >
-          <Lock />
-        </Button>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="border border-transparent hover:border-cat-accent/10"
-          onClick={() => undefined}
-        >
-          <CornerRightDown />
-        </Button>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="border border-transparent hover:border-cat-accent/10"
-          onClick={() => undefined}
-        >
-          <ClipboardPaste />
-        </Button>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="border border-transparent hover:border-cat-accent/10"
-          onClick={() => undefined}
-        >
-          <CircleXIcon />
-        </Button>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="border border-transparent hover:border-cat-accent/10"
-          onClick={() => undefined}
-        >
-          <CaseSensitive />
-        </Button>
+      <EditorbarContainer>
+        <Container className="inline-flex items-center rounded-md border border-border p-0.5 mr-2 bg-background">
+          <Button
+            variant="ghost"
+            className="h-8 w-8"
+            onClick={() => handleStatusChange(activeSegmentId)}
+          >
+            <SquareCheckBig />
+          </Button>
+          <Button
+            variant="ghost"
+            className="h-8 w-8"
+            onClick={handleStatusChangeAll}
+          >
+            <FileCheck />
+          </Button>
+          <Button variant="ghost" className="h-8 w-8" onClick={() => undefined}>
+            <Lock />
+          </Button>
+        </Container>
+        <Container className="inline-flex items-center rounded-md border border-border p-0.5 mr-2 bg-background">
+          <Button variant="ghost" className="h-8 w-8" onClick={() => undefined}>
+            <CornerRightDown />
+          </Button>
+          <Button variant="ghost" className="h-8 w-8" onClick={() => undefined}>
+            <ClipboardPaste />
+          </Button>
+          <Button variant="ghost" className="h-8 w-8" onClick={() => undefined}>
+            <CircleXIcon />
+          </Button>
+          <Button variant="ghost" className="h-8 w-8" onClick={() => undefined}>
+            <CaseSensitive />
+          </Button>
+        </Container>
 
-        <Button
-          variant="ghost"
-          size="icon"
-          className="border border-transparent hover:border-cat-accent/10"
-          onClick={handleReformulate}
-        >
-          <WandSparkles />
-        </Button>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="border border-transparent hover:border-cat-accent/10"
-          onClick={handleImprove}
-        >
-          <Bot />
-        </Button>
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="border border-transparent hover:border-cat-accent/10"
-            >
-              <Eye />
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="max-w-[90vw]">
-            <Preview html={isLoadingPreview ? "LOADING..." : html ?? "error"} />
-          </DialogContent>
-        </Dialog>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="border border-transparent hover:border-cat-accent/10"
-          onClick={() => downloadFile("txt")}
-        >
-          <Download />
-        </Button>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="border border-transparent hover:border-cat-accent/10"
-          onClick={() => downloadFile("pdf")}
-        >
-          <FileText />
-        </Button>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="border border-transparent hover:border-cat-accent/10"
-        >
-          <FileSearch />
-        </Button>
-      </Container>
-      <Container className="sticky top-[49px] z-10 col-span-3 flex justify-between items-center px-4 border-b border-border bg-gray-50">
-        <SearchForm placeholder="Search glossary" className="h-8" />
+        <Container className="inline-flex items-center rounded-md border border-border p-0.5 mr-2 bg-background">
+          <Button
+            variant="ghost"
+            className="h-8 w-8"
+            onClick={handleReformulate}
+          >
+            <WandSparkles />
+          </Button>
+          <Button variant="ghost" className="h-8 w-8" onClick={handleImprove}>
+            <Bot />
+          </Button>
+        </Container>
+        <Container className="inline-flex items-center rounded-md border border-border p-0.5 mr-2 bg-background">
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8">
+                <Eye />
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-[90vw]">
+              <Preview
+                html={isLoadingPreview ? "LOADING..." : html ?? "error"}
+              />
+            </DialogContent>
+          </Dialog>
+          <Button
+            variant="ghost"
+            className="h-8 w-8"
+            onClick={() => downloadFile("txt")}
+          >
+            <Download />
+          </Button>
+          <Button
+            variant="ghost"
+            className="h-8 w-8"
+            onClick={() => downloadFile("pdf")}
+          >
+            <FileText />
+          </Button>
+          <Button variant="ghost" className="h-8 w-8">
+            <FileSearch />
+          </Button>
+        </Container>
+      </EditorbarContainer>
+      <TmbarContainer>
+        <SearchForm
+          placeholder="Search glossary"
+          className="h-8 border-border"
+        />
         <ToggleGroup
           type="single"
           value={currentView}
@@ -203,18 +175,18 @@ export default function EditorControls() {
         >
           <ToggleGroupItem
             value="tm"
-            className="data-[state=on]:bg-cat-accent/10"
+            className="h-8 data-[state=on]:bg-cat-accent/10"
           >
             <SquareM />
           </ToggleGroupItem>
           <ToggleGroupItem
             value="glossary"
-            className="data-[state=on]:bg-cat-accent/10"
+            className="h-8 data-[state=on]:bg-cat-accent/10"
           >
             <BookOpenText />
           </ToggleGroupItem>
         </ToggleGroup>
-      </Container>
+      </TmbarContainer>
     </>
   );
 }

@@ -15,7 +15,7 @@ export default function SearchForm({ className, ...props }: SearchFormProps) {
       <Input
         type="search"
         className={
-          "h-8 pl-8 bg-background shadow-none focus-visible:ring-2 focus-visible:ring-sidebar-ring"
+          "h-8 pl-8 bg-background border-border shadow-none focus-visible:ring-2 focus-visible:ring-sidebar-ring"
         }
         placeholder={props.placeholder}
         {...props}
