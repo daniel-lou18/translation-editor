@@ -1,14 +1,13 @@
 import { useEditor } from "@/contexts/editorContext";
-import { TranslationSegment } from "./TranslationSegment";
 import { useAutoTranslation } from "@/hooks/useAutoTranslation";
 import Container from "../../ui/Container";
 import { useCallback, KeyboardEvent, ChangeEvent } from "react";
 import { useSemanticMatches } from "@/hooks/useSemanticMatches";
 import { useSegmentHandlers } from "@/hooks/useSegmentHandlers";
+import { EditorSegment } from "@/components/ui/Editor/EditorSegment";
 
 export default function TranslationSegments() {
-  const { segments, activeSegmentId, getActiveSegment, handleValueChange } =
-    useEditor();
+  const { segments, activeSegmentId, getActiveSegment } = useEditor();
   const activeSegment = getActiveSegment();
   const { matches } = useSemanticMatches(activeSegment);
   const {
@@ -17,8 +16,6 @@ export default function TranslationSegments() {
     isError,
   } = useAutoTranslation(activeSegment, matches);
   const { onChange, onClick, onStatusChange, onKeyDown } = useSegmentHandlers();
-
-  console.log({ activeSegment });
 
   const renderAutoTranslation = useCallback(
     (id: number) => {
@@ -33,12 +30,14 @@ export default function TranslationSegments() {
   return (
     <Container className="col-span-9 bg-background shadow-sm divide-y divide-gray-100 border-r border-muted">
       {segments.map((segment, idx) => (
-        <TranslationSegment
+        <EditorSegment
           key={segment.id}
-          data={segment}
-          autoTranslation={renderAutoTranslation(segment.id)}
-          activeId={activeSegmentId}
-          index={idx}
+          data={{
+            ...segment,
+            activeId: activeSegmentId,
+            index: idx,
+            placeholder: renderAutoTranslation(segment.id),
+          }}
           handlers={{
             onChange: (e: ChangeEvent<HTMLTextAreaElement>) =>
               onChange(e, segment.id),

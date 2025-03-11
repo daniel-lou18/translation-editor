@@ -1,14 +1,12 @@
-import { EditorSegment } from "@/types/Segment";
-import TranslationStatus from "./TranslationStatus";
+import { EditorSegmentType } from "@/types/Segment";
 import Container from "@/components/ui/Container";
 import { useFocus } from "@/hooks/useFocus";
 import { useScrollHeight } from "@/hooks/useScrollHeight";
 import { ChangeEvent, KeyboardEvent } from "react";
-interface TranslationSegmentProps {
-  data: EditorSegment;
-  autoTranslation: string | null;
-  activeId: number;
-  index: number;
+import TranslationStatus from "@/components/TextEditor/Segments/TranslationStatus";
+
+interface EditorSegmentProps {
+  data: EditorSegmentType;
   handlers: {
     onChange: (e: ChangeEvent<HTMLTextAreaElement>) => void;
     onClick: () => void;
@@ -17,14 +15,9 @@ interface TranslationSegmentProps {
   };
 }
 
-export function TranslationSegment({
-  data,
-  autoTranslation,
-  activeId,
-  index,
-  handlers,
-}: TranslationSegmentProps) {
-  const { id, sourceText, targetText, status } = data;
+export function EditorSegment({ data, handlers }: EditorSegmentProps) {
+  const { id, activeId, index, sourceText, targetText, status, placeholder } =
+    data;
   const { textAreaRef, sourceDivRef, onInput } = useScrollHeight();
   useFocus(textAreaRef, activeId, id);
 
@@ -46,7 +39,7 @@ export function TranslationSegment({
         onInput={onInput}
         onKeyDown={handlers.onKeyDown}
         className={`flex-1 h-fit rounded-lg p-2 text-sm outline-none -outline-offset-2 focus:outline-2 focus:outline-cat-accent/50 hover:bg-background focus:bg-background transition-all resize-none bg-cat-memory/30`}
-        placeholder={autoTranslation || ""}
+        placeholder={placeholder ?? ""}
         rows={1}
       />
       <TranslationStatus

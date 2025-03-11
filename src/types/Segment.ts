@@ -17,9 +17,15 @@ export type MutableSegmentData = {
 
 export type Segment = ImmutableSegmentContext & MutableSegmentData;
 
-export type EditorSegment = {
+export type SegmentType = {
   id: number;
   sourceText: string;
   targetText: string | null;
   status: string | null;
+};
+
+export type EditorSegmentType = SegmentType & {
+  activeId: number;
+  index: number;
+  placeholder?: string | null;
 };

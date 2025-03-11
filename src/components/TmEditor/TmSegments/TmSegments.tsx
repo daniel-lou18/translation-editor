@@ -1,4 +1,4 @@
-import { TranslationSegment } from "@/components/TextEditor/Segments/TranslationSegment";
+import { EditorSegment } from "@/components/ui/Editor/EditorSegment";
 import Container from "@/components/ui/Container";
 import { useTmSegments } from "@/hooks/useTmSegments";
 import { formatTmSegmentsToEditorSegments } from "@/utils/helpers";
@@ -12,12 +12,9 @@ export default function TmSegments() {
   return (
     <Container className="col-span-9 bg-background shadow-sm divide-y divide-gray-100 border-r border-muted">
       {editorSegments?.map((segment, idx) => (
-        <TranslationSegment
+        <EditorSegment
           key={segment.id}
-          data={segment}
-          activeId={idx}
-          index={idx}
-          autoTranslation={null}
+          data={{ ...segment, activeId: idx, index: idx, placeholder: null }}
           handlers={{
             onChange: () => {},
             onClick: () => {},

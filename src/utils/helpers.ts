@@ -6,9 +6,9 @@ import {
   TranslationWithDocument,
   TranslationWithTargetSegments,
 } from "@/types";
-import { Segment } from "@/types/Segment";
+import { Segment, SegmentType } from "@/types/Segment";
 import { TmSegmentPair } from "@/types/Tm";
-import { EditorSegment } from "@/types/Segment";
+
 export function calculateProgress(
   segments: Segment[],
   currentBatchIndex: number,
@@ -110,7 +110,7 @@ export function getIdsFromTranslation(translation: TranslationWithDocument) {
 
 export function formatTmSegmentsToEditorSegments(
   tmSegments: TmSegmentPair[] | null
-): EditorSegment[] {
+): SegmentType[] {
   if (!tmSegments) return [];
 
   console.log({ tmSegments });

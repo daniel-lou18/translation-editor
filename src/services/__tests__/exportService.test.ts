@@ -2,35 +2,24 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { ExportService } from "../exportService";
 import { ApiService } from "../ApiService";
 import { outputContentTypes } from "@/types/Files";
-// Create a mock class that extends ApiService
-class MockApiService extends ApiService {
-  constructor() {
-    super("http://test-api.com");
-  }
-}
 
+// Create a mock for the getBlob method
+const mockGetBlob = vi.fn();
+
+// Mock the ApiService class
 vi.mock("../ApiService", () => {
   return {
     ApiService: vi.fn().mockImplementation(() => ({
-      getBlob: vi.fn(),
+      getBlob: mockGetBlob,
     })),
   };
 });
 
 describe("ExportService", () => {
   let exportService: ExportService;
-  let mockGetBlob: ReturnType<typeof vi.fn>;
 
   beforeEach(() => {
     vi.clearAllMocks();
-    mockGetBlob = vi.fn();
-
-    // Mock the ApiService constructor and its getBlob method
-    (ApiService as unknown as ReturnType<typeof vi.fn>).mockImplementation(
-      () => ({
-        getBlob: mockGetBlob,
-      })
-    );
 
     // Create a new instance of ExportService for each test
     exportService = new ExportService();

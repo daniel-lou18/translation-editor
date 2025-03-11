@@ -53,3 +53,5 @@ export type TmSegmentPair = {
   sourceSegment: TmSegmentType;
   targetSegment: TmSegmentType;
 };
+
+export type NormalizedTms = Record<number, Tm>;

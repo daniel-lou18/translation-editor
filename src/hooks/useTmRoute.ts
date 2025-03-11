@@ -6,7 +6,7 @@ export function useTmRoute() {
   const navigate = useNavigate();
 
   const navigateToTm = useCallback(
-    (id?: number) => {
+    (id?: number | string) => {
       if (id) {
         return navigate(`/app/tms/${id}`);
       }
