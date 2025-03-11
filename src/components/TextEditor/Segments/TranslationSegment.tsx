@@ -3,17 +3,17 @@ import TranslationStatus from "./TranslationStatus";
 import Container from "@/components/ui/Container";
 import { useFocus } from "@/hooks/useFocus";
 import { useScrollHeight } from "@/hooks/useScrollHeight";
-
+import { ChangeEvent, KeyboardEvent } from "react";
 interface TranslationSegmentProps {
   data: EditorSegment;
   autoTranslation: string | null;
   activeId: number;
   index: number;
   handlers: {
-    onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+    onChange: (e: ChangeEvent<HTMLTextAreaElement>) => void;
     onClick: () => void;
     onStatusChange: () => void;
-    onKeyDown: (e: React.KeyboardEvent<HTMLTextAreaElement>) => void;
+    onKeyDown: (e: KeyboardEvent<HTMLTextAreaElement>) => void;
   };
 }
 

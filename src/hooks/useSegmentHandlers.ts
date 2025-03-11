@@ -1,12 +1,8 @@
 import { useEditor } from "@/contexts/editorContext";
 import { ChangeEvent, KeyboardEvent } from "react";
 
-export function useSegmentHandlers(
-  segmentId: number,
-  autoTranslation: string | null
-) {
+export function useSegmentHandlers() {
   const {
-    activeSegmentId,
     handleValueChange,
     handleSegmentChange,
     handleStatusChange,
@@ -14,7 +10,7 @@ export function useSegmentHandlers(
     toNextSegment,
   } = useEditor();
 
-  const onChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+  const onChange = (e: ChangeEvent<HTMLTextAreaElement>, segmentId: number) => {
     const value = e.target.value;
     handleValueChange(segmentId, value);
   };
@@ -23,24 +19,28 @@ export function useSegmentHandlers(
 
   const onStatusChange = (segmentId: number) => handleStatusChange(segmentId);
 
-  const onKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
+  const onKeyDown = (
+    e: KeyboardEvent<HTMLTextAreaElement>,
+    segmentId: number,
+    autoTranslation: string | null
+  ) => {
     if (e.key === "Tab") {
       e.preventDefault();
-      onTab();
+      onTab(segmentId, autoTranslation);
     }
     if (e.key === "Enter") {
       e.preventDefault();
-      onEnter();
+      onEnter(segmentId);
     }
   };
 
-  const onTab = () => {
+  const onTab = (segmentId: number, autoTranslation: string | null) => {
     if (!autoTranslation) return;
     handleValueChange(segmentId, autoTranslation);
   };
 
-  const onEnter = () => {
-    setStatus(activeSegmentId, "translated");
+  const onEnter = (segmentId: number) => {
+    setStatus(segmentId, "translated");
     toNextSegment();
   };
 
