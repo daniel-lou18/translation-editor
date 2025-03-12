@@ -28,6 +28,7 @@ import {
   Languages,
   Settings,
 } from "lucide-react";
+import { SidebarGroupType } from "@/components/ui/Layout/Sidebar";
 type AppSidebarProps = {
   projects: NormalizedProjectsWithTranslations | null;
   currentProject: ProjectWithDocsAndTrans | null;
@@ -39,6 +40,13 @@ export default function DocumentsSidebar({
   ...props
 }: AppSidebarProps) {
   if (!projects || !currentProject) return null;
+
+  const sidebarContent: SidebarGroupType[] = [
+    {
+      label: "Navigation",
+      items: [{ content: "All projects", href: "/app/projects" }],
+    },
+  ];
 
   return (
     <Sidebar {...props}>
@@ -80,9 +88,7 @@ export default function DocumentsSidebar({
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <Link to={`/app/projects/${String(
-                      currentProject.id
-                    )}/tms`}>
+                  <Link to={`/app/projects/${String(currentProject.id)}/tms`}>
                     <BookType /> Translation Memory
                   </Link>
                 </SidebarMenuButton>

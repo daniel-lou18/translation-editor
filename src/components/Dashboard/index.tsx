@@ -12,7 +12,7 @@ export default function Dashboard() {
       <DashboardSidebar />
       <SidebarInset className="bg-muted/20">
         <DashboardHeader />
-        <DashboardContent projects={projects} />{" "}
+        <DashboardContent projects={projects} />
       </SidebarInset>
     </SidebarProvider>
   );
