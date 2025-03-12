@@ -16,6 +16,7 @@ import SearchForm from "@/components/ui/SearchForm";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import EditorbarContainer from "@/components/ui/Editor/EditorbarContainer";
 import TmbarContainer from "@/components/ui/Editor/TmbarContainer";
+import IconsContainer from "@/components/ui/Editor/IconsContainer";
 export default function TmEditorControls() {
   // const {
   //   activeSegmentId,
@@ -29,7 +30,7 @@ export default function TmEditorControls() {
   return (
     <>
       <EditorbarContainer>
-        <Container className="inline-flex items-center rounded-md border border-border p-0.5 mr-2">
+        <IconsContainer>
           <Button
             variant="ghost"
             className="h-8 w-8"
@@ -47,17 +48,17 @@ export default function TmEditorControls() {
           <Button variant="ghost" className="h-8 w-8" onClick={() => undefined}>
             <Lock />
           </Button>
-        </Container>
-        <Container className="inline-flex items-center rounded-md border border-border p-0.5 mr-2">
+        </IconsContainer>
+        <IconsContainer>
           <Button variant="ghost" className="h-8 w-8" onClick={() => undefined}>
             <ClipboardPaste />
           </Button>
           <Button variant="ghost" className="h-8 w-8" onClick={() => undefined}>
             <CircleXIcon />
           </Button>
-        </Container>
+        </IconsContainer>
 
-        <Container className="inline-flex items-center rounded-md border border-border p-0.5 mr-2">
+        <IconsContainer>
           <Button
             variant="ghost"
             className="h-8 w-8"
@@ -68,7 +69,7 @@ export default function TmEditorControls() {
           <Button variant="ghost" className="h-8 w-8">
             <FileSearch />
           </Button>
-        </Container>
+        </IconsContainer>
       </EditorbarContainer>
       <TmbarContainer>
         <SearchForm placeholder="Search glossary" className="h-8" />

@@ -16,7 +16,6 @@ import {
   WandSparkles,
 } from "lucide-react";
 import { Button } from "../../ui/button";
-import Container from "@/components/ui/Container";
 import { useEditor } from "@/contexts/editorContext";
 import { useReformulate } from "@/hooks/useReformulate";
 import { useQueryClient } from "@tanstack/react-query";
@@ -32,6 +31,9 @@ import { useImprove } from "@/hooks/useImprove";
 import { useCurrentProject } from "@/hooks/useCurrentProject";
 import EditorbarContainer from "@/components/ui/Editor/EditorbarContainer";
 import TmbarContainer from "@/components/ui/Editor/TmbarContainer";
+import IconsContainer from "@/components/ui/Editor/IconsContainer";
+import DownloadButton from "./DownloadButton";
+import Container from "@/components/ui/Container";
 
 export default function EditorControls() {
   const {
@@ -82,86 +84,101 @@ export default function EditorControls() {
     });
   }
 
+  const downloadData = [
+    { label: "Plain text (.txt)", onClick: () => downloadFile("txt") },
+    { label: "HTML (.html)", onClick: () => downloadFile("txt") },
+    { label: "PDF (.pdf)", onClick: () => downloadFile("pdf") },
+  ];
+
   return (
     <>
       <EditorbarContainer>
-        <Container className="inline-flex items-center rounded-md border border-border p-0.5 mr-2 bg-background">
-          <Button
-            variant="ghost"
-            className="h-8 w-8"
-            onClick={() => handleStatusChange(activeSegmentId)}
-          >
-            <SquareCheckBig />
-          </Button>
-          <Button
-            variant="ghost"
-            className="h-8 w-8"
-            onClick={handleStatusChangeAll}
-          >
-            <FileCheck />
-          </Button>
-          <Button variant="ghost" className="h-8 w-8" onClick={() => undefined}>
-            <Lock />
-          </Button>
-        </Container>
-        <Container className="inline-flex items-center rounded-md border border-border p-0.5 mr-2 bg-background">
-          <Button variant="ghost" className="h-8 w-8" onClick={() => undefined}>
-            <CornerRightDown />
-          </Button>
-          <Button variant="ghost" className="h-8 w-8" onClick={() => undefined}>
-            <ClipboardPaste />
-          </Button>
-          <Button variant="ghost" className="h-8 w-8" onClick={() => undefined}>
-            <CircleXIcon />
-          </Button>
-          <Button variant="ghost" className="h-8 w-8" onClick={() => undefined}>
-            <CaseSensitive />
-          </Button>
-        </Container>
+        <Container className="flex">
+          <IconsContainer>
+            <Button
+              variant="ghost"
+              className="h-8 w-8"
+              onClick={() => handleStatusChange(activeSegmentId)}
+            >
+              <SquareCheckBig />
+            </Button>
+            <Button
+              variant="ghost"
+              className="h-8 w-8"
+              onClick={handleStatusChangeAll}
+            >
+              <FileCheck />
+            </Button>
+            <Button
+              variant="ghost"
+              className="h-8 w-8"
+              onClick={() => undefined}
+            >
+              <Lock />
+            </Button>
+          </IconsContainer>
+          <IconsContainer>
+            <Button
+              variant="ghost"
+              className="h-8 w-8"
+              onClick={() => undefined}
+            >
+              <CornerRightDown />
+            </Button>
+            <Button
+              variant="ghost"
+              className="h-8 w-8"
+              onClick={() => undefined}
+            >
+              <ClipboardPaste />
+            </Button>
+            <Button
+              variant="ghost"
+              className="h-8 w-8"
+              onClick={() => undefined}
+            >
+              <CircleXIcon />
+            </Button>
+            <Button
+              variant="ghost"
+              className="h-8 w-8"
+              onClick={() => undefined}
+            >
+              <CaseSensitive />
+            </Button>
+          </IconsContainer>
 
-        <Container className="inline-flex items-center rounded-md border border-border p-0.5 mr-2 bg-background">
-          <Button
-            variant="ghost"
-            className="h-8 w-8"
-            onClick={handleReformulate}
-          >
-            <WandSparkles />
-          </Button>
-          <Button variant="ghost" className="h-8 w-8" onClick={handleImprove}>
-            <Bot />
-          </Button>
+          <IconsContainer>
+            <Button
+              variant="ghost"
+              className="h-8 w-8"
+              onClick={handleReformulate}
+            >
+              <WandSparkles />
+            </Button>
+            <Button variant="ghost" className="h-8 w-8" onClick={handleImprove}>
+              <Bot />
+            </Button>
+          </IconsContainer>
+          <IconsContainer>
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button variant="ghost" className="h-8 w-8">
+                  <Eye />
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="max-w-[90vw]">
+                <Preview
+                  html={isLoadingPreview ? "LOADING..." : html ?? "error"}
+                />
+              </DialogContent>
+            </Dialog>
+            <Button variant="ghost" className="h-8 w-8">
+              <FileSearch />
+            </Button>
+          </IconsContainer>
         </Container>
-        <Container className="inline-flex items-center rounded-md border border-border p-0.5 mr-2 bg-background">
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8">
-                <Eye />
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="max-w-[90vw]">
-              <Preview
-                html={isLoadingPreview ? "LOADING..." : html ?? "error"}
-              />
-            </DialogContent>
-          </Dialog>
-          <Button
-            variant="ghost"
-            className="h-8 w-8"
-            onClick={() => downloadFile("txt")}
-          >
-            <Download />
-          </Button>
-          <Button
-            variant="ghost"
-            className="h-8 w-8"
-            onClick={() => downloadFile("pdf")}
-          >
-            <FileText />
-          </Button>
-          <Button variant="ghost" className="h-8 w-8">
-            <FileSearch />
-          </Button>
-        </Container>
+        <DownloadButton data={downloadData} />
       </EditorbarContainer>
       <TmbarContainer>
         <SearchForm

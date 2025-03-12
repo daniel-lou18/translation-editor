@@ -1,7 +1,7 @@
 import { EditorSegment } from "@/components/ui/Editor/EditorSegment";
-import Container from "@/components/ui/Container";
 import { useTmSegments } from "@/hooks/useTmSegments";
 import { formatTmSegmentsToEditorSegments } from "@/utils/helpers";
+import ContentContainer from "@/components/ui/Editor/ContentContainer";
 
 export default function TmSegments() {
   const { tmSegments } = useTmSegments();
@@ -10,7 +10,7 @@ export default function TmSegments() {
   console.log({ editorSegments });
 
   return (
-    <Container className="col-span-9 bg-background shadow-sm divide-y divide-gray-100 border-r border-muted">
+    <ContentContainer>
       {editorSegments?.map((segment, idx) => (
         <EditorSegment
           key={segment.id}
@@ -23,6 +23,6 @@ export default function TmSegments() {
           }}
         />
       ))}
-    </Container>
+    </ContentContainer>
   );
 }

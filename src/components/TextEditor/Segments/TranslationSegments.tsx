@@ -5,7 +5,7 @@ import { useCallback, KeyboardEvent, ChangeEvent } from "react";
 import { useSemanticMatches } from "@/hooks/useSemanticMatches";
 import { useSegmentHandlers } from "@/hooks/useSegmentHandlers";
 import { EditorSegment } from "@/components/ui/Editor/EditorSegment";
-
+import ContentContainer from "@/components/ui/Editor/ContentContainer";
 export default function TranslationSegments() {
   const { segments, activeSegmentId, getActiveSegment } = useEditor();
   const activeSegment = getActiveSegment();
@@ -28,7 +28,7 @@ export default function TranslationSegments() {
   );
 
   return (
-    <Container className="col-span-9 bg-background shadow-sm divide-y divide-gray-100 border-r border-border">
+    <ContentContainer>
       {segments.map((segment, idx) => (
         <EditorSegment
           key={segment.id}
@@ -48,6 +48,6 @@ export default function TranslationSegments() {
           }}
         />
       ))}
-    </Container>
+    </ContentContainer>
   );
 }

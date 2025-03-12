@@ -24,7 +24,7 @@ export default function SelectDocument({
       items={items}
       value={currentId || ""}
       onChange={onSelect}
-      className="bg-background h-9.5 border-border"
+      className="bg-background h-9 border-border"
     />
   );
 }
