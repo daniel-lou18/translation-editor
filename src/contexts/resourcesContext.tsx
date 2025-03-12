@@ -62,7 +62,7 @@ export function useResources() {
 
   if (!context) {
     throw new Error(
-      "useResources must be used within the GlossaryContext provider"
+      "useResources must be used within the ResourcesContext provider"
     );
   }
 

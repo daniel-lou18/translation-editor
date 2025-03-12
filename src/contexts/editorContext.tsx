@@ -2,7 +2,7 @@ import { EditorActions, useEditorActions } from "@/hooks/useEditorActions";
 import { useEditorSync } from "@/hooks/useEditorSync";
 import { Segment } from "@/types/Segment";
 import { createContext, ReactNode, useContext, useReducer } from "react";
-import { editorContextUtils } from "./editorContextUtils";
+import { editorContextUtils, NextSegmentConfig } from "./editorContextUtils";
 import { SegmentStatus } from "@/types";
 
 export type InitialState = {
@@ -19,7 +19,7 @@ type EditorContextProviderProps = {
 
 type Utilities = {
   getActiveSegment: () => Segment;
-  toNextSegment: () => Segment;
+  toNextSegment: (config?: NextSegmentConfig) => Segment;
   getCompletedSegments: () => number;
 };
 
@@ -34,7 +34,7 @@ export type Action =
       type: "UPDATE_SEGMENTS";
       payload: {
         id: number;
-        value: string;
+        value: string | null;
       };
     }
   | {
@@ -43,7 +43,8 @@ export type Action =
     }
   | { type: "SET_STATUS"; payload: { id: number; status: SegmentStatus } }
   | { type: "UPDATE_STATUS_ALL" }
-  | { type: "SYNC_COMPLETED" };
+  | { type: "SYNC_COMPLETED" }
+  | { type: "RESET_ALL_SEGMENTS" };
 
 const initialState: InitialState = {
   segments: [],
@@ -67,6 +68,14 @@ function reducer(state: InitialState, action: Action): InitialState {
             : segment
         ),
         pendingChanges: state.pendingChanges.add(action.payload.id),
+      };
+    case "RESET_ALL_SEGMENTS":
+      return {
+        ...state,
+        segments: state.segments.map((segment) => ({
+          ...segment,
+          targetText: "",
+        })),
       };
     case "UPDATE_STATUS":
       return {

@@ -10,7 +10,7 @@ import SelectDocument from "./SelectDocument";
 import { useCallback } from "react";
 import { Separator } from "@/components/ui/separator";
 import TopbarContainer from "@/components/ui/Editor/TopbarContainer";
-
+import Logo from "@/components/ui/Editor/Logo";
 export default function ProjectControls() {
   const { segments, getCompletedSegments } = useEditor();
   const totalSegments = segments.length;
@@ -84,6 +84,8 @@ export default function ProjectControls() {
         error={error}
         loadingComponent={<ProjectControlsSkeleton />}
       >
+        <Logo />
+        <Separator orientation="vertical" className="h-6" />
         <SelectProject
           projects={projects || {}}
           currentProject={currentProject}

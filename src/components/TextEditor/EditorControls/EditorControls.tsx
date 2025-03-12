@@ -1,18 +1,16 @@
 import {
-  BookOpenText,
+  ArrowRightFromLine,
   Bot,
-  CaseSensitive,
-  CircleXIcon,
-  ClipboardPaste,
+  CaseLower,
+  CaseUpper,
   CornerRightDown,
-  Download,
+  Eraser,
   Eye,
   FileCheck,
   FileSearch,
-  FileText,
+  FileX,
   Lock,
   SquareCheckBig,
-  SquareM,
   WandSparkles,
 } from "lucide-react";
 import { Button } from "../../ui/button";
@@ -21,19 +19,22 @@ import { useReformulate } from "@/hooks/useReformulate";
 import { useQueryClient } from "@tanstack/react-query";
 import { TranslationMemoryMatches } from "@/types";
 import { useExportTranslation } from "@/hooks/useExportTranslation";
-import SearchForm from "@/components/ui/SearchForm";
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { useResources } from "@/contexts/resourcesContext";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import Preview from "./Preview";
 import { usePreview } from "@/hooks/usePreview";
 import { useImprove } from "@/hooks/useImprove";
 import { useCurrentProject } from "@/hooks/useCurrentProject";
 import EditorbarContainer from "@/components/ui/Editor/EditorbarContainer";
-import TmbarContainer from "@/components/ui/Editor/TmbarContainer";
+import Tmbar from "@/components/ui/Editor/Tmbar";
 import IconsContainer from "@/components/ui/Editor/IconsContainer";
-import DownloadButton from "./DownloadButton";
+import DownloadButton from "../../ui/Editor/DownloadButton";
 import Container from "@/components/ui/Container";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export default function EditorControls() {
   const {
@@ -41,6 +42,9 @@ export default function EditorControls() {
     getActiveSegment,
     handleStatusChange,
     handleStatusChangeAll,
+    handleResetAllSegments,
+    handleValueChange,
+    toNextSegment,
   } = useEditor();
   const segment = getActiveSegment();
   const { currentDocument } = useCurrentProject();
@@ -53,11 +57,10 @@ export default function EditorControls() {
     ? currentMatches.map((match) => match.targetText)
     : [];
 
-  const { mutate } = useReformulate(activeSegmentId);
-  const { mutate: mutateImprove } = useImprove(activeSegmentId);
+  const { mutate } = useReformulate();
+  const { mutate: mutateImprove } = useImprove();
 
   const { downloadFile } = useExportTranslation();
-  const { currentView, changeView } = useResources();
   const { html, isLoading: isLoadingPreview } = usePreview();
 
   function handleReformulate() {
@@ -91,119 +94,242 @@ export default function EditorControls() {
   ];
 
   return (
-    <>
+    <TooltipProvider>
       <EditorbarContainer>
         <Container className="flex">
           <IconsContainer>
-            <Button
-              variant="ghost"
-              className="h-8 w-8"
-              onClick={() => handleStatusChange(activeSegmentId)}
-            >
-              <SquareCheckBig />
-            </Button>
-            <Button
-              variant="ghost"
-              className="h-8 w-8"
-              onClick={handleStatusChangeAll}
-            >
-              <FileCheck />
-            </Button>
-            <Button
-              variant="ghost"
-              className="h-8 w-8"
-              onClick={() => undefined}
-            >
-              <Lock />
-            </Button>
-          </IconsContainer>
-          <IconsContainer>
-            <Button
-              variant="ghost"
-              className="h-8 w-8"
-              onClick={() => undefined}
-            >
-              <CornerRightDown />
-            </Button>
-            <Button
-              variant="ghost"
-              className="h-8 w-8"
-              onClick={() => undefined}
-            >
-              <ClipboardPaste />
-            </Button>
-            <Button
-              variant="ghost"
-              className="h-8 w-8"
-              onClick={() => undefined}
-            >
-              <CircleXIcon />
-            </Button>
-            <Button
-              variant="ghost"
-              className="h-8 w-8"
-              onClick={() => undefined}
-            >
-              <CaseSensitive />
-            </Button>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className="h-8 w-8"
+                  onClick={() => handleStatusChange(activeSegmentId)}
+                >
+                  <SquareCheckBig />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Toggle current segment status</p>
+              </TooltipContent>
+            </Tooltip>
+
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className="h-8 w-8"
+                  onClick={handleStatusChangeAll}
+                >
+                  <FileCheck />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Toggle status for all segments</p>
+              </TooltipContent>
+            </Tooltip>
+
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className="h-8 w-8"
+                  onClick={() => undefined}
+                >
+                  <Lock />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Lock segment (not implemented)</p>
+              </TooltipContent>
+            </Tooltip>
           </IconsContainer>
 
           <IconsContainer>
-            <Button
-              variant="ghost"
-              className="h-8 w-8"
-              onClick={handleReformulate}
-            >
-              <WandSparkles />
-            </Button>
-            <Button variant="ghost" className="h-8 w-8" onClick={handleImprove}>
-              <Bot />
-            </Button>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className="h-8 w-8"
+                  onClick={() =>
+                    toNextSegment({
+                      direction: "forward",
+                      skipConfirmed: true,
+                    })
+                  }
+                >
+                  <CornerRightDown />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Go to the next unconfirmed segment</p>
+              </TooltipContent>
+            </Tooltip>
+
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className="h-8 w-8"
+                  onClick={() =>
+                    handleValueChange(activeSegmentId, segment.sourceText)
+                  }
+                >
+                  <ArrowRightFromLine />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Copy source text to target</p>
+              </TooltipContent>
+            </Tooltip>
+
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className="h-8 w-8"
+                  onClick={() => handleValueChange(activeSegmentId, null)}
+                >
+                  <Eraser />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Clear current segment</p>
+              </TooltipContent>
+            </Tooltip>
+
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className="h-8 w-8"
+                  onClick={handleResetAllSegments}
+                >
+                  <FileX />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Clear all segments</p>
+              </TooltipContent>
+            </Tooltip>
           </IconsContainer>
+
+          <IconsContainer>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className="h-8 w-8"
+                  onClick={() =>
+                    handleValueChange(
+                      activeSegmentId,
+                      segment.targetText?.toUpperCase() ?? null
+                    )
+                  }
+                >
+                  <CaseUpper />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Convert to uppercase</p>
+              </TooltipContent>
+            </Tooltip>
+
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className="h-8 w-8"
+                  onClick={() =>
+                    handleValueChange(
+                      activeSegmentId,
+                      segment.targetText?.toLowerCase() ?? null
+                    )
+                  }
+                >
+                  <CaseLower />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Convert to lowercase</p>
+              </TooltipContent>
+            </Tooltip>
+
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className="h-8 w-8"
+                  onClick={handleReformulate}
+                >
+                  <WandSparkles />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Reformulate translation</p>
+              </TooltipContent>
+            </Tooltip>
+
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className="h-8 w-8"
+                  onClick={handleImprove}
+                >
+                  <Bot />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Improve translation with AI</p>
+              </TooltipContent>
+            </Tooltip>
+          </IconsContainer>
+
           <IconsContainer>
             <Dialog>
-              <DialogTrigger asChild>
-                <Button variant="ghost" className="h-8 w-8">
-                  <Eye />
-                </Button>
-              </DialogTrigger>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <DialogTrigger asChild>
+                    <Button variant="ghost" className="h-8 w-8">
+                      <Eye />
+                    </Button>
+                  </DialogTrigger>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Preview document</p>
+                </TooltipContent>
+              </Tooltip>
               <DialogContent className="max-w-[90vw]">
                 <Preview
                   html={isLoadingPreview ? "LOADING..." : html ?? "error"}
                 />
               </DialogContent>
             </Dialog>
-            <Button variant="ghost" className="h-8 w-8">
-              <FileSearch />
-            </Button>
+
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button variant="ghost" className="h-8 w-8">
+                  <FileSearch />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Search in document (not implemented)</p>
+              </TooltipContent>
+            </Tooltip>
           </IconsContainer>
         </Container>
-        <DownloadButton data={downloadData} />
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <div>
+              <DownloadButton data={downloadData} />
+            </div>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>Download translation in different formats</p>
+          </TooltipContent>
+        </Tooltip>
       </EditorbarContainer>
-      <TmbarContainer>
-        <SearchForm
-          placeholder="Search glossary"
-          className="h-8 border-border"
-        />
-        <ToggleGroup
-          type="single"
-          value={currentView}
-          onValueChange={changeView}
-        >
-          <ToggleGroupItem
-            value="tm"
-            className="h-8 data-[state=on]:bg-cat-accent/10"
-          >
-            <SquareM />
-          </ToggleGroupItem>
-          <ToggleGroupItem
-            value="glossary"
-            className="h-8 data-[state=on]:bg-cat-accent/10"
-          >
-            <BookOpenText />
-          </ToggleGroupItem>
-        </ToggleGroup>
-      </TmbarContainer>
-    </>
+      <Tmbar />
+    </TooltipProvider>
   );
 }

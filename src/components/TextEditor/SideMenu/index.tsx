@@ -31,6 +31,10 @@ export default function SideMenu() {
   );
   const { currentView } = useResources();
 
+  const ErrorComponent = (
+    <p className="p-4 text-sm text-muted-foreground">No matches found</p>
+  );
+
   return (
     <Container className="col-span-3 sticky top-0 min-h-screen h-fit space-y-4 bg-background">
       {currentView === "tm" ? (
@@ -39,9 +43,7 @@ export default function SideMenu() {
             isLoading={isLoadingMatches || isLoadingReformulation}
             isError={isError}
             error={error}
-            errorComponent={
-              <p className="text-sm text-muted-foreground">No matches found</p>
-            }
+            errorComponent={ErrorComponent}
             loadingComponent={<MatchSkeletons />}
           >
             <ReformulationMatches
@@ -57,9 +59,7 @@ export default function SideMenu() {
             isLoading={isLoadingGlossary}
             isError={isGlossaryError}
             error={glossaryError}
-            errorComponent={
-              <p className="text-sm text-muted-foreground">No matches found</p>
-            }
+            errorComponent={ErrorComponent}
             loadingComponent={<GlossarySkeletons />}
           >
             <Glossary glossaryData={glossaryData || []} />

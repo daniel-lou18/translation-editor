@@ -20,7 +20,7 @@ export default function DownloadButton({ data }: DownloadButtonProps) {
           Download
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent>
+      <DropdownMenuContent align="end">
         {data.map((item) => (
           <DropdownMenuItem key={item.label} onClick={item.onClick}>
             {item.label}

@@ -4,10 +4,11 @@ import { Dispatch, useCallback } from "react";
 
 export type EditorActions = {
   handleSegmentChange: (id: number) => void;
-  handleValueChange: (id: number, value: string) => void;
+  handleValueChange: (id: number, value: string | null) => void;
   handleStatusChange: (id: number) => void;
   setStatus: (id: number, status: SegmentStatus) => void;
   handleStatusChangeAll: () => void;
+  handleResetAllSegments: () => void;
 };
 
 export function useEditorActions(
@@ -19,8 +20,12 @@ export function useEditorActions(
       [dispatch]
     ),
     handleValueChange: useCallback(
-      (id: number, value: string) =>
+      (id: number, value: string | null) =>
         dispatch({ type: "UPDATE_SEGMENTS", payload: { id, value } }),
+      [dispatch]
+    ),
+    handleResetAllSegments: useCallback(
+      () => dispatch({ type: "RESET_ALL_SEGMENTS" }),
       [dispatch]
     ),
     handleStatusChange: useCallback(

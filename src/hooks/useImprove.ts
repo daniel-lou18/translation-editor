@@ -2,8 +2,10 @@ import { reformulationService } from "@/services/reformulationService";
 import { LangCodesDomain } from "@/types";
 import { TextSegment } from "@/types/Dtos";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useEditor } from "@/contexts/editorContext";
 
-export function useImprove(id: number) {
+export function useImprove() {
+  const { activeSegmentId } = useEditor();
   const queryClient = useQueryClient();
 
   const { isPending, error, isError, mutate } = useMutation({
@@ -14,15 +16,15 @@ export function useImprove(id: number) {
       ),
     onSuccess: (data) => {
       queryClient.invalidateQueries({
-        queryKey: ["translation", id],
+        queryKey: ["translation", activeSegmentId],
       });
-      queryClient.setQueryData(["reformulation", id], data);
+      queryClient.setQueryData(["reformulation", activeSegmentId], data);
     },
   });
 
   const improvedTranslation = queryClient.getQueryData<string>([
     "reformulation",
-    id,
+    activeSegmentId,
   ]);
 
   return {

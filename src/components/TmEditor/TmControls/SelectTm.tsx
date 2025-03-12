@@ -20,7 +20,7 @@ export default function SelectTm({ tms, currentTm, onSelect }: SelectTmProps) {
       items={items}
       value={currentId || ""}
       onChange={onSelect}
-      className="border border-border h-9.5"
+      className="border border-border h-9"
     />
   );
 }

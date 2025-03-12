@@ -1,6 +1,11 @@
 import { EditorActions } from "@/hooks/useEditorActions";
 import { Segment } from "@/types/Segment";
 
+export type NextSegmentConfig = {
+  direction: "forward" | "backward";
+  skipConfirmed: boolean;
+};
+
 export function editorContextUtils(
   segments: Segment[],
   activeSegmentId: number,
@@ -9,11 +14,25 @@ export function editorContextUtils(
   const getActiveSegment = () =>
     segments.find((segment) => segment.id === activeSegmentId) || segments[0];
 
-  const toNextSegment = () => {
+  const toNextSegment = (
+    config: NextSegmentConfig = {
+      direction: "forward",
+      skipConfirmed: false,
+    }
+  ) => {
     const currentIndex = segments.findIndex(
       (segment) => segment.id === activeSegmentId
     );
-    const nextSegment = segments[currentIndex + 1];
+
+    const firstUnconfirmedSegment = segments
+      .slice(currentIndex + 1)
+      .find((segment) => segment.status !== "translated");
+
+    const nextSegment = config.skipConfirmed
+      ? firstUnconfirmedSegment
+      : segments[currentIndex + 1];
+
+    if (!nextSegment) return segments[currentIndex];
 
     actions.handleSegmentChange(nextSegment.id);
     return nextSegment;

@@ -1,7 +1,8 @@
 import { reformulationService } from "@/services/reformulationService";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-
-export function useReformulate(id: number) {
+import { useEditor } from "@/contexts/editorContext";
+export function useReformulate() {
+  const { activeSegmentId } = useEditor();
   const queryClient = useQueryClient();
 
   const { isPending, error, isError, mutate } = useMutation({
@@ -16,10 +17,13 @@ export function useReformulate(id: number) {
         params.targetLang
       ),
     onSuccess: (data) =>
-      queryClient.setQueryData(["reformulation", id], data.trim()),
+      queryClient.setQueryData(["reformulation", activeSegmentId], data.trim()),
   });
 
-  const reformulation = queryClient.getQueryData<string>(["reformulation", id]);
+  const reformulation = queryClient.getQueryData<string>([
+    "reformulation",
+    activeSegmentId,
+  ]);
 
   return {
     reformulation,
