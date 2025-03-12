@@ -1,6 +1,5 @@
 import { useEditor } from "@/contexts/editorContext";
 import { useAutoTranslation } from "@/hooks/useAutoTranslation";
-import Container from "../../ui/Container";
 import { useCallback, KeyboardEvent, ChangeEvent } from "react";
 import { useSemanticMatches } from "@/hooks/useSemanticMatches";
 import { useSegmentHandlers } from "@/hooks/useSegmentHandlers";

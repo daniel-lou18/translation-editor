@@ -12,7 +12,6 @@ export default function TextEditor() {
         <ProjectControls />
         <EditorControls />
         {/* <SearchForm placeholder="Search resources" className="col-span-3" /> */}
-
         <TranslationSegments />
         <SideMenu />
       </Container>

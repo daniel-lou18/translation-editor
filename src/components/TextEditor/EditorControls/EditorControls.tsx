@@ -318,16 +318,8 @@ export default function EditorControls() {
             </Tooltip>
           </IconsContainer>
         </Container>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <div>
-              <DownloadButton data={downloadData} />
-            </div>
-          </TooltipTrigger>
-          <TooltipContent>
-            <p>Download translation in different formats</p>
-          </TooltipContent>
-        </Tooltip>
+
+        <DownloadButton data={downloadData} />
       </EditorbarContainer>
       <Tmbar />
     </TooltipProvider>
