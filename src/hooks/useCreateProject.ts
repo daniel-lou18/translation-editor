@@ -1,26 +1,27 @@
 import { projectService } from "@/services/projectService";
-import { OptionalProjectWithId } from "@/types";
+import { NewProject } from "@/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-
-export function useUpdateProject() {
+import { useTranslationRoute } from "./useTranslationRoute";
+export function useCreateProject() {
   const queryClient = useQueryClient();
+  const { navigateToProjects } = useTranslationRoute();
   const { mutate, isPending, isError, error } = useMutation({
-    mutationFn: (project: OptionalProjectWithId) =>
-      projectService.updateProject(project),
+    mutationFn: (project: NewProject) => projectService.createProject(project),
     onSuccess: handleSuccess,
     onError: handleError,
   });
 
   function handleSuccess() {
     queryClient.invalidateQueries({ queryKey: ["projects"] });
-    toast.success("Project settings have been successfully updated", {
+    navigateToProjects();
+    toast.success("Project has been successfully created", {
       classNames: { toast: "bg-green-100" },
     });
   }
 
   function handleError() {
-    toast.error(`Could not update project: ${error}`, {
+    toast.error(`Could not create project: ${error}`, {
       classNames: { toast: "bg-red-100" },
     });
   }

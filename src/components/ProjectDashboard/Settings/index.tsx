@@ -1,6 +1,6 @@
 import Container from "@/components/ui/Container";
 import DeleteProject from "./DeleteProject";
-import ProjectName from "./ProjectName";
+import ProjectName from "./UpdateProject";
 import PageTitle from "@/components/ui/PageTitle";
 
 export default function ProjectSettings() {

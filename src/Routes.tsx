@@ -14,7 +14,7 @@ import CreateTmPage from "./pages/CreateTm";
 import AddTmPairsPage from "./pages/AddTmPairs";
 import TmEditorPage from "./pages/TmEditor";
 import DashboardProjects from "./components/Dashboard/Projects";
-
+import CreateProjectPage from "./pages/CreateProject";
 export default function RoutesComponent() {
   return (
     <Routes>
@@ -23,6 +23,7 @@ export default function RoutesComponent() {
       <Route path="/app" element={<RootLayout />}>
         <Route path="dashboard" element={<DashboardPage />}>
           <Route path="projects" element={<DashboardProjects />} />
+          <Route path="projects/create" element={<CreateProjectPage />} />
           <Route path="documents/upload" element={<UploadDocumentPage />} />
         </Route>
         <Route path="projects/:projectId" element={<ProjectLayout />}>

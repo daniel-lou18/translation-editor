@@ -40,3 +40,5 @@ export type ProjectWithDocsAndTransWithDoc = Project & {
 };
 
 export type OptionalProjectWithId = Partial<Project> & { id: number };
+
+export type NewProject = Pick<Project, "name" | "description">;

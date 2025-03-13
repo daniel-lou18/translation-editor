@@ -1,4 +1,5 @@
 import {
+  NewProject,
   OptionalProjectWithId,
   Project,
   ProjectWithDocsAndTrans,
@@ -19,8 +20,16 @@ export class ProjectService extends ApiService {
     return this.get("/projects");
   }
 
+  async createProject(project: NewProject): Promise<Project> {
+    return this.post("/projects", { project });
+  }
+
   async updateProject(project: OptionalProjectWithId): Promise<Project> {
     return this.post(`/projects/${project.id}`, { project });
+  }
+
+  async deleteProject(projectId: number): Promise<void> {
+    return this.delete(`/projects/${projectId}`, { timeout: 60000 });
   }
 }
 

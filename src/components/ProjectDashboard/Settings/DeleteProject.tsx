@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import ButtonLoader from "@/components/ui/ButtonLoader";
 import {
   Card,
   CardDescription,
@@ -6,6 +7,17 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { useDeleteProject } from "@/hooks/useDeleteProject";
+import { LoaderCircle } from "lucide-react";
 import { FormEvent } from "react";
 
 const projectNameData = {
@@ -17,9 +29,11 @@ const projectNameData = {
 };
 
 export default function DeleteProject() {
+  const { deleteProject, isDeleting } = useDeleteProject();
+
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    console.log("delete");
+    deleteProject();
   }
 
   return (
@@ -37,9 +51,38 @@ export default function DeleteProject() {
           <p className="text-sm text-destructive">
             This action cannot be undone!
           </p>
-          <Button size="sm" type="submit" variant="destructive">
-            Delete project
-          </Button>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button size="sm" type="button" variant="destructive">
+                Delete project
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader className="space-y-4">
+                <DialogTitle>
+                  Are you sure you want to delete this project?
+                </DialogTitle>
+                <DialogDescription>
+                  This will permanently delete you project. Please not that this
+                  action is irreversible, so proceed with caution
+                </DialogDescription>
+              </DialogHeader>
+              <DialogFooter>
+                <form onSubmit={handleSubmit}>
+                  <Button
+                    size="sm"
+                    variant="destructive"
+                    type="submit"
+                    disabled={isDeleting}
+                  >
+                    <ButtonLoader isLoading={isDeleting}>
+                      Delete project
+                    </ButtonLoader>
+                  </Button>
+                </form>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
         </CardFooter>
       </Card>
     </form>

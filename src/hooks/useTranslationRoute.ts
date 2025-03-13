@@ -11,6 +11,10 @@ export function useTranslationRoute() {
   const { projectId, documentId, translationId } = useParams();
   const navigate = useNavigate();
 
+  const navigateToProjects = useCallback(() => {
+    navigate("/app/dashboard/projects");
+  }, [navigate]);
+
   const navigateToProject = useCallback(
     (projectId: number | string) => {
       if (!projectId) {
@@ -80,6 +84,7 @@ export function useTranslationRoute() {
     navigateToTranslation,
     navigateToDocument,
     navigateToProject,
+    navigateToProjects,
     navigateToTms,
   };
 }

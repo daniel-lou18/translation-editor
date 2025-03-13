@@ -2,6 +2,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useBaseMutation } from "./useBaseMutation";
 import { documentService } from "@/services/documentService";
 import { toast } from "sonner";
+
 export function useDeleteDoc() {
   const queryClient = useQueryClient();
 

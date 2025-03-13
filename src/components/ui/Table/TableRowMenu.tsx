@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/dialog";
 import { MoreHorizontal } from "lucide-react";
 import { FormEvent } from "react";
-
+import ButtonLoader from "../ButtonLoader";
 export type DropdownMenuItem = {
   value: string;
   onClick: (param: any) => void;
@@ -86,7 +86,7 @@ export default function TableRowMenu<T extends DataType>({
         <DialogFooter>
           <form onSubmit={handleDelete}>
             <Button size="sm" variant="destructive" type="submit">
-              {`Delete ${name}`}
+              <ButtonLoader isLoading={false}>{`Delete ${name}`}</ButtonLoader>
             </Button>
           </form>
         </DialogFooter>

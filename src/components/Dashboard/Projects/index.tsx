@@ -16,17 +16,17 @@ export default function DashboardProjects() {
   if (!formattedProjects || formattedProjects.length === 0) return null;
 
   return (
-    <>
-      <Container className="flex justify-between mb-6">
+    <Container className="space-y-8">
+      <Container className="flex justify-between">
         <PageTitle title="Daniel's Projects" />
         <PageControls>
           <SearchForm />
           <Button size="sm" asChild>
-            <Link to="#">New Project</Link>
+            <Link to="/app/dashboard/projects/create">New Project</Link>
           </Button>
         </PageControls>
       </Container>
       <ProjectCards projects={formattedProjects} />
-    </>
+    </Container>
   );
 }

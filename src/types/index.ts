@@ -118,3 +118,8 @@ export type LangCodesDomain = {
   targetLang: LangCode;
   domain: Domain;
 };
+
+export type TitleDescription = {
+  title: string;
+  description: string;
+};
