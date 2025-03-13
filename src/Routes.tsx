@@ -24,6 +24,9 @@ export default function RoutesComponent() {
         <Route path="dashboard" element={<DashboardPage />}>
           <Route path="projects" element={<DashboardProjects />} />
           <Route path="projects/create" element={<CreateProjectPage />} />
+          <Route path="tms" element={<TmsPage />} />
+          <Route path="tms/create" element={<CreateTmPage />} />
+          <Route path="tms/add-segments" element={<AddTmPairsPage />} />
           <Route path="documents/upload" element={<UploadDocumentPage />} />
         </Route>
         <Route path="projects/:projectId" element={<ProjectLayout />}>

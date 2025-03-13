@@ -3,7 +3,7 @@ import { useTranslationRoute } from "@/hooks/useTranslationRoute";
 import PageTitle from "../../ui/PageTitle";
 import SearchForm from "../../ui/SearchForm";
 import { Button } from "../../ui/button";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import Container from "@/components/ui/Container";
 import PageControls from "@/components/ui/PageControls";
 import {
@@ -15,9 +15,12 @@ import {
 import { ChevronDown } from "lucide-react";
 
 export default function Tms() {
+  const navigate = useNavigate();
   const { projectId } = useTranslationRoute();
 
-  if (!projectId) return null;
+  if (!projectId) {
+    navigate("/app/dashboard/tms");
+  }
 
   return (
     <>
@@ -34,12 +37,24 @@ export default function Tms() {
             </DropdownMenuTrigger>
             <DropdownMenuContent>
               <DropdownMenuItem asChild>
-                <Link to={`/app/projects/${projectId}/tms/create`}>
+                <Link
+                  to={
+                    projectId
+                      ? `/app/projects/${projectId}/tms/create`
+                      : "/app/dashboard/tms/create"
+                  }
+                >
                   Create new TM
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
-                <Link to={`/app/projects/${projectId}/tms/add-segments`}>
+                <Link
+                  to={
+                    projectId
+                      ? `/app/projects/${projectId}/tms/add-segments`
+                      : "/app/dashboard/tms/add-segments"
+                  }
+                >
                   Add segment pairs
                 </Link>
               </DropdownMenuItem>

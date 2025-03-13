@@ -16,8 +16,8 @@ const sidebarContent: SidebarGroupType[] = [
   {
     label: "Translation resources",
     items: [
-      { content: "All TMs", href: "/app/dashboard/resources/tm" },
-      { content: "Create TM", href: "/app/dashboard/resources/tm/create" },
+      { content: "All TMs", href: "/app/dashboard/tms" },
+      { content: "Create TM", href: "/app/dashboard/tms/create" },
       { content: "All glossaries", href: "/app/dashboard/resources/glossary" },
       {
         content: "Create glossary",
