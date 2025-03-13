@@ -4,7 +4,11 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
+  DropdownMenuPortal,
   DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
@@ -19,9 +23,18 @@ import {
 import { MoreHorizontal } from "lucide-react";
 import { FormEvent } from "react";
 import ButtonLoader from "../ButtonLoader";
+
 export type DropdownMenuItem = {
   value: string;
+} & (
+  | { subItems: DropdownMenuItem[]; onClick?: undefined }
+  | { subItems?: undefined; onClick: (param: any) => void }
+);
+
+export type DeleteMenuItem = {
+  value: "delete";
   onClick: (param: any) => void;
+  subItems?: undefined;
 };
 
 export type DataType = {
@@ -31,7 +44,7 @@ export type DataType = {
 export type TableRowMenuProps<T extends DataType> = {
   name: string;
   data: T;
-  items: DropdownMenuItem[];
+  items: (DropdownMenuItem | DeleteMenuItem)[];
 };
 
 export default function TableRowMenu<T extends DataType>({
@@ -41,7 +54,12 @@ export default function TableRowMenu<T extends DataType>({
 }: TableRowMenuProps<T>) {
   function handleDelete(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    items[items.length - 1].onClick(data);
+    const deleteItem = items.find((item) => item.value === "delete") as
+      | DeleteMenuItem
+      | undefined;
+    if (deleteItem) {
+      deleteItem.onClick(data);
+    }
   }
 
   return (
@@ -58,17 +76,42 @@ export default function TableRowMenu<T extends DataType>({
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
-          {items.slice(0, -1).map((item) => (
-            <DropdownMenuItem
-              key={item.value}
-              onSelect={(e) => {
-                e.preventDefault();
-                item.onClick(data);
-              }}
-            >
-              {item.value}
-            </DropdownMenuItem>
-          ))}
+          {items.slice(0, -1).map((item) =>
+            "subItems" in item && item.subItems ? (
+              <DropdownMenuSub key={item.value}>
+                <DropdownMenuSubTrigger>{item.value}</DropdownMenuSubTrigger>
+                <DropdownMenuPortal>
+                  <DropdownMenuSubContent>
+                    {item.subItems.map((subItem) => (
+                      <DropdownMenuItem
+                        key={subItem.value}
+                        onSelect={(e) => {
+                          e.preventDefault();
+                          if ("onClick" in subItem && subItem.onClick) {
+                            subItem.onClick(data);
+                          }
+                        }}
+                      >
+                        {subItem.value}
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuSubContent>
+                </DropdownMenuPortal>
+              </DropdownMenuSub>
+            ) : (
+              <DropdownMenuItem
+                key={item.value}
+                onSelect={(e) => {
+                  e.preventDefault();
+                  if ("onClick" in item) {
+                    item.onClick(data);
+                  }
+                }}
+              >
+                {item.value}
+              </DropdownMenuItem>
+            )
+          )}
           <DropdownMenuSeparator />
           <DialogTrigger asChild>
             <DropdownMenuItem>{`Delete ${name}`}</DropdownMenuItem>

@@ -8,17 +8,20 @@ export function useExportTranslation() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
-  async function downloadFile(format: ExportFileType) {
+  async function downloadFile(format: ExportFileType, id?: string) {
+    const currentId = id ?? translationId;
+    console.log("currentId", currentId);
+
     try {
       setIsLoading(true);
       setError("");
 
-      if (!translationId) {
+      if (!currentId) {
         throw new Error("Translation id is missing");
       }
 
       const { data, fileName } = await exportService.exportTranslation(
-        translationId,
+        currentId,
         format
       );
 

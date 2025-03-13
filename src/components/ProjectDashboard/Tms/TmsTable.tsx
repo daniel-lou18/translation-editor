@@ -1,13 +1,44 @@
 import {
   Table,
   TableBody,
-  TableCell,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
 import TmsTableBody from "./TmsTableBody";
 import { useTms } from "@/hooks/useTms";
+
+const tmsTableHeader = [
+  {
+    label: "Name",
+    key: "name",
+  },
+  {
+    label: "Description",
+    key: "description",
+  },
+  {
+    label: "Source lang",
+    key: "sourceLang",
+  },
+  {
+    label: "Target lang",
+    key: "targetLang",
+  },
+  {
+    label: "Domain",
+    key: "domain",
+  },
+  {
+    label: "Created",
+    key: "created",
+  },
+  {
+    label: "Actions",
+    key: "actions",
+    className: "w-[100px] pr-0",
+  },
+];
 
 export default function TmsTable() {
   const { tms } = useTms();
@@ -16,25 +47,15 @@ export default function TmsTable() {
     <Table>
       <TableHeader>
         <TableRow className="hover:bg-transparent">
-          <TableHead className="pl-0">Name</TableHead>
-          <TableHead>Description</TableHead>
-          <TableHead>Source lang</TableHead>
-          <TableHead>Target lang</TableHead>
-          <TableHead>Domain</TableHead>
-          <TableHead>Created</TableHead>
-          <TableHead className="w-[100px] pr-0">Actions</TableHead>
+          {tmsTableHeader.map((header) => (
+            <TableHead key={header.key} className={header.className ?? ""}>
+              {header.label}
+            </TableHead>
+          ))}
         </TableRow>
       </TableHeader>
       <TableBody>
-        {tms.length > 0 ? (
-          <TmsTableBody tms={tms} />
-        ) : (
-          <TableRow>
-            <TableCell colSpan={7} className="h-24 text-center">
-              No TMs found
-            </TableCell>
-          </TableRow>
-        )}
+        <TmsTableBody tms={tms} />
       </TableBody>
     </Table>
   );

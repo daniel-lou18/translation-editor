@@ -3,12 +3,15 @@ import TmsTableRow from "./TmsTableRow";
 import { useDeleteTm } from "@/hooks/useDeleteTm";
 import { useUpdateTm } from "@/hooks/useUpdateTm";
 import { useEditTable } from "@/hooks/useEditTable";
+import { useTmRoute } from "@/hooks/useTmRoute";
+import { TableCell, TableRow } from "@/components/ui/table";
 
 type TmsTableBodyProps = {
   tms: Tm[];
 };
 
 export default function TmsTableBody({ tms }: TmsTableBodyProps) {
+  const { navigateToTm } = useTmRoute();
   const { deleteTm, isDeleting } = useDeleteTm();
   const { updateTm, isSaving } = useUpdateTm();
   const { setEditingId, setEditFormData, ...restProps } =
@@ -18,8 +21,10 @@ export default function TmsTableBody({ tms }: TmsTableBodyProps) {
     name: "tm",
     items: [
       {
-        value: "View details",
-        onClick: () => {},
+        value: "View",
+        onClick: (tm: Tm) => {
+          navigateToTm(tm.id);
+        },
       },
       {
         value: "Edit",
@@ -30,7 +35,20 @@ export default function TmsTableBody({ tms }: TmsTableBodyProps) {
       },
       {
         value: "Export",
-        onClick: () => {},
+        subItems: [
+          {
+            value: "Excel (.xlsx)",
+            onClick: () => {},
+          },
+          {
+            value: "Comma-separated values (.csv)",
+            onClick: () => {},
+          },
+          {
+            value: "Tab-separated values (.tsv)",
+            onClick: () => {},
+          },
+        ],
       },
       {
         value: "Delete",
@@ -41,13 +59,27 @@ export default function TmsTableBody({ tms }: TmsTableBodyProps) {
     ],
   };
 
-  return tms.map((tm) => (
-    <TmsTableRow
-      key={tm.id}
-      data={tm}
-      isSaving={isSaving || isDeleting}
-      rowMenuData={tmsRowMenuData}
-      {...restProps}
-    />
-  ));
+  if (tms.length === 0) {
+    return (
+      <TableRow>
+        <TableCell colSpan={7} className="h-24 text-center">
+          No TMs found
+        </TableCell>
+      </TableRow>
+    );
+  }
+
+  return (
+    <>
+      {tms.map((tm) => (
+        <TmsTableRow
+          key={tm.id}
+          data={tm}
+          isSaving={isSaving || isDeleting}
+          rowMenuData={tmsRowMenuData}
+          {...restProps}
+        />
+      ))}
+    </>
+  );
 }
