@@ -7,6 +7,7 @@ import { FileMetadata } from "@/types/Dtos";
 import { getIdsFromTranslation } from "@/utils/helpers";
 import { useBaseMutation } from "./useBaseMutation";
 import { FullLangsDomain } from "@/types";
+import { useLocation } from "react-router";
 
 export type SubmitDocumentResult = {
   projectId: string;
@@ -27,8 +28,14 @@ type DocumentUploadConfig = {
 
 export function useDocumentUpload(config: DocumentUploadConfig) {
   const { sourceLang, targetLang, domain, newProject = true, tmId } = config;
-  const { navigateToTranslation, projectId } = useTranslationRoute();
+  const { navigateToTranslation, projectId: urlProjectId } =
+    useTranslationRoute();
+  const location = useLocation();
   const { file, setFile, removeFile } = useUploadSingle();
+
+  const isDashboard = location.pathname.includes("/dashboard/documents/upload");
+  const projectId = isDashboard ? "1" : urlProjectId;
+
   const { mutate, isPending: isLoading } = useBaseMutation({
     mutationFn: submitDocument,
     onSuccess: (params: SubmitDocumentResult) => {

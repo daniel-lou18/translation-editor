@@ -6,9 +6,9 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "../ui/card";
+} from "@/components/ui/card";
 import { ChevronRight, Circle } from "lucide-react";
-import Container from "../ui/Container";
+import Container from "@/components/ui/Container";
 import { Link } from "react-router";
 
 export type ProjectCardProps = {
@@ -20,6 +20,7 @@ export type ProjectCardProps = {
     translationsCount: number;
   };
   status: ProjectStatus;
+  className?: string;
 };
 
 export default function ProjectCard({
@@ -27,14 +28,19 @@ export default function ProjectCard({
   name,
   info: { description, documentsCount, translationsCount },
   status,
+  className,
 }: ProjectCardProps) {
   return (
-    <Link to={`${id}/documents`}>
-      <Card className="hover:bg-muted hover:cursor-pointer transition-all group">
-        <CardHeader className="flex-row justify-between">
-          <Container className="space-y-1.5">
+    <Link to={`/app/projects/${id}/documents`} className="block h-full">
+      <Card
+        className={`hover:bg-muted hover:cursor-pointer transition-all group flex flex-col h-full ${
+          className || ""
+        }`}
+      >
+        <CardHeader className="flex-row justify-between flex-grow">
+          <Container className="space-y-1.5 flex flex-col">
             <CardTitle className="text-xl">{name}</CardTitle>
-            <CardDescription>
+            <CardDescription className="flex-grow">
               <p>{description}</p>
             </CardDescription>
           </Container>

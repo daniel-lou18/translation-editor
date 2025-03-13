@@ -1,13 +1,13 @@
 import { Button } from "@/components/ui/button";
 import ButtonLoader from "@/components/ui/ButtonLoader";
 import {
-  Card,
   CardContent,
   CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import CardComponent, { FieldData } from "@/components/ui/Card/CardComponent";
 import Container from "@/components/ui/Container";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -93,59 +93,50 @@ export default function ProjectName() {
     });
   }
 
+  const fieldData: FieldData[] = [
+    {
+      label: "Name",
+      value: name,
+      onChange: handleNameChange,
+      onBlur: handleNameBlur,
+      error: nameError,
+    },
+    {
+      label: "Description",
+      value: description,
+      onChange: handleDescriptionChange,
+      onBlur: handleDescriptionBlur,
+      error: descriptionError,
+    },
+  ];
+
   return (
     <form onSubmit={handleSubmit}>
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-xl flex justify-between">
-            {projectNameData.header.title}
-            <Container className="flex items-center space-x-2 text-sm">
-              <Switch
-                id="project-active"
-                checked={status}
-                onCheckedChange={(val) => setStatus(val)}
-              />
-              <Label htmlFor="project-active">Active</Label>
-            </Container>
-          </CardTitle>
-          <CardDescription>
-            {projectNameData.header.description}
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="flex justify-between gap-8 pb-2">
-          <Container className="flex-1 grid gap-2">
-            <Label htmlFor="project-name">Name</Label>
-            <Input
-              id="project-name"
-              value={name}
-              onChange={handleNameChange}
-              onBlur={handleNameBlur}
+      <CardComponent>
+        <CardComponent.Header
+          title={projectNameData.header.title}
+          description={projectNameData.header.description}
+        >
+          <Container className="flex items-center space-x-2 text-sm">
+            <Switch
+              id="project-active"
+              checked={status}
+              onCheckedChange={(val) => setStatus(val)}
             />
-            <p className={`min-h-4 text-xs text-destructive`}>{nameError}</p>
+            <Label htmlFor="project-active">Active</Label>
           </Container>
-          <Container className="flex-1 grid gap-2">
-            <Label htmlFor="project-description">Description</Label>
-            <Input
-              id="project-description"
-              value={description}
-              onChange={handleDescriptionChange}
-              onBlur={handleDescriptionBlur}
-            />
-            <p className={`min-h-4 text-xs text-destructive`}>
-              {descriptionError}
-            </p>
-          </Container>
-        </CardContent>
-        <CardFooter className="py-4 border-t border-border justify-between">
-          <p className={`text-sm text-muted-foreground`}>
-            Project name must be between 1 and 36 characters long. Project
-            description between 3 and 100.
-          </p>
+        </CardComponent.Header>
+        <CardComponent.Content>
+          {fieldData.map((field) => (
+            <CardComponent.Field key={field.label} data={field} />
+          ))}
+        </CardComponent.Content>
+        <CardComponent.Footer text="Project name must be between 1 and 36 characters long. Project description between 3 and 100.">
           <Button size="sm" type="submit">
             <ButtonLoader isLoading={isLoading}>Save</ButtonLoader>
           </Button>
-        </CardFooter>
-      </Card>
+        </CardComponent.Footer>
+      </CardComponent>
     </form>
   );
 }

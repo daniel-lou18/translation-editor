@@ -29,7 +29,7 @@ export default function TranslationsBreadcrumb({
         <BreadcrumbList>
           <BreadcrumbItem className="hidden md:block">
             <BreadcrumbLink asChild className="flex items-center">
-              <Link to="/app/projects">
+              <Link to="/app/dashboard/projects">
                 <Home size={16} className="mr-1" /> Home
               </Link>
             </BreadcrumbLink>

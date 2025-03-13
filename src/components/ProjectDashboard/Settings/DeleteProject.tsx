@@ -25,15 +25,15 @@ export default function DeleteProject() {
   return (
     <form onSubmit={handleSubmit}>
       <Card>
-        <CardHeader>
-          <CardTitle className="text-xl">
+        <CardHeader className="px-6 py-4 space-y-0">
+          <CardTitle className="text-lg">
             {projectNameData.header.title}
           </CardTitle>
           <CardDescription>
             {projectNameData.header.description}{" "}
           </CardDescription>
         </CardHeader>
-        <CardFooter className="py-4 border-t border-border justify-between bg-destructive/10">
+        <CardFooter className="py-4 border-t border-sidebar-border justify-between bg-destructive/10">
           <p className="text-sm text-destructive">
             This action cannot be undone!
           </p>

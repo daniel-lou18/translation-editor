@@ -3,7 +3,6 @@ import EditorPage from "./pages/Editor";
 import HomePage from "./pages/Home";
 import LoginPage from "./pages/Login";
 import RootLayout from "./pages/RootLayout";
-import UploadPage from "./components/Upload/UploadLanding";
 import TranslationsPage from "./pages/Translations";
 import DashboardPage from "./pages/Dashboard";
 import ProjectLayout from "./pages/ProjectLayout";
@@ -14,6 +13,7 @@ import TmsPage from "./pages/Tms";
 import CreateTmPage from "./pages/CreateTm";
 import AddTmPairsPage from "./pages/AddTmPairs";
 import TmEditorPage from "./pages/TmEditor";
+import DashboardProjects from "./components/Dashboard/Projects";
 
 export default function RoutesComponent() {
   return (
@@ -21,9 +21,10 @@ export default function RoutesComponent() {
       <Route index element={<HomePage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/app" element={<RootLayout />}>
-        <Route path="upload" element={<UploadPage />} />
-
-        <Route path="projects" element={<DashboardPage />} />
+        <Route path="dashboard" element={<DashboardPage />}>
+          <Route path="projects" element={<DashboardProjects />} />
+          <Route path="documents/upload" element={<UploadDocumentPage />} />
+        </Route>
         <Route path="projects/:projectId" element={<ProjectLayout />}>
           <Route path="documents" element={<DocumentsPage />} />
           <Route path="documents/upload" element={<UploadDocumentPage />} />

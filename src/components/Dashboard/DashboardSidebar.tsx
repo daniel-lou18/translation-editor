@@ -9,34 +9,42 @@ const sidebarContent: SidebarGroupType[] = [
   {
     label: "Projects",
     items: [
-      { content: "All projects", href: "/app/projects" },
-      { content: "New project", href: "/app/projects/create" },
+      { content: "All projects", href: "/app/dashboard/projects" },
+      { content: "New project", href: "/app/dashboard/projects/create" },
     ],
   },
   {
     label: "Translation resources",
     items: [
-      { content: "All TMs", href: "/app/resources/tm" },
-      { content: "Create TM", href: "/app/resources/tm/create" },
-      { content: "All glossaries", href: "/app/resources/glossary" },
-      { content: "Create glossary", href: "/app/resources/glossary/create" },
+      { content: "All TMs", href: "/app/dashboard/resources/tm" },
+      { content: "Create TM", href: "/app/dashboard/resources/tm/create" },
+      { content: "All glossaries", href: "/app/dashboard/resources/glossary" },
+      {
+        content: "Create glossary",
+        href: "/app/dashboard/resources/glossary/create",
+      },
     ],
   },
   {
     label: "Quick start",
-    items: [{ content: "Translate document", href: "/app/documents/upload" }],
+    items: [
+      {
+        content: "Translate document",
+        href: "/app/dashboard/documents/upload",
+      },
+    ],
   },
   {
     label: "Account",
     items: [
-      { content: "Preferences", href: "/app/account/preferences" },
+      { content: "Preferences", href: "/app/dashboard/account/preferences" },
       {
         content: (
           <>
             <LogOut /> Log out
           </>
         ),
-        href: "/app/account/logout",
+        href: "/app/dashboard/account/logout",
       },
     ],
   },

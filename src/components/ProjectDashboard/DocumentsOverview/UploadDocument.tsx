@@ -38,7 +38,7 @@ export default function UploadDocument({
 
   return (
     <Container>
-      <PageTitle title="Upload document" />
+      <PageTitle title="Translate document" />
       <UploadTmForm
         handleSubmit={handleSubmit}
         isLoading={isLoading}

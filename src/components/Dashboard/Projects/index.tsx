@@ -1,24 +1,22 @@
-import { ProjectWithDocsAndTrans } from "@/types";
 import { formatProjectsToCards } from "@/utils/helpers";
-import Container from "../ui/Container";
-import PageTitle from "../ui/PageTitle";
-import SearchForm from "../ui/SearchForm";
-import { Button } from "../ui/button";
+import Container from "../../ui/Container";
+import PageTitle from "../../ui/PageTitle";
+import SearchForm from "../../ui/SearchForm";
+import { Button } from "../../ui/button";
 import ProjectCards from "./ProjectCards";
 import { Link } from "react-router";
-import PageControls from "../ui/PageControls";
+import PageControls from "../../ui/PageControls";
+import { useProjects } from "@/hooks/useProjects";
 
-type DashboardContentProps = {
-  projects: ProjectWithDocsAndTrans[] | undefined;
-};
+export default function DashboardProjects() {
+  const { data: projects } = useProjects();
 
-export default function DashboardContent({ projects }: DashboardContentProps) {
   const formattedProjects = formatProjectsToCards(projects);
 
   if (!formattedProjects || formattedProjects.length === 0) return null;
 
   return (
-    <Container className="px-12 py-6 bg-muted/20">
+    <>
       <Container className="flex justify-between mb-6">
         <PageTitle title="Daniel's Projects" />
         <PageControls>
@@ -29,6 +27,6 @@ export default function DashboardContent({ projects }: DashboardContentProps) {
         </PageControls>
       </Container>
       <ProjectCards projects={formattedProjects} />
-    </Container>
+    </>
   );
 }

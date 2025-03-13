@@ -1,18 +1,18 @@
 import DashboardSidebar from "@/components/Dashboard/DashboardSidebar";
-import DashboardContent from "@/components/Dashboard/DashboardContent";
 import DashboardHeader from "@/components/Dashboard/DashboardHeader";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
-import { useProjects } from "@/hooks/useProjects";
+import { Outlet } from "react-router";
+import Container from "../ui/Container";
 
 export default function Dashboard() {
-  const { data: projects } = useProjects();
-
   return (
     <SidebarProvider>
       <DashboardSidebar />
       <SidebarInset className="bg-muted/20">
         <DashboardHeader />
-        <DashboardContent projects={projects} />
+        <Container className="xl:px-12 min-[1600px]:px-24 py-6">
+          <Outlet />
+        </Container>
       </SidebarInset>
     </SidebarProvider>
   );
