@@ -21,7 +21,7 @@ export function useAddTranslation() {
     queryClient.invalidateQueries({ queryKey: ["projects"] });
     toast.success("Translation has been added successfully", {
       classNames: {
-        toast: "bg-green-200",
+        toast: "bg-green-100",
       },
     });
   }
@@ -29,7 +29,7 @@ export function useAddTranslation() {
   function handleError() {
     toast.error("Something went wrong. Could not add translation", {
       classNames: {
-        toast: "bg-red-200",
+        toast: "bg-red-100",
       },
     });
   }

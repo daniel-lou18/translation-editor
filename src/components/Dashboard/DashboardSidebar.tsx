@@ -8,14 +8,23 @@ type DashboardSidebarProps = ComponentProps<typeof Sidebar>;
 const sidebarContent: SidebarGroupType[] = [
   {
     label: "Projects",
-    items: [{ content: "All projects", href: "/app/projects" }],
+    items: [
+      { content: "All projects", href: "/app/projects" },
+      { content: "New project", href: "/app/projects/create" },
+    ],
   },
   {
-    label: "Upload",
+    label: "Translation resources",
     items: [
-      { content: "Upload Document", href: "/app/upload/document" },
-      { content: "Upload TM", href: "/app/upload/tm" },
+      { content: "All TMs", href: "/app/resources/tm" },
+      { content: "Create TM", href: "/app/resources/tm/create" },
+      { content: "All glossaries", href: "/app/resources/glossary" },
+      { content: "Create glossary", href: "/app/resources/glossary/create" },
     ],
+  },
+  {
+    label: "Quick start",
+    items: [{ content: "Translate document", href: "/app/documents/upload" }],
   },
   {
     label: "Account",

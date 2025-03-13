@@ -15,13 +15,13 @@ export function useUpdateProject() {
   function handleSuccess() {
     queryClient.invalidateQueries({ queryKey: ["projects"] });
     toast.success("Project settings have been successfully updated", {
-      classNames: { toast: "bg-green-200" },
+      classNames: { toast: "bg-green-100" },
     });
   }
 
   function handleError() {
     toast.error("Could not update project name", {
-      classNames: { toast: "bg-red-200" },
+      classNames: { toast: "bg-red-100" },
     });
   }
 

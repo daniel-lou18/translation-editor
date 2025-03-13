@@ -1,24 +1,11 @@
 import * as React from "react";
 import { SearchForm } from "@/components/ProjectDashboard/DocumentsOverview/search-form";
 import { VersionSwitcher } from "@/components/ProjectDashboard/DocumentsOverview/version-switcher";
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
-  SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  SidebarRail,
-  SidebarSeparator,
-} from "@/components/ui/sidebar";
+import { Sidebar } from "@/components/ui/sidebar";
 import {
   NormalizedProjectsWithTranslations,
   ProjectWithDocsAndTrans,
 } from "@/types";
-import { Link } from "react-router";
 import {
   BookType,
   BookOpenText,
@@ -28,7 +15,10 @@ import {
   Languages,
   Settings,
 } from "lucide-react";
-import { SidebarGroupType } from "@/components/ui/Layout/Sidebar";
+import SidebarComponent, {
+  SidebarGroupType,
+} from "@/components/ui/Layout/Sidebar";
+
 type AppSidebarProps = {
   projects: NormalizedProjectsWithTranslations | null;
   currentProject: ProjectWithDocsAndTrans | null;
@@ -41,101 +31,84 @@ export default function DocumentsSidebar({
 }: AppSidebarProps) {
   if (!projects || !currentProject) return null;
 
-  const sidebarContent: SidebarGroupType[] = [
+  const content: SidebarGroupType[] = [
     {
       label: "Navigation",
-      items: [{ content: "All projects", href: "/app/projects" }],
+      items: [
+        {
+          content: (
+            <>
+              <FileText /> Documents
+            </>
+          ),
+          href: `/app/projects/${String(currentProject.id)}/documents`,
+        },
+        {
+          content: (
+            <>
+              <Globe /> All translations
+            </>
+          ),
+          href: `/app/projects/${String(currentProject.id)}/translations`,
+        },
+      ],
+    },
+    {
+      label: "Translation Resources",
+      items: [
+        {
+          content: (
+            <>
+              <BookType /> Translation Memory
+            </>
+          ),
+          href: `/app/projects/${String(currentProject.id)}/tms`,
+        },
+        {
+          content: (
+            <>
+              <BookOpenText /> Glossaries
+            </>
+          ),
+          href: `#`,
+        },
+      ],
+    },
+    {
+      label: "",
+      items: [
+        {
+          content: (
+            <>
+              <ChartBar /> Statistics
+            </>
+          ),
+          href: `#`,
+        },
+        {
+          content: (
+            <>
+              <Languages /> Languages
+            </>
+          ),
+          href: `#`,
+        },
+        {
+          content: (
+            <>
+              <Settings /> Settings
+            </>
+          ),
+          href: `/app/projects/${String(currentProject.id)}/settings`,
+        },
+      ],
     },
   ];
 
   return (
-    <Sidebar {...props}>
-      <SidebarHeader>
-        <VersionSwitcher projects={projects} defaultProject={currentProject} />
-        <SearchForm />
-      </SidebarHeader>
-      <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupLabel>Navigation</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild>
-                  <Link
-                    to={`/app/projects/${String(currentProject.id)}/documents`}
-                  >
-                    <FileText /> Documents
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild>
-                  <Link
-                    to={`/app/projects/${String(
-                      currentProject.id
-                    )}/translations`}
-                  >
-                    <Globe /> All translations
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-        <SidebarGroup>
-          <SidebarGroupLabel>Translation Resources</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild>
-                  <Link to={`/app/projects/${String(currentProject.id)}/tms`}>
-                    <BookType /> Translation Memory
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild>
-                  <Link to="#">
-                    <BookOpenText /> Glossaries
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-        <SidebarSeparator />
-        <SidebarGroup>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild>
-                  <Link to="#">
-                    <ChartBar /> Statistics
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild>
-                  <Link to="#">
-                    <Languages /> Languages
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild>
-                  <Link
-                    to={`/app/projects/${String(currentProject.id)}/settings`}
-                  >
-                    <Settings /> Settings
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-        <SidebarSeparator />
-      </SidebarContent>
-      <SidebarRail />
-    </Sidebar>
+    <SidebarComponent {...props} menuContent={content}>
+      <VersionSwitcher projects={projects} defaultProject={currentProject} />
+      <SearchForm />
+    </SidebarComponent>
   );
 }
