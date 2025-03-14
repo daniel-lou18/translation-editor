@@ -26,13 +26,25 @@ export default function SideMenu() {
     isError: isGlossaryError,
     error: glossaryError,
   } = useSearchGlossary(activeSegment.sourceText);
-  const { reformulation, isLoading: isLoadingReformulation } = useReformulate(
-    activeSegment.id
-  );
+  const { reformulation, isLoading: isLoadingReformulation } = useReformulate();
   const { currentView } = useResources();
 
   const ErrorComponent = (
-    <p className="p-4 text-sm text-muted-foreground">No matches found</p>
+    <p className="p-4 text-sm text-muted-foreground">
+      Error: could not retrieve matches
+    </p>
+  );
+
+  const EmptyMatchesComponent = (
+    <p className="p-4 text-sm text-muted-foreground">
+      No matches found for this segment
+    </p>
+  );
+
+  const EmptyGlossaryComponent = (
+    <p className="p-4 text-sm text-muted-foreground">
+      No glossary terms found for this segment
+    </p>
   );
 
   return (
@@ -40,11 +52,19 @@ export default function SideMenu() {
       {currentView === "tm" ? (
         <Container className="mt-4 px-4">
           <DataHandler
-            isLoading={isLoadingMatches || isLoadingReformulation}
-            isError={isError}
-            error={error}
-            errorComponent={ErrorComponent}
-            loadingComponent={<MatchSkeletons />}
+            loading={{
+              isLoading: isLoadingMatches || isLoadingReformulation,
+              component: <MatchSkeletons />,
+            }}
+            error={{
+              isError,
+              error,
+              component: ErrorComponent,
+            }}
+            empty={{
+              isEmpty: !matches || matches.length === 0,
+              component: EmptyMatchesComponent,
+            }}
           >
             <ReformulationMatches
               sourceText={activeSegment.sourceText}
@@ -54,13 +74,21 @@ export default function SideMenu() {
           </DataHandler>
         </Container>
       ) : (
-        <Container>
+        <Container className="mt-4 px-4">
           <DataHandler
-            isLoading={isLoadingGlossary}
-            isError={isGlossaryError}
-            error={glossaryError}
-            errorComponent={ErrorComponent}
-            loadingComponent={<GlossarySkeletons />}
+            loading={{
+              isLoading: isLoadingGlossary,
+              component: <GlossarySkeletons />,
+            }}
+            error={{
+              isError: isGlossaryError,
+              error: glossaryError,
+              component: ErrorComponent,
+            }}
+            empty={{
+              isEmpty: !glossaryData || glossaryData.length === 0,
+              component: EmptyGlossaryComponent,
+            }}
           >
             <Glossary glossaryData={glossaryData || []} />
           </DataHandler>

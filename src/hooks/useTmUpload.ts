@@ -1,5 +1,5 @@
 import { FormEvent } from "react";
-import { useTranslationRoute } from "@/hooks/useTranslationRoute";
+import { useRoute } from "@/hooks/useRoute";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
 import { useUploadDouble } from "./useUploadDouble";
@@ -23,7 +23,7 @@ export function useTmUpload(config: UploadConfig) {
   const { sourceFile, targetFile, setSourceFile, setTargetFile } =
     useUploadDouble();
   const queryClient = useQueryClient();
-  const { navigateToTms } = useTranslationRoute();
+  const { navigateToTms } = useRoute();
 
   const { mutate, isPending: isLoading } = useBaseMutation({
     mutationFn: async (

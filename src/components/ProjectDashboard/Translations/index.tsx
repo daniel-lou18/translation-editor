@@ -16,7 +16,6 @@ export default function Translations() {
     docSelectItems,
     langItems,
     handleAddTranslation,
-    handleClickTranslation,
     handleSelectDocument,
   } = useTranslationActions();
 
@@ -44,7 +43,6 @@ export default function Translations() {
       </Container>
       <TranslationsTable
         translations={currentDocument ? translations : allTranslations}
-        onClick={handleClickTranslation}
       />
     </>
   );

@@ -1,10 +1,10 @@
 import { translationService } from "@/services/translationService";
 import { Update } from "@/types/Dtos";
 import { useMutation } from "@tanstack/react-query";
-import { useTranslationRoute } from "./useTranslationRoute";
+import { useRoute } from "./useRoute";
 
 export function useSaveSegments() {
-  const { translationId } = useTranslationRoute();
+  const { translationId } = useRoute();
   const { mutate, data, isPending, isError, error } = useMutation({
     mutationFn: (updates: Update[]) => updateSegments(translationId, updates),
   });

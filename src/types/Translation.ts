@@ -1,5 +1,5 @@
 import { LangCode } from ".";
-import { Document } from "./Document";
+import { Document, DocumentWithSourceSegments } from "./Document";
 import { Segment } from "./Segment";
 
 export type SegmentStatus = "translated" | "untranslated";
@@ -52,7 +52,7 @@ export type TranslationWithTargetSegments = TranslationWithDocument & {
 
 export type TranslationWithSegments = {
   translation: Translation;
-  document: Document;
+  document: DocumentWithSourceSegments;
   segments: Segment[];
 };
 

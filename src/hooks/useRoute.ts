@@ -2,12 +2,12 @@ import { useCallback } from "react";
 import { useNavigate, useParams } from "react-router";
 
 export type NavigationParams = {
-  projectId: string | number;
-  documentId: string | number;
-  translationId: string | number;
+  projectId: string | number | undefined;
+  documentId: string | number | undefined;
+  translationId: string | number | undefined;
 };
 
-export function useTranslationRoute() {
+export function useRoute() {
   const { projectId, documentId, translationId } = useParams();
   const navigate = useNavigate();
 
@@ -16,7 +16,7 @@ export function useTranslationRoute() {
   }, [navigate]);
 
   const navigateToProject = useCallback(
-    (projectId: number | string) => {
+    (projectId: number | string | undefined) => {
       if (!projectId) {
         throw new Error("Project id is missing");
       }
@@ -30,7 +30,7 @@ export function useTranslationRoute() {
   );
 
   const navigateToDocument = useCallback(
-    (documentId: number | string) => {
+    (documentId: number | string | undefined) => {
       if (!projectId) {
         throw new Error("Project id is missing");
       }
@@ -79,6 +79,19 @@ export function useTranslationRoute() {
     [navigate]
   );
 
+  const navigateToTranslationDetails = useCallback(
+    ({ documentId, translationId }: Omit<NavigationParams, "projectId">) => {
+      if (!projectId) {
+        throw new Error("Project id is missing");
+      }
+
+      navigate(
+        `/app/projects/${projectId}/documents/${documentId}/translations/${translationId}/details`
+      );
+    },
+    [navigate]
+  );
+
   const navigateToTms = useCallback(() => {
     if (!projectId) {
       throw new Error("Project id is missing");
@@ -93,6 +106,7 @@ export function useTranslationRoute() {
     translationId,
     navigateToTranslations,
     navigateToTranslation,
+    navigateToTranslationDetails,
     navigateToDocument,
     navigateToDocumentDetails,
     navigateToProject,

@@ -2,7 +2,7 @@ import { renderHook, act } from "@testing-library/react";
 import { useTmUpload } from "../useTmUpload";
 import { uploadService } from "@/services/uploadService";
 import { useQueryClient } from "@tanstack/react-query";
-import { useTranslationRoute } from "@/hooks/useTranslationRoute";
+import { useRoute} from "@/hooks/useRoute";
 import { toast } from "sonner";
 import { vi, describe, it, expect, beforeEach, Mock } from "vitest";
 import type { Lang, Domain } from "@/types";
@@ -27,8 +27,8 @@ vi.mock("@tanstack/react-query", () => ({
     })),
 }));
 
-vi.mock("@/hooks/useTranslationRoute", () => ({
-  useTranslationRoute: vi.fn(() => ({
+vi.mock("@/hooks/useRoute", () => ({
+  useRoute: vi.fn(() => ({
     navigateToTms: vi.fn(),
   })),
 }));
@@ -197,7 +197,7 @@ describe("useTmUpload", () => {
     const mockNavigateToTms = vi.fn();
 
     (useQueryClient as Mock).mockReturnValue(mockQueryClient);
-    (useTranslationRoute as Mock).mockReturnValue({
+    (useRouteas Mock).mockReturnValue({
       navigateToTms: mockNavigateToTms,
     });
 

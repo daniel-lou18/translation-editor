@@ -2,10 +2,10 @@ import { projectService } from "@/services/projectService";
 import { NewProject } from "@/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { useTranslationRoute } from "./useTranslationRoute";
+import { useRoute } from "./useRoute";
 export function useCreateProject() {
   const queryClient = useQueryClient();
-  const { navigateToProjects } = useTranslationRoute();
+  const { navigateToProjects } = useRoute();
   const { mutate, isPending, isError, error } = useMutation({
     mutationFn: (project: NewProject) => projectService.createProject(project),
     onSuccess: handleSuccess,

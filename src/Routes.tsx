@@ -15,7 +15,9 @@ import AddTmPairsPage from "./pages/AddTmPairs";
 import TmEditorPage from "./pages/TmEditor";
 import DashboardProjects from "./components/Dashboard/Projects";
 import CreateProjectPage from "./pages/CreateProject";
-import DocumentPage from "./pages/Document";
+import DocumentDetailsPage from "./pages/DocumentDetails";
+import TranslationDetailsPage from "./pages/TranslationDetails";
+
 export default function RoutesComponent() {
   return (
     <Routes>
@@ -32,7 +34,10 @@ export default function RoutesComponent() {
         </Route>
         <Route path="projects/:projectId" element={<ProjectLayout />}>
           <Route path="documents" element={<DocumentsPage />} />
-          <Route path="documents/:documentId" element={<DocumentPage />} />
+          <Route
+            path="documents/:documentId"
+            element={<DocumentDetailsPage />}
+          />
           <Route path="documents/upload" element={<UploadDocumentPage />} />
           <Route
             path="documents/:documentId/translations"
@@ -43,6 +48,10 @@ export default function RoutesComponent() {
           <Route path="tms/create" element={<CreateTmPage />} />
           <Route path="tms/add-segments" element={<AddTmPairsPage />} />
           <Route path="settings" element={<ProjectSettings />} />
+          <Route
+            path="documents/:documentId/translations/:translationId/details"
+            element={<TranslationDetailsPage />}
+          />
         </Route>
         <Route
           path="projects/:projectId/documents/:documentId/translations/:translationId"

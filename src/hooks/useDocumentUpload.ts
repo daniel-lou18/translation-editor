@@ -1,5 +1,5 @@
 import { FormEvent } from "react";
-import { useTranslationRoute } from "@/hooks/useTranslationRoute";
+import { useRoute } from "@/hooks/useRoute";
 import { toast } from "sonner";
 import { useUploadSingle } from "./useUploadSingle";
 import { uploadService } from "@/services/uploadService";
@@ -28,8 +28,7 @@ type DocumentUploadConfig = {
 
 export function useDocumentUpload(config: DocumentUploadConfig) {
   const { sourceLang, targetLang, domain, newProject = true, tmId } = config;
-  const { navigateToTranslation, projectId: urlProjectId } =
-    useTranslationRoute();
+  const { navigateToTranslation, projectId: urlProjectId } = useRoute();
   const location = useLocation();
   const { file, setFile, removeFile } = useUploadSingle();
 

@@ -1,35 +1,28 @@
 import CardComponent from "@/components/ui/Card/CardComponent";
-import { Document, DocumentWithTranslationsSegments } from "@/types/Document";
-import { Button } from "@/components/ui/button";
-import { FileText, Edit, Download, Trash } from "lucide-react";
+import { DocumentWithTranslationsSegments } from "@/types/Document";
+import { FileText } from "lucide-react";
 import { formatDate, formatNumber, formatFileSize } from "@/utils/formatters";
 import Container from "../Container";
 
 type DocumentCardProps = {
-  document: DocumentWithTranslationsSegments;
-  fileSize?: number;
-  onEdit?: (document: Document) => void;
-  onDelete?: (document: Document) => void;
-  onDownload?: (document: Document) => void;
+  document: DocumentWithTranslationsSegments | null;
 };
 
-export default function DocumentCard({
-  document,
-  fileSize,
-  onEdit,
-  onDelete,
-  onDownload,
-}: DocumentCardProps) {
+export default function DocumentCard({ document }: DocumentCardProps) {
+  if (!document) {
+    return null;
+  }
+
   const {
-    fileName,
-    sourceLang,
+    fileName = "Untitled",
+    sourceLang = "Unknown",
     domain,
     subdomain,
     docType,
     createdAt,
     updatedAt,
-    sourceSegments,
-    translations,
+    sourceSegments = [],
+    translations = [],
   } = document;
 
   // Calculate additional metrics
@@ -83,7 +76,6 @@ export default function DocumentCard({
     { label: "Segments", value: formatNumber(segmentCount) },
     { label: "Word Count", value: formatNumber(wordCount) },
     { label: "Character Count", value: formatNumber(characterCount) },
-    fileSize ? { label: "File Size", value: formatFileSize(fileSize) } : null,
     { label: "Created", value: formatDate(createdAt) },
     { label: "Last Updated", value: formatDate(updatedAt) },
   ].filter(Boolean);
@@ -107,12 +99,15 @@ export default function DocumentCard({
   return (
     <CardComponent>
       <CardComponent.Header
-        title="Document Details"
-        description="Information about this document and its content"
+        title={`${fileName.split(".").slice(0, -1).join(".")}`}
+        description="Information and key metrics about this document and its content"
       >
         <FileText className="h-5 w-5 text-muted-foreground" />
       </CardComponent.Header>
       <CardComponent.Content className="p-0 gap-0">
+        <Container className="flex flex-col space-y-1 col-span-1 lg:col-span-2 px-6 pt-4 font-semibold">
+          Document Metrics
+        </Container>
         <Container className="grid grid-cols-1 lg:grid-cols-2 gap-4 px-6 py-4">
           {documentDetails.map(
             (detail) =>
@@ -133,8 +128,8 @@ export default function DocumentCard({
         {/* Translation metrics section */}
         {translationDetails.length > 0 && (
           <>
-            <Container className="flex flex-col space-y-1 col-span-1 lg:col-span-2 border-t border-sidebar-border px-6 pt-4">
-              <span className="text-sm font-semibold">Translation Metrics</span>
+            <Container className="flex flex-col space-y-1 col-span-1 lg:col-span-2 border-t border-sidebar-border px-6 pt-4 font-semibold">
+              Translation Metrics
             </Container>
 
             <Container className="grid grid-cols-1 lg:grid-cols-2 gap-4 px-6 py-4">
@@ -156,40 +151,7 @@ export default function DocumentCard({
           </>
         )}
       </CardComponent.Content>
-      <CardComponent.Footer text="This document contains source text that can be translated into multiple languages.">
-        <Container className="flex space-x-2">
-          {onEdit && (
-            <Button
-              size="sm"
-              variant="outline"
-              onClick={() => onEdit(document)}
-            >
-              <Edit className="h-4 w-4 mr-2" />
-              Edit
-            </Button>
-          )}
-          {onDownload && (
-            <Button
-              size="sm"
-              variant="outline"
-              onClick={() => onDownload(document)}
-            >
-              <Download className="h-4 w-4 mr-2" />
-              Download
-            </Button>
-          )}
-          {onDelete && (
-            <Button
-              size="sm"
-              variant="destructive"
-              onClick={() => onDelete(document)}
-            >
-              <Trash className="h-4 w-4 mr-2" />
-              Delete
-            </Button>
-          )}
-        </Container>
-      </CardComponent.Footer>
+      <CardComponent.Footer text="This document contains source text that can be translated into multiple languages." />
     </CardComponent>
   );
 }

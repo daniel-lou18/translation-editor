@@ -1,5 +1,5 @@
 import { useCurrentProject } from "@/hooks/useCurrentProject";
-import { useTranslationRoute } from "@/hooks/useTranslationRoute";
+import { useRoute } from "@/hooks/useRoute";
 import {
   getAllTranslationsFromProject,
   langArrayToComboItems,
@@ -15,7 +15,7 @@ import { ComboDataElement } from "@/components/ui/Combobox";
 
 export function useTranslationActions() {
   const { currentProject, currentDocument } = useCurrentProject();
-  const { navigateToDocument, navigateToTranslation } = useTranslationRoute();
+  const { navigateToDocument, navigateToTranslation } = useRoute();
   const navigate = useNavigate();
   const { mutate, isLoading } = useAddTranslation();
 

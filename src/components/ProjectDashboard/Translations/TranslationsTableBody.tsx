@@ -2,17 +2,18 @@ import { FormattedTranslation } from "@/types/Translation";
 import TranslationsTableRow from "./TranslationsTableRow";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { useExportTranslation } from "@/hooks/useExportTranslation";
+import { useRoute } from "@/hooks/useRoute";
 
 type TranslationsTableBodyProps = {
   translations: FormattedTranslation[];
-  onClick: (documentId: number, translationId: number) => void;
 };
 
 export default function TranslationsTableBody({
   translations,
-  onClick,
 }: TranslationsTableBodyProps) {
   const { downloadFile } = useExportTranslation();
+  const { navigateToTranslation, navigateToTranslationDetails, projectId } =
+    useRoute();
 
   const translationRowMenuData = {
     name: "translation",
@@ -20,12 +21,29 @@ export default function TranslationsTableBody({
       {
         value: "Open translation",
         onClick: (translation: FormattedTranslation) => {
-          onClick(translation.documentId, translation.id);
+          if (!projectId) {
+            return;
+          }
+
+          navigateToTranslation({
+            projectId,
+            documentId: translation.documentId,
+            translationId: translation.id,
+          });
         },
       },
       {
         value: "View details",
-        onClick: () => {},
+        onClick: (translation: FormattedTranslation) => {
+          if (!projectId) {
+            return;
+          }
+
+          navigateToTranslationDetails({
+            documentId: translation.documentId,
+            translationId: translation.id,
+          });
+        },
       },
       {
         value: "Export",
@@ -79,7 +97,6 @@ export default function TranslationsTableBody({
         <TranslationsTableRow
           key={translation.id}
           data={translation}
-          onClick={onClick}
           rowMenuData={translationRowMenuData}
         />
       ))}

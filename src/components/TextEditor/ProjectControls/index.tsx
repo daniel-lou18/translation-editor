@@ -1,7 +1,7 @@
 import { useEditor } from "@/contexts/editorContext";
 import TranslationProgress from "./TranslationProgress";
 import SelectProject from "./SelectProject";
-import { useTranslationRoute } from "@/hooks/useTranslationRoute";
+import { useRoute } from "@/hooks/useRoute";
 import DataHandler from "@/components/ui/DataHandler";
 import ProjectControlsSkeleton from "./ProjectControlsSkeleton";
 import SelectTranslation from "./SelectTranslation";
@@ -15,7 +15,7 @@ export default function ProjectControls() {
   const { segments, getCompletedSegments } = useEditor();
   const totalSegments = segments.length;
   const completedSegments = getCompletedSegments();
-  const { navigateToTranslation } = useTranslationRoute();
+  const { navigateToTranslation } = useRoute();
   const {
     projects,
     currentProject,
@@ -79,10 +79,22 @@ export default function ProjectControls() {
   return (
     <TopbarContainer>
       <DataHandler
-        isLoading={isLoading}
-        isError={isError}
-        error={error}
-        loadingComponent={<ProjectControlsSkeleton />}
+        loading={{
+          isLoading,
+          component: <ProjectControlsSkeleton />,
+        }}
+        error={{
+          isError,
+          error,
+        }}
+        empty={{
+          isEmpty: !projects || Object.keys(projects).length === 0,
+          component: (
+            <div className="p-4 text-sm text-muted-foreground">
+              No projects available
+            </div>
+          ),
+        }}
       >
         <SelectProject
           projects={projects || {}}

@@ -1,5 +1,5 @@
 import TmsTable from "@/components/ProjectDashboard/Tms/TmsTable";
-import { useTranslationRoute } from "@/hooks/useTranslationRoute";
+import { useRoute } from "@/hooks/useRoute";
 import PageTitle from "../../ui/PageTitle";
 import SearchForm from "../../ui/SearchForm";
 import { Button } from "../../ui/button";
@@ -16,7 +16,7 @@ import { ChevronDown } from "lucide-react";
 
 export default function Tms() {
   const navigate = useNavigate();
-  const { projectId } = useTranslationRoute();
+  const { projectId } = useRoute();
 
   if (!projectId) {
     navigate("/app/dashboard/tms");

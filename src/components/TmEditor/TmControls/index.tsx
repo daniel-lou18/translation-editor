@@ -20,10 +20,22 @@ export default function TmControls() {
   return (
     <TopbarContainer>
       <DataHandler
-        isLoading={isLoading}
-        isError={isError}
-        error={error}
-        loadingComponent={<TmControlsSkeleton />}
+        loading={{
+          isLoading,
+          component: <TmControlsSkeleton />,
+        }}
+        error={{
+          isError,
+          error,
+        }}
+        empty={{
+          isEmpty: !normalizedTms || Object.keys(normalizedTms).length === 0,
+          component: (
+            <div className="p-4 text-sm text-muted-foreground">
+              No translation memories available
+            </div>
+          ),
+        }}
       >
         <SelectTm
           tms={normalizedTms}

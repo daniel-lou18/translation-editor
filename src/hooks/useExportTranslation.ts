@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { useTranslationRoute } from "./useTranslationRoute";
+import { useRoute } from "./useRoute";
 import { exportService } from "@/services/exportService";
 import { ExportFileType } from "@/types/Files";
 
 export function useExportTranslation() {
-  const { translationId } = useTranslationRoute();
+  const { translationId } = useRoute();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 

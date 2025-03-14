@@ -1,5 +1,5 @@
 import { FormEvent } from "react";
-import { useTranslationRoute } from "@/hooks/useTranslationRoute";
+import { useRoute } from "@/hooks/useRoute";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
 import { useUploadSingle } from "./useUploadSingle";
@@ -21,7 +21,7 @@ export function useTmExcelUpload(config: UploadConfig) {
   const { sourceLang, targetLang, domain, type, tmId } = config;
   const { file, setFile } = useUploadSingle();
   const queryClient = useQueryClient();
-  const { navigateToTms } = useTranslationRoute();
+  const { navigateToTms } = useRoute();
 
   const { mutate, isPending: isLoading } = useBaseMutation({
     mutationFn: async (

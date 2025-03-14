@@ -1,5 +1,5 @@
 import { useEditTable } from "@/hooks/useEditTable";
-import { useTranslationRoute } from "@/hooks/useTranslationRoute";
+import { useRoute } from "@/hooks/useRoute";
 import { Document } from "@/types";
 import DocumentsTableRow from "./DocumentsTableRow";
 import { useDeleteDoc } from "@/hooks/useDeleteDoc";
@@ -10,8 +10,7 @@ type DocumentsTableBodyProps = {
 };
 
 export default function DocumentsTableBody({ docs }: DocumentsTableBodyProps) {
-  const { navigateToTranslations, navigateToDocumentDetails } =
-    useTranslationRoute();
+  const { navigateToTranslations, navigateToDocumentDetails } = useRoute();
   const { deleteDoc, isDeleting } = useDeleteDoc();
   const { updateDoc, isSaving } = useUpdateDoc();
   const { setEditingId, setEditFormData, ...restProps } =

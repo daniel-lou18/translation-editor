@@ -1,5 +1,9 @@
 import { Lang, Domain } from ".";
-import { Document, SourceSegment } from "./Document";
+import {
+  Document,
+  SourceSegment,
+  DocumentWithSourceSegments,
+} from "./Document";
 import { Tm } from "./Tm";
 import { TargetSegment, Translation } from "./Translation";
 
@@ -10,7 +14,7 @@ export type JoinedSegment = {
 
 export type TranslationWithJoinedSegments = {
   translation: Translation;
-  document: Document;
+  document: DocumentWithSourceSegments;
   segments: JoinedSegment[];
 };
 

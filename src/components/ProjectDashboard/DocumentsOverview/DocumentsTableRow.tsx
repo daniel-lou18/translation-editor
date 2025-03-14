@@ -7,7 +7,7 @@ import TableRowMenu from "@/components/ui/Table/TableRowMenu";
 import { FileText } from "lucide-react";
 import { TableRowProps } from "@/components/ui/Table/types";
 import { Document } from "@/types/Document";
-import { useTranslationRoute } from "@/hooks/useTranslationRoute";
+import { useRoute } from "@/hooks/useRoute";
 
 type DocumentsTableRowProps = TableRowProps<Document>;
 
@@ -21,7 +21,7 @@ export default function DocumentsTableRow({
   isSaving,
   rowMenuData,
 }: DocumentsTableRowProps) {
-  const { navigateToTranslations } = useTranslationRoute();
+  const { navigateToTranslations } = useRoute();
   const { id, fileName, sourceLang, domain, docType, createdAt } = data;
   const isEditing = editingId === id;
 

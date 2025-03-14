@@ -1,9 +1,9 @@
 import { translationService } from "@/services/translationService";
 import { useQuery } from "@tanstack/react-query";
-import { useTranslationRoute } from "./useTranslationRoute";
+import { useRoute } from "./useRoute";
 
 export function useGetTranslationSegments() {
-  const { translationId } = useTranslationRoute();
+  const { translationId } = useRoute();
   const { data, isPending, isError, error } = useQuery({
     queryKey: ["segments", translationId],
     queryFn: () => getSegmentsData(translationId),
@@ -19,6 +19,7 @@ export function useGetTranslationSegments() {
   }
 
   return {
+    document: data?.document || null,
     translation: data?.translation || null,
     segments: data?.segments || [],
     isLoading: isPending,

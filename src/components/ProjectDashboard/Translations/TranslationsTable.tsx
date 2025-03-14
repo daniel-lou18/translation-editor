@@ -10,12 +10,10 @@ import TranslationsTableBody from "./TranslationsTableBody";
 
 type TranslationsTableProps = {
   translations: FormattedTranslation[];
-  onClick: (documentId: number, translationId: number) => void;
 };
 
 export default function TranslationsTable({
   translations,
-  onClick,
 }: TranslationsTableProps) {
   return (
     <Table>
@@ -30,7 +28,7 @@ export default function TranslationsTable({
         </TableRow>
       </TableHeader>
       <TableBody>
-        <TranslationsTableBody translations={translations} onClick={onClick} />
+        <TranslationsTableBody translations={translations} />
       </TableBody>
     </Table>
   );

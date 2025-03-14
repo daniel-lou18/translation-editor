@@ -1,9 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
-import { useTranslationRoute } from "./useTranslationRoute";
+import { useRoute } from "./useRoute";
 import { documentService } from "@/services/documentService";
 
 export function useGetDocument(docId?: string | number) {
-  const { documentId: urlDocId } = useTranslationRoute();
+  const { documentId: urlDocId } = useRoute();
 
   const documentId = docId === undefined ? urlDocId : docId;
 
