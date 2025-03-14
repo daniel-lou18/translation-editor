@@ -25,8 +25,6 @@ export default function DocumentsTableRow({
   const { id, fileName, sourceLang, domain, docType, createdAt } = data;
   const isEditing = editingId === id;
 
-  console.log(editFormData);
-
   const onClick = (documentId: number) => {
     if (!documentId) return;
     navigateToTranslations(documentId);

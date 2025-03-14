@@ -9,9 +9,8 @@ import {
   Activity,
   Calendar,
   RefreshCw,
-  FileText,
 } from "lucide-react";
-import { formatDate, formatNumber, formatFileSize } from "@/utils/formatters";
+import { formatDate, formatNumber } from "@/utils/formatters";
 import Container from "../Container";
 import { Segment } from "@/types/Segment";
 import { DocumentWithSourceSegments } from "@/types";
@@ -27,7 +26,6 @@ export default function TranslationCard({
   document,
   segments,
 }: TranslationCardProps) {
-  // Early return if any required data is missing
   if (!translation || !document || !segments.length) {
     return null;
   }

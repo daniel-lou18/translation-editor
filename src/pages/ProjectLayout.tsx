@@ -3,10 +3,10 @@ import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { useCurrentProject } from "@/hooks/useCurrentProject";
 import { Outlet } from "react-router";
 import Container from "@/components/ui/Container";
-import TranslationsBreadcrumb from "@/components/ProjectDashboard/Translations/TranslationsBreadcrumb";
+import BreadcrumbLayout from "@/components/ProjectDashboard/Translations/BreadcrumbLayout";
 
 export default function ProjectLayout() {
-  const { projects, currentProject, currentDocument } = useCurrentProject();
+  const { projects, currentProject } = useCurrentProject();
 
   if (!currentProject) return null;
 
@@ -14,11 +14,7 @@ export default function ProjectLayout() {
     <SidebarProvider>
       <DocumentsSidebar projects={projects} currentProject={currentProject} />
       <SidebarInset className="bg-muted/20">
-        <TranslationsBreadcrumb
-          projectId={currentProject.id}
-          projectName={currentProject.name}
-          fileName={currentDocument?.fileName ?? null}
-        />
+        <BreadcrumbLayout />
         <Container className="xl:px-12 min-[1600px]:px-24 py-6">
           <Outlet />
         </Container>
