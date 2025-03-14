@@ -1,12 +1,14 @@
 import DocumentCard from "@/components/ui/Card/DocumentCard";
-import { useCurrentProject } from "@/hooks/useCurrentProject";
+import { useGetDocument } from "@/hooks/useGetDocument";
+import { useTranslationRoute } from "@/hooks/useTranslationRoute";
 
 export default function DocumentsDetails() {
-  const { currentDocument } = useCurrentProject();
+  const { documentId } = useTranslationRoute();
+  const { document } = useGetDocument(documentId);
 
-  if (!currentDocument) {
+  if (!document) {
     return <div>No document found</div>;
   }
 
-  return <DocumentCard document={currentDocument} />;
+  return <DocumentCard document={document} />;
 }

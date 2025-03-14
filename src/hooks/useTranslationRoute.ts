@@ -42,6 +42,17 @@ export function useTranslationRoute() {
     [navigate]
   );
 
+  const navigateToDocumentDetails = useCallback(
+    (documentId: number) => {
+      if (!projectId) {
+        throw new Error("Project id is missing");
+      }
+
+      navigate(`/app/projects/${projectId}/documents/${documentId}`);
+    },
+    [navigate]
+  );
+
   const navigateToTranslations = useCallback(
     (documentId: number) => {
       if (!documentId) {
@@ -83,6 +94,7 @@ export function useTranslationRoute() {
     navigateToTranslations,
     navigateToTranslation,
     navigateToDocument,
+    navigateToDocumentDetails,
     navigateToProject,
     navigateToProjects,
     navigateToTms,

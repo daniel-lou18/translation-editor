@@ -2,7 +2,7 @@ import { translationService } from "@/services/translationService";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslationRoute } from "./useTranslationRoute";
 
-export function useGetSegments() {
+export function useGetTranslationSegments() {
   const { translationId } = useTranslationRoute();
   const { data, isPending, isError, error } = useQuery({
     queryKey: ["segments", translationId],
@@ -15,9 +15,14 @@ export function useGetSegments() {
       throw new Error("Project or translation id is missing");
     }
 
-    const result = await translationService.getTranslation(translationId);
-    return result.segments;
+    return translationService.getTranslation(translationId);
   }
 
-  return { segments: data || null, isLoading: isPending, isError, error };
+  return {
+    translation: data?.translation || null,
+    segments: data?.segments || [],
+    isLoading: isPending,
+    isError,
+    error,
+  };
 }

@@ -1,3 +1,5 @@
+import DocumentsDetails from "@/components/ProjectDashboard/DocumentsOverview/DocumentsDetails";
+
 export default function DocumentPage() {
-  return <div>Document</div>;
+  return <DocumentsDetails />;
 }

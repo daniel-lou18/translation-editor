@@ -52,7 +52,7 @@ function Header({ children, title, description, className }: HeaderProps) {
   return (
     <CardHeader
       className={cn(
-        "flex flex-row justify-between px-6 py-4 border-b border-sidebar-border space-y-0",
+        "flex flex-row justify-between px-6 py-4 border-b border-border space-y-0",
         className
       )}
     >
@@ -105,7 +105,7 @@ function Footer({ text, children, className }: FooterProps) {
   return (
     <CardFooter
       className={cn(
-        "px-6 py-4 border-t border-sidebar-border justify-between",
+        "px-6 py-4 border-t border-border justify-between",
         className
       )}
     >

@@ -3,10 +3,10 @@ import TextEditorSkeleton from "@/components/TextEditor/TextEditorSkeleton";
 import DataHandler from "@/components/ui/DataHandler";
 import EditorContextProvider from "@/contexts/editorContext";
 import ResourcesContextProvider from "@/contexts/resourcesContext";
-import { useGetSegments } from "@/hooks/useGetSegments";
+import { useGetTranslationSegments } from "@/hooks/useGetTranslationSegments";
 
 export default function EditorPage() {
-  const { segments, isLoading, isError, error } = useGetSegments();
+  const { segments, isLoading, isError, error } = useGetTranslationSegments();
 
   return (
     <DataHandler
@@ -15,16 +15,11 @@ export default function EditorPage() {
       error={error}
       loadingComponent={<TextEditorSkeleton />}
     >
-      {segments?.length ? (
-        <EditorContextProvider
-          initialSegments={segments}
-          key={segments?.[0].id}
-        >
-          <ResourcesContextProvider>
-            <TextEditor />
-          </ResourcesContextProvider>
-        </EditorContextProvider>
-      ) : null}
+      <EditorContextProvider initialSegments={segments} key={segments?.[0].id}>
+        <ResourcesContextProvider>
+          <TextEditor />
+        </ResourcesContextProvider>
+      </EditorContextProvider>
     </DataHandler>
   );
 }

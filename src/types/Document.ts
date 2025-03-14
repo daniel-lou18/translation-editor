@@ -29,6 +29,11 @@ export type DocumentWithTranslations = Document & {
   translations: Translation[];
 };
 
+export type DocumentWithTranslationsSegments = Document & {
+  sourceSegments: SourceSegment[];
+  translations: Translation[];
+};
+
 export type DocumentWithTranslationsWithDoc = Document & {
   translations: TranslationWithDocument[];
 };

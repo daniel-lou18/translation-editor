@@ -10,7 +10,8 @@ type DocumentsTableBodyProps = {
 };
 
 export default function DocumentsTableBody({ docs }: DocumentsTableBodyProps) {
-  const { navigateToTranslations } = useTranslationRoute();
+  const { navigateToTranslations, navigateToDocumentDetails } =
+    useTranslationRoute();
   const { deleteDoc, isDeleting } = useDeleteDoc();
   const { updateDoc, isSaving } = useUpdateDoc();
   const { setEditingId, setEditFormData, ...restProps } =
@@ -34,7 +35,9 @@ export default function DocumentsTableBody({ docs }: DocumentsTableBodyProps) {
       },
       {
         value: "View details",
-        onClick: () => {},
+        onClick: (doc: Document) => {
+          navigateToDocumentDetails(doc.id);
+        },
       },
       {
         value: "Delete",
