@@ -8,19 +8,27 @@ import {
 } from "@/components/ui/breadcrumb";
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
+import { useCurrentProject } from "@/hooks/useCurrentProject";
 import { toCapitalCase } from "@/utils/formatters";
+import {
+  partUrlMap,
+  reconstructPath,
+  replaceIdsWithNames,
+} from "@/utils/helpers";
 import { Home } from "lucide-react";
 import { Link, useLocation } from "react-router";
 
 export default function BreadcrumbLayout() {
   const { pathname } = useLocation();
-  const pathParts = pathname.split("/").filter(Boolean);
-  const pathPartsWithoutApp = pathParts.slice(1);
+  const { currentProject, currentDocument, currentTranslation } =
+    useCurrentProject();
 
-  function reconstructPath(part: string, index: number) {
-    if (part === "dashboard") return "/app/dashboard/projects";
-    return `/app/${pathPartsWithoutApp.slice(0, index + 1).join("/")}`;
-  }
+  const pathParts = pathname.split("/").filter(Boolean).slice(1);
+  const displayedPathParts = replaceIdsWithNames(pathParts, {
+    currentProject,
+    currentDocument,
+    currentTranslation,
+  });
 
   return (
     <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4 bg-white">
@@ -35,13 +43,13 @@ export default function BreadcrumbLayout() {
               </Link>
             </BreadcrumbLink>
           </BreadcrumbItem>
-          {pathPartsWithoutApp.map((part, index) =>
-            index === pathPartsWithoutApp.length - 1 ? (
+          {displayedPathParts.map((part, index, parts) =>
+            index === parts.length - 1 ? (
               <>
                 <BreadcrumbSeparator className="hidden md:block" />
                 <BreadcrumbItem>
                   <BreadcrumbPage>
-                    {toCapitalCase(pathPartsWithoutApp[index])}
+                    {toCapitalCase(displayedPathParts[index])}
                   </BreadcrumbPage>
                 </BreadcrumbItem>
               </>
@@ -50,7 +58,9 @@ export default function BreadcrumbLayout() {
                 <BreadcrumbSeparator className="hidden md:block" />
                 <BreadcrumbItem className="hidden md:block">
                   <BreadcrumbLink asChild>
-                    <Link to={reconstructPath(part, index)}>
+                    <Link
+                      to={reconstructPath(part, index, pathParts, partUrlMap)}
+                    >
                       {toCapitalCase(part)}
                     </Link>
                   </BreadcrumbLink>

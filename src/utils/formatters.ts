@@ -51,3 +51,7 @@ export function formatFileSize(bytes: number, decimals = 2): string {
 export function toCapitalCase(str: string) {
   return str.replace(/-/g, " ").replace(/\b\w/g, (char) => char.toUpperCase());
 }
+
+export function isNumeric(value: string | number): boolean {
+  return /^\d+$/.test(String(value));
+}

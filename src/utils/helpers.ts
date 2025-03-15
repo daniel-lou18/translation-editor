@@ -1,4 +1,5 @@
 import {
+  Document,
   Lang,
   NormalizedTranslations,
   ProjectWithDocsAndTrans,
@@ -6,8 +7,11 @@ import {
   TranslationWithDocument,
   TranslationWithTargetSegments,
 } from "@/types";
+import { Project } from "@/types/Project";
 import { Segment, SegmentType } from "@/types/Segment";
 import { TmSegmentPair } from "@/types/Tm";
+import { Translation } from "@/types/Translation";
+import { isNumeric } from "./formatters";
 
 export function calculateProgress(
   segments: Segment[],
@@ -121,4 +125,52 @@ export function formatTmSegmentsToEditorSegments(
     targetText: targetSegment?.textContent || null,
     status: "translated",
   }));
+}
+
+export function replaceIdsWithNames(
+  parts: string[],
+  data: {
+    currentProject: Project | null;
+    currentDocument: Document | null;
+    currentTranslation: Translation | null;
+  }
+) {
+  return parts.map((part, index, parts) => {
+    if (!isNumeric(part)) {
+      return part;
+    }
+    if (parts[index - 1] === "projects") {
+      return data.currentProject?.name || part;
+    }
+    if (parts[index - 1] === "documents") {
+      return data.currentDocument?.fileName || part;
+    }
+    if (parts[index - 1] === "translations") {
+      return data.currentTranslation?.targetLang || part;
+    }
+    return part;
+  });
+}
+
+export const partUrlMap = {
+  dashboard: "dashboard/projects",
+  projects: "dashboard/projects",
+};
+
+export function reconstructPath(
+  part: string,
+  index: number,
+  pathParts: string[],
+  partUrlMap: Record<string, string>
+) {
+  const rootPath = "/app";
+  if (partUrlMap[part as keyof typeof partUrlMap]) {
+    return `${rootPath}/${partUrlMap[part as keyof typeof partUrlMap]}`;
+  }
+
+  if (pathParts[index - 1] === "projects") {
+    return `${rootPath}/${pathParts.slice(0, index + 1).join("/")}/documents`;
+  }
+
+  return `${rootPath}/${pathParts.slice(0, index + 1).join("/")}`;
 }
