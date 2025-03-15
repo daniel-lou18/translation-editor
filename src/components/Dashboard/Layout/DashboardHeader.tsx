@@ -1,7 +1,7 @@
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Home } from "lucide-react";
-import Container from "../ui/Container";
+import Container from "../../ui/Container";
 
 export default function DashboardHeader() {
   return (

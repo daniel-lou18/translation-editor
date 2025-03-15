@@ -234,7 +234,9 @@ export default function TranslationCard({
   return (
     <CardComponent>
       <CardComponent.Header
-        title={document.fileName.split(".").slice(0, -1).join(".")}
+        title={`${document.fileName.split(".").slice(0, -1).join(".")} - ${
+          translation.targetLang
+        }`}
         description="Information and key metrics about this translation and its progress"
       />
       <CardComponent.Content className="p-0 gap-0">

@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/sidebar";
 import { ComponentProps, ReactNode } from "react";
 import { Link } from "react-router";
+import Container from "../Container";
 
 type SidebarProps = ComponentProps<typeof SidebarComponent> & {
   children: ReactNode;
@@ -38,7 +39,7 @@ export default function Sidebar({
       <SidebarHeader>{children}</SidebarHeader>
       <SidebarContent>
         {menuContent.map((group) => (
-          <>
+          <Container key={group.label}>
             <SidebarGroup key={group.label}>
               {group.label ? (
                 <SidebarGroupLabel>{group.label}</SidebarGroupLabel>
@@ -56,7 +57,7 @@ export default function Sidebar({
               </SidebarGroupContent>
             </SidebarGroup>
             <SidebarSeparator className="mx-0" />
-          </>
+          </Container>
         ))}
       </SidebarContent>
     </SidebarComponent>

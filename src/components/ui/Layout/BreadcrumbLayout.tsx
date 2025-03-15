@@ -17,6 +17,7 @@ import {
 } from "@/utils/helpers";
 import { Home } from "lucide-react";
 import { Link, useLocation } from "react-router";
+import Container from "../Container";
 
 export default function BreadcrumbLayout() {
   const { pathname } = useLocation();
@@ -31,7 +32,7 @@ export default function BreadcrumbLayout() {
   });
 
   return (
-    <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4 bg-white">
+    <Container className="flex items-center gap-2">
       <SidebarTrigger className="-ml-1" />
       <Separator orientation="vertical" className="mr-2 h-4" />
       <Breadcrumb>
@@ -45,16 +46,16 @@ export default function BreadcrumbLayout() {
           </BreadcrumbItem>
           {displayedPathParts.map((part, index, parts) =>
             index === parts.length - 1 ? (
-              <>
+              <Container key={part} className="flex items-center gap-2">
                 <BreadcrumbSeparator className="hidden md:block" />
                 <BreadcrumbItem>
                   <BreadcrumbPage>
                     {toCapitalCase(displayedPathParts[index])}
                   </BreadcrumbPage>
                 </BreadcrumbItem>
-              </>
+              </Container>
             ) : (
-              <>
+              <Container key={part} className="flex items-center gap-2">
                 <BreadcrumbSeparator className="hidden md:block" />
                 <BreadcrumbItem className="hidden md:block">
                   <BreadcrumbLink asChild>
@@ -65,11 +66,11 @@ export default function BreadcrumbLayout() {
                     </Link>
                   </BreadcrumbLink>
                 </BreadcrumbItem>
-              </>
+              </Container>
             )
           )}
         </BreadcrumbList>
       </Breadcrumb>
-    </header>
+    </Container>
   );
 }
