@@ -54,9 +54,9 @@ export default function TableRowMenu<T extends DataType>({
 }: TableRowMenuProps<T>) {
   function handleDelete(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const deleteItem = items.find((item) => item.value === "delete") as
-      | DeleteMenuItem
-      | undefined;
+    const deleteItem = items.find(
+      (item) => item.value.toLowerCase() === "delete"
+    ) as DeleteMenuItem | undefined;
     if (deleteItem) {
       deleteItem.onClick(data);
     }

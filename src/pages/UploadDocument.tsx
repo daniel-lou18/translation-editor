@@ -1,5 +1,7 @@
-import UploadDocument from "@/components/ProjectDashboard/DocumentsOverview/UploadDocument";
+import UploadDocument, {
+  UploadDocumentProps,
+} from "@/components/ProjectDashboard/DocumentsOverview/UploadDocument";
 
-export default function UploadDocumentPage() {
-  return <UploadDocument newProject={false} />;
+export default function UploadDocumentPage({ mode }: UploadDocumentProps) {
+  return <UploadDocument mode={mode} />;
 }

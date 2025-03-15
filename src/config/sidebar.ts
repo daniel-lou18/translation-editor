@@ -42,11 +42,11 @@ export const dashboardSidebarConfig: SidebarGroupConfig[] = [
     items: [
       {
         label: "Translate document with AI",
-        href: "/app/dashboard/documents/upload",
+        href: "/app/dashboard/documents/upload/ai",
       },
       {
-        label: "Upload document",
-        href: "/app/dashboard/documents/upload",
+        label: "Start translation",
+        href: "/app/dashboard/documents/upload/manual",
       },
     ],
   },

@@ -7,7 +7,7 @@ import { FileMetadata } from "@/types/Dtos";
 import { getIdsFromTranslation } from "@/utils/helpers";
 import { useBaseMutation } from "./useBaseMutation";
 import { FullLangsDomain } from "@/types";
-import { useLocation } from "react-router";
+import { useRouteParams } from "./useRouteParams";
 
 export type SubmitDocumentResult = {
   projectId: string;
@@ -18,21 +18,18 @@ export type SubmitDocumentResult = {
 type SubmitDocumentVariables = {
   file: File | null;
   fileMetadata: FileMetadata;
-  newProject: boolean;
 };
 
 type DocumentUploadConfig = {
-  newProject?: boolean;
+  mode: "ai" | "manual";
   tmId?: string;
 } & FullLangsDomain;
 
 export function useDocumentUpload(config: DocumentUploadConfig) {
-  const { sourceLang, targetLang, domain, newProject = true, tmId } = config;
+  const { sourceLang, targetLang, domain, tmId, mode } = config;
   const { navigateToTranslation, projectId: urlProjectId } = useRoute();
-  const location = useLocation();
   const { file, setFile, removeFile } = useUploadSingle();
-
-  const isDashboard = location.pathname.includes("/dashboard/documents/upload");
+  const { isDashboard } = useRouteParams();
   const projectId = isDashboard ? "1" : urlProjectId;
 
   const { mutate, isPending: isLoading } = useBaseMutation({
@@ -52,20 +49,16 @@ export function useDocumentUpload(config: DocumentUploadConfig) {
   async function submitDocument(
     variables: SubmitDocumentVariables
   ): Promise<SubmitDocumentResult> {
-    const { file, fileMetadata, newProject } = variables;
+    const { file, fileMetadata } = variables;
 
     if (!file) {
       throw new Error("File is required");
     }
 
     const translation =
-      file.type === "text/plain"
-        ? await uploadService.submitSourceText(file, fileMetadata, newProject)
-        : await uploadService.submitDocumentFile(
-            file,
-            fileMetadata,
-            newProject
-          );
+      mode === "manual"
+        ? await uploadService.submitSourceText(file, fileMetadata)
+        : await uploadService.submitDocumentFile(file, fileMetadata);
 
     return getIdsFromTranslation(translation);
   }
@@ -75,7 +68,6 @@ export function useDocumentUpload(config: DocumentUploadConfig) {
     mutate({
       file,
       fileMetadata: { sourceLang, targetLang, domain, projectId, tmId },
-      newProject,
     });
   }
 

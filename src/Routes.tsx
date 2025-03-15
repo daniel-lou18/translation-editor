@@ -30,7 +30,14 @@ export default function RoutesComponent() {
           <Route path="tms" element={<TmsPage />} />
           <Route path="tms/create" element={<CreateTmPage />} />
           <Route path="tms/add-segments" element={<AddTmPairsPage />} />
-          <Route path="documents/upload" element={<UploadDocumentPage />} />
+          <Route
+            path="documents/upload/ai"
+            element={<UploadDocumentPage mode="ai" />}
+          />
+          <Route
+            path="documents/upload/manual"
+            element={<UploadDocumentPage mode="manual" />}
+          />
         </Route>
         <Route path="projects/:projectId" element={<ProjectLayout />}>
           <Route path="documents" element={<DocumentsPage />} />
@@ -38,7 +45,10 @@ export default function RoutesComponent() {
             path="documents/:documentId"
             element={<DocumentDetailsPage />}
           />
-          <Route path="documents/upload" element={<UploadDocumentPage />} />
+          <Route
+            path="documents/upload"
+            element={<UploadDocumentPage mode="ai" />}
+          />
           <Route
             path="documents/:documentId/translations"
             element={<TranslationsPage />}

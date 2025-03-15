@@ -15,24 +15,22 @@ export class UploadService extends ApiService {
 
   async submitSourceText(
     file: File,
-    fileMetadata: FileMetadata,
-    newProject = true
+    fileMetadata: FileMetadata
   ): Promise<TranslationWithDocument> {
-    const formData = this.createFormData(file, fileMetadata, newProject);
+    const formData = this.createFormData(file, fileMetadata);
 
     return this.post<TranslationWithDocument>(
-      `/upload/documents/source?new-project=${newProject}`,
-      formData
+      `/upload/documents/source`,
+      formData,
+      { timeout: 60000 }
     );
   }
 
   async submitDocumentFile(
     file: File,
-    fileMetadata: FileMetadata,
-    newProject = true
+    fileMetadata: FileMetadata
   ): Promise<TranslationWithDocument> {
-    console.log("fileMetadata", fileMetadata);
-    const formData = this.createFormData(file, fileMetadata, newProject);
+    const formData = this.createFormData(file, fileMetadata);
 
     return this.post<TranslationWithDocument>(
       `/upload/documents/file`,
@@ -45,7 +43,9 @@ export class UploadService extends ApiService {
     const formData = new FormData();
     files.forEach((file) => formData.append("files", file));
 
-    return this.post("upload/tms", formData);
+    return this.post("upload/tms", formData, {
+      timeout: 60000,
+    });
   }
 
   async createTm(
@@ -79,11 +79,7 @@ export class UploadService extends ApiService {
     });
   }
 
-  private createFormData(
-    file: File,
-    fileMetadata: FileMetadata,
-    newProject: boolean
-  ) {
+  private createFormData(file: File, fileMetadata: FileMetadata) {
     const formData = new FormData();
     formData.append("file", file);
     formData.append("targetLang", fileMetadata.targetLang);
@@ -97,7 +93,7 @@ export class UploadService extends ApiService {
       formData.append("tmId", fileMetadata.tmId);
     }
 
-    if (!newProject && "projectId" in fileMetadata && fileMetadata.projectId) {
+    if ("projectId" in fileMetadata && fileMetadata.projectId) {
       formData.append("projectId", fileMetadata.projectId);
     }
 

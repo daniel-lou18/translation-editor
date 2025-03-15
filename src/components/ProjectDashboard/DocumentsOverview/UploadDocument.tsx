@@ -9,12 +9,12 @@ import { useDocumentUpload } from "@/hooks/useDocumentUpload";
 import { BookType, Earth } from "lucide-react";
 import { useSelectTm } from "@/hooks/useSelectTm";
 
-type UploadDocumentProps = {
-  newProject?: boolean;
+export type UploadDocumentProps = {
+  mode: "ai" | "manual";
 };
 
 export default function UploadDocument({
-  newProject = true,
+  mode = "manual",
 }: UploadDocumentProps) {
   const { tmItems, tmId, onTmChange } = useSelectTm();
   const {
@@ -33,12 +33,14 @@ export default function UploadDocument({
       targetLang,
       domain,
       tmId,
-      newProject,
+      mode,
     });
 
   return (
     <Container>
-      <PageTitle title="Translate document" />
+      <PageTitle
+        title={mode === "ai" ? "Translate with AI" : "Start new translation"}
+      />
       <UploadTmForm
         handleSubmit={handleSubmit}
         isLoading={isLoading}
