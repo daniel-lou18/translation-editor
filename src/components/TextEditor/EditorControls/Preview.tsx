@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import Container from "@/components/ui/Container";
 import { GalleryHorizontal, ZoomIn, ZoomOut } from "lucide-react";
 import { useRef, useEffect, useState } from "react";
 
@@ -52,8 +53,8 @@ export default function Preview({
   }, []);
 
   return (
-    <div className="flex flex-col w-full">
-      <div className="flex items-center gap-3 mb-4">
+    <Container className="flex flex-col w-full">
+      <Container className="flex items-center gap-3 mb-4">
         <Button
           variant="outline"
           size="icon"
@@ -79,9 +80,9 @@ export default function Preview({
         >
           <GalleryHorizontal className="w-4 h-4" />
         </Button>
-      </div>
+      </Container>
 
-      <div
+      <Container
         className="flex justify-center border border-border bg-muted p-5 overflow-auto rounded-sm"
         style={{ maxHeight }}
       >
@@ -97,7 +98,7 @@ export default function Preview({
           }}
           dangerouslySetInnerHTML={{ __html: html }}
         />
-      </div>
-    </div>
+      </Container>
+    </Container>
   );
 }

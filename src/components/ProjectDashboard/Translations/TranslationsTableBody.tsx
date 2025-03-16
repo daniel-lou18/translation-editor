@@ -12,8 +12,12 @@ export default function TranslationsTableBody({
   translations,
 }: TranslationsTableBodyProps) {
   const { downloadFile } = useExportTranslation();
-  const { navigateToTranslation, navigateToTranslationDetails, projectId } =
-    useRoute();
+  const {
+    navigateToTranslation,
+    navigateToTranslationDetails,
+    navigateToTranslationPreview,
+    projectId,
+  } = useRoute();
 
   const translationRowMenuData = {
     name: "translation",
@@ -27,6 +31,19 @@ export default function TranslationsTableBody({
 
           navigateToTranslation({
             projectId,
+            documentId: translation.documentId,
+            translationId: translation.id,
+          });
+        },
+      },
+      {
+        value: "View translation",
+        onClick: (translation: FormattedTranslation) => {
+          if (!projectId) {
+            return;
+          }
+
+          navigateToTranslationPreview({
             documentId: translation.documentId,
             translationId: translation.id,
           });

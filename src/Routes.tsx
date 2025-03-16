@@ -17,6 +17,7 @@ import DashboardProjects from "./components/Dashboard/Projects";
 import CreateProjectPage from "./pages/CreateProject";
 import DocumentDetailsPage from "./pages/DocumentDetails";
 import TranslationDetailsPage from "./pages/TranslationDetails";
+import TranslationPreviewPage from "./pages/TranslationPreview";
 
 export default function RoutesComponent() {
   return (
@@ -61,6 +62,10 @@ export default function RoutesComponent() {
           <Route
             path="documents/:documentId/translations/:translationId/details"
             element={<TranslationDetailsPage />}
+          />
+          <Route
+            path="documents/:documentId/translations/:translationId/preview"
+            element={<TranslationPreviewPage />}
           />
         </Route>
         <Route

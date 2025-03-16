@@ -26,7 +26,7 @@ export default class TranslationService extends ApiService {
     return this.transformSegments(data);
   }
 
-  async previewTranslation(translationId: string): Promise<string> {
+  async previewTranslation(translationId: string | number): Promise<string> {
     return this.get(`/translations/${translationId}/preview`);
   }
 

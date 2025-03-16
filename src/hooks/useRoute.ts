@@ -92,6 +92,15 @@ export function useRoute() {
     [navigate]
   );
 
+  const navigateToTranslationPreview = useCallback(
+    ({ documentId, translationId }: Omit<NavigationParams, "projectId">) => {
+      navigate(
+        `/app/projects/${projectId}/documents/${documentId}/translations/${translationId}/preview`
+      );
+    },
+    [navigate]
+  );
+
   const navigateToTms = useCallback(() => {
     if (!projectId) {
       throw new Error("Project id is missing");
@@ -107,6 +116,7 @@ export function useRoute() {
     navigateToTranslations,
     navigateToTranslation,
     navigateToTranslationDetails,
+    navigateToTranslationPreview,
     navigateToDocument,
     navigateToDocumentDetails,
     navigateToProject,
