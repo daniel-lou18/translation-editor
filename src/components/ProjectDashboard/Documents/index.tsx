@@ -1,4 +1,4 @@
-import DocumentsTable from "@/components/ProjectDashboard/DocumentsOverview/DocumentsTable";
+import DocumentsTable from "@/components/ProjectDashboard/Documents/DocumentsTable";
 import { useCurrentProject } from "@/hooks/useCurrentProject";
 import PageTitle from "../../ui/PageTitle";
 import SearchForm from "../../ui/SearchForm";

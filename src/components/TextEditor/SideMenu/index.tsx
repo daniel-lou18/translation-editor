@@ -52,6 +52,10 @@ export default function SideMenu() {
       {currentView === "tm" ? (
         <Container className="mt-4 px-4">
           <DataHandler
+            data={{
+              matches,
+              reformulation,
+            }}
             loading={{
               isLoading: isLoadingMatches || isLoadingReformulation,
               component: <MatchSkeletons />,
@@ -66,16 +70,23 @@ export default function SideMenu() {
               component: EmptyMatchesComponent,
             }}
           >
-            <ReformulationMatches
-              sourceText={activeSegment.sourceText}
-              reformulation={reformulation}
-            />
-            <MemoryMatches matches={matches} />
+            {(data) => (
+              <>
+                <ReformulationMatches
+                  sourceText={activeSegment.sourceText}
+                  reformulation={data.reformulation}
+                />
+                <MemoryMatches matches={data.matches} />
+              </>
+            )}
           </DataHandler>
         </Container>
       ) : (
         <Container className="mt-4 px-4">
           <DataHandler
+            data={{
+              glossaryData,
+            }}
             loading={{
               isLoading: isLoadingGlossary,
               component: <GlossarySkeletons />,
@@ -90,7 +101,7 @@ export default function SideMenu() {
               component: EmptyGlossaryComponent,
             }}
           >
-            <Glossary glossaryData={glossaryData || []} />
+            {(data) => <Glossary glossaryData={data.glossaryData || []} />}
           </DataHandler>
         </Container>
       )}

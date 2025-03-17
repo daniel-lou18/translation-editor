@@ -6,7 +6,7 @@ import { ArrowRight, Sheet } from "lucide-react";
 import UploadButton from "../../Upload/UploadButton";
 import Container from "../../ui/Container";
 import { PropsWithChildren } from "react";
-import { AllowedMemoryType } from "@/types/Files";
+import { AllowedMemoryType, AllowedType } from "@/types/Files";
 import Combobox from "@/components/ui/Combobox";
 
 type UploadTmFormProps = PropsWithChildren<{
@@ -49,7 +49,7 @@ type FileConfig = {
   file: File | null;
   setFile: (file: File) => void;
   removeFile: () => void;
-  acceptedTypes: AllowedMemoryType[];
+  acceptedTypes: AllowedType[];
 };
 
 type LangConfig = {

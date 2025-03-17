@@ -1,4 +1,4 @@
-import Documents from "@/components/ProjectDashboard/DocumentsOverview";
+import Documents from "@/components/ProjectDashboard/Documents";
 
 export default function DocumentsPage() {
   return <Documents />;

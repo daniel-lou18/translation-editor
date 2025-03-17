@@ -53,6 +53,17 @@ export function useRoute() {
     [navigate]
   );
 
+  const navigateToDocumentPreview = useCallback(
+    (documentId: number) => {
+      if (!projectId) {
+        throw new Error("Project id is missing");
+      }
+
+      navigate(`/app/projects/${projectId}/documents/${documentId}/preview`);
+    },
+    [navigate]
+  );
+
   const navigateToTranslations = useCallback(
     (documentId: number) => {
       if (!documentId) {
@@ -119,6 +130,7 @@ export function useRoute() {
     navigateToTranslationPreview,
     navigateToDocument,
     navigateToDocumentDetails,
+    navigateToDocumentPreview,
     navigateToProject,
     navigateToProjects,
     navigateToTms,

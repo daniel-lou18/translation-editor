@@ -20,7 +20,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { TranslationMemoryMatches } from "@/types";
 import { useExportTranslation } from "@/hooks/useExportTranslation";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import Preview from "./Preview";
+import Preview from "../../ui/DocViewer/HtmlViewer";
 import { usePreview } from "@/hooks/usePreview";
 import { useImprove } from "@/hooks/useImprove";
 import { useCurrentProject } from "@/hooks/useCurrentProject";
@@ -35,6 +35,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import HtmlViewer from "../../ui/DocViewer/HtmlViewer";
 
 export default function EditorControls() {
   const {
@@ -300,7 +301,7 @@ export default function EditorControls() {
                 </TooltipContent>
               </Tooltip>
               <DialogContent className="max-w-[90vw]">
-                <Preview
+                <HtmlViewer
                   html={isLoadingPreview ? "LOADING..." : html ?? "error"}
                 />
               </DialogContent>

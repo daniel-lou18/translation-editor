@@ -1,4 +1,4 @@
-import { allowedDocumentTypes, allowedMemoryTypes } from "@/utils/constants";
+import { allowedDocumentTypes, allowedMemoryTypes } from "@/types/Files";
 import { useState } from "react";
 
 export interface FileInfo {

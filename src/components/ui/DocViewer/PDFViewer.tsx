@@ -3,30 +3,36 @@ import Container from "@/components/ui/Container";
 import { GalleryHorizontal, ZoomIn, ZoomOut } from "lucide-react";
 import { useRef, useEffect, useState } from "react";
 
-interface PDFPreviewProps {
-  html: string;
+interface PDFViewerProps {
+  pdfUrl: string;
   initialScale?: number;
   maxHeight?: string;
   onScaleChange?: (scale: number) => void;
+  title?: string;
 }
 
-export default function Preview({
-  html,
+export default function PDFViewer({
+  pdfUrl,
   initialScale = 1,
   maxHeight = "80vh",
   onScaleChange,
-}: PDFPreviewProps) {
-  const previewRef = useRef<HTMLDivElement | null>(null);
+  title = "PDF Document",
+}: PDFViewerProps) {
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const objectRef = useRef<HTMLObjectElement | null>(null);
   const [scale, setScale] = useState<number>(initialScale);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  // Standard A4 dimensions in pixels (assuming 96 DPI)
+  const pdfWidth = 794; // ~210mm at 96 DPI
+  const pdfHeight = 1123; // ~297mm at 96 DPI
 
   const calculateScale = (): void => {
-    // Default A4 dimensions in pixels (assuming 96 DPI)
-    const a4Width: number = 794; // ~210mm at 96 DPI
     const containerWidth: number =
-      previewRef.current?.parentElement?.clientWidth || window.innerWidth * 0.9;
+      containerRef.current?.clientWidth || window.innerWidth * 0.9;
 
     // Calculate the scale factor to fit the container width
-    const newScale: number = Math.min(1, containerWidth / a4Width);
+    const newScale: number = Math.min(1, containerWidth / pdfWidth);
     updateScale(newScale);
   };
 
@@ -35,6 +41,11 @@ export default function Preview({
     if (onScaleChange) {
       onScaleChange(newScale);
     }
+  };
+
+  // Handle PDF load
+  const handleLoad = () => {
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -82,23 +93,49 @@ export default function Preview({
         </Button>
       </Container>
 
-      <Container
+      <div
+        ref={containerRef}
         className="flex justify-center border border-border bg-muted p-5 overflow-auto rounded-sm"
         style={{ maxHeight }}
       >
         <div
-          ref={previewRef}
-          className="bg-white shadow-md relative box-border font-sans"
+          className="relative bg-white shadow-md"
           style={{
             transform: `scale(${scale})`,
             transformOrigin: "top left",
-            width: "794px", // A4 width at 96 DPI
-            minHeight: "1123px", // A4 height at 96 DPI
-            padding: "40px",
+            width: pdfWidth,
+            height: pdfHeight,
           }}
-          dangerouslySetInnerHTML={{ __html: html }}
-        />
-      </Container>
+        >
+          {isLoading && (
+            <div className="absolute inset-0 flex items-center justify-center bg-white z-10">
+              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+            </div>
+          )}
+          <object
+            ref={objectRef}
+            data={`${pdfUrl}#toolbar=0&navpanes=0&scrollbar=0&view=FitH`}
+            type="application/pdf"
+            width="100%"
+            height="100%"
+            className="shadow-md"
+            onLoad={handleLoad}
+            aria-label={title}
+          >
+            <div className="p-4 text-center">
+              <p>Your browser doesn't support embedded PDFs.</p>
+              <a
+                href={pdfUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-500 hover:underline"
+              >
+                Download the PDF
+              </a>
+            </div>
+          </object>
+        </div>
+      </div>
     </Container>
   );
 }

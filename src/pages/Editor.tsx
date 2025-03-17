@@ -11,6 +11,9 @@ export default function EditorPage() {
 
   return (
     <DataHandler
+      data={{
+        segments,
+      }}
       loading={{
         isLoading,
         component: <TextEditorSkeleton />,
@@ -24,11 +27,16 @@ export default function EditorPage() {
         component: <NoSegmentsFound />,
       }}
     >
-      <EditorContextProvider initialSegments={segments} key={segments?.[0]?.id}>
-        <ResourcesContextProvider>
-          <TextEditor />
-        </ResourcesContextProvider>
-      </EditorContextProvider>
+      {(data) => (
+        <EditorContextProvider
+          initialSegments={data.segments}
+          key={data.segments?.[0]?.id}
+        >
+          <ResourcesContextProvider>
+            <TextEditor />
+          </ResourcesContextProvider>
+        </EditorContextProvider>
+      )}
     </DataHandler>
   );
 }

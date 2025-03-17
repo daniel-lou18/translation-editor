@@ -5,7 +5,7 @@ import { Earth } from "lucide-react";
 import { useTmUpload } from "@/hooks/useTmUpload";
 import { useTmFileFormat } from "@/hooks/useTmFileFormat";
 import UploadTmTitle from "./UploadTmTitle";
-import { allowedExcelTypes, allowedMemoryTypes } from "@/utils/constants";
+import { allowedExcelTypes, allowedMemoryTypes } from "@/types/Files";
 import { AllowedMemoryType } from "@/types/Files";
 import { useLangsDomain } from "@/hooks/useLangsDomain";
 import { useTmExcelUpload } from "@/hooks/useTmExcelUpload";

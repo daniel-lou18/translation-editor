@@ -174,3 +174,18 @@ export function reconstructPath(
 
   return `${rootPath}/${pathParts.slice(0, index + 1).join("/")}`;
 }
+
+export function isAllowedType(
+  fileName: string,
+  allowedExtensions: readonly string[]
+) {
+  if (!fileName) return false;
+
+  const escapedExtensions = allowedExtensions.map((ext) =>
+    ext.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
+  );
+
+  const pattern = new RegExp(`(${escapedExtensions.join("|")})$`, "i");
+
+  return pattern.test(fileName);
+}

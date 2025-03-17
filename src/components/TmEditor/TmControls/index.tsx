@@ -20,6 +20,10 @@ export default function TmControls() {
   return (
     <TopbarContainer>
       <DataHandler
+        data={{
+          tms: normalizedTms,
+          currentTm: tmId ? normalizedTms?.[tmId] : null,
+        }}
         loading={{
           isLoading,
           component: <TmControlsSkeleton />,
@@ -37,11 +41,13 @@ export default function TmControls() {
           ),
         }}
       >
-        <SelectTm
-          tms={normalizedTms}
-          currentTm={tmId ? normalizedTms?.[tmId] : null}
-          onSelect={handleTmSelect}
-        />
+        {(data) => (
+          <SelectTm
+            tms={data.tms}
+            currentTm={data.currentTm}
+            onSelect={handleTmSelect}
+          />
+        )}
       </DataHandler>
     </TopbarContainer>
   );

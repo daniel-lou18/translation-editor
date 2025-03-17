@@ -79,6 +79,14 @@ export default function ProjectControls() {
   return (
     <TopbarContainer>
       <DataHandler
+        data={{
+          projects,
+          currentProject,
+          currentDocuments,
+          currentDocument,
+          currentTranslations,
+          currentTranslation,
+        }}
         loading={{
           isLoading,
           component: <ProjectControlsSkeleton />,
@@ -96,25 +104,28 @@ export default function ProjectControls() {
           ),
         }}
       >
-        <SelectProject
-          projects={projects || {}}
-          currentProject={currentProject}
-          onSelect={handleProjectSelect}
-        />
-        <Separator orientation="vertical" className="h-6" />
-        <SelectDocument
-          documents={currentDocuments || {}}
-          currentDocument={currentDocument}
-          onSelect={handleDocumentSelect}
-        />
-        <Separator orientation="vertical" className="h-6" />
-
-        <SelectTranslation
-          currentDocument={currentDocument}
-          translations={currentTranslations || {}}
-          currentTranslation={currentTranslation}
-          onSelect={handleTranslationSelect}
-        />
+        {(data) => (
+          <>
+            <SelectProject
+              projects={data.projects || {}}
+              currentProject={data.currentProject}
+              onSelect={handleProjectSelect}
+            />
+            <Separator orientation="vertical" className="h-6" />
+            <SelectDocument
+              documents={data.currentDocuments || {}}
+              currentDocument={data.currentDocument}
+              onSelect={handleDocumentSelect}
+            />
+            <Separator orientation="vertical" className="h-6" />
+            <SelectTranslation
+              currentDocument={data.currentDocument}
+              translations={data.currentTranslations || {}}
+              currentTranslation={data.currentTranslation}
+              onSelect={handleTranslationSelect}
+            />
+          </>
+        )}
       </DataHandler>
       <Separator orientation="vertical" className="h-6" />
       <TranslationProgress current={completedSegments} total={totalSegments} />

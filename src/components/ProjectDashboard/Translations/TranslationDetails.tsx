@@ -14,6 +14,11 @@ export default function TranslationDetails() {
     <Container className="space-y-8">
       <PageTitle title="Translation details" />
       <DataHandler
+        data={{
+          translation,
+          document,
+          segments,
+        }}
         loading={{
           isLoading,
           component: <TranslationCardSkeleton />,
@@ -32,11 +37,13 @@ export default function TranslationDetails() {
           component: <EmptyTranslationState />,
         }}
       >
-        <TranslationCard
-          translation={translation}
-          document={document}
-          segments={segments}
-        />
+        {(data) => (
+          <TranslationCard
+            translation={data.translation}
+            document={data.document}
+            segments={data.segments}
+          />
+        )}
       </DataHandler>
     </Container>
   );

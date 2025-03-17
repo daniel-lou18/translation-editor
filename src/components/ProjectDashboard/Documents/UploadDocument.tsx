@@ -1,7 +1,7 @@
 import Container from "../../ui/Container";
 import PageTitle from "../../ui/PageTitle";
 import UploadTmForm from "../Tms/UploadTmForm";
-import { allowedDocumentTypes } from "@/utils/constants";
+import { allowedDocumentTypes } from "@/types/Files";
 import { AllowedDocumentType } from "@/types/Files";
 import Combobox from "@/components/ui/Combobox";
 import { useLangsDomain } from "@/hooks/useLangsDomain";

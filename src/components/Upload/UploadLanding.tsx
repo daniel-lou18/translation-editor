@@ -1,4 +1,3 @@
-import UploadForm from "./UploadForm";
 import Container from "../ui/Container";
 
 export default function UploadLanding() {
@@ -12,7 +11,6 @@ export default function UploadLanding() {
           Upload the document you want to translate, together with its TM files
         </p>
       </Container>
-      <UploadForm />
     </Container>
   );
 }

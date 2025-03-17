@@ -9,6 +9,7 @@ export type Document = {
   domain: Domain | null;
   subdomain: string | null;
   docType: string | null;
+  html: string | null;
   createdAt: string;
   updatedAt: string;
 };

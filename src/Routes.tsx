@@ -18,6 +18,7 @@ import CreateProjectPage from "./pages/CreateProject";
 import DocumentDetailsPage from "./pages/DocumentDetails";
 import TranslationDetailsPage from "./pages/TranslationDetails";
 import TranslationPreviewPage from "./pages/TranslationPreview";
+import DocumentViewerPage from "./pages/DocumentViewer";
 
 export default function RoutesComponent() {
   return (
@@ -45,6 +46,10 @@ export default function RoutesComponent() {
           <Route
             path="documents/:documentId"
             element={<DocumentDetailsPage />}
+          />
+          <Route
+            path="documents/:documentId/preview"
+            element={<DocumentViewerPage />}
           />
           <Route
             path="documents/upload"

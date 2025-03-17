@@ -148,40 +148,6 @@ export const languageToCodeMap = {
   Indonesian: "id_ID",
 } as const;
 
-export const allowedExcelTypes = [".xlsx", ".xls"] as const;
-export const allowedDocumentTypes = [
-  ".txt",
-  ".pdf",
-  ".png",
-  ".bmp",
-  ".jpg",
-  ".jpeg",
-  ".docx",
-  ".doc",
-  ".html",
-  ".xml",
-] as const;
-
-export const allowedMemoryTypes = [
-  ...allowedExcelTypes,
-  ".txt",
-  ".pdf",
-  ".png",
-  ".bmp",
-  ".jpg",
-  ".jpeg",
-  ".docx",
-  ".doc",
-  ".html",
-  ".xml",
-] as const;
-
-export const allowedTypes = [
-  ...allowedExcelTypes,
-  ...allowedDocumentTypes,
-  ...allowedMemoryTypes,
-] as const;
-
 export const domains = [
   "legal",
   "medical",

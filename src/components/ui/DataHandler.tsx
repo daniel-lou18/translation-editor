@@ -1,7 +1,8 @@
 import { ReactNode } from "react";
 
-type DataHandlerProps = {
-  children: ReactNode;
+type DataHandlerProps<DataType> = {
+  data: DataType;
+  children: (data: NonNullable<DataType>) => ReactNode;
   loading: {
     isLoading: boolean;
     component?: ReactNode;
@@ -17,8 +18,9 @@ type DataHandlerProps = {
   };
 };
 
-export default function DataHandler({
+export default function DataHandler<DataType>({
   children,
+  data,
   loading: { isLoading, component: loadingComponent = <div>Loading...</div> },
   error: {
     isError,
@@ -31,7 +33,7 @@ export default function DataHandler({
     isEmpty: false,
     component: <div>No data available</div>,
   },
-}: DataHandlerProps) {
+}: DataHandlerProps<DataType>) {
   const { isEmpty, component: emptyComponent } = empty;
 
   if (isLoading) {
@@ -46,5 +48,5 @@ export default function DataHandler({
     return <>{emptyComponent}</>;
   }
 
-  return <>{children}</>;
+  return <>{children(data as NonNullable<DataType>)}</>;
 }

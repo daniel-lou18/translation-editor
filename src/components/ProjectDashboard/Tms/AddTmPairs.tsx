@@ -5,7 +5,7 @@ import Combobox from "@/components/ui/Combobox";
 import { Earth } from "lucide-react";
 import { useTmFileFormat } from "@/hooks/useTmFileFormat";
 import UploadTmTitle from "./UploadTmTitle";
-import { allowedExcelTypes, allowedMemoryTypes } from "@/utils/constants";
+import { allowedExcelTypes, allowedMemoryTypes } from "@/types/Files";
 import { AllowedMemoryType } from "@/types/Files";
 import { useSelectTm } from "@/hooks/useSelectTm";
 import { useTmUpload } from "@/hooks/useTmUpload";

@@ -15,6 +15,7 @@ export default function DocumentsDetails() {
     <Container className="space-y-8">
       <PageTitle title="Document details" />
       <DataHandler
+        data={document}
         loading={{
           isLoading,
           component: <DocumentCardSkeleton />,
@@ -28,7 +29,7 @@ export default function DocumentsDetails() {
           component: <EmptyDocumentState />,
         }}
       >
-        <DocumentCard document={document} />
+        {(document) => <DocumentCard document={document} />}
       </DataHandler>
     </Container>
   );
