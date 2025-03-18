@@ -30,7 +30,7 @@ export default function SelectTranslation({
       items={items}
       value={currentId || ""}
       onChange={onSelect}
-      className="bg-background h-9 border-border"
+      className="bg-white h-9 border-border"
     />
   );
 }

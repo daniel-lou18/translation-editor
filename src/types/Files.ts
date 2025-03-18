@@ -66,7 +66,9 @@ export const outputContentTypes = {
 
 export type BlobResponse = { data: Blob; fileName: string };
 
-export function getFileType(fileName: string) {
+export function getFileType(fileName: string | undefined) {
+  if (!fileName) return null;
+
   if (isAllowedType(fileName, allowedHtmlTypes)) {
     return "html";
   }
@@ -85,4 +87,8 @@ export function getFileType(fileName: string) {
   if (isAllowedType(fileName, allowedDocTypes)) {
     return "doc";
   }
+  if (isAllowedType(fileName, allowedExcelTypes)) {
+    return "excel";
+  }
+  return null;
 }

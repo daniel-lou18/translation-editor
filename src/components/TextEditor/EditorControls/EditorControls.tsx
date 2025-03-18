@@ -20,7 +20,6 @@ import { useQueryClient } from "@tanstack/react-query";
 import { TranslationMemoryMatches } from "@/types";
 import { useExportTranslation } from "@/hooks/useExportTranslation";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import Preview from "../../ui/DocViewer/HtmlViewer";
 import { usePreview } from "@/hooks/usePreview";
 import { useImprove } from "@/hooks/useImprove";
 import { useCurrentProject } from "@/hooks/useCurrentProject";
@@ -36,6 +35,8 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import HtmlViewer from "../../ui/DocViewer/HtmlViewer";
+import DataHandler from "@/components/ui/DataHandler";
+import SkeletonViewer from "@/components/ui/DocViewer/SkeletonViewer";
 
 export default function EditorControls() {
   const {
@@ -62,7 +63,12 @@ export default function EditorControls() {
   const { mutate: mutateImprove } = useImprove();
 
   const { downloadFile } = useExportTranslation();
-  const { html, isLoading: isLoadingPreview } = usePreview();
+  const {
+    html,
+    isLoading: isLoadingPreview,
+    isError: isErrorPreview,
+    error: errorPreview,
+  } = usePreview();
 
   function handleReformulate() {
     if (!segment.targetText) return;
@@ -301,9 +307,17 @@ export default function EditorControls() {
                 </TooltipContent>
               </Tooltip>
               <DialogContent className="max-w-[90vw]">
-                <HtmlViewer
-                  html={isLoadingPreview ? "LOADING..." : html ?? "error"}
-                />
+                <DataHandler
+                  data={html}
+                  loading={{
+                    isLoading: isLoadingPreview,
+                    component: <SkeletonViewer />,
+                  }}
+                  error={{ isError: isErrorPreview, error: errorPreview }}
+                  empty={{ isEmpty: !html }}
+                >
+                  {(html) => <HtmlViewer html={html} />}
+                </DataHandler>
               </DialogContent>
             </Dialog>
 

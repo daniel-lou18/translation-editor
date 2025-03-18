@@ -1,27 +1,26 @@
-import HtmlViewer from "@/components/ui/DocViewer/HtmlViewer";
-import ImageViewer from "@/components/ui/DocViewer/ImageViewer";
-import PDFViewer from "@/components/ui/DocViewer/PDFViewer";
+import DocumentCardSkeleton from "@/components/ui/Card/DocumentCardSkeleton";
+import DataHandler from "@/components/ui/DataHandler";
+import ViewerSelector from "@/components/ui/DocViewer/ViewerSelector";
 import { useCurrentProject } from "@/hooks/useCurrentProject";
 import { getFileType } from "@/types/Files";
 
 export default function DocumentViewer() {
-  const { currentDocument } = useCurrentProject();
-  const docUrl = `${import.meta.env.VITE_UPLOADS_URL}/${
-    currentDocument?.fileName
-  }`;
+  const { currentDocument, isLoading, isError, error } = useCurrentProject();
+  const contentType = getFileType(currentDocument?.fileName);
 
-  if (!currentDocument) return null;
-
-  const contentType = getFileType(currentDocument.fileName);
-
-  switch (contentType) {
-    case "html":
-      return <HtmlViewer html={currentDocument.html} />;
-    case "pdf":
-      return <PDFViewer pdfUrl={docUrl} />;
-    case "image":
-      return <ImageViewer imageUrl={docUrl} />;
-    default:
-      return <p>Unsupported file type</p>;
-  }
+  return (
+    <DataHandler
+      data={{ currentDocument, contentType }}
+      loading={{ isLoading, component: <DocumentCardSkeleton /> }}
+      error={{ isError, error }}
+      empty={{ isEmpty: !currentDocument, component: <p>No document found</p> }}
+    >
+      {(data) => (
+        <ViewerSelector
+          document={data.currentDocument}
+          contentType={data.contentType}
+        />
+      )}
+    </DataHandler>
+  );
 }
