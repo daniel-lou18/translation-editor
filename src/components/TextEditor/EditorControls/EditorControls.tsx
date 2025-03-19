@@ -35,8 +35,9 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import HtmlViewer from "../../ui/DocViewer/HtmlViewer";
-import DataHandler from "@/components/ui/DataHandler";
 import SkeletonViewer from "@/components/ui/DocViewer/SkeletonViewer";
+import FileError from "@/components/ui/Error/FileError";
+import NoFileContent from "@/components/ui/Error/NoFileContent";
 
 export default function EditorControls() {
   const {
@@ -92,6 +93,20 @@ export default function EditorControls() {
         domain: currentDocument.domain,
       },
     });
+  }
+
+  function renderPreview() {
+    if (isLoadingPreview) {
+      return <SkeletonViewer />;
+    }
+    if (isErrorPreview) {
+      return <FileError title="Error Loading Preview" error={errorPreview} />;
+    }
+    if (!html) {
+      return <NoFileContent />;
+    }
+
+    return <HtmlViewer html={html} />;
   }
 
   const downloadData = [
@@ -307,17 +322,7 @@ export default function EditorControls() {
                 </TooltipContent>
               </Tooltip>
               <DialogContent className="max-w-[90vw]">
-                <DataHandler
-                  data={html}
-                  loading={{
-                    isLoading: isLoadingPreview,
-                    component: <SkeletonViewer />,
-                  }}
-                  error={{ isError: isErrorPreview, error: errorPreview }}
-                  empty={{ isEmpty: !html }}
-                >
-                  {(html) => <HtmlViewer html={html} />}
-                </DataHandler>
+                {renderPreview()}
               </DialogContent>
             </Dialog>
 

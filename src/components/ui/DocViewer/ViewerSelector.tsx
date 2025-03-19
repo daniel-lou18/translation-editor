@@ -19,6 +19,7 @@ export default function ViewerSelector({
 
   switch (contentType) {
     case "html":
+    case "word":
       return <HtmlViewer html={document.html ?? ""} />;
     case "pdf":
       return <PDFViewer pdfUrl={docUrl} />;

@@ -85,7 +85,7 @@ export function getFileType(fileName: string | undefined) {
     return "csv";
   }
   if (isAllowedType(fileName, allowedDocTypes)) {
-    return "doc";
+    return "word";
   }
   if (isAllowedType(fileName, allowedExcelTypes)) {
     return "excel";

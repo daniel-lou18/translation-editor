@@ -1,48 +1,34 @@
 import DocumentCard from "@/components/ui/Card/DocumentCard";
 import { useGetDocument } from "@/hooks/useGetDocument";
 import { useRoute } from "@/hooks/useRoute";
-import DataHandler from "@/components/ui/DataHandler";
-import DocumentCardSkeleton from "@/components/ui/Card/DocumentCardSkeleton";
-import { FileText } from "lucide-react";
 import PageTitle from "@/components/ui/PageTitle";
 import Container from "@/components/ui/Container";
+import DocumentCardSkeleton from "@/components/ui/Card/DocumentCardSkeleton";
+import Error from "@/components/ui/Error/FileError";
+import NoContent from "@/components/ui/Error/NoFileContent";
 
 export default function DocumentsDetails() {
   const { documentId } = useRoute();
   const { document, isLoading, isError, error } = useGetDocument(documentId);
 
+  function renderDocumentCard() {
+    if (isLoading) {
+      return <DocumentCardSkeleton />;
+    }
+    if (isError) {
+      return <Error title="Error Loading Document" error={error} />;
+    }
+    if (!document) {
+      return <NoContent />;
+    }
+
+    return <DocumentCard document={document} />;
+  }
+
   return (
     <Container className="space-y-8">
       <PageTitle title="Document details" />
-      <DataHandler
-        data={document}
-        loading={{
-          isLoading,
-          component: <DocumentCardSkeleton />,
-        }}
-        error={{
-          isError,
-          error,
-        }}
-        empty={{
-          isEmpty: !document && !isLoading && !isError,
-          component: <EmptyDocumentState />,
-        }}
-      >
-        {(document) => <DocumentCard document={document} />}
-      </DataHandler>
+      {renderDocumentCard()}
     </Container>
-  );
-}
-
-function EmptyDocumentState() {
-  return (
-    <div className="flex flex-col items-center justify-center p-8 text-center">
-      <FileText className="h-12 w-12 text-muted-foreground mb-4" />
-      <h3 className="text-lg font-medium">No Document Found</h3>
-      <p className="text-muted-foreground mt-2">
-        The document you're looking for doesn't exist or has been removed.
-      </p>
-    </div>
   );
 }

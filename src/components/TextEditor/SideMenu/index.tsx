@@ -1,6 +1,5 @@
 import ReformulationMatches from "@/components/TextEditor/SideMenu/ReformulationMatches";
 import MemoryMatches from "./MemoryMatches";
-import DataHandler from "../../ui/DataHandler";
 import MatchSkeletons from "./MatchSkeletons";
 import { useEditor } from "@/contexts/editorContext";
 import { useReformulate } from "@/hooks/useReformulate";
@@ -29,82 +28,69 @@ export default function SideMenu() {
   const { reformulation, isLoading: isLoadingReformulation } = useReformulate();
   const { currentView } = useResources();
 
-  const ErrorComponent = (
-    <p className="p-4 text-sm text-muted-foreground">
-      Error: could not retrieve matches
-    </p>
-  );
+  // Translation Memory View
+  const renderTMView = () => {
+    if (isLoadingMatches || isLoadingReformulation) {
+      return <MatchSkeletons />;
+    }
 
-  const EmptyMatchesComponent = (
-    <p className="p-4 text-sm text-muted-foreground">
-      No matches found for this segment
-    </p>
-  );
+    if (isError) {
+      return (
+        <p className="p-4 text-sm text-muted-foreground">
+          Error: {error?.message || "could not retrieve matches"}
+        </p>
+      );
+    }
 
-  const EmptyGlossaryComponent = (
-    <p className="p-4 text-sm text-muted-foreground">
-      No glossary terms found for this segment
-    </p>
-  );
+    if (!matches || matches.length === 0) {
+      return (
+        <p className="p-4 text-sm text-muted-foreground">
+          No matches found for this segment
+        </p>
+      );
+    }
+
+    return (
+      <>
+        <ReformulationMatches
+          sourceText={activeSegment.sourceText}
+          reformulation={reformulation}
+        />
+        <MemoryMatches matches={matches} />
+      </>
+    );
+  };
+
+  // Glossary View
+  const renderGlossaryView = () => {
+    if (isLoadingGlossary) {
+      return <GlossarySkeletons />;
+    }
+
+    if (isGlossaryError) {
+      return (
+        <p className="p-4 text-sm text-muted-foreground">
+          Error: {glossaryError?.message || "could not retrieve glossary terms"}
+        </p>
+      );
+    }
+
+    if (!glossaryData || glossaryData.length === 0) {
+      return (
+        <p className="p-4 text-sm text-muted-foreground">
+          No glossary terms found for this segment
+        </p>
+      );
+    }
+
+    return <Glossary glossaryData={glossaryData} />;
+  };
 
   return (
     <Container className="col-span-3 sticky top-0 min-h-screen h-fit space-y-4 bg-background">
-      {currentView === "tm" ? (
-        <Container className="mt-4 px-4">
-          <DataHandler
-            data={{
-              matches,
-              reformulation,
-            }}
-            loading={{
-              isLoading: isLoadingMatches || isLoadingReformulation,
-              component: <MatchSkeletons />,
-            }}
-            error={{
-              isError,
-              error,
-              component: ErrorComponent,
-            }}
-            empty={{
-              isEmpty: !matches || matches.length === 0,
-              component: EmptyMatchesComponent,
-            }}
-          >
-            {(data) => (
-              <>
-                <ReformulationMatches
-                  sourceText={activeSegment.sourceText}
-                  reformulation={data.reformulation}
-                />
-                <MemoryMatches matches={data.matches} />
-              </>
-            )}
-          </DataHandler>
-        </Container>
-      ) : (
-        <Container className="mt-4 px-4">
-          <DataHandler
-            data={{
-              glossaryData,
-            }}
-            loading={{
-              isLoading: isLoadingGlossary,
-              component: <GlossarySkeletons />,
-            }}
-            error={{
-              isError: isGlossaryError,
-              error: glossaryError,
-              component: ErrorComponent,
-            }}
-            empty={{
-              isEmpty: !glossaryData || glossaryData.length === 0,
-              component: EmptyGlossaryComponent,
-            }}
-          >
-            {(data) => <Glossary glossaryData={data.glossaryData || []} />}
-          </DataHandler>
-        </Container>
-      )}
+      <Container className="mt-4 px-4">
+        {currentView === "tm" ? renderTMView() : renderGlossaryView()}
+      </Container>
     </Container>
   );
 }

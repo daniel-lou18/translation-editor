@@ -2,7 +2,6 @@ import { useEditor } from "@/contexts/editorContext";
 import TranslationProgress from "./TranslationProgress";
 import SelectProject from "./SelectProject";
 import { useRoute } from "@/hooks/useRoute";
-import DataHandler from "@/components/ui/DataHandler";
 import ProjectControlsSkeleton from "./ProjectControlsSkeleton";
 import SelectTranslation from "./SelectTranslation";
 import { useCurrentProject } from "@/hooks/useCurrentProject";
@@ -10,7 +9,7 @@ import SelectDocument from "./SelectDocument";
 import { useCallback } from "react";
 import { Separator } from "@/components/ui/separator";
 import TopbarContainer from "@/components/ui/Editor/TopbarContainer";
-
+import ErrorMessage from "@/components/ui/Error/ErrorMessage";
 export default function ProjectControls() {
   const { segments, getCompletedSegments } = useEditor();
   const totalSegments = segments.length;
@@ -76,59 +75,47 @@ export default function ProjectControls() {
     ]
   );
 
-  return (
-    <TopbarContainer>
-      <DataHandler
-        data={{
-          projects,
-          currentProject,
-          currentDocuments,
-          currentDocument,
-          currentTranslations,
-          currentTranslation,
-        }}
-        loading={{
-          isLoading,
-          component: <ProjectControlsSkeleton />,
-        }}
-        error={{
-          isError,
-          error,
-        }}
-        empty={{
-          isEmpty: !projects || Object.keys(projects).length === 0,
-          component: (
-            <div className="p-4 text-sm text-muted-foreground">
-              No projects available
-            </div>
-          ),
-        }}
-      >
-        {(data) => (
-          <>
-            <SelectProject
-              projects={data.projects || {}}
-              currentProject={data.currentProject}
-              onSelect={handleProjectSelect}
-            />
-            <Separator orientation="vertical" className="h-6" />
-            <SelectDocument
-              documents={data.currentDocuments || {}}
-              currentDocument={data.currentDocument}
-              onSelect={handleDocumentSelect}
-            />
-            <Separator orientation="vertical" className="h-6" />
-            <SelectTranslation
-              currentDocument={data.currentDocument}
-              translations={data.currentTranslations || {}}
-              currentTranslation={data.currentTranslation}
-              onSelect={handleTranslationSelect}
-            />
-          </>
-        )}
-      </DataHandler>
-      <Separator orientation="vertical" className="h-6" />
-      <TranslationProgress current={completedSegments} total={totalSegments} />
-    </TopbarContainer>
-  );
+  const renderControls = () => {
+    if (isLoading) {
+      return <ProjectControlsSkeleton />;
+    }
+
+    if (isError) {
+      return <ErrorMessage error={error} />;
+    }
+
+    if (!projects || Object.keys(projects).length === 0) {
+      return <ErrorMessage message="No projects available" />;
+    }
+
+    return (
+      <>
+        <SelectProject
+          projects={projects || {}}
+          currentProject={currentProject}
+          onSelect={handleProjectSelect}
+        />
+        <Separator orientation="vertical" className="h-6" />
+        <SelectDocument
+          documents={currentDocuments || {}}
+          currentDocument={currentDocument}
+          onSelect={handleDocumentSelect}
+        />
+        <Separator orientation="vertical" className="h-6" />
+        <SelectTranslation
+          currentDocument={currentDocument}
+          translations={currentTranslations || {}}
+          currentTranslation={currentTranslation}
+          onSelect={handleTranslationSelect}
+        />
+        <Separator orientation="vertical" className="h-6" />
+        <TranslationProgress
+          current={completedSegments}
+          total={totalSegments}
+        />
+      </>
+    );
+  };
+
+  return <TopbarContainer>{renderControls()}</TopbarContainer>;
 }
