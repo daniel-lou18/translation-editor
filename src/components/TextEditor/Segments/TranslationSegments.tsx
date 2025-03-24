@@ -5,6 +5,7 @@ import { useSemanticMatches } from "@/hooks/useSemanticMatches";
 import { useSegmentHandlers } from "@/hooks/useSegmentHandlers";
 import { EditorSegment } from "@/components/ui/Editor/EditorSegment";
 import ContentContainer from "@/components/ui/Editor/ContentContainer";
+
 export default function TranslationSegments() {
   const { segments, activeSegmentId, getActiveSegment } = useEditor();
   const activeSegment = getActiveSegment();
