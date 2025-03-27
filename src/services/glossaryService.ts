@@ -7,6 +7,7 @@ export class GlossaryService extends ApiService {
   }
 
   async search(searchQuery: string): Promise<GlossaryTermWithDocPair[]> {
+    throw new Error("Not implemented");
     return this.get(`/glossaries/search?q=${searchQuery}`);
   }
 }

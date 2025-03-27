@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import Container from "@/components/ui/Container";
 import { GalleryHorizontal, ZoomIn, ZoomOut } from "lucide-react";
 import { useRef, useEffect, useState } from "react";
+import LoadingSpinner from "../LoadingSpinner";
 
 interface ImageViewerProps {
   imageUrl: string;
@@ -122,11 +123,7 @@ export default function ImageViewer({
             height: imageDimensions.height || "auto",
           }}
         >
-          {!imageLoaded && (
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
-            </div>
-          )}
+          {!imageLoaded && <LoadingSpinner />}
           <img
             ref={imageRef}
             src={imageUrl}

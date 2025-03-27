@@ -10,6 +10,7 @@ export type Document = {
   subdomain: string | null;
   docType: string | null;
   html: string | null;
+  fileUrl: string | null;
   createdAt: string;
   updatedAt: string;
 };

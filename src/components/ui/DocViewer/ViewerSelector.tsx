@@ -15,16 +15,14 @@ export default function ViewerSelector({
 }: ViewerSelectorProps) {
   if (!document) return null;
 
-  const docUrl = `${import.meta.env.VITE_UPLOADS_URL}/${document.fileName}`;
-
   switch (contentType) {
     case "html":
     case "word":
       return <HtmlViewer html={document.html ?? ""} />;
     case "pdf":
-      return <PDFViewer pdfUrl={docUrl} />;
+      return <PDFViewer pdfUrl={document.fileUrl ?? ""} />;
     case "image":
-      return <ImageViewer imageUrl={docUrl} />;
+      return <ImageViewer imageUrl={document.fileUrl ?? ""} />;
     default:
       return <p>Unsupported file type</p>;
   }

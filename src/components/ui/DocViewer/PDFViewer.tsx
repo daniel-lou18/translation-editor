@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import Container from "@/components/ui/Container";
 import { GalleryHorizontal, ZoomIn, ZoomOut } from "lucide-react";
 import { useRef, useEffect, useState } from "react";
+import LoadingSpinner from "../LoadingSpinner";
 
 interface PDFViewerProps {
   pdfUrl: string;
@@ -107,11 +108,7 @@ export default function PDFViewer({
             height: pdfHeight,
           }}
         >
-          {isLoading && (
-            <div className="absolute inset-0 flex items-center justify-center bg-white z-10">
-              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
-            </div>
-          )}
+          {isLoading && <LoadingSpinner />}
           <object
             ref={objectRef}
             data={`${pdfUrl}#toolbar=0&navpanes=0&scrollbar=0&view=FitH`}
