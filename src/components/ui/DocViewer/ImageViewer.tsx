@@ -1,8 +1,7 @@
-import { Button } from "@/components/ui/button";
 import Container from "@/components/ui/Container";
-import { GalleryHorizontal, ZoomIn, ZoomOut } from "lucide-react";
 import { useRef, useEffect, useState } from "react";
 import LoadingSpinner from "../LoadingSpinner";
+import ViewerControls from "./ViewerControls";
 
 interface ImageViewerProps {
   imageUrl: string;
@@ -81,33 +80,7 @@ export default function ImageViewer({
 
   return (
     <Container className="flex flex-col w-full">
-      <Container className="flex items-center gap-3 mb-4">
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={() => updateScale(Math.max(0.3, scale - 0.1))}
-          aria-label="Zoom out"
-        >
-          <ZoomOut className="w-4 h-4" />
-        </Button>
-        <span className="text-sm font-medium">{Math.round(scale * 100)}%</span>
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={() => updateScale(scale + 0.1)}
-          aria-label="Zoom in"
-        >
-          <ZoomIn className="w-4 h-4" />
-        </Button>
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={() => calculateScale()}
-          aria-label="Fit to width"
-        >
-          <GalleryHorizontal className="w-4 h-4" />
-        </Button>
-      </Container>
+      <ViewerControls scaleControls={{ scale, updateScale, calculateScale }} />
 
       <div
         ref={containerRef}

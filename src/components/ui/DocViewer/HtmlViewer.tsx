@@ -1,14 +1,20 @@
-import { Button } from "@/components/ui/button";
 import Container from "@/components/ui/Container";
-import { GalleryHorizontal, ZoomIn, ZoomOut } from "lucide-react";
 import { useRef, useEffect, useState } from "react";
+import ViewerControls from "./ViewerControls";
 
-interface PDFPreviewProps {
-  html: string;
+type PDFPreviewProps = {
+  html: Html;
   initialScale?: number;
   maxHeight?: string;
   onScaleChange?: (scale: number) => void;
-}
+};
+
+export type Html = {
+  original: string;
+  translation?: string;
+};
+
+export type Mode = "original" | "translation";
 
 export default function HtmlViewer({
   html,
@@ -19,6 +25,7 @@ export default function HtmlViewer({
   const containerRef = useRef<HTMLDivElement | null>(null);
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
   const [scale, setScale] = useState<number>(initialScale);
+  const [mode, setMode] = useState<Mode>("original");
 
   const calculateScale = (): void => {
     // Default A4 dimensions in pixels (assuming 96 DPI)
@@ -81,43 +88,20 @@ export default function HtmlViewer({
                 }
               </style>
             </head>
-            <body>${html}</body>
+            <body>${html[mode]}</body>
           </html>
         `);
         iframeDoc.close();
       }
     }
-  }, [html, iframeRef.current]);
+  }, [html, mode, iframeRef.current]);
 
   return (
     <Container className="flex flex-col w-full">
-      <Container className="flex items-center gap-3 mb-4">
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={() => updateScale(Math.max(0.3, scale - 0.1))}
-          aria-label="Zoom out"
-        >
-          <ZoomOut className="w-4 h-4" />
-        </Button>
-        <span className="text-sm font-medium">{Math.round(scale * 100)}%</span>
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={() => updateScale(scale + 0.1)}
-          aria-label="Zoom in"
-        >
-          <ZoomIn className="w-4 h-4" />
-        </Button>
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={() => calculateScale()}
-          aria-label="Fit to width"
-        >
-          <GalleryHorizontal className="w-4 h-4" />
-        </Button>
-      </Container>
+      <ViewerControls
+        scaleControls={{ scale, updateScale, calculateScale }}
+        viewMode={html.translation ? { mode, onChange: setMode } : null}
+      />
 
       <div
         ref={containerRef}

@@ -106,7 +106,14 @@ export default function EditorControls() {
       return <NoFileContent />;
     }
 
-    return <HtmlViewer html={html} />;
+    return (
+      <HtmlViewer
+        html={{
+          original: currentDocument?.html ?? "",
+          translation: html,
+        }}
+      />
+    );
   }
 
   const downloadData = [
