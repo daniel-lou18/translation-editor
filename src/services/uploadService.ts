@@ -22,7 +22,7 @@ export class UploadService extends ApiService {
     return this.post<TranslationWithDocument>(
       `/upload/documents/source`,
       formData,
-      { timeout: 60000 }
+      { timeout: 120000 }
     );
   }
 
@@ -35,7 +35,7 @@ export class UploadService extends ApiService {
     return this.post<TranslationWithDocument>(
       `/upload/documents/file`,
       formData,
-      { timeout: 60000 }
+      { timeout: 120000 }
     );
   }
 
@@ -44,7 +44,7 @@ export class UploadService extends ApiService {
     files.forEach((file) => formData.append("files", file));
 
     return this.post("upload/tms", formData, {
-      timeout: 60000,
+      timeout: 120000,
     });
   }
 
@@ -59,7 +59,7 @@ export class UploadService extends ApiService {
     formData.append("domain", filesMetadata.domain);
 
     return this.post("upload/documents/docpair", formData, {
-      timeout: 60000,
+      timeout: 120000,
     });
   }
 
@@ -75,7 +75,7 @@ export class UploadService extends ApiService {
     formData.append("tmId", filesMetadata.tmId);
 
     return this.post("upload/tms/segments", formData, {
-      timeout: 60000,
+      timeout: 120000,
     });
   }
 
