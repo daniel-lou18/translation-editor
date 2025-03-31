@@ -1,6 +1,7 @@
 import Container from "@/components/ui/Container";
 import { useRef, useEffect, useState } from "react";
 import ViewerControls from "./ViewerControls";
+import { useViewer } from "@/hooks/useViewer";
 
 type PDFPreviewProps = {
   html: Html;
@@ -16,6 +17,10 @@ export type Html = {
 
 export type Mode = "original" | "translation";
 
+const A4_WIDTH = 794;
+const A4_HEIGHT = 1123;
+const PAGE_GAP = 40;
+
 export default function HtmlViewer({
   html,
   initialScale = 1,
@@ -26,15 +31,15 @@ export default function HtmlViewer({
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
   const [scale, setScale] = useState<number>(initialScale);
   const [mode, setMode] = useState<Mode>("original");
+  const { pages } = useViewer(html[mode] ?? null);
 
   const calculateScale = (): void => {
     // Default A4 dimensions in pixels (assuming 96 DPI)
-    const a4Width: number = 794; // ~210mm at 96 DPI
     const containerWidth: number =
       containerRef.current?.clientWidth || window.innerWidth * 0.9;
 
     // Calculate the scale factor to fit the container width
-    const newScale: number = Math.min(1, containerWidth / a4Width);
+    const newScale: number = Math.min(1, containerWidth / A4_WIDTH);
     updateScale(newScale);
   };
 
@@ -45,11 +50,10 @@ export default function HtmlViewer({
     }
   };
 
+  // Window resize effect
   useEffect(() => {
-    // Calculate scale on initial render
     calculateScale();
 
-    // Recalculate when window resizes
     const handleResize = (): void => {
       calculateScale();
     };
@@ -67,7 +71,7 @@ export default function HtmlViewer({
       const iframeDoc =
         iframe.contentDocument || iframe.contentWindow?.document;
 
-      if (iframeDoc) {
+      if (iframeDoc && pages > 0) {
         // Write a complete HTML document to the iframe
         iframeDoc.open();
         iframeDoc.write(`
@@ -78,23 +82,34 @@ export default function HtmlViewer({
               <style>
                 body {
                   margin: 0;
-                  padding: 40px;
-                  font-family: sans-serif;
+                  padding: 0;
+                  font-family: ui-sans-serif, system-ui, sans-serif;
                   box-sizing: border-box;
-                  background-color: white;
+                  background-color: #f5f5f5;
+                  overflow: hidden
                 }
                 * {
                   box-sizing: border-box;
                 }
+                .page-break-visual {
+                  display: none;
+                }
+                .pages-container {
+                  padding: ${PAGE_GAP}px 0px;
+                }
               </style>
             </head>
-            <body>${html[mode]}</body>
+            <body>
+              <div class="pages-container">
+                ${html[mode]}
+              </div>
+            </body>
           </html>
         `);
         iframeDoc.close();
       }
     }
-  }, [html, mode, iframeRef.current]);
+  }, [pages, iframeRef.current, html[mode]]);
 
   return (
     <Container className="flex flex-col w-full">
@@ -105,15 +120,14 @@ export default function HtmlViewer({
 
       <div
         ref={containerRef}
-        className="flex justify-center border border-border bg-muted p-5 overflow-auto rounded-sm"
+        className="flex justify-center border border-border bg-muted overflow-auto rounded-sm"
         style={{ maxHeight }}
       >
         <div
           style={{
             transform: `scale(${scale})`,
             transformOrigin: "top left",
-            width: "794px", // A4 width at 96 DPI
-            height: "1123px", // A4 height at 96 DPI
+            width: `${A4_WIDTH}px`,
           }}
         >
           <iframe
@@ -121,10 +135,8 @@ export default function HtmlViewer({
             title="Document Preview"
             style={{
               width: "100%",
-              height: "100%",
+              height: pages * (A4_HEIGHT + 2 * PAGE_GAP) + "px", // Height for all pages plus margins
               border: "none",
-              boxShadow:
-                "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
             }}
             sandbox="allow-same-origin"
           />
