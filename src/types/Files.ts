@@ -188,7 +188,7 @@ export const FileTypeToMimeTypeMap: Record<DocumentFormat, MimeType> = {
   tsv: "text/tab-separated-values",
 } as const;
 
-export const getMimeType = (fileName: string | undefined) => {
+export const getMimeType = (fileName: string | undefined): MimeType | null => {
   if (!fileName) return null;
 
   // Get the file extension

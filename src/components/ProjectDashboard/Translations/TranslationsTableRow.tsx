@@ -7,6 +7,7 @@ import TableRowMenu from "@/components/ui/Table/TableRowMenu";
 import { FormattedTranslation } from "@/types/Translation";
 import { TableRowMenuProps } from "@/components/ui/Table/TableRowMenu";
 import { useRoute } from "@/hooks/useRoute";
+
 type TranslationsTableRowProps = {
   data: FormattedTranslation;
   rowMenuData: Omit<TableRowMenuProps<FormattedTranslation>, "data">;

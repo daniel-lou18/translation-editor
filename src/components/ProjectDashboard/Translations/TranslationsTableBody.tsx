@@ -3,7 +3,9 @@ import TranslationsTableRow from "./TranslationsTableRow";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { useExportTranslation } from "@/hooks/useExportTranslation";
 import { useRoute } from "@/hooks/useRoute";
-import { getFileType, getMimeType } from "@/types/Files";
+import { getMimeType, MimeType } from "@/types/Files";
+import { EXPORT_FORMATS } from "@/config/translationsTable";
+import { useCallback } from "react";
 
 type TranslationsTableBodyProps = {
   translations: FormattedTranslation[];
@@ -20,102 +22,77 @@ export default function TranslationsTableBody({
     projectId,
   } = useRoute();
 
+  const handleDownload = useCallback(
+    (translation: FormattedTranslation, output: MimeType) => {
+      const input = getMimeType(translation.document.fileName);
+      if (!input) {
+        return;
+      }
+      downloadFile(
+        {
+          input,
+          output,
+        },
+        String(translation.id)
+      );
+    },
+    [downloadFile]
+  );
+
+  const navigationItems = [
+    {
+      value: "Open translation",
+      onClick: (translation: FormattedTranslation) => {
+        if (!projectId) {
+          return;
+        }
+
+        navigateToTranslation({
+          projectId,
+          documentId: translation.documentId,
+          translationId: translation.id,
+        });
+      },
+    },
+    {
+      value: "View translation",
+      onClick: (translation: FormattedTranslation) => {
+        if (!projectId) {
+          return;
+        }
+
+        navigateToTranslationPreview({
+          documentId: translation.documentId,
+          translationId: translation.id,
+        });
+      },
+    },
+    {
+      value: "View details",
+      onClick: (translation: FormattedTranslation) => {
+        if (!projectId) {
+          return;
+        }
+
+        navigateToTranslationDetails({
+          documentId: translation.documentId,
+          translationId: translation.id,
+        });
+      },
+    },
+  ];
+
   const translationRowMenuData = {
     name: "translation",
     items: [
-      {
-        value: "Open translation",
-        onClick: (translation: FormattedTranslation) => {
-          if (!projectId) {
-            return;
-          }
-
-          navigateToTranslation({
-            projectId,
-            documentId: translation.documentId,
-            translationId: translation.id,
-          });
-        },
-      },
-      {
-        value: "View translation",
-        onClick: (translation: FormattedTranslation) => {
-          if (!projectId) {
-            return;
-          }
-
-          navigateToTranslationPreview({
-            documentId: translation.documentId,
-            translationId: translation.id,
-          });
-        },
-      },
-      {
-        value: "View details",
-        onClick: (translation: FormattedTranslation) => {
-          if (!projectId) {
-            return;
-          }
-
-          navigateToTranslationDetails({
-            documentId: translation.documentId,
-            translationId: translation.id,
-          });
-        },
-      },
+      ...navigationItems,
       {
         value: "Export",
-        subItems: [
-          {
-            value: "Plain text (.txt)",
-            onClick: (translation: FormattedTranslation) => {
-              downloadFile(
-                {
-                  input: getMimeType(translation.document.fileName),
-                  output: "text/plain",
-                },
-                String(translation.id)
-              );
-            },
-          },
-          {
-            value: "HTML (.html)",
-            onClick: (translation: FormattedTranslation) => {
-              downloadFile(
-                {
-                  input: getMimeType(translation.document.fileName),
-                  output: "text/html",
-                },
-                String(translation.id)
-              );
-            },
-          },
-          {
-            value: "PDF (.pdf)",
-            onClick: (translation: FormattedTranslation) => {
-              downloadFile(
-                {
-                  input: getMimeType(translation.document.fileName),
-                  output: "application/pdf",
-                },
-                String(translation.id)
-              );
-            },
-          },
-          {
-            value: "Microsoft Word (.docx)",
-            onClick: (translation: FormattedTranslation) => {
-              downloadFile(
-                {
-                  input: getMimeType(translation.document.fileName),
-                  output:
-                    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-                },
-                String(translation.id)
-              );
-            },
-          },
-        ],
+        subItems: Object.entries(EXPORT_FORMATS).map(([_, value]) => ({
+          value: value.label,
+          onClick: (translation: FormattedTranslation) =>
+            handleDownload(translation, value.mimeType),
+        })),
       },
       {
         value: "Delete",

@@ -1,22 +1,31 @@
 import { useState } from "react";
 import { useRoute } from "./useRoute";
-import { exportService, ExportFormat } from "@/services/exportService";
+import { ExportFormat, exportService } from "@/services/exportService";
+import { toast } from "sonner";
 
 export function useExportTranslation() {
   const { translationId } = useRoute();
-  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const [filesDownloading, setFilesDownloading] = useState<Set<string>>(
+    new Set()
+  );
 
   async function downloadFile(format: ExportFormat, id?: string) {
     const currentId = id ?? translationId;
+    let toastId: string | number = "";
 
     try {
-      setIsLoading(true);
-      setError("");
-
       if (!currentId) {
         throw new Error("Translation id is missing");
       }
+
+      setFilesDownloading((prev) => {
+        const set = new Set(prev);
+        set.add(currentId);
+        return set;
+      });
+      toastId = toast.loading("Downloading file...");
+      setError("");
 
       const { data, fileName } = await exportService.exportTranslation(
         currentId,
@@ -31,14 +40,29 @@ export function useExportTranslation() {
       link.click();
 
       window.URL.revokeObjectURL(downloadUrl);
+      toast.success("File downloaded successfully", {
+        classNames: { toast: "bg-green-100" },
+      });
     } catch (err) {
       const error = err instanceof Error ? err : new Error("Unknown error");
       console.error("Error while exporting translation: ", error);
+      toast.error("Error while exporting translation", {
+        classNames: { toast: "bg-red-100" },
+      });
       setError(error.message);
     } finally {
-      setIsLoading(false);
+      toast.dismiss(toastId);
+      if (!currentId) {
+        return;
+      }
+
+      setFilesDownloading((prev) => {
+        const set = new Set(prev);
+        set.delete(currentId);
+        return set;
+      });
     }
   }
 
-  return { downloadFile, isLoading, error };
+  return { downloadFile, filesDownloading, error };
 }

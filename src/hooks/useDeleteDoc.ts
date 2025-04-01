@@ -8,12 +8,18 @@ export function useDeleteDoc() {
 
   const { mutate, isPending } = useBaseMutation({
     mutationFn: (docId: number) => documentService.deleteDoc(docId),
-    onSuccess: () => {
+    onMutate: () => {
+      const toastId = toast.loading("Deleting document...");
+      return { toastId };
+    },
+    onSuccess: (_, __, context) => {
       queryClient.invalidateQueries({ queryKey: ["projects"] });
       toast.success("Document deleted successfully");
+      toast.dismiss(context?.toastId);
     },
-    onError: () => {
+    onError: (_, __, context) => {
       toast.error("Could not delete document");
+      toast.dismiss(context?.toastId);
     },
   });
 

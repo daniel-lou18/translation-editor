@@ -2,7 +2,7 @@ import { BlobResponse, MimeType } from "@/types/Files";
 import { ApiService } from "./ApiService";
 
 export type ExportFormat = {
-  input: MimeType | null;
+  input: MimeType;
   output: MimeType;
 };
 
@@ -15,10 +15,6 @@ export class ExportService extends ApiService {
     translationId: string,
     format: ExportFormat
   ): Promise<BlobResponse> {
-    if (!format.input) {
-      throw new Error("Input mime type is required");
-    }
-
     return await this.getBlob(
       `/translations/${translationId}/export?inputMimeType=${format.input}&outputMimeType=${format.output}`
     );

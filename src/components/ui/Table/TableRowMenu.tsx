@@ -22,7 +22,6 @@ import {
 } from "@/components/ui/dialog";
 import { MoreHorizontal } from "lucide-react";
 import { FormEvent } from "react";
-import ButtonLoader from "../ButtonLoader";
 
 export type DropdownMenuItem = {
   value: string;
@@ -85,8 +84,7 @@ export default function TableRowMenu<T extends DataType>({
                     {item.subItems.map((subItem) => (
                       <DropdownMenuItem
                         key={subItem.value}
-                        onSelect={(e) => {
-                          e.preventDefault();
+                        onSelect={() => {
                           if ("onClick" in subItem && subItem.onClick) {
                             subItem.onClick(data);
                           }
@@ -101,8 +99,7 @@ export default function TableRowMenu<T extends DataType>({
             ) : (
               <DropdownMenuItem
                 key={item.value}
-                onSelect={(e) => {
-                  e.preventDefault();
+                onSelect={() => {
                   if ("onClick" in item) {
                     item.onClick(data);
                   }
@@ -129,7 +126,7 @@ export default function TableRowMenu<T extends DataType>({
         <DialogFooter>
           <form onSubmit={handleDelete}>
             <Button size="sm" variant="destructive" type="submit">
-              <ButtonLoader isLoading={false}>{`Delete ${name}`}</ButtonLoader>
+              {`Delete ${name}`}
             </Button>
           </form>
         </DialogFooter>

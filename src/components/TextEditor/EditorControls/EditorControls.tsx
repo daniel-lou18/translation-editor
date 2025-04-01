@@ -17,7 +17,7 @@ import { Button } from "../../ui/button";
 import { useEditor } from "@/contexts/editorContext";
 import { useReformulate } from "@/hooks/useReformulate";
 import { useQueryClient } from "@tanstack/react-query";
-import { TranslationMemoryMatches } from "@/types";
+import { TranslationMemoryMatches, TranslationWithDocument } from "@/types";
 import { useExportTranslation } from "@/hooks/useExportTranslation";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { usePreview } from "@/hooks/usePreview";
@@ -38,8 +38,9 @@ import HtmlViewer from "../../ui/DocViewer/HtmlViewer";
 import SkeletonViewer from "@/components/ui/DocViewer/SkeletonViewer";
 import FileError from "@/components/ui/Error/FileError";
 import NoFileContent from "@/components/ui/Error/NoFileContent";
-import { getFileType } from "@/types/Files";
+import { getFileType, getMimeType, MimeType } from "@/types/Files";
 import DocxViewer from "@/components/ui/DocViewer/DocxViewer";
+import { useCallback } from "react";
 
 export default function EditorControls() {
   const {
@@ -52,7 +53,7 @@ export default function EditorControls() {
     toNextSegment,
   } = useEditor();
   const segment = getActiveSegment();
-  const { currentDocument } = useCurrentProject();
+  const { currentDocument, currentTranslation } = useCurrentProject();
   const queryClient = useQueryClient();
   const matches = queryClient.getQueryData<TranslationMemoryMatches>([
     "allMatches",
@@ -97,6 +98,26 @@ export default function EditorControls() {
     });
   }
 
+  const handleDownload = useCallback(
+    (translation: TranslationWithDocument | null, output: MimeType) => {
+      if (!translation) {
+        return;
+      }
+      const input = getMimeType(translation.document.fileName);
+      if (!input) {
+        return;
+      }
+      downloadFile(
+        {
+          input,
+          output,
+        },
+        String(translation.id)
+      );
+    },
+    [downloadFile]
+  );
+
   function renderPreview() {
     const contentType = getFileType(currentDocument?.fileName);
     if (isLoadingPreview) {
@@ -131,9 +152,26 @@ export default function EditorControls() {
   }
 
   const downloadData = [
-    { label: "Plain text (.txt)", onClick: () => downloadFile("txt") },
-    { label: "HTML (.html)", onClick: () => downloadFile("txt") },
-    { label: "PDF (.pdf)", onClick: () => downloadFile("pdf") },
+    {
+      label: "Plain text (.txt)",
+      onClick: () => handleDownload(currentTranslation, "text/plain"),
+    },
+    {
+      label: "HTML (.html)",
+      onClick: () => handleDownload(currentTranslation, "text/html"),
+    },
+    {
+      label: "PDF (.pdf)",
+      onClick: () => handleDownload(currentTranslation, "application/pdf"),
+    },
+    {
+      label: "Word (.docx)",
+      onClick: () =>
+        handleDownload(
+          currentTranslation,
+          "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        ),
+    },
   ];
 
   return (
