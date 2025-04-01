@@ -19,6 +19,7 @@ export type Mode = "original" | "translation";
 
 const A4_WIDTH = 794;
 const A4_HEIGHT = 1123;
+const A4_PADDING = 96;
 const PAGE_GAP = 40;
 
 export default function HtmlViewer({
@@ -64,7 +65,6 @@ export default function HtmlViewer({
     };
   }, []);
 
-  // Write HTML content to iframe
   useEffect(() => {
     if (iframeRef.current) {
       const iframe = iframeRef.current;
@@ -72,7 +72,6 @@ export default function HtmlViewer({
         iframe.contentDocument || iframe.contentWindow?.document;
 
       if (iframeDoc && pages > 0) {
-        // Write a complete HTML document to the iframe
         iframeDoc.open();
         iframeDoc.write(`
           <!DOCTYPE html>
@@ -91,12 +90,22 @@ export default function HtmlViewer({
                 * {
                   box-sizing: border-box;
                 }
-                .page-break-visual {
-                  display: none;
-                }
                 .pages-container {
                   padding: ${PAGE_GAP}px 0px;
                 }
+                .page {
+                position: relative;
+                width: ${A4_WIDTH}px;
+                min-height: ${A4_HEIGHT}px;
+                padding: ${A4_PADDING}px;
+                margin: 0 auto ${PAGE_GAP}px;
+                box-sizing: border-box;
+                page-break-after: always;
+                break-after: page;
+                background-color: #fff;
+                border-radius: 4px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+              }
               </style>
             </head>
             <body>

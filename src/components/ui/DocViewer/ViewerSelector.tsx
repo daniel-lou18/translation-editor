@@ -2,6 +2,7 @@ import ImageViewer from "./ImageViewer";
 import HtmlViewer from "./HtmlViewer";
 import PDFViewer from "./PDFViewer";
 import { Document } from "@/types";
+import DocxViewer from "./DocxViewer";
 
 type ViewerSelectorProps = {
   document: Document | null;
@@ -14,11 +15,18 @@ export default function ViewerSelector({
 }: ViewerSelectorProps) {
   if (!document) return null;
 
+  console.log(document);
+
   switch (contentType) {
     case "html":
-    case "word":
       return (
         <HtmlViewer
+          html={{ original: document.html ?? "Content not available" }}
+        />
+      );
+    case "word":
+      return (
+        <DocxViewer
           html={{ original: document.html ?? "Content not available" }}
         />
       );

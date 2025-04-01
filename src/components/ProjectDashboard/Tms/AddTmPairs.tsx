@@ -5,8 +5,7 @@ import Combobox from "@/components/ui/Combobox";
 import { Earth } from "lucide-react";
 import { useTmFileFormat } from "@/hooks/useTmFileFormat";
 import UploadTmTitle from "./UploadTmTitle";
-import { allowedExcelTypes, allowedMemoryTypes } from "@/types/Files";
-import { AllowedMemoryType } from "@/types/Files";
+import { EXCEL_MIME_TYPES, MIME_TYPES } from "@/types/Files";
 import { useSelectTm } from "@/hooks/useSelectTm";
 import { useTmUpload } from "@/hooks/useTmUpload";
 import { useTmExcelUpload } from "@/hooks/useTmExcelUpload";
@@ -93,7 +92,7 @@ export default function AddTmPairs() {
               file,
               setFile,
               removeFile,
-              acceptedTypes: [...allowedExcelTypes] as AllowedMemoryType[],
+              acceptedTypes: [...EXCEL_MIME_TYPES],
             }}
             langConfig={{
               sourceLang: {
@@ -119,7 +118,7 @@ export default function AddTmPairs() {
               removeFile: removeSourceFile,
               lang: sourceLang,
               onChange: (value) => setSourceLang(value),
-              acceptedTypes: [...allowedMemoryTypes] as AllowedMemoryType[],
+              acceptedTypes: [...MIME_TYPES],
             }}
             target={{
               file: targetFile,
@@ -127,7 +126,7 @@ export default function AddTmPairs() {
               removeFile: removeTargetFile,
               lang: targetLang,
               onChange: (value) => setTargetLang(value),
-              acceptedTypes: [...allowedMemoryTypes] as AllowedMemoryType[],
+              acceptedTypes: [...MIME_TYPES],
             }}
             langItems={langItems}
           />

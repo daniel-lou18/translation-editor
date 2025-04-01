@@ -33,6 +33,7 @@ export type FormattedTranslation = {
   createdAt: string;
   updatedAt: string;
   targetSegments: TargetSegment[];
+  document: Document;
 };
 
 export type TargetSegment = {

@@ -38,6 +38,8 @@ import HtmlViewer from "../../ui/DocViewer/HtmlViewer";
 import SkeletonViewer from "@/components/ui/DocViewer/SkeletonViewer";
 import FileError from "@/components/ui/Error/FileError";
 import NoFileContent from "@/components/ui/Error/NoFileContent";
+import { getFileType } from "@/types/Files";
+import DocxViewer from "@/components/ui/DocViewer/DocxViewer";
 
 export default function EditorControls() {
   const {
@@ -96,6 +98,7 @@ export default function EditorControls() {
   }
 
   function renderPreview() {
+    const contentType = getFileType(currentDocument?.fileName);
     if (isLoadingPreview) {
       return <SkeletonViewer />;
     }
@@ -104,6 +107,17 @@ export default function EditorControls() {
     }
     if (!html) {
       return <NoFileContent />;
+    }
+
+    if (contentType === "word") {
+      return (
+        <DocxViewer
+          html={{
+            original: currentDocument?.html ?? "No content available",
+            translation: html,
+          }}
+        />
+      );
     }
 
     return (

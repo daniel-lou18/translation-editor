@@ -1,4 +1,4 @@
-import { allowedDocumentTypes, allowedMemoryTypes } from "@/types/Files";
+import { DOCUMENT_MIME_TYPES, MEMORY_MIME_TYPES } from "@/types/Files";
 import { useState } from "react";
 
 export interface FileInfo {
@@ -10,11 +10,11 @@ export function useFileManager() {
   const [files, setFiles] = useState<FileInfo[]>([]);
 
   function processFiles(newFiles: File[], type: "document" | "memory") {
-    const validExtensions =
-      type === "document" ? allowedDocumentTypes : allowedMemoryTypes;
+    const validMimeTypes =
+      type === "document" ? DOCUMENT_MIME_TYPES : MEMORY_MIME_TYPES;
     const processedFiles = newFiles
       .filter((file) =>
-        validExtensions.some((ext) => file.name.toLowerCase().endsWith(ext))
+        validMimeTypes.some((mimeType) => file.type === mimeType)
       )
       .map((file) => ({ file, type }));
 

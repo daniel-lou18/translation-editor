@@ -1,16 +1,14 @@
 import { useState } from "react";
 import { useRoute } from "./useRoute";
-import { exportService } from "@/services/exportService";
-import { ExportFileType } from "@/types/Files";
+import { exportService, ExportFormat } from "@/services/exportService";
 
 export function useExportTranslation() {
   const { translationId } = useRoute();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
-  async function downloadFile(format: ExportFileType, id?: string) {
+  async function downloadFile(format: ExportFormat, id?: string) {
     const currentId = id ?? translationId;
-    console.log("currentId", currentId);
 
     try {
       setIsLoading(true);

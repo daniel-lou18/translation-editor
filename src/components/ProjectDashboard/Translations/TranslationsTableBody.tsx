@@ -3,6 +3,7 @@ import TranslationsTableRow from "./TranslationsTableRow";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { useExportTranslation } from "@/hooks/useExportTranslation";
 import { useRoute } from "@/hooks/useRoute";
+import { getFileType, getMimeType } from "@/types/Files";
 
 type TranslationsTableBodyProps = {
   translations: FormattedTranslation[];
@@ -68,25 +69,50 @@ export default function TranslationsTableBody({
           {
             value: "Plain text (.txt)",
             onClick: (translation: FormattedTranslation) => {
-              downloadFile("txt", String(translation.id));
+              downloadFile(
+                {
+                  input: getMimeType(translation.document.fileName),
+                  output: "text/plain",
+                },
+                String(translation.id)
+              );
             },
           },
           {
             value: "HTML (.html)",
             onClick: (translation: FormattedTranslation) => {
-              downloadFile("txt", String(translation.id));
+              downloadFile(
+                {
+                  input: getMimeType(translation.document.fileName),
+                  output: "text/html",
+                },
+                String(translation.id)
+              );
             },
           },
           {
             value: "PDF (.pdf)",
             onClick: (translation: FormattedTranslation) => {
-              downloadFile("pdf", String(translation.id));
+              downloadFile(
+                {
+                  input: getMimeType(translation.document.fileName),
+                  output: "application/pdf",
+                },
+                String(translation.id)
+              );
             },
           },
           {
             value: "Microsoft Word (.docx)",
             onClick: (translation: FormattedTranslation) => {
-              downloadFile("txt", String(translation.id));
+              downloadFile(
+                {
+                  input: getMimeType(translation.document.fileName),
+                  output:
+                    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                },
+                String(translation.id)
+              );
             },
           },
         ],

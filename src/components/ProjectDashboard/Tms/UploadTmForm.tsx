@@ -6,7 +6,7 @@ import { ArrowRight, Sheet } from "lucide-react";
 import UploadButton from "../../Upload/UploadButton";
 import Container from "../../ui/Container";
 import { PropsWithChildren } from "react";
-import { AllowedMemoryType, AllowedType } from "@/types/Files";
+import { MimeType } from "@/types/Files";
 import Combobox from "@/components/ui/Combobox";
 
 type UploadTmFormProps = PropsWithChildren<{
@@ -49,7 +49,7 @@ type FileConfig = {
   file: File | null;
   setFile: (file: File) => void;
   removeFile: () => void;
-  acceptedTypes: AllowedType[];
+  acceptedTypes: MimeType[];
 };
 
 type LangConfig = {
@@ -115,7 +115,10 @@ function UploadSingle({ file, langConfig, titles }: UploadSingleProps) {
           description={`Allowed file types: ${file.acceptedTypes
             .map((type) => type.slice(1).toUpperCase())
             .join(", ")}. ${
-            file.acceptedTypes.includes(".xlsx")
+            file.acceptedTypes.includes("application/vnd.ms-excel") ||
+            file.acceptedTypes.includes(
+              "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            )
               ? "1st column: source segments, 2nd column: target segments"
               : ""
           }`}

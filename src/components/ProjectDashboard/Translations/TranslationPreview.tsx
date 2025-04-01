@@ -5,6 +5,8 @@ import SkeletonViewer from "@/components/ui/DocViewer/SkeletonViewer";
 import Error from "@/components/ui/Error/FileError";
 import NoContent from "@/components/ui/Error/NoFileContent";
 import { useCurrentProject } from "@/hooks/useCurrentProject";
+import { getFileType } from "@/types/Files";
+import DocxViewer from "@/components/ui/DocViewer/DocxViewer";
 
 export default function TranslationPreview() {
   const { translationId } = useRoute();
@@ -20,6 +22,7 @@ export default function TranslationPreview() {
     isError: isErrorDocument,
     error: errorDocument,
   } = useCurrentProject();
+  const contentType = getFileType(currentDocument?.fileName);
 
   if (isLoadingTranslation || isLoadingDocument) return <SkeletonViewer />;
 
@@ -33,6 +36,16 @@ export default function TranslationPreview() {
 
   if (!html || !currentDocument) return <NoContent title="No Content Found" />;
 
+  if (contentType === "word") {
+    return (
+      <DocxViewer
+        html={{
+          original: currentDocument.html ?? "No content available",
+          translation: html,
+        }}
+      />
+    );
+  }
   return (
     <HtmlViewer
       html={{
