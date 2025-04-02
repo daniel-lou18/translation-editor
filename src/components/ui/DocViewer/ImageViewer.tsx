@@ -1,6 +1,7 @@
 import Container from "@/components/ui/Container";
 import { useRef, useEffect, useState } from "react";
 import ViewerControls from "./ViewerControls";
+import { useViewerScale } from "@/hooks/useViewerScale";
 
 interface ImageViewerProps {
   imageUrl: string;
@@ -19,32 +20,16 @@ export default function ImageViewer({
 }: ImageViewerProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const imageRef = useRef<HTMLImageElement | null>(null);
-  const [scale, setScale] = useState<number>(initialScale);
   const [imageDimensions, setImageDimensions] = useState({
     width: 0,
     height: 0,
   });
 
-  const calculateScale = (): void => {
-    if (!imageDimensions.width) return;
-
-    const containerWidth: number =
-      containerRef.current?.clientWidth || window.innerWidth * 0.9;
-
-    // Calculate the scale factor to fit the container width
-    const newScale: number = Math.min(
-      1,
-      containerWidth / imageDimensions.width
-    );
-    updateScale(newScale);
-  };
-
-  const updateScale = (newScale: number): void => {
-    setScale(newScale);
-    if (onScaleChange) {
-      onScaleChange(newScale);
-    }
-  };
+  const { scale, calculateScale, updateScale } = useViewerScale(containerRef, {
+    initialScale,
+    width: imageDimensions.width,
+    onScaleChange,
+  });
 
   // Handle image load to get dimensions
   const handleImageLoad = () => {

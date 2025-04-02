@@ -11,6 +11,7 @@ import {
 } from "@/utils/constants";
 import DocViewerError from "./DocViewerError";
 import { generateHtmlLayout } from "./helpers";
+import { useViewerScale } from "@/hooks/useViewerScale";
 
 type PDFPreviewProps = {
   html: Html;
@@ -34,41 +35,15 @@ export default function HtmlViewer({
 }: PDFPreviewProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
-  const [scale, setScale] = useState<number>(initialScale);
   const [mode, setMode] = useState<Mode>("original");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const { pages } = useViewer(html[mode] ?? null);
-
-  const calculateScale = (): void => {
-    // Default A4 dimensions in pixels (assuming 96 DPI)
-    const containerWidth: number =
-      containerRef.current?.clientWidth || window.innerWidth * 0.9;
-
-    // Calculate the scale factor to fit the container width
-    const newScale: number = Math.min(1, containerWidth / A4_WIDTH);
-    updateScale(newScale);
-  };
-
-  const updateScale = (newScale: number): void => {
-    setScale(newScale);
-    if (onScaleChange) {
-      onScaleChange(newScale);
-    }
-  };
-
-  useEffect(() => {
-    calculateScale();
-
-    const handleResize = (): void => {
-      calculateScale();
-    };
-
-    window.addEventListener("resize", handleResize);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
+  const { scale, calculateScale, updateScale } = useViewerScale(containerRef, {
+    initialScale,
+    width: A4_WIDTH,
+    onScaleChange,
+  });
 
   useEffect(() => {
     setIsLoading(true);

@@ -1,13 +1,13 @@
 import Container from "@/components/ui/Container";
-import { useRef, useEffect, useState } from "react";
+import { useRef, useState } from "react";
 import ViewerControls from "./ViewerControls";
 import DocViewerSkeleton from "./DocViewerSkeleton";
 import { A4_HEIGHT, A4_WIDTH } from "@/utils/constants";
+import { useViewerScale } from "@/hooks/useViewerScale";
 
 interface PDFViewerProps {
   pdfUrl: string;
   initialScale?: number;
-  maxHeight?: string;
   onScaleChange?: (scale: number) => void;
   title?: string;
 }
@@ -15,49 +15,21 @@ interface PDFViewerProps {
 export default function PDFViewer({
   pdfUrl,
   initialScale = 1,
-  maxHeight = "80vh",
   onScaleChange,
   title = "PDF Document",
 }: PDFViewerProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const objectRef = useRef<HTMLObjectElement | null>(null);
-  const [scale, setScale] = useState<number>(initialScale);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-
-  const calculateScale = (): void => {
-    const containerWidth: number =
-      containerRef.current?.clientWidth || window.innerWidth * 0.9;
-
-    // Calculate the scale factor to fit the container width
-    const newScale: number = Math.min(1, containerWidth / A4_WIDTH);
-    updateScale(newScale);
-  };
-
-  const updateScale = (newScale: number): void => {
-    setScale(newScale);
-    if (onScaleChange) {
-      onScaleChange(newScale);
-    }
-  };
+  const { scale, calculateScale, updateScale } = useViewerScale(containerRef, {
+    initialScale,
+    width: A4_WIDTH,
+    onScaleChange,
+  });
 
   const handleLoad = () => {
     setIsLoading(false);
   };
-
-  useEffect(() => {
-    // Calculate scale on initial render
-    calculateScale();
-
-    // Recalculate when window resizes
-    const handleResize = (): void => {
-      calculateScale();
-    };
-
-    window.addEventListener("resize", handleResize);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
 
   return (
     <Container className="flex flex-col w-full">
@@ -65,8 +37,7 @@ export default function PDFViewer({
 
       <div
         ref={containerRef}
-        className="flex justify-center border border-border bg-muted p-5 overflow-auto rounded-sm"
-        style={{ maxHeight }}
+        className="flex justify-center border border-border bg-muted p-5 rounded-sm overflow-auto"
       >
         <div
           className="relative bg-white shadow-md"
