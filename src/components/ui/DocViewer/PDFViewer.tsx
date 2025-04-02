@@ -1,7 +1,8 @@
 import Container from "@/components/ui/Container";
 import { useRef, useEffect, useState } from "react";
-import LoadingSpinner from "../LoadingSpinner";
 import ViewerControls from "./ViewerControls";
+import DocViewerSkeleton from "./DocViewerSkeleton";
+import { A4_HEIGHT, A4_WIDTH } from "@/utils/constants";
 
 interface PDFViewerProps {
   pdfUrl: string;
@@ -23,16 +24,12 @@ export default function PDFViewer({
   const [scale, setScale] = useState<number>(initialScale);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  // Standard A4 dimensions in pixels (assuming 96 DPI)
-  const pdfWidth = 794; // ~210mm at 96 DPI
-  const pdfHeight = 1123; // ~297mm at 96 DPI
-
   const calculateScale = (): void => {
     const containerWidth: number =
       containerRef.current?.clientWidth || window.innerWidth * 0.9;
 
     // Calculate the scale factor to fit the container width
-    const newScale: number = Math.min(1, containerWidth / pdfWidth);
+    const newScale: number = Math.min(1, containerWidth / A4_WIDTH);
     updateScale(newScale);
   };
 
@@ -43,7 +40,6 @@ export default function PDFViewer({
     }
   };
 
-  // Handle PDF load
   const handleLoad = () => {
     setIsLoading(false);
   };
@@ -77,11 +73,11 @@ export default function PDFViewer({
           style={{
             transform: `scale(${scale})`,
             transformOrigin: "top left",
-            width: pdfWidth,
-            height: pdfHeight,
+            width: A4_WIDTH,
+            height: A4_HEIGHT,
           }}
         >
-          {isLoading && <LoadingSpinner />}
+          {isLoading && <DocViewerSkeleton />}
           <object
             ref={objectRef}
             data={`${pdfUrl}#toolbar=0&navpanes=0&scrollbar=0&view=FitH`}

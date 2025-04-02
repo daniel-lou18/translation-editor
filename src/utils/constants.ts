@@ -179,3 +179,26 @@ export const domains = [
   "culture",
   "agriculture",
 ] as const;
+
+export const A4_WIDTH = 794;
+export const A4_HEIGHT = 1123;
+export const A4_PADDING = 96;
+export const A4_PAGE_GAP = 40;
+
+export const DEFAULT_WORD_LAYOUT: WordLayout = {
+  width: A4_WIDTH,
+  minHeight: A4_HEIGHT,
+  paddingTop: A4_PADDING,
+  paddingBottom: A4_PADDING,
+  paddingLeft: A4_PADDING,
+  paddingRight: A4_PADDING,
+};
+
+export type WordLayout = {
+  width: number;
+  minHeight: number;
+  paddingTop: number;
+  paddingBottom: number;
+  paddingLeft: number;
+  paddingRight: number;
+};

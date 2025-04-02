@@ -35,12 +35,12 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import HtmlViewer from "../../ui/DocViewer/HtmlViewer";
-import SkeletonViewer from "@/components/ui/DocViewer/SkeletonViewer";
 import FileError from "@/components/ui/Error/FileError";
 import NoFileContent from "@/components/ui/Error/NoFileContent";
 import { getFileType, getMimeType, MimeType } from "@/types/Files";
 import DocxViewer from "@/components/ui/DocViewer/DocxViewer";
 import { useCallback } from "react";
+import DocViewerSkeleton from "@/components/ui/DocViewer/DocViewerSkeleton";
 
 export default function EditorControls() {
   const {
@@ -121,7 +121,7 @@ export default function EditorControls() {
   function renderPreview() {
     const contentType = getFileType(currentDocument?.fileName);
     if (isLoadingPreview) {
-      return <SkeletonViewer />;
+      return <DocViewerSkeleton />;
     }
     if (isErrorPreview) {
       return <FileError title="Error Loading Preview" error={errorPreview} />;
@@ -220,7 +220,7 @@ export default function EditorControls() {
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Lock segment (not implemented)</p>
+                <p>Lock segment (soon)</p>
               </TooltipContent>
             </Tooltip>
           </IconsContainer>
@@ -392,7 +392,7 @@ export default function EditorControls() {
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Search in document (not implemented)</p>
+                <p>Search in document (soon)</p>
               </TooltipContent>
             </Tooltip>
           </IconsContainer>

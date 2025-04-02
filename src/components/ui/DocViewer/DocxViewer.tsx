@@ -4,6 +4,10 @@ import ViewerControls from "./ViewerControls";
 import { Html } from "./HtmlViewer";
 import DOMPurify from "dompurify";
 import ErrorMessage from "../Error/ErrorMessage";
+import DocViewerSkeleton from "./DocViewerSkeleton";
+import { DEFAULT_WORD_LAYOUT } from "@/utils/constants";
+import { createScopedCss, parseDocxPageLayout } from "./helpers";
+
 export type Mode = "original" | "translation";
 
 type DocxViewerProps = {
@@ -13,47 +17,6 @@ type DocxViewerProps = {
   onScaleChange?: (scale: number) => void;
 };
 
-type WordLayout = {
-  width: number;
-  minHeight: number;
-  paddingTop: number;
-  paddingBottom: number;
-  paddingLeft: number;
-  paddingRight: number;
-};
-
-const DEFAULT_WORD_LAYOUT: WordLayout = {
-  width: 792,
-  minHeight: 1120,
-  paddingTop: 96,
-  paddingBottom: 96,
-  paddingLeft: 96,
-  paddingRight: 96,
-};
-
-const convertPtToPx = (pt: number) => pt * (96 / 72);
-
-const parsePageLayout = (
-  cssText: string,
-  defaultLayout: WordLayout
-): WordLayout => {
-  const pageRuleRegex =
-    /@page\s+WordSection1\s*\{\s*size:\s*([\d.]+pt)\s+([\d.]+pt);\s*margin:\s*([\d.]+pt)\s+([\d.]+pt)\s+([\d.]+pt)\s+([\d.]+pt);\s*\}/i; // Make selector specific if needed
-  const match = cssText.match(pageRuleRegex);
-
-  if (match) {
-    return {
-      width: convertPtToPx(parseFloat(match[1])),
-      minHeight: convertPtToPx(parseFloat(match[2])),
-      paddingTop: convertPtToPx(parseFloat(match[3])),
-      paddingBottom: convertPtToPx(parseFloat(match[4])),
-      paddingLeft: convertPtToPx(parseFloat(match[5])),
-      paddingRight: convertPtToPx(parseFloat(match[6])),
-    };
-  }
-  return defaultLayout;
-};
-
 export default function DocxViewer({
   html,
   initialScale = 1,
@@ -61,6 +24,7 @@ export default function DocxViewer({
   onScaleChange,
 }: DocxViewerProps) {
   const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [scale, setScale] = useState<number>(initialScale);
   const [mode, setMode] = useState<Mode>("original");
@@ -100,6 +64,9 @@ export default function DocxViewer({
   }, [docData.layout.width]);
 
   useEffect(() => {
+    setIsLoading(true);
+    setError(null);
+
     const htmlContent = html[mode];
 
     if (!htmlContent) {
@@ -109,6 +76,7 @@ export default function DocxViewer({
         layout: DEFAULT_WORD_LAYOUT,
       });
       setError("No content found");
+      setIsLoading(false);
       return;
     }
 
@@ -118,10 +86,10 @@ export default function DocxViewer({
 
       const styleElements = doc.querySelectorAll("style");
       const styles = Array.from(styleElements)
-        .map((style) => style.innerHTML)
+        .map((style) => createScopedCss(style))
         .join("\n");
 
-      const layout = parsePageLayout(styles, DEFAULT_WORD_LAYOUT);
+      const layout = parseDocxPageLayout(styles, DEFAULT_WORD_LAYOUT);
 
       const wordSection = doc.body.querySelector(".WordSection1");
       const content = wordSection ? wordSection.outerHTML : doc.body.innerHTML;
@@ -141,6 +109,8 @@ export default function DocxViewer({
         content: "",
         layout: DEFAULT_WORD_LAYOUT,
       });
+    } finally {
+      setIsLoading(false);
     }
   }, [html, mode]);
 
@@ -155,24 +125,33 @@ export default function DocxViewer({
         viewMode={html.translation ? { mode, onChange: setMode } : null}
       />
 
-      <div
-        ref={containerRef}
-        className="flex justify-center px-12 py-8 border border-border bg-white overflow-auto rounded-sm"
-        style={{ maxHeight }}
-      >
+      {isLoading ? (
+        <DocViewerSkeleton
+          maxHeight={maxHeight}
+          width={docData.layout.width}
+          height={docData.layout.minHeight}
+          showSideBySide={!!html.translation}
+        />
+      ) : (
         <div
-          style={{
-            transform: `scale(${scale})`,
-            transformOrigin: "top left",
-          }}
+          ref={containerRef}
+          className="flex justify-center px-12 py-8 border border-border bg-white overflow-auto rounded-sm docx-viewer-container"
+          style={{ maxHeight }}
         >
-          <style dangerouslySetInnerHTML={{ __html: docData.styles }} />
           <div
-            dangerouslySetInnerHTML={{ __html: docData.content }}
-            style={{ ...docData.layout }}
-          />
+            style={{
+              transform: `scale(${scale})`,
+              transformOrigin: "top left",
+            }}
+          >
+            <style dangerouslySetInnerHTML={{ __html: docData.styles }} />
+            <div
+              dangerouslySetInnerHTML={{ __html: docData.content }}
+              style={{ ...docData.layout }}
+            />
+          </div>
         </div>
-      </div>
+      )}
     </Container>
   );
 }

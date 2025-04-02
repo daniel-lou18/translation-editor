@@ -1,12 +1,12 @@
 import HtmlViewer from "@/components/ui/DocViewer/HtmlViewer";
 import { usePreview } from "@/hooks/usePreview";
 import { useRoute } from "@/hooks/useRoute";
-import SkeletonViewer from "@/components/ui/DocViewer/SkeletonViewer";
-import Error from "@/components/ui/Error/FileError";
 import NoContent from "@/components/ui/Error/NoFileContent";
 import { useCurrentProject } from "@/hooks/useCurrentProject";
 import { getFileType } from "@/types/Files";
 import DocxViewer from "@/components/ui/DocViewer/DocxViewer";
+import DocViewerSkeleton from "@/components/ui/DocViewer/DocViewerSkeleton";
+import DocViewerError from "@/components/ui/DocViewer/DocViewerError";
 
 export default function TranslationPreview() {
   const { translationId } = useRoute();
@@ -24,13 +24,16 @@ export default function TranslationPreview() {
   } = useCurrentProject();
   const contentType = getFileType(currentDocument?.fileName);
 
-  if (isLoadingTranslation || isLoadingDocument) return <SkeletonViewer />;
+  if (isLoadingTranslation || isLoadingDocument) return <DocViewerSkeleton />;
 
   if (isErrorTranslation || isErrorDocument)
     return (
-      <Error
-        title="Error Loading Translation"
-        error={errorTranslation || errorDocument}
+      <DocViewerError
+        error={
+          errorTranslation?.message ||
+          errorDocument?.message ||
+          "Error Loading Translation"
+        }
       />
     );
 

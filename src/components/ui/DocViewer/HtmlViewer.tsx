@@ -2,6 +2,15 @@ import Container from "@/components/ui/Container";
 import { useRef, useEffect, useState } from "react";
 import ViewerControls from "./ViewerControls";
 import { useViewer } from "@/hooks/useViewer";
+import DocViewerSkeleton from "./DocViewerSkeleton";
+import {
+  A4_WIDTH,
+  A4_HEIGHT,
+  A4_PADDING,
+  A4_PAGE_GAP,
+} from "@/utils/constants";
+import DocViewerError from "./DocViewerError";
+import { generateHtmlLayout } from "./helpers";
 
 type PDFPreviewProps = {
   html: Html;
@@ -17,11 +26,6 @@ export type Html = {
 
 export type Mode = "original" | "translation";
 
-const A4_WIDTH = 794;
-const A4_HEIGHT = 1123;
-const A4_PADDING = 96;
-const PAGE_GAP = 40;
-
 export default function HtmlViewer({
   html,
   initialScale = 1,
@@ -32,6 +36,8 @@ export default function HtmlViewer({
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
   const [scale, setScale] = useState<number>(initialScale);
   const [mode, setMode] = useState<Mode>("original");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
   const { pages } = useViewer(html[mode] ?? null);
 
   const calculateScale = (): void => {
@@ -51,7 +57,6 @@ export default function HtmlViewer({
     }
   };
 
-  // Window resize effect
   useEffect(() => {
     calculateScale();
 
@@ -66,67 +71,63 @@ export default function HtmlViewer({
   }, []);
 
   useEffect(() => {
-    if (iframeRef.current) {
+    setIsLoading(true);
+    setError(null);
+
+    if (!html[mode]) {
+      setError("No content available");
+      setIsLoading(false);
+      return;
+    }
+
+    try {
       const iframe = iframeRef.current;
+      if (!iframe) return;
       const iframeDoc =
         iframe.contentDocument || iframe.contentWindow?.document;
+      if (!iframeDoc) return;
 
-      if (iframeDoc && pages > 0) {
-        iframeDoc.open();
-        iframeDoc.write(`
-          <!DOCTYPE html>
-          <html>
-            <head>
-              <meta charset="utf-8">
-              <style>
-                body {
-                  margin: 0;
-                  padding: 0;
-                  font-family: ui-sans-serif, system-ui, sans-serif;
-                  box-sizing: border-box;
-                  background-color: #f5f5f5;
-                  overflow: hidden
-                }
-                * {
-                  box-sizing: border-box;
-                }
-                .pages-container {
-                  padding: ${PAGE_GAP}px 0px;
-                }
-                .page {
-                position: relative;
-                width: ${A4_WIDTH}px;
-                min-height: ${A4_HEIGHT}px;
-                padding: ${A4_PADDING}px;
-                margin: 0 auto ${PAGE_GAP}px;
-                box-sizing: border-box;
-                page-break-after: always;
-                break-after: page;
-                background-color: #fff;
-                border-radius: 4px;
-                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-              }
-              </style>
-            </head>
-            <body>
-              <div class="pages-container">
-                ${html[mode]}
-              </div>
-            </body>
-          </html>
-        `);
-        iframeDoc.close();
-      }
+      iframeDoc.open();
+      iframeDoc.write(
+        generateHtmlLayout(html[mode], {
+          width: A4_WIDTH,
+          height: A4_HEIGHT,
+          padding: A4_PADDING,
+          gap: A4_PAGE_GAP,
+        })
+      );
+      iframeDoc.close();
+    } catch (err) {
+      console.error("Error rendering HTML content", err);
+      setError("Failed to render HTML content");
+    } finally {
+      setIsLoading(false);
     }
-  }, [pages, iframeRef.current, html[mode]]);
+  }, [html, mode]);
 
-  return (
-    <Container className="flex flex-col w-full">
-      <ViewerControls
-        scaleControls={{ scale, updateScale, calculateScale }}
-        viewMode={html.translation ? { mode, onChange: setMode } : null}
-      />
+  const renderContent = () => {
+    if (isLoading) {
+      return (
+        <DocViewerSkeleton
+          maxHeight={maxHeight}
+          width={A4_WIDTH}
+          height={A4_HEIGHT}
+        />
+      );
+    }
 
+    if (error) {
+      return (
+        <DocViewerError
+          error={error}
+          config={{ maxHeight, scale, width: A4_WIDTH }}
+        />
+      );
+    }
+
+    const iframeHeight = Math.max(1, pages) * (A4_HEIGHT + 2 * A4_PAGE_GAP);
+
+    return (
       <div
         ref={containerRef}
         className="flex justify-center border border-border bg-muted overflow-auto rounded-sm"
@@ -144,13 +145,24 @@ export default function HtmlViewer({
             title="Document Preview"
             style={{
               width: "100%",
-              height: pages * (A4_HEIGHT + 2 * PAGE_GAP) + "px", // Height for all pages plus margins
+              height: `${iframeHeight}px`,
               border: "none",
             }}
             sandbox="allow-same-origin"
           />
         </div>
       </div>
+    );
+  };
+
+  return (
+    <Container className="flex flex-col w-full">
+      <ViewerControls
+        scaleControls={{ scale, updateScale, calculateScale }}
+        viewMode={html.translation ? { mode, onChange: setMode } : null}
+      />
+
+      {renderContent()}
     </Container>
   );
 }

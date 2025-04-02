@@ -1,6 +1,5 @@
 import Container from "@/components/ui/Container";
 import { useRef, useEffect, useState } from "react";
-import LoadingSpinner from "../LoadingSpinner";
 import ViewerControls from "./ViewerControls";
 
 interface ImageViewerProps {
@@ -21,14 +20,13 @@ export default function ImageViewer({
   const containerRef = useRef<HTMLDivElement | null>(null);
   const imageRef = useRef<HTMLImageElement | null>(null);
   const [scale, setScale] = useState<number>(initialScale);
-  const [imageLoaded, setImageLoaded] = useState<boolean>(false);
   const [imageDimensions, setImageDimensions] = useState({
     width: 0,
     height: 0,
   });
 
   const calculateScale = (): void => {
-    if (!imageLoaded || !imageDimensions.width) return;
+    if (!imageDimensions.width) return;
 
     const containerWidth: number =
       containerRef.current?.clientWidth || window.innerWidth * 0.9;
@@ -55,16 +53,8 @@ export default function ImageViewer({
         width: imageRef.current.naturalWidth,
         height: imageRef.current.naturalHeight,
       });
-      setImageLoaded(true);
     }
   };
-
-  useEffect(() => {
-    // Calculate scale once image is loaded
-    if (imageLoaded) {
-      calculateScale();
-    }
-  }, [imageLoaded]);
 
   useEffect(() => {
     // Recalculate when window resizes
@@ -76,7 +66,7 @@ export default function ImageViewer({
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, [imageLoaded]);
+  }, []);
 
   return (
     <Container className="flex flex-col w-full">
@@ -96,7 +86,6 @@ export default function ImageViewer({
             height: imageDimensions.height || "auto",
           }}
         >
-          {!imageLoaded && <LoadingSpinner />}
           <img
             ref={imageRef}
             src={imageUrl}
@@ -104,7 +93,7 @@ export default function ImageViewer({
             onLoad={handleImageLoad}
             className="max-w-full"
             style={{
-              display: imageLoaded ? "block" : "none",
+              minHeight: maxHeight,
               boxShadow:
                 "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
             }}
