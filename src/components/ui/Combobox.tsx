@@ -15,6 +15,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { ComponentPropsWithoutRef, useState } from "react";
+import { shortenString } from "@/utils/helpers";
 
 export type ComboDataElement<T extends string> = { value: T; label: string };
 
@@ -58,9 +59,7 @@ export default function Combobox<T extends string>({
           className={cn("min-w-[150px] justify-between", className)}
         >
           {selectedItem
-            ? selectedItem.label.length > 30
-              ? `${selectedItem.label.slice(0, 30)}...`
-              : selectedItem.label
+            ? shortenString(selectedItem.label)
             : `Select ${name.split("_").join(" ")}`}
           <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
         </Button>

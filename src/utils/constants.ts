@@ -185,6 +185,13 @@ export const A4_HEIGHT = 1123;
 export const A4_PADDING = 96;
 export const A4_PAGE_GAP = 40;
 
+export const A4_LAYOUT_CONFIG = {
+  width: A4_WIDTH,
+  height: A4_HEIGHT,
+  padding: A4_PADDING,
+  gap: A4_PAGE_GAP,
+} as const;
+
 export const DEFAULT_WORD_LAYOUT: WordLayout = {
   width: A4_WIDTH,
   minHeight: A4_HEIGHT,

@@ -1,4 +1,3 @@
-import Container from "@/components/ui/Container";
 import { useRef, useState } from "react";
 import ViewerControls from "./ViewerControls";
 import { Html } from "./HtmlViewer";
@@ -6,21 +5,25 @@ import ErrorMessage from "../Error/ErrorMessage";
 import DocViewerSkeleton from "./DocViewerSkeleton";
 import { useParseDocxHtml } from "@/hooks/useParseDocxHtml";
 import { useViewerScale } from "@/hooks/useViewerScale";
+import DocViewerContainer from "./DocViewerContainer";
 
 export type Mode = "original" | "translation";
 
 type DocxViewerProps = {
-  html: Html;
-  initialScale?: number;
-  maxHeight?: string;
-  onScaleChange?: (scale: number) => void;
+  data: {
+    html: Html;
+    fileName: string;
+  };
+  layout?: {
+    initialScale?: number;
+    maxHeight?: string;
+    onScaleChange?: (scale: number) => void;
+  };
 };
 
 export default function DocxViewer({
-  html,
-  initialScale = 1,
-  maxHeight = "80vh",
-  onScaleChange,
+  data: { html, fileName },
+  layout: { initialScale = 1, maxHeight = "80vh", onScaleChange } = {},
 }: DocxViewerProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [mode, setMode] = useState<Mode>("original");
@@ -36,11 +39,18 @@ export default function DocxViewer({
   }
 
   return (
-    <Container className="flex flex-col w-full">
-      <ViewerControls
-        scaleControls={{ scale, updateScale, calculateScale }}
-        viewMode={html.translation ? { mode, onChange: setMode } : null}
-      />
+    <DocViewerContainer>
+      {html.translation ? (
+        <ViewerControls
+          scaleControls={{ scale, updateScale, calculateScale }}
+          viewMode={{ mode, onChange: setMode }}
+        />
+      ) : (
+        <ViewerControls
+          scaleControls={{ scale, updateScale, calculateScale }}
+          fileName={fileName}
+        />
+      )}
 
       {isLoading ? (
         <DocViewerSkeleton
@@ -51,7 +61,7 @@ export default function DocxViewer({
       ) : (
         <div
           ref={containerRef}
-          className="flex justify-center px-12 py-8 border border-border bg-white overflow-auto rounded-sm docx-viewer-container"
+          className="flex justify-center px-12 py-8 bg-white/30 overflow-auto docx-viewer-container"
           style={{ maxHeight }}
         >
           <div
@@ -68,6 +78,6 @@ export default function DocxViewer({
           </div>
         </div>
       )}
-    </Container>
+    </DocViewerContainer>
   );
 }

@@ -3,9 +3,7 @@ import TranslationsTableRow from "./TranslationsTableRow";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { useExportTranslation } from "@/hooks/useExportTranslation";
 import { useRoute } from "@/hooks/useRoute";
-import { getMimeType, MimeType } from "@/types/Files";
 import { EXPORT_FORMATS } from "@/config/translationsTable";
-import { useCallback } from "react";
 
 type TranslationsTableBodyProps = {
   translations: FormattedTranslation[];
@@ -14,30 +12,13 @@ type TranslationsTableBodyProps = {
 export default function TranslationsTableBody({
   translations,
 }: TranslationsTableBodyProps) {
-  const { downloadFile } = useExportTranslation();
+  const { handleDownload } = useExportTranslation();
   const {
     navigateToTranslation,
     navigateToTranslationDetails,
     navigateToTranslationPreview,
     projectId,
   } = useRoute();
-
-  const handleDownload = useCallback(
-    (translation: FormattedTranslation, output: MimeType) => {
-      const input = getMimeType(translation.document.fileName);
-      if (!input) {
-        return;
-      }
-      downloadFile(
-        {
-          input,
-          output,
-        },
-        String(translation.id)
-      );
-    },
-    [downloadFile]
-  );
 
   const navigationItems = [
     {

@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useRoute } from "./useRoute";
 import { ExportFormat, exportService } from "@/services/exportService";
 import { toast } from "sonner";
+import { TranslationWithDocument } from "@/types/Translation";
+import { getMimeType, MimeType } from "@/types/Files";
 
 export function useExportTranslation() {
   const { translationId } = useRoute();
@@ -64,5 +66,23 @@ export function useExportTranslation() {
     }
   }
 
-  return { downloadFile, filesDownloading, error };
+  const handleDownload = useCallback(
+    (translation: TranslationWithDocument | null, output: MimeType) => {
+      if (!translation) return;
+
+      const input = getMimeType(translation.document.fileName);
+      if (!input) return;
+
+      downloadFile(
+        {
+          input,
+          output,
+        },
+        String(translation.id)
+      );
+    },
+    [downloadFile]
+  );
+
+  return { downloadFile, filesDownloading, error, handleDownload };
 }

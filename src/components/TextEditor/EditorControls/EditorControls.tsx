@@ -4,6 +4,7 @@ import {
   CaseLower,
   CaseUpper,
   CornerRightDown,
+  Download,
   Eraser,
   Eye,
   FileCheck,
@@ -17,7 +18,7 @@ import { Button } from "../../ui/button";
 import { useEditor } from "@/contexts/editorContext";
 import { useReformulate } from "@/hooks/useReformulate";
 import { useQueryClient } from "@tanstack/react-query";
-import { TranslationMemoryMatches, TranslationWithDocument } from "@/types";
+import { TranslationMemoryMatches } from "@/types";
 import { useExportTranslation } from "@/hooks/useExportTranslation";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { usePreview } from "@/hooks/usePreview";
@@ -26,7 +27,7 @@ import { useCurrentProject } from "@/hooks/useCurrentProject";
 import EditorbarContainer from "@/components/ui/Editor/EditorbarContainer";
 import Tmbar from "@/components/ui/Editor/Tmbar";
 import IconsContainer from "@/components/ui/Editor/IconsContainer";
-import DownloadButton from "../../ui/Editor/DownloadButton";
+import DropdownButton from "../../ui/Editor/DropdownButton";
 import Container from "@/components/ui/Container";
 import {
   Tooltip,
@@ -37,9 +38,8 @@ import {
 import HtmlViewer from "../../ui/DocViewer/HtmlViewer";
 import FileError from "@/components/ui/Error/FileError";
 import NoFileContent from "@/components/ui/Error/NoFileContent";
-import { getFileType, getMimeType, MimeType } from "@/types/Files";
+import { getFileType } from "@/types/Files";
 import DocxViewer from "@/components/ui/DocViewer/DocxViewer";
-import { useCallback } from "react";
 import DocViewerSkeleton from "@/components/ui/DocViewer/DocViewerSkeleton";
 
 export default function EditorControls() {
@@ -66,7 +66,7 @@ export default function EditorControls() {
   const { mutate } = useReformulate();
   const { mutate: mutateImprove } = useImprove();
 
-  const { downloadFile } = useExportTranslation();
+  const { handleDownload } = useExportTranslation();
   const {
     html,
     isLoading: isLoadingPreview,
@@ -98,26 +98,6 @@ export default function EditorControls() {
     });
   }
 
-  const handleDownload = useCallback(
-    (translation: TranslationWithDocument | null, output: MimeType) => {
-      if (!translation) {
-        return;
-      }
-      const input = getMimeType(translation.document.fileName);
-      if (!input) {
-        return;
-      }
-      downloadFile(
-        {
-          input,
-          output,
-        },
-        String(translation.id)
-      );
-    },
-    [downloadFile]
-  );
-
   function renderPreview() {
     const contentType = getFileType(currentDocument?.fileName);
     if (isLoadingPreview) {
@@ -133,9 +113,12 @@ export default function EditorControls() {
     if (contentType === "word") {
       return (
         <DocxViewer
-          html={{
-            original: currentDocument?.html ?? "No content available",
-            translation: html,
+          data={{
+            html: {
+              original: currentDocument?.html ?? "No content available",
+              translation: html,
+            },
+            fileName: currentDocument?.fileName ?? "No content available",
           }}
         />
       );
@@ -398,7 +381,13 @@ export default function EditorControls() {
           </IconsContainer>
         </Container>
 
-        <DownloadButton data={downloadData} />
+        <DropdownButton
+          buttonData={{
+            label: "Download",
+            icon: <Download className="w-4 h-4" />,
+          }}
+          menuData={downloadData}
+        />
       </EditorbarContainer>
       <Tmbar />
     </TooltipProvider>

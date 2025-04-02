@@ -189,3 +189,7 @@ export function isAllowedType(
 
   return pattern.test(fileName);
 }
+
+export function shortenString(str: string, maxLength = 30) {
+  return str.length > maxLength ? `${str.slice(0, maxLength)}...` : str;
+}

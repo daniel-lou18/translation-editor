@@ -27,14 +27,31 @@ export default function ViewerSelector({
     case "word":
       return (
         <DocxViewer
-          html={{ original: document.html ?? "Content not available" }}
+          data={{
+            html: {
+              original: document.html ?? "Content not available",
+            },
+            fileName: document.fileName ?? "Content not available",
+          }}
         />
       );
     case "pdf":
-      return <PDFViewer pdfUrl={document.fileUrl ?? "Content not available"} />;
+      return (
+        <PDFViewer
+          data={{
+            pdfUrl: document.fileUrl ?? "Content not available",
+            fileName: document.fileName ?? "Content not available",
+          }}
+        />
+      );
     case "image":
       return (
-        <ImageViewer imageUrl={document.fileUrl ?? "Content not available"} />
+        <ImageViewer
+          imageData={{
+            fileName: document.fileName ?? "Content not available",
+            imageUrl: document.fileUrl ?? "Content not available",
+          }}
+        />
       );
     default:
       return <p>Unsupported file type</p>;

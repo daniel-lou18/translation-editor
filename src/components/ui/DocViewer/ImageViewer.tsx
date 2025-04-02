@@ -1,22 +1,24 @@
-import Container from "@/components/ui/Container";
 import { useRef, useEffect, useState } from "react";
 import ViewerControls from "./ViewerControls";
 import { useViewerScale } from "@/hooks/useViewerScale";
+import DocViewerContainer from "./DocViewerContainer";
 
 interface ImageViewerProps {
-  imageUrl: string;
-  initialScale?: number;
-  maxHeight?: string;
-  onScaleChange?: (scale: number) => void;
-  alt?: string;
+  imageData: {
+    fileName: string;
+    imageUrl: string;
+    alt?: string;
+  };
+  layout?: {
+    initialScale?: number;
+    maxHeight?: string;
+    onScaleChange?: (scale: number) => void;
+  };
 }
 
 export default function ImageViewer({
-  imageUrl,
-  initialScale = 1,
-  maxHeight = "80vh",
-  onScaleChange,
-  alt = "Image preview",
+  imageData: { fileName, imageUrl, alt = "Image preview" },
+  layout: { initialScale = 1, maxHeight = "80vh", onScaleChange } = {},
 }: ImageViewerProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const imageRef = useRef<HTMLImageElement | null>(null);
@@ -54,12 +56,15 @@ export default function ImageViewer({
   }, []);
 
   return (
-    <Container className="flex flex-col w-full">
-      <ViewerControls scaleControls={{ scale, updateScale, calculateScale }} />
+    <DocViewerContainer>
+      <ViewerControls
+        scaleControls={{ scale, updateScale, calculateScale }}
+        fileName={fileName}
+      />
 
       <div
         ref={containerRef}
-        className="flex justify-center border border-border bg-muted p-5 overflow-auto rounded-sm"
+        className="flex justify-center bg-muted p-5 overflow-auto"
         style={{ maxHeight }}
       >
         <div
@@ -85,6 +90,6 @@ export default function ImageViewer({
           />
         </div>
       </div>
-    </Container>
+    </DocViewerContainer>
   );
 }
