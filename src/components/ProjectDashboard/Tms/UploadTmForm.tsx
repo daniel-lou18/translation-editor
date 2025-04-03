@@ -6,7 +6,7 @@ import { ArrowRight, Sheet } from "lucide-react";
 import UploadButton from "../../Upload/UploadButton";
 import Container from "../../ui/Container";
 import { PropsWithChildren } from "react";
-import { MimeType } from "@/types/Files";
+import { MimeType, MimeTypeToFileTypeMap } from "@/types/Files";
 import Combobox from "@/components/ui/Combobox";
 
 type UploadTmFormProps = PropsWithChildren<{
@@ -113,7 +113,7 @@ function UploadSingle({ file, langConfig, titles }: UploadSingleProps) {
           accept={file.acceptedTypes.join(",")}
           title={titles.uploadTitle}
           description={`Allowed file types: ${file.acceptedTypes
-            .map((type) => type.slice(1).toUpperCase())
+            .map((type) => MimeTypeToFileTypeMap[type])
             .join(", ")}. ${
             file.acceptedTypes.includes("application/vnd.ms-excel") ||
             file.acceptedTypes.includes(
@@ -156,7 +156,7 @@ function UploadDouble({ source, target, langItems }: UploadDoubleProps) {
           accept={source.acceptedTypes.join(",")}
           title="Source Document"
           description={`Allowed file types: ${source.acceptedTypes
-            .map((type) => type.slice(1).toUpperCase())
+            .map((type) => MimeTypeToFileTypeMap[type])
             .join(", ")}`}
           onFilesSelect={(files) => source.setFile(files[0])}
           className="h-[200px] bg-cat-memory/70 hover:bg-cat-memory"
@@ -186,7 +186,7 @@ function UploadDouble({ source, target, langItems }: UploadDoubleProps) {
           accept={target.acceptedTypes.join(",")}
           title="Target Document"
           description={`Allowed file types: ${target.acceptedTypes
-            .map((type) => type.slice(1).toUpperCase())
+            .map((type) => MimeTypeToFileTypeMap[type])
             .join(", ")}`}
           onFilesSelect={(files) => target.setFile(files[0])}
           className="h-[200px] bg-cat-memory/70 hover:bg-cat-memory"

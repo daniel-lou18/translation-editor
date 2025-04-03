@@ -11,7 +11,7 @@ import {
   SidebarSeparator,
 } from "@/components/ui/sidebar";
 import { ComponentProps, ReactNode } from "react";
-import { Link } from "react-router";
+import { Link, useLocation } from "react-router";
 import Container from "../Container";
 
 type SidebarProps = ComponentProps<typeof SidebarComponent> & {
@@ -34,6 +34,11 @@ export default function Sidebar({
   menuContent,
   ...props
 }: SidebarProps) {
+  const location = useLocation();
+  const isActive = (href: string) => {
+    return location.pathname === href;
+  };
+
   return (
     <SidebarComponent {...props}>
       <SidebarHeader>{children}</SidebarHeader>
@@ -48,7 +53,7 @@ export default function Sidebar({
                 <SidebarMenu>
                   {group.items.map((item, idx) => (
                     <SidebarMenuItem key={idx}>
-                      <SidebarMenuButton asChild>
+                      <SidebarMenuButton asChild isActive={isActive(item.href)}>
                         <Link to={item.href}>{item.content}</Link>
                       </SidebarMenuButton>
                     </SidebarMenuItem>

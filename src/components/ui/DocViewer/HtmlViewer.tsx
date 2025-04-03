@@ -71,7 +71,7 @@ export default function HtmlViewer({
       <div
         ref={containerRef}
         className="flex justify-center bg-muted overflow-auto"
-        style={{ maxHeight }}
+        // style={{ maxHeight }}
       >
         <div
           style={{
@@ -97,10 +97,17 @@ export default function HtmlViewer({
 
   return (
     <DocViewerContainer>
-      <ViewerControls
-        scaleControls={{ scale, updateScale, calculateScale }}
-        viewMode={html.translation ? { mode, onChange: setMode } : null}
-      />
+      {html.translation ? (
+        <ViewerControls
+          scaleControls={{ scale, updateScale, calculateScale }}
+          viewMode={{ mode, onChange: setMode }}
+        />
+      ) : (
+        <ViewerControls
+          scaleControls={{ scale, updateScale, calculateScale }}
+          fileName={html.original}
+        />
+      )}
       {renderContent()}
     </DocViewerContainer>
   );

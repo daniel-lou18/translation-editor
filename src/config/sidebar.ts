@@ -3,20 +3,61 @@ import { ComponentProps } from "react";
 
 export type SidebarProps = ComponentProps<typeof Sidebar>;
 
-// Define item types that don't include JSX
 export type SidebarItemConfig = {
   label: string;
   href: string;
-  icon?: string; // Store icon name as string
+  icon?: string;
 };
 
-// Define group types without JSX
 export type SidebarGroupConfig = {
   label: string;
   items: SidebarItemConfig[];
 };
 
-// Dashboard sidebar configuration without JSX
+export const dashboardSidebarConfigV2: SidebarGroupConfig[] = [
+  {
+    label: "Workspace",
+    items: [
+      { label: "Dashboard", href: "/app/dashboard/workspace", icon: "home" },
+      {
+        label: "My Projects",
+        href: "/app/dashboard/projects",
+        icon: "projects",
+      },
+      {
+        label: "Translations",
+        href: "/app/dashboard/translations",
+        icon: "translations",
+      },
+      {
+        label: "Translation Memories",
+        href: "/app/dashboard/tms",
+        icon: "tms",
+      },
+      {
+        label: "AI",
+        href: "/app/dashboard/documents/upload/ai",
+        icon: "ai",
+      },
+    ],
+  },
+  {
+    label: "Account",
+    items: [
+      {
+        label: "Preferences",
+        href: "/app/dashboard/account/preferences",
+        icon: "settings",
+      },
+      {
+        label: "Log out",
+        href: "/app/dashboard/account/logout",
+        icon: "logout",
+      },
+    ],
+  },
+];
+
 export const dashboardSidebarConfig: SidebarGroupConfig[] = [
   {
     label: "Projects",

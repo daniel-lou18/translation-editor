@@ -62,7 +62,7 @@ export default function DocxViewer({
         <div
           ref={containerRef}
           className="flex justify-center px-12 py-8 bg-white/30 overflow-auto docx-viewer-container"
-          style={{ maxHeight }}
+          // style={{ maxHeight }}
         >
           <div
             style={{

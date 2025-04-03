@@ -18,9 +18,9 @@ export default function DashboardProjects() {
   return (
     <Container className="space-y-8">
       <Container className="flex justify-between">
-        <PageTitle title="Daniel's Projects" />
+        <PageTitle title="My Projects" level={2} />
         <PageControls>
-          <SearchForm />
+          <SearchForm placeholder="Search projects" />
           <Button size="sm" asChild>
             <Link to="/app/dashboard/projects/create">New Project</Link>
           </Button>

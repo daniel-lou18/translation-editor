@@ -39,9 +39,9 @@ export default function ProjectCard({
       >
         <CardHeader className="flex-row justify-between flex-grow">
           <Container className="space-y-1.5 flex flex-col">
-            <CardTitle className="text-xl">{name}</CardTitle>
+            <CardTitle className="text-lg">{name}</CardTitle>
             <CardDescription className="flex-grow">
-              <p>{description}</p>
+              {description}
             </CardDescription>
           </Container>
           <ChevronRight className="text-muted-foreground group-hover:text-foreground group-hover:translate-x-2 group-hover:transition-all duration-300 ease-out" />

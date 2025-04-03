@@ -19,7 +19,8 @@ import DocumentDetailsPage from "./pages/DocumentDetails";
 import TranslationDetailsPage from "./pages/TranslationDetails";
 import TranslationPreviewPage from "./pages/TranslationPreview";
 import DocumentViewerPage from "./pages/DocumentViewer";
-
+import WorkspacePage from "./pages/Workspace";
+import DashboardTms from "./components/Dashboard/TMs";
 export default function RoutesComponent() {
   return (
     <Routes>
@@ -27,9 +28,11 @@ export default function RoutesComponent() {
       <Route path="/login" element={<LoginPage />} />
       <Route path="/app" element={<RootLayout />}>
         <Route path="dashboard" element={<DashboardPage />}>
+          <Route path="workspace" element={<WorkspacePage />} />
           <Route path="projects" element={<DashboardProjects />} />
           <Route path="projects/create" element={<CreateProjectPage />} />
-          <Route path="tms" element={<TmsPage />} />
+          <Route path="translations" element={<TranslationsPage />} />
+          <Route path="tms" element={<DashboardTms />} />
           <Route path="tms/create" element={<CreateTmPage />} />
           <Route path="tms/add-segments" element={<AddTmPairsPage />} />
           <Route

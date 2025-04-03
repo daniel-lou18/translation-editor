@@ -23,7 +23,7 @@ export default function Tms() {
   }
 
   return (
-    <>
+    <Container>
       <Container className="flex justify-between mb-6">
         <PageTitle title="Translation Memory" />
         <PageControls>
@@ -63,6 +63,6 @@ export default function Tms() {
         </PageControls>
       </Container>
       <TmsTable />
-    </>
+    </Container>
   );
 }

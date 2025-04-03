@@ -65,7 +65,7 @@ export default function ImageViewer({
       <div
         ref={containerRef}
         className="flex justify-center bg-muted p-5 overflow-auto"
-        style={{ maxHeight }}
+        // style={{ maxHeight }}
       >
         <div
           className="relative bg-white shadow-md"

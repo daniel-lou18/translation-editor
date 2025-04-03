@@ -41,18 +41,7 @@ export function formatTranslationsToTableRows(
 ) {
   if (!translations) return [];
 
-  return Object.values(translations || {}).map((translation) => ({
-    ...translation,
-    id: String(translation.id),
-    documentId: String(translation.documentId),
-    fileName: translation.document.fileName,
-    progress: Math.round(
-      (translation.targetSegments.filter((seg) => seg.status === "translated")
-        .length /
-        translation.targetSegments.length) *
-        100
-    ),
-  }));
+  return formatTranslationsToTable(Object.values(translations || {}));
 }
 
 export function formatProjectsToCards(
@@ -83,6 +72,23 @@ export function getAllTranslationsFromProject(
     TranslationWithTargetSegments[]
   >((acc, doc) => [...acc, ...doc.translations], []);
 
+  return translations.map((translation) => ({
+    ...translation,
+    id: translation.id,
+    documentId: translation.documentId,
+    fileName: translation.document.fileName,
+    progress: Math.round(
+      (translation.targetSegments.filter((seg) => seg.status === "translated")
+        .length /
+        translation.targetSegments.length) *
+        100
+    ),
+  }));
+}
+
+export function formatTranslationsToTable(
+  translations: TranslationWithDocument[]
+) {
   return translations.map((translation) => ({
     ...translation,
     id: translation.id,

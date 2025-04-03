@@ -16,7 +16,7 @@ export default function ProjectLayout() {
       <DocumentsSidebar projects={projects} currentProject={currentProject} />
       <SidebarInset className="bg-muted/20">
         <Navbar />
-        <Container className="xl:px-12 min-[1600px]:px-24 py-6">
+        <Container className="px-6 xl:px-12 min-[1600px]:px-24 py-6">
           <Outlet />
         </Container>
       </SidebarInset>

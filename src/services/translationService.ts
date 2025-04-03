@@ -1,6 +1,8 @@
 import {
   LangCode,
   SelectTranslation,
+  Translation,
+  TranslationWithDocument,
   TranslationWithSegments,
   UpdatedId,
 } from "@/types";
@@ -10,6 +12,21 @@ import { TranslationWithJoinedSegments, Update } from "@/types/Dtos";
 export default class TranslationService extends ApiService {
   constructor() {
     super(import.meta.env.VITE_API_URL);
+  }
+
+  async getTranslations(params?: {
+    limit?: number;
+    order_by?: string;
+    order?: "asc" | "desc";
+  }): Promise<TranslationWithDocument[]> {
+    const queryParams = new URLSearchParams();
+
+    if (params?.limit) queryParams.append("limit", params.limit.toString());
+    if (params?.order_by) queryParams.append("order_by", params.order_by);
+    if (params?.order) queryParams.append("order", params.order);
+
+    const query = queryParams.toString();
+    return this.get(`/translations${query ? `?${query}` : ""}`);
   }
 
   async getTranslation(
