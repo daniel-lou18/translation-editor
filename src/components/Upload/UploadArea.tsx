@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { BookType, FileText } from "lucide-react";
+import { FileText, Layers } from "lucide-react";
 import { useState } from "react";
 import Container from "../ui/Container";
 
@@ -66,7 +66,7 @@ export default function UploadArea({
         {type === "document" ? (
           <FileText className="w-6 h-6 text-cat-accent" />
         ) : (
-          <BookType className="w-6 h-6 text-cat-accent" />
+          <Layers className="w-6 h-6 text-cat-accent" />
         )}
       </Container>
 

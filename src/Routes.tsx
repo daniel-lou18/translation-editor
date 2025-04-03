@@ -21,6 +21,7 @@ import TranslationPreviewPage from "./pages/TranslationPreview";
 import DocumentViewerPage from "./pages/DocumentViewer";
 import WorkspacePage from "./pages/Workspace";
 import DashboardTms from "./components/Dashboard/TMs";
+import DashboardTranslationsPage from "./pages/DashboardTranslations";
 export default function RoutesComponent() {
   return (
     <Routes>
@@ -31,7 +32,7 @@ export default function RoutesComponent() {
           <Route path="workspace" element={<WorkspacePage />} />
           <Route path="projects" element={<DashboardProjects />} />
           <Route path="projects/create" element={<CreateProjectPage />} />
-          <Route path="translations" element={<TranslationsPage />} />
+          <Route path="translations" element={<DashboardTranslationsPage />} />
           <Route path="tms" element={<DashboardTms />} />
           <Route path="tms/create" element={<CreateTmPage />} />
           <Route path="tms/add-segments" element={<AddTmPairsPage />} />

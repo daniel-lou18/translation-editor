@@ -3,7 +3,6 @@ import PageTitle from "../../ui/PageTitle";
 import SearchForm from "../../ui/SearchForm";
 import TranslationCombobox from "./TranslationCombobox";
 import PageControls from "@/components/ui/PageControls";
-import Container from "@/components/ui/Container";
 import Combobox from "@/components/ui/Combobox";
 import { useTranslationActions } from "@/hooks/useTranslationActions";
 
@@ -21,8 +20,7 @@ export default function Translations() {
 
   return (
     <>
-      <Container className="flex justify-between mb-6">
-        <PageTitle title="Translations"></PageTitle>
+      <PageTitle title="Translations">
         <PageControls>
           <SearchForm placeholder="Search translations" />
           <Combobox
@@ -40,7 +38,7 @@ export default function Translations() {
             onSelectLang={handleAddTranslation}
           />
         </PageControls>
-      </Container>
+      </PageTitle>
       <TranslationsTable
         translations={currentDocument ? translations : allTranslations}
       />

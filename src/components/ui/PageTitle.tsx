@@ -20,7 +20,7 @@ export default function PageTitle({
   const Heading = `h${level}` as const;
 
   return (
-    <Container className="flex gap-6 items-center">
+    <Container className="flex gap-6 items-center mb-6 justify-between">
       <Heading
         className={cn(
           "flex items-center gap-2 font-semibold text-2xl",

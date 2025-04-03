@@ -1,6 +1,6 @@
 import UploadTmForm from "@/components/ProjectDashboard/Tms/UploadTmForm";
 import Container from "../../ui/Container";
-import { BookType } from "lucide-react";
+import { Layers } from "lucide-react";
 import Combobox from "@/components/ui/Combobox";
 import { Earth } from "lucide-react";
 import { useTmFileFormat } from "@/hooks/useTmFileFormat";
@@ -62,7 +62,7 @@ export default function AddTmPairs() {
       >
         <UploadTmForm.Header title="Upload segments to a TM">
           <Container className="flex items-center gap-2">
-            <BookType className="w-4 h-4 text-muted-foreground" />
+            <Layers className="w-4 h-4 text-muted-foreground" />
             <span className="text-sm text-muted-foreground">TM:</span>
             <Combobox
               name="tm"

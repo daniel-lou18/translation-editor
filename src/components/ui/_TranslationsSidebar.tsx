@@ -16,7 +16,13 @@ import {
   ProjectWithDocsAndTrans,
 } from "@/types";
 import { Link } from "react-router";
-import { BookType, ChartBar, FileSpreadsheet, Globe } from "lucide-react";
+import {
+  BookType,
+  ChartBar,
+  FileSpreadsheet,
+  Globe,
+  Layers,
+} from "lucide-react";
 
 type TranslationsSidebarProps = {
   projects: NormalizedProjectsWithTranslations | null;
@@ -47,7 +53,7 @@ export default function TranslationsSidebar({
             <SidebarMenuItem>
               <SidebarMenuButton asChild size="lg">
                 <Link to="#">
-                  <BookType /> Translation Memory
+                  <Layers /> Translation Memory
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>

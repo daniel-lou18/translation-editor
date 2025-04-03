@@ -14,7 +14,7 @@ export function useTranslations(params?: {
     queryKey: ["translations"],
     queryFn: () =>
       translationService.getTranslations({
-        limit: params?.limit ?? 5,
+        limit: params?.limit ?? 3,
         order_by: params?.order_by ?? "updatedAt",
         order: params?.order ?? "desc",
       }),

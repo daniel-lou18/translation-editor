@@ -7,6 +7,7 @@ import ProjectCards from "./ProjectCards";
 import { Link } from "react-router";
 import PageControls from "../../ui/PageControls";
 import { useProjects } from "@/hooks/useProjects";
+import { Folders } from "lucide-react";
 
 export default function DashboardProjects() {
   const { data: projects } = useProjects();
@@ -15,17 +16,22 @@ export default function DashboardProjects() {
 
   if (!formattedProjects || formattedProjects.length === 0) return null;
 
+  const title = (
+    <>
+      <Folders size={24} strokeWidth={1.5} /> My Projects
+    </>
+  );
+
   return (
     <Container className="space-y-8">
-      <Container className="flex justify-between">
-        <PageTitle title="My Projects" level={2} />
+      <PageTitle title={title}>
         <PageControls>
           <SearchForm placeholder="Search projects" />
           <Button size="sm" asChild>
             <Link to="/app/dashboard/projects/create">New Project</Link>
           </Button>
         </PageControls>
-      </Container>
+      </PageTitle>
       <ProjectCards projects={formattedProjects} />
     </Container>
   );

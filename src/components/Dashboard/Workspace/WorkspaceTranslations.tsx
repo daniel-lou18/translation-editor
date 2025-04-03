@@ -8,14 +8,16 @@ import { formatTranslationsToTable } from "@/utils/helpers";
 export default function WorkspaceTranslations() {
   const { translations, isLoading, error } = useTranslations();
 
+  const title = (
+    <>
+      <Globe size={18} /> Recent translations
+    </>
+  );
+
   return (
     <Container className="flex flex-col space-y-4">
       <PageTitle
-        title={
-          <>
-            <Globe size={18} /> Recent translations
-          </>
-        }
+        title={title}
         level={2}
         className="text-md text-muted-foreground"
       />

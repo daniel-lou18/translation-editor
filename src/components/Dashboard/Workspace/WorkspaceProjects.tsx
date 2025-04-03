@@ -6,6 +6,7 @@ import { useProjects } from "@/hooks/useProjects";
 
 export default function WorkspaceProjects() {
   const { data: projects } = useProjects();
+
   return (
     <Container className="flex flex-col space-y-4">
       <PageTitle
@@ -34,10 +35,10 @@ export default function WorkspaceProjects() {
                 {item.status}
               </>
             }
-            icon={Folder}
-            iconClassName="relative top-[72%] fill-card"
             cardClassName="h-40 w-56"
-          />
+          >
+            <Folder className="h-6 w-6 text-muted-foreground relative top-8 relative top-[72%] fill-card" />
+          </DashboardCard>
         ))}
       </Container>
     </Container>

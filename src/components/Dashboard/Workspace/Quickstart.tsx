@@ -62,9 +62,9 @@ export default function Quickstart() {
             key={item.title}
             title={item.title}
             description={item.description}
-            icon={item.icon}
-            iconClassName="fill-card/30"
-          />
+          >
+            <item.icon className="relative top-8 text-muted-foreground fill-card/30" />
+          </DashboardCard>
         ))}
       </Container>
     </Container>

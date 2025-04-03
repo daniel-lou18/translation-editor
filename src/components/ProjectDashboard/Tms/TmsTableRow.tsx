@@ -3,7 +3,7 @@ import { TableRow } from "@/components/ui/table";
 import { TableCell } from "@/components/ui/table";
 import Container from "@/components/ui/Container";
 import EditableCell from "@/components/ui/Table/EditableCell";
-import { BookType } from "lucide-react";
+import { BookType, Layers } from "lucide-react";
 import { Tm } from "@/types/Tm";
 import { TableRowProps } from "@/components/ui/Table/types";
 import TableRowMenu from "@/components/ui/Table/TableRowMenu";
@@ -35,7 +35,7 @@ export default function TmsTableRow({
     <TableRow key={id} className="hover:bg-gray-200/50 hover:cursor-pointer">
       <TableCell className="pl-1" onClick={() => onRowClick(id)}>
         <Container className="flex items-center gap-2">
-          <BookType className="h-4 w-4" strokeWidth={1.5} />
+          <Layers className="h-4 w-4" strokeWidth={1.5} />
           <EditableCell
             inputConfig={{
               field: "name",

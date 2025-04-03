@@ -12,6 +12,7 @@ import {
   Globe,
   Languages,
   Settings,
+  Layers,
 } from "lucide-react";
 import SidebarComponent, {
   SidebarGroupType,
@@ -26,11 +27,11 @@ type AppSidebarProps = {
 const iconMap = {
   fileText: <FileText />,
   globe: <Globe />,
-  bookType: <BookType />,
   bookOpenText: <BookOpenText />,
   chartBar: <ChartBar />,
   languages: <Languages />,
   settings: <Settings />,
+  layers: <Layers />,
 };
 
 export default function DocumentsSidebar({

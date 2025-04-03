@@ -33,6 +33,7 @@ export default function UploadTmTitle({
           >
             {tmFormats.map(({ type, Icon }) => (
               <ToggleGroupItem
+                key={type}
                 value={type}
                 aria-label={`Toggle ${type}`}
                 className="data-[state=on]:bg-cat-accent/10"

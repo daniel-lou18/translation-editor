@@ -130,7 +130,7 @@ export function createProjectSidebarConfig(
         {
           label: "Translation Memory",
           href: `/app/projects/${String(projectId)}/tms`,
-          icon: "bookType",
+          icon: "layers",
         },
         {
           label: "Glossaries",

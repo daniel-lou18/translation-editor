@@ -1,11 +1,11 @@
 import Container from "../../ui/Container";
 import PageTitle from "../../ui/PageTitle";
 import UploadTmForm from "../Tms/UploadTmForm";
-import { DocumentFormat, DOCUMENT_FORMATS, MIME_TYPES } from "@/types/Files";
+import { MIME_TYPES } from "@/types/Files";
 import Combobox from "@/components/ui/Combobox";
 import { useLangsDomain } from "@/hooks/useLangsDomain";
 import { useDocumentUpload } from "@/hooks/useDocumentUpload";
-import { BookType, Earth } from "lucide-react";
+import { Earth, Layers } from "lucide-react";
 import { useSelectTm } from "@/hooks/useSelectTm";
 
 export type UploadDocumentProps = {
@@ -48,7 +48,7 @@ export default function UploadDocument({
         <UploadTmForm.Header title="Upload source document to translate">
           {mode === "ai" && (
             <Container className="flex items-center gap-2">
-              <BookType className="w-4 h-4 text-muted-foreground" />
+              <Layers className="w-4 h-4 text-muted-foreground" />
               <span className="text-sm text-muted-foreground">TM:</span>
               <Combobox
                 name="tm"

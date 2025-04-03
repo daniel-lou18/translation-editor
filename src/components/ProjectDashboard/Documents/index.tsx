@@ -4,7 +4,6 @@ import PageTitle from "../../ui/PageTitle";
 import SearchForm from "../../ui/SearchForm";
 import { Button } from "../../ui/button";
 import { Link } from "react-router";
-import Container from "@/components/ui/Container";
 import PageControls from "@/components/ui/PageControls";
 
 export default function Documents() {
@@ -14,8 +13,7 @@ export default function Documents() {
 
   return (
     <>
-      <Container className="flex justify-between mb-6">
-        <PageTitle title="Documents" />
+      <PageTitle title="Documents">
         <PageControls>
           <SearchForm placeholder="Search documents" />
           <Button size="sm" asChild>
@@ -24,7 +22,7 @@ export default function Documents() {
             </Link>
           </Button>
         </PageControls>
-      </Container>
+      </PageTitle>
       <DocumentsTable />
     </>
   );
