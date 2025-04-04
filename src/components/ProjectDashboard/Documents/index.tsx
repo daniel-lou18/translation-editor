@@ -5,17 +5,37 @@ import SearchForm from "../../ui/SearchForm";
 import { Button } from "../../ui/button";
 import { Link } from "react-router";
 import PageControls from "@/components/ui/PageControls";
+import NoContent from "@/components/ui/Error/NoFileContent";
+import { useState } from "react";
+import { useSearch } from "@/hooks/useSearch";
 
 export default function Documents() {
   const { currentProject } = useCurrentProject();
+  const [searchQuery, setSearchQuery] = useState("");
+  const filteredDocuments = useSearch(
+    currentProject?.documents || [],
+    searchQuery,
+    (item, query) => {
+      return (
+        item.fileName.toLowerCase().includes(query.trim().toLowerCase()) ||
+        item.sourceLang.toLowerCase().includes(query.trim().toLowerCase()) ||
+        item?.domain?.toLowerCase().includes(query.trim().toLowerCase()) ||
+        false
+      );
+    }
+  );
 
-  if (!currentProject) return null;
+  if (!currentProject) return <NoContent />;
 
   return (
     <>
       <PageTitle title="Documents">
         <PageControls>
-          <SearchForm placeholder="Search documents" />
+          <SearchForm
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search documents"
+          />
           <Button size="sm" asChild>
             <Link to={`/app/projects/${currentProject.id}/documents/upload`}>
               Upload Document
@@ -23,7 +43,7 @@ export default function Documents() {
           </Button>
         </PageControls>
       </PageTitle>
-      <DocumentsTable />
+      <DocumentsTable documents={filteredDocuments} />
     </>
   );
 }

@@ -7,12 +7,13 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import DocumentsTableBody from "./DocumentsTableBody";
-import { useCurrentProject } from "@/hooks/useCurrentProject";
+import { DocumentWithTranslationsWithDoc } from "@/types";
 
-export default function DocumentsTable() {
-  const { currentDocuments } = useCurrentProject();
-  const documents = Object.values(currentDocuments || {});
+type DocumentsTableProps = {
+  documents: DocumentWithTranslationsWithDoc[];
+};
 
+export default function DocumentsTable({ documents }: DocumentsTableProps) {
   return (
     <Table>
       <TableHeader>

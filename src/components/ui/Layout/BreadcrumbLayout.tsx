@@ -18,6 +18,7 @@ import {
 import { Home } from "lucide-react";
 import { Link, useLocation } from "react-router";
 import Container from "../Container";
+import { dashboardUrl } from "@/config/urls";
 
 export default function BreadcrumbLayout() {
   const { pathname } = useLocation();
@@ -39,7 +40,7 @@ export default function BreadcrumbLayout() {
         <BreadcrumbList>
           <BreadcrumbItem className="hidden md:block">
             <BreadcrumbLink asChild className="flex items-center">
-              <Link to="/app/dashboard/projects">
+              <Link to={dashboardUrl()}>
                 <Home size={16} className="mr-1" /> Home
               </Link>
             </BreadcrumbLink>

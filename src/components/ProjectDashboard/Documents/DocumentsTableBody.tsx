@@ -37,13 +37,13 @@ export default function DocumentsTableBody({ docs }: DocumentsTableBodyProps) {
         },
       },
       {
-        value: "View translations",
+        value: "See translations",
         onClick: (doc: Document) => {
           navigateToTranslations(doc.id);
         },
       },
       {
-        value: "View details",
+        value: "Display statistics",
         onClick: (doc: Document) => {
           navigateToDocumentDetails(doc.id);
         },

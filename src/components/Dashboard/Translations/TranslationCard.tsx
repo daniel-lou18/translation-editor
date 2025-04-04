@@ -25,7 +25,7 @@ type TranslationCardProps = {
 export default function TranslationCard({ data }: TranslationCardProps) {
   return (
     <Link to={data.href}>
-      <Card className="group relative flex flex-col overflow-hidden w-auto h-40 shadow-md hover:shadow-xl hover:border-muted-foreground/50 transition-all duration-300 ease-in-out">
+      <Card className="group relative flex flex-col overflow-hidden w-auto h-40 shadow-md hover:-translate-y-1 hover:translate-x-0.5 hover:shadow-xl hover:border-muted-foreground/50 transition-all duration-300 ease-in-out">
         <CardHeader className="justify-center text-sm font-medium bg-muted px-4 py-2 h-[25%] border-b border-input py-2 border-b">
           {data.header}
         </CardHeader>

@@ -1,5 +1,6 @@
 import { Sidebar } from "@/components/ui/sidebar";
 import { ComponentProps } from "react";
+import * as url from "@/config/urls";
 
 export type SidebarProps = ComponentProps<typeof Sidebar>;
 
@@ -21,22 +22,22 @@ export const dashboardSidebarConfigV2: SidebarGroupConfig[] = [
       { label: "Dashboard", href: "/app/dashboard/workspace", icon: "home" },
       {
         label: "My Projects",
-        href: "/app/dashboard/projects",
+        href: url.dashboardProjectsUrl(),
         icon: "projects",
       },
       {
         label: "Translations",
-        href: "/app/dashboard/translations",
+        href: url.dashboardTranslationsUrl(),
         icon: "translations",
       },
       {
         label: "Translation Memories",
-        href: "/app/dashboard/tms",
+        href: url.dashboardTmsUrl(),
         icon: "tms",
       },
       {
         label: "AI",
-        href: "/app/dashboard/documents/upload/ai",
+        href: url.uploadDocumentAiUrl(),
         icon: "ai",
       },
     ],
@@ -114,12 +115,12 @@ export function createProjectSidebarConfig(
       items: [
         {
           label: "Documents",
-          href: `/app/projects/${String(projectId)}/documents`,
+          href: url.projectUrl(projectId),
           icon: "fileText",
         },
         {
-          label: "All translations",
-          href: `/app/projects/${String(projectId)}/translations`,
+          label: "Translations",
+          href: url.translationsUrl(projectId),
           icon: "globe",
         },
       ],
@@ -129,7 +130,7 @@ export function createProjectSidebarConfig(
       items: [
         {
           label: "Translation Memory",
-          href: `/app/projects/${String(projectId)}/tms`,
+          href: url.tmsUrl(projectId),
           icon: "layers",
         },
         {
@@ -154,7 +155,7 @@ export function createProjectSidebarConfig(
         },
         {
           label: "Settings",
-          href: `/app/projects/${String(projectId)}/settings`,
+          href: url.settingsUrl(projectId),
           icon: "settings",
         },
       ],

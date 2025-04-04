@@ -27,7 +27,7 @@ export default function DashboardCard({
     <Link to={href}>
       <Card
         className={cn(
-          "group relative flex flex-col overflow-hidden w-44 h-44 shadow-md hover:shadow-xl hover:border-muted-foreground/50 transition-all duration-300 ease-in-out",
+          "group relative flex flex-col overflow-hidden w-44 h-44 shadow-md hover:-translate-y-1 hover:translate-x-0.5 hover:shadow-xl hover:border-muted-foreground/50 transition-all duration-300 ease-in-out",
           className
         )}
       >

@@ -38,7 +38,7 @@ export default function TranslationsTableBody({
       onClick: navigate(navigateToTranslationPreview),
     },
     {
-      value: "View details",
+      value: "Display statistics",
       onClick: navigate(navigateToTranslationDetails),
     },
   ];

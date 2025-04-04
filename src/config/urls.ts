@@ -1,3 +1,11 @@
+export function dashboardUrl() {
+  return "/app/dashboard/workspace";
+}
+
+export function dashboardProjectsUrl() {
+  return "/app/dashboard/projects";
+}
+
 export function projectsUrl() {
   return "/app/projects";
 }
@@ -22,6 +30,14 @@ export function uploadDocumentManualUrl() {
   return "/app/dashboard/documents/upload/manual";
 }
 
+export function dashboardTranslationsUrl() {
+  return "/app/dashboard/translations";
+}
+
+export function translationsUrl(projectId: string | number) {
+  return `/app/projects/${projectId}/translations`;
+}
+
 export function translationUrl(
   projectId: string,
   documentId: string,
@@ -30,8 +46,16 @@ export function translationUrl(
   return `${documentUrl(projectId, documentId)}/translations/${translationId}`;
 }
 
-export function tmsUrl(projectId: string, tmId: string) {
-  return `${projectUrl(projectId)}/tms/${tmId}`;
+export function dashboardTmsUrl() {
+  return "/app/dashboard/tms";
+}
+
+export function tmsUrl(projectId: string | number) {
+  return `/app/projects/${projectId}/tms`;
+}
+
+export function tmUrl(projectId: string, tmId: string) {
+  return `/app/projects/${projectId}/tms/${tmId}`;
 }
 
 export function createTmUrl() {
@@ -40,4 +64,8 @@ export function createTmUrl() {
 
 export function updateTmUrl() {
   return "/app/dashboard/tms/add-segments";
+}
+
+export function settingsUrl(projectId: string | number) {
+  return `/app/projects/${projectId}/settings`;
 }

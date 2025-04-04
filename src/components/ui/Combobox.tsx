@@ -24,6 +24,7 @@ type ComboboxProps<T extends string> = {
   items: ComboDataElement<T>[];
   value: T | null;
   onChange: (currentValue: T) => void;
+  defaultLabel?: string;
   buttonVariant?:
     | "link"
     | "default"
@@ -42,6 +43,7 @@ export default function Combobox<T extends string>({
   onChange,
   buttonVariant = "outline",
   className,
+  defaultLabel,
 }: ComboboxProps<T>) {
   const [open, setOpen] = useState(false);
 
@@ -60,7 +62,7 @@ export default function Combobox<T extends string>({
         >
           {selectedItem
             ? shortenString(selectedItem.label)
-            : `Select ${name.split("_").join(" ")}`}
+            : defaultLabel || `Select ${name.split("_").join(" ")}`}
           <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
         </Button>
       </PopoverTrigger>

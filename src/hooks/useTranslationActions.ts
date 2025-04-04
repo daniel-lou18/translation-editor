@@ -3,6 +3,7 @@ import { useRoute } from "@/hooks/useRoute";
 import {
   getAllTranslationsFromProject,
   langArrayToComboItems,
+  shortenFileName,
 } from "@/utils/helpers";
 import {
   languageToCodeMap as languages,
@@ -25,16 +26,21 @@ export function useTranslationActions() {
   );
   const docSelectItems = [
     { value: "all", label: "All translations" },
-    ...allTranslations.reduce<ComboDataElement<string>[]>((acc, trans) => {
-      const value = String(trans.documentId);
-      if (!acc.find((el) => el.value === value)) {
-        acc.push({
-          value: value,
-          label: trans.document.fileName,
-        });
-      }
-      return acc;
-    }, []),
+    ...allTranslations.reduce<ComboDataElement<string>[]>(
+      (acc, translation) => {
+        const id = String(translation.documentId);
+
+        if (!acc.find((el) => el.value === id)) {
+          acc.push({
+            value: id,
+            label: shortenFileName(translation.document.fileName),
+          });
+        }
+
+        return acc;
+      },
+      []
+    ),
   ];
   const langItems = langArrayToComboItems(Object.keys(languages) as Lang[]);
 

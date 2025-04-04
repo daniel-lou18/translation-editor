@@ -35,7 +35,7 @@ export default function ProjectCard({
     <Link to={`/app/projects/${id}/documents`} className="block h-full">
       <Card
         className={cn(
-          "relative group transition-all group flex flex-col h-full shadow-md hover:bg-muted hover:shadow-xl hover:border-muted-foreground/50 transition-all duration-300 ease-in-out",
+          "relative group transition-all group flex flex-col h-full shadow-md hover:-translate-y-1 hover:translate-x-0.5 hover:bg-muted hover:shadow-xl hover:border-muted-foreground/50 transition-all duration-300 ease-in-out",
           className
         )}
       >
