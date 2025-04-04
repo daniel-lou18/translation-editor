@@ -12,7 +12,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Layers } from "lucide-react";
 
 export default function Tms() {
   const navigate = useNavigate();
@@ -22,12 +22,22 @@ export default function Tms() {
     navigate("/app/dashboard/tms");
   }
 
+  const title = (
+    <>
+      <Layers size={22} strokeWidth={1.5} />
+      Translation Memory
+    </>
+  );
+
   return (
     <Container>
-      <Container className="flex justify-between mb-6">
-        <PageTitle title="Translation Memory" />
+      <PageTitle title={title}>
         <PageControls>
-          <SearchForm placeholder="Search TM entries" />
+          <SearchForm
+            placeholder="Search TM entries"
+            value={""}
+            onChange={() => {}}
+          />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button size="sm">
@@ -61,7 +71,7 @@ export default function Tms() {
             </DropdownMenuContent>
           </DropdownMenu>
         </PageControls>
-      </Container>
+      </PageTitle>
       <TmsTable />
     </Container>
   );

@@ -36,7 +36,7 @@ export default function UploadTmTitle({
                 key={type}
                 value={type}
                 aria-label={`Toggle ${type}`}
-                className="data-[state=on]:bg-cat-accent/10"
+                className="min-w-8 h-8 w-8 data-[state=on]:bg-cat-accent/10"
               >
                 {<Icon />}
               </ToggleGroupItem>

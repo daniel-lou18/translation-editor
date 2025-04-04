@@ -78,11 +78,10 @@ export default function DashboardTranslations() {
           >
             {toggleData.map(({ value, icon: Icon }) => (
               <ToggleGroupItem
-                size="sm"
                 key={value}
                 value={value}
                 aria-label={`Toggle ${value}`}
-                className="data-[state=on]:bg-cat-accent/10"
+                className="min-w-8 h-8 w-8 data-[state=on]:bg-cat-accent/10"
               >
                 {<Icon />}
               </ToggleGroupItem>
@@ -101,6 +100,7 @@ export default function DashboardTranslations() {
             <TranslationCard
               key={translation.id}
               data={{
+                href: `/app/projects/${translation.document.projectId}/documents/${translation.document.id}/translations/${translation.id}`,
                 header: shortenFileName(translation.document.fileName),
                 content: `${translation.document.sourceLang} > ${translation.targetLang}`,
                 footerLeft: translation.document.domain,

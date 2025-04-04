@@ -10,6 +10,7 @@ import {
 import { ChevronRight } from "lucide-react";
 import Container from "@/components/ui/Container";
 import { Link } from "react-router";
+import { cn } from "@/lib/utils";
 
 export type ProjectCardProps = {
   id: string;
@@ -33,9 +34,10 @@ export default function ProjectCard({
   return (
     <Link to={`/app/projects/${id}/documents`} className="block h-full">
       <Card
-        className={`hover:bg-muted hover:cursor-pointer transition-all group flex flex-col h-full ${
-          className || ""
-        }`}
+        className={cn(
+          "relative group transition-all group flex flex-col h-full shadow-md hover:bg-muted hover:shadow-xl hover:border-muted-foreground/50 transition-all duration-300 ease-in-out",
+          className
+        )}
       >
         <CardHeader className="flex-row justify-between flex-grow">
           <Container className="space-y-1.5 flex flex-col">

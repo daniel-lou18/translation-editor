@@ -3,6 +3,7 @@ import DashboardCard from "./DashboardCard";
 import { Folder, Folders } from "lucide-react";
 import PageTitle from "@/components/ui/PageTitle";
 import { useProjects } from "@/hooks/useProjects";
+import { projectUrl } from "@/config/urls";
 
 export default function WorkspaceProjects() {
   const { data: projects } = useProjects();
@@ -25,6 +26,7 @@ export default function WorkspaceProjects() {
         {projects?.map((item) => (
           <DashboardCard
             key={item.id}
+            href={projectUrl(item.id)}
             title={item.name}
             description={
               <Container>

@@ -22,6 +22,7 @@ import DocumentViewerPage from "./pages/DocumentViewer";
 import WorkspacePage from "./pages/Workspace";
 import DashboardTms from "./components/Dashboard/TMs";
 import DashboardTranslationsPage from "./pages/DashboardTranslations";
+
 export default function RoutesComponent() {
   return (
     <Routes>
