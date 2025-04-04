@@ -11,19 +11,17 @@ type DashboardCardProps = {
   children: ReactNode;
   title: ReactNode;
   description: ReactNode;
-  cardClassName?: string;
+  className?: string;
 };
 
 export default function DashboardCard({
   children,
   title,
   description,
-  cardClassName,
+  className,
 }: DashboardCardProps) {
   return (
-    <Card
-      className={cn("flex flex-col overflow-hidden w-44 h-44", cardClassName)}
-    >
+    <Card className={cn("flex flex-col overflow-hidden w-44 h-44", className)}>
       <CardHeader className="bg-muted px-6 py-0 h-[25%] border-b border-input">
         {children}
       </CardHeader>

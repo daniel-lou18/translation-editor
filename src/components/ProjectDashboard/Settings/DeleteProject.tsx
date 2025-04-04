@@ -17,7 +17,6 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { useDeleteProject } from "@/hooks/useDeleteProject";
-import { LoaderCircle } from "lucide-react";
 import { FormEvent } from "react";
 
 const projectNameData = {

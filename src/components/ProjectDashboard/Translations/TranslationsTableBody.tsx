@@ -2,8 +2,17 @@ import { FormattedTranslation } from "@/types/Translation";
 import TranslationsTableRow from "./TranslationsTableRow";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { useExportTranslation } from "@/hooks/useExportTranslation";
-import { useRoute } from "@/hooks/useRoute";
+import { NavigationParams, useRoute } from "@/hooks/useRoute";
 import { EXPORT_FORMATS } from "@/config/translationsTable";
+
+const navigate =
+  (navigateToTranslation: (params: NavigationParams) => void) =>
+  (translation: FormattedTranslation) =>
+    navigateToTranslation({
+      projectId: translation.document.projectId,
+      documentId: translation.documentId,
+      translationId: translation.id,
+    });
 
 type TranslationsTableBodyProps = {
   translations: FormattedTranslation[];
@@ -17,49 +26,20 @@ export default function TranslationsTableBody({
     navigateToTranslation,
     navigateToTranslationDetails,
     navigateToTranslationPreview,
-    projectId,
   } = useRoute();
 
   const navigationItems = [
     {
       value: "Open translation",
-      onClick: (translation: FormattedTranslation) => {
-        if (!projectId) {
-          return;
-        }
-
-        navigateToTranslation({
-          projectId,
-          documentId: translation.documentId,
-          translationId: translation.id,
-        });
-      },
+      onClick: navigate(navigateToTranslation),
     },
     {
       value: "View translation",
-      onClick: (translation: FormattedTranslation) => {
-        if (!projectId) {
-          return;
-        }
-
-        navigateToTranslationPreview({
-          documentId: translation.documentId,
-          translationId: translation.id,
-        });
-      },
+      onClick: navigate(navigateToTranslationPreview),
     },
     {
       value: "View details",
-      onClick: (translation: FormattedTranslation) => {
-        if (!projectId) {
-          return;
-        }
-
-        navigateToTranslationDetails({
-          documentId: translation.documentId,
-          translationId: translation.id,
-        });
-      },
+      onClick: navigate(navigateToTranslationDetails),
     },
   ];
 

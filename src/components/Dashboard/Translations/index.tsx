@@ -3,19 +3,27 @@ import SearchForm from "../../ui/SearchForm";
 import PageControls from "@/components/ui/PageControls";
 import TranslationsTable from "@/components/ProjectDashboard/Translations/TranslationsTable";
 import { useTranslations } from "@/hooks/useTranslations";
-import { formatTranslationsToTable } from "@/utils/helpers";
+import { formatTranslationsToTable, shortenFileName } from "@/utils/helpers";
 import { ToggleGroup } from "@/components/ui/toggle-group";
 import { ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Globe, LayoutGrid, List } from "lucide-react";
 import { ChangeEvent, useState } from "react";
-import DashboardCard from "../Workspace/DashboardCard";
 import { useSearch } from "@/hooks/useSearch";
+import Container from "@/components/ui/Container";
+import TranslationCard from "./TranslationCard";
+
+type ViewMode = "table" | "grid";
+
+const statusColors = {
+  in_progress: "bg-yellow-500",
+  completed: "bg-green-600",
+  not_started: "bg-muted",
+};
+
 const toggleData = [
   { value: "table", icon: List },
   { value: "grid", icon: LayoutGrid },
 ];
-
-type ViewMode = "table" | "grid";
 
 const title = (
   <>
@@ -88,22 +96,25 @@ export default function DashboardTranslations() {
           translations={formatTranslationsToTable(filteredTranslations)}
         />
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-4 gap-y-8">
-          {filteredTranslations?.map((translation) => {
-            return (
-              <DashboardCard
-                key={translation.id}
-                title={`${translation.document.sourceLang} > ${translation.targetLang}`}
-                description={translation.document.domain}
-                cardClassName="w-full h-44"
-              >
-                <div className="text-sm font-medium">
-                  {translation.document.fileName}
-                </div>
-              </DashboardCard>
-            );
-          })}
-        </div>
+        <Container className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-x-4 gap-y-8">
+          {filteredTranslations?.map((translation) => (
+            <TranslationCard
+              key={translation.id}
+              data={{
+                header: shortenFileName(translation.document.fileName),
+                content: `${translation.document.sourceLang} > ${translation.targetLang}`,
+                footerLeft: translation.document.domain,
+                status: {
+                  label: translation.status || "not_started",
+                  color:
+                    statusColors[
+                      translation.status as keyof typeof statusColors
+                    ],
+                },
+              }}
+            />
+          ))}
+        </Container>
       )}
     </>
   );

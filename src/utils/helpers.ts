@@ -199,3 +199,14 @@ export function isAllowedType(
 export function shortenString(str: string, maxLength = 30) {
   return str.length > maxLength ? `${str.slice(0, maxLength)}...` : str;
 }
+
+export function shortenFileName(fileName: string, maxLength = 20) {
+  const [name, extension] = fileName.split(".");
+  const length = name.length;
+
+  return length > maxLength
+    ? `${name.slice(0, 12)}...${name.slice(Math.floor(length - 7))}${
+        extension ? `.${extension}` : ""
+      }`
+    : fileName;
+}

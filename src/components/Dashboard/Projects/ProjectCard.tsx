@@ -7,7 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { ChevronRight, Circle } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import Container from "@/components/ui/Container";
 import { Link } from "react-router";
 
@@ -53,13 +53,14 @@ export default function ProjectCard({
           <p className="text-sm pl-2">Translations: {translationsCount}</p>
         </CardContent>
         <CardFooter className="text-sm">
-          <Circle
-            size={10}
-            fill={`${status === "active" ? "green" : "grey"}`}
-            color={`${status === "active" ? "green" : "grey"}`}
-            className="mr-1"
-          />{" "}
-          {status}
+          <Container>
+            <span
+              className={`inline-block w-2 h-2 rounded-full mr-2 ${
+                status === "active" ? "bg-green-600" : "bg-muted"
+              }`}
+            />
+            <span>{status}</span>
+          </Container>
         </CardFooter>
       </Card>
     </Link>

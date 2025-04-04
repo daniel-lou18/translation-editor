@@ -91,22 +91,36 @@ export function useRoute() {
   );
 
   const navigateToTranslationDetails = useCallback(
-    ({ documentId, translationId }: Omit<NavigationParams, "projectId">) => {
-      if (!projectId) {
+    ({
+      projectId: providedProjectId,
+      documentId,
+      translationId,
+    }: NavigationParams) => {
+      const usedProjectId = providedProjectId || projectId;
+      if (!usedProjectId) {
         throw new Error("Project id is missing");
       }
 
       navigate(
-        `/app/projects/${projectId}/documents/${documentId}/translations/${translationId}/details`
+        `/app/projects/${usedProjectId}/documents/${documentId}/translations/${translationId}/details`
       );
     },
     [navigate]
   );
 
   const navigateToTranslationPreview = useCallback(
-    ({ documentId, translationId }: Omit<NavigationParams, "projectId">) => {
+    ({
+      projectId: providedProjectId,
+      documentId,
+      translationId,
+    }: NavigationParams) => {
+      const usedProjectId = providedProjectId || projectId;
+      if (!usedProjectId) {
+        throw new Error("Project id is missing");
+      }
+
       navigate(
-        `/app/projects/${projectId}/documents/${documentId}/translations/${translationId}/preview`
+        `/app/projects/${usedProjectId}/documents/${documentId}/translations/${translationId}/preview`
       );
     },
     [navigate]

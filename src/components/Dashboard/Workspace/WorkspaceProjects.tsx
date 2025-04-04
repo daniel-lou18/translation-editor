@@ -1,6 +1,6 @@
 import Container from "@/components/ui/Container";
 import DashboardCard from "./DashboardCard";
-import { Circle, Folder, Folders } from "lucide-react";
+import { Folder, Folders } from "lucide-react";
 import PageTitle from "@/components/ui/PageTitle";
 import { useProjects } from "@/hooks/useProjects";
 
@@ -27,18 +27,16 @@ export default function WorkspaceProjects() {
             key={item.id}
             title={item.name}
             description={
-              <>
-                {" "}
-                <Circle
-                  size={10}
-                  fill={`${item.status === "active" ? "green" : "grey"}`}
-                  color={`${item.status === "active" ? "green" : "grey"}`}
-                  className="mr-1"
-                />{" "}
-                {item.status}
-              </>
+              <Container>
+                <span
+                  className={`inline-block w-2 h-2 rounded-full mr-2 ${
+                    item.status === "active" ? "bg-green-600" : "bg-muted"
+                  }`}
+                />
+                <span>{item.status}</span>
+              </Container>
             }
-            cardClassName="h-40 w-56"
+            className="h-40 w-56"
           >
             <Folder className="h-6 w-6 text-muted-foreground relative top-8 relative top-[72%] fill-card" />
           </DashboardCard>
