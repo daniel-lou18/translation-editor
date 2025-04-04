@@ -7,24 +7,32 @@ type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
 type PageTitleProps = {
   title: ReactNode;
   children?: ReactNode;
-  className?: string;
   level?: HeadingLevel;
+  classNames?: {
+    container?: string;
+    heading?: string;
+  };
 };
 
 export default function PageTitle({
   children,
   title,
-  className,
+  classNames,
   level = 1,
 }: PageTitleProps) {
   const Heading = `h${level}` as const;
 
   return (
-    <Container className="flex gap-6 items-center mb-6 justify-between">
+    <Container
+      className={cn(
+        "flex gap-6 items-center mb-6 justify-between",
+        classNames?.container
+      )}
+    >
       <Heading
         className={cn(
           "flex items-center gap-2 font-semibold text-2xl",
-          className
+          classNames?.heading
         )}
       >
         {title}

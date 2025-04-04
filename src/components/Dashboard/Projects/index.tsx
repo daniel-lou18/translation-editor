@@ -8,13 +8,24 @@ import { Link } from "react-router";
 import PageControls from "../../ui/PageControls";
 import { useProjects } from "@/hooks/useProjects";
 import { Folders } from "lucide-react";
+import { ChangeEvent, useMemo, useState } from "react";
+import { useSearch } from "@/hooks/useSearch";
 
 export default function DashboardProjects() {
   const { data: projects } = useProjects();
+  const [searchQuery, setSearchQuery] = useState("");
 
   const formattedProjects = formatProjectsToCards(projects);
-
   if (!formattedProjects || formattedProjects.length === 0) return null;
+
+  const filteredProjects = useSearch(
+    formattedProjects,
+    searchQuery,
+    (project, query) =>
+      project.name.toLowerCase().includes(query.trim().toLowerCase()) ||
+      project.description?.toLowerCase().includes(query.trim().toLowerCase()) ||
+      false
+  );
 
   const title = (
     <>
@@ -26,13 +37,19 @@ export default function DashboardProjects() {
     <Container className="space-y-8">
       <PageTitle title={title}>
         <PageControls>
-          <SearchForm placeholder="Search projects" />
+          <SearchForm
+            placeholder="Search projects"
+            value={searchQuery}
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              setSearchQuery(e.target.value)
+            }
+          />
           <Button size="sm" asChild>
             <Link to="/app/dashboard/projects/create">New Project</Link>
           </Button>
         </PageControls>
       </PageTitle>
-      <ProjectCards projects={formattedProjects} />
+      <ProjectCards projects={filteredProjects} />
     </Container>
   );
 }

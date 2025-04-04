@@ -19,7 +19,10 @@ export default function WorkspaceTranslations() {
       <PageTitle
         title={title}
         level={2}
-        className="text-md text-muted-foreground"
+        classNames={{
+          container: "mb-2",
+          heading: "text-md text-muted-foreground",
+        }}
       />
       <TranslationsTable
         translations={formatTranslationsToTable(translations)}

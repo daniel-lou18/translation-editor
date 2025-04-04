@@ -19,7 +19,9 @@ export default function Workspace() {
       <PageTitle
         title={titleComponent}
         level={1}
-        className="flex justify-center w-full mb-4"
+        classNames={{
+          heading: "flex justify-center w-full mb-4",
+        }}
       />
       <Container className="space-y-12">
         <Quickstart />

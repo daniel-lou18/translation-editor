@@ -7,9 +7,9 @@ import { formatTranslationsToTable } from "@/utils/helpers";
 import { ToggleGroup } from "@/components/ui/toggle-group";
 import { ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Globe, LayoutGrid, List } from "lucide-react";
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import DashboardCard from "../Workspace/DashboardCard";
-
+import { useSearch } from "@/hooks/useSearch";
 const toggleData = [
   { value: "table", icon: List },
   { value: "grid", icon: LayoutGrid },
@@ -25,7 +25,27 @@ const title = (
 
 export default function DashboardTranslations() {
   const { translations } = useTranslations({ limit: 50 });
+  const [searchQuery, setSearchQuery] = useState("");
   const [viewMode, setViewMode] = useState<ViewMode>("table");
+
+  const filteredTranslations = useSearch(
+    translations,
+    searchQuery,
+    (translation, query) =>
+      translation.document.fileName
+        .toLowerCase()
+        .includes(query.trim().toLowerCase()) ||
+      translation.document?.domain
+        ?.toLowerCase()
+        .includes(query.trim().toLowerCase()) ||
+      translation.document?.sourceLang
+        ?.toLowerCase()
+        .includes(query.trim().toLowerCase()) ||
+      translation?.targetLang
+        ?.toLowerCase()
+        .includes(query.trim().toLowerCase()) ||
+      false
+  );
 
   const toggleViewMode = (value: ViewMode) => {
     if (!value) return;
@@ -36,7 +56,13 @@ export default function DashboardTranslations() {
     <>
       <PageTitle title={title}>
         <PageControls className="gap-4">
-          <SearchForm placeholder="Search translations" />
+          <SearchForm
+            placeholder="Search translations"
+            value={searchQuery}
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              setSearchQuery(e.target.value)
+            }
+          />
           <ToggleGroup
             type="single"
             value={viewMode}
@@ -59,11 +85,11 @@ export default function DashboardTranslations() {
 
       {viewMode === "table" ? (
         <TranslationsTable
-          translations={formatTranslationsToTable(translations)}
+          translations={formatTranslationsToTable(filteredTranslations)}
         />
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-4 gap-y-8">
-          {translations?.map((translation) => {
+          {filteredTranslations?.map((translation) => {
             return (
               <DashboardCard
                 key={translation.id}

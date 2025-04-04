@@ -46,7 +46,7 @@ const data = [
 
 export default function Quickstart() {
   return (
-    <Container className="flex flex-col space-y-4">
+    <Container className="flex flex-col space-y-2">
       <PageTitle
         title={
           <>
@@ -54,7 +54,10 @@ export default function Quickstart() {
           </>
         }
         level={2}
-        className="text-md text-muted-foreground"
+        classNames={{
+          container: "mb-2",
+          heading: "text-md text-muted-foreground",
+        }}
       />
       <Container className="flex gap-6">
         {data.map((item) => (

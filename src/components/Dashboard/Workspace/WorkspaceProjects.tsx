@@ -16,7 +16,10 @@ export default function WorkspaceProjects() {
           </>
         }
         level={2}
-        className="text-md text-muted-foreground"
+        classNames={{
+          container: "mb-2",
+          heading: "text-md text-muted-foreground",
+        }}
       />
       <Container className="flex gap-6">
         {projects?.map((item) => (
