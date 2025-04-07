@@ -1,29 +1,35 @@
-import UploadArea from "@/components/Upload/UploadArea";
-import Overlay from "../../ui/Overlay";
+import UploadArea from "@/components/ui/Upload/UploadArea";
+import Overlay from "../Overlay";
 import { Lang } from "@/types";
-import MemoryFileItem from "./MemoryFileItem";
-import { ArrowRight, Sheet } from "lucide-react";
-import UploadButton from "../../Upload/UploadButton";
-import Container from "../../ui/Container";
-import { PropsWithChildren } from "react";
+import FileItem from "./FileItem";
+import { ArrowRight, LucideIcon, Sheet } from "lucide-react";
+import UploadButton from "./UploadButton";
+import Container from "../Container";
+import { ComponentType, PropsWithChildren } from "react";
 import { MimeType, MimeTypeToFileTypeMap } from "@/types/Files";
 import Combobox from "@/components/ui/Combobox";
 
-type UploadTmFormProps = PropsWithChildren<{
+type UploadFormProps = PropsWithChildren<{
   handleSubmit: (e: React.FormEvent<HTMLFormElement>) => Promise<void>;
   isLoading: boolean;
   buttonText?: string;
 }>;
 
-function UploadTmForm({
+function createDescription(acceptedTypes: MimeType[], additionalText?: string) {
+  return `Allowed file types: ${acceptedTypes
+    .map((type) => MimeTypeToFileTypeMap[type])
+    .join(", ")}. ${additionalText || ""}`;
+}
+
+function UploadForm({
   children,
   handleSubmit,
   isLoading,
   buttonText = "Upload",
-}: UploadTmFormProps) {
+}: UploadFormProps) {
   return (
     <form onSubmit={handleSubmit}>
-      <Container className="my-8 rounded-lg border border-gray-200 bg-card overflow-hidden">
+      <Container className="my-8 rounded-lg border border-border bg-card overflow-hidden">
         {children}
       </Container>
       <UploadButton isProcessing={isLoading}>{buttonText}</UploadButton>
@@ -38,7 +44,7 @@ type HeaderProps = PropsWithChildren<{
 
 function Header({ children, title }: HeaderProps) {
   return (
-    <Container className="px-4 py-3 flex items-center justify-between border-b border-gray-200">
+    <Container className="px-4 py-3 flex items-center justify-between border-b border-gray-200 bg-muted">
       <h3 className="text-sm font-medium">{title}</h3>
       <Container className="flex items-center gap-6">{children}</Container>
     </Container>
@@ -59,8 +65,15 @@ type LangConfig = {
 
 type LangItem = { value: Lang; label: Lang };
 
+type Content = {
+  uploadTitle: string;
+  fileTitle: string;
+  uploadInstructions?: string;
+  icon?: LucideIcon | ComponentType<{ className?: string }>;
+};
+
 type UploadSingleProps = {
-  titles: { uploadTitle: string; fileTitle: string };
+  content: Content;
   file: FileConfig;
   langConfig: {
     sourceLang: LangConfig;
@@ -75,16 +88,16 @@ type UploadDoubleProps = {
   langItems: LangItem[];
 };
 
-function UploadSingle({ file, langConfig, titles }: UploadSingleProps) {
+function UploadSingle({ file, langConfig, content }: UploadSingleProps) {
   return (
-    <Container className={`relative p-4 grid grid-cols-1 gap-4`}>
+    <Container className={`relative p-6 grid grid-cols-1 gap-4`}>
       {file.file ? (
-        <MemoryFileItem>
-          <MemoryFileItem.Header onRemoveFile={file.removeFile} icon={Sheet}>
-            {titles.fileTitle}
-          </MemoryFileItem.Header>
-          <MemoryFileItem.Body>{file.file.name}</MemoryFileItem.Body>
-          <MemoryFileItem.Footer>
+        <FileItem>
+          <FileItem.Header onRemoveFile={file.removeFile} icon={Sheet}>
+            {content.fileTitle}
+          </FileItem.Header>
+          <FileItem.Body>{file.file.name}</FileItem.Body>
+          <FileItem.Footer>
             <Container className="flex items-center gap-2">
               <span className="text-sm text-gray-600">Source:</span>
               <Combobox
@@ -105,25 +118,19 @@ function UploadSingle({ file, langConfig, titles }: UploadSingleProps) {
                 className="w-full h-9"
               />
             </Container>
-          </MemoryFileItem.Footer>
-        </MemoryFileItem>
+          </FileItem.Footer>
+        </FileItem>
       ) : (
         <UploadArea
-          type="memory"
           accept={file.acceptedTypes.join(",")}
-          title={titles.uploadTitle}
-          description={`Allowed file types: ${file.acceptedTypes
-            .map((type) => MimeTypeToFileTypeMap[type])
-            .join(", ")}. ${
-            file.acceptedTypes.includes("application/vnd.ms-excel") ||
-            file.acceptedTypes.includes(
-              "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-            )
-              ? "1st column: source segments, 2nd column: target segments"
-              : ""
-          }`}
+          title={content.uploadTitle}
+          description={createDescription(
+            file.acceptedTypes,
+            content.uploadInstructions
+          )}
           onFilesSelect={(files) => file.setFile(files[0])}
-          className="h-[200px] bg-cat-memory/70 hover:bg-cat-memory"
+          className="h-[200px]"
+          icon={content.icon}
         />
       )}
     </Container>
@@ -134,12 +141,12 @@ function UploadDouble({ source, target, langItems }: UploadDoubleProps) {
   return (
     <Container className={`relative p-4 grid grid-cols-2 gap-4`}>
       {source.file ? (
-        <MemoryFileItem>
-          <MemoryFileItem.Header onRemoveFile={source.removeFile}>
+        <FileItem>
+          <FileItem.Header onRemoveFile={source.removeFile}>
             Source Document
-          </MemoryFileItem.Header>
-          <MemoryFileItem.Body>{source.file?.name}</MemoryFileItem.Body>
-          <MemoryFileItem.Footer>
+          </FileItem.Header>
+          <FileItem.Body>{source.file?.name}</FileItem.Body>
+          <FileItem.Footer>
             <span className="text-sm text-gray-600">Language:</span>
             <Combobox
               name="source_language"
@@ -148,28 +155,25 @@ function UploadDouble({ source, target, langItems }: UploadDoubleProps) {
               onChange={source.onChange}
               className="w-full h-9"
             />
-          </MemoryFileItem.Footer>
-        </MemoryFileItem>
+          </FileItem.Footer>
+        </FileItem>
       ) : (
         <UploadArea
-          type="memory"
           accept={source.acceptedTypes.join(",")}
           title="Source Document"
-          description={`Allowed file types: ${source.acceptedTypes
-            .map((type) => MimeTypeToFileTypeMap[type])
-            .join(", ")}`}
+          description={createDescription(source.acceptedTypes)}
           onFilesSelect={(files) => source.setFile(files[0])}
-          className="h-[200px] bg-cat-memory/70 hover:bg-cat-memory"
+          className="h-[200px]"
         />
       )}
 
       {target.file ? (
-        <MemoryFileItem>
-          <MemoryFileItem.Header onRemoveFile={target.removeFile}>
+        <FileItem>
+          <FileItem.Header onRemoveFile={target.removeFile}>
             Target Document
-          </MemoryFileItem.Header>
-          <MemoryFileItem.Body>{target.file?.name}</MemoryFileItem.Body>
-          <MemoryFileItem.Footer>
+          </FileItem.Header>
+          <FileItem.Body>{target.file?.name}</FileItem.Body>
+          <FileItem.Footer>
             <span className="text-sm text-gray-600">Language:</span>
             <Combobox
               name="target_language"
@@ -178,30 +182,27 @@ function UploadDouble({ source, target, langItems }: UploadDoubleProps) {
               onChange={target.onChange}
               className="w-full h-9"
             />
-          </MemoryFileItem.Footer>
-        </MemoryFileItem>
+          </FileItem.Footer>
+        </FileItem>
       ) : (
         <UploadArea
-          type="memory"
           accept={target.acceptedTypes.join(",")}
           title="Target Document"
-          description={`Allowed file types: ${target.acceptedTypes
-            .map((type) => MimeTypeToFileTypeMap[type])
-            .join(", ")}`}
+          description={createDescription(target.acceptedTypes)}
           onFilesSelect={(files) => target.setFile(files[0])}
-          className="h-[200px] bg-cat-memory/70 hover:bg-cat-memory"
+          className="h-[200px]"
         />
       )}
 
-      <Container className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-full p-1 shadow-md">
-        <ArrowRight size={28} className="text-gray-500" />
+      <Container className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-full p-2 shadow-lg">
+        <ArrowRight size={32} className="text-gray-500" />
       </Container>
     </Container>
   );
 }
 
-UploadTmForm.Header = Header;
-UploadTmForm.UploadDouble = UploadDouble;
-UploadTmForm.UploadSingle = UploadSingle;
+UploadForm.Header = Header;
+UploadForm.UploadDouble = UploadDouble;
+UploadForm.UploadSingle = UploadSingle;
 
-export default UploadTmForm;
+export default UploadForm;

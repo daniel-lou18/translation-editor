@@ -1,4 +1,4 @@
-import Container from "../ui/Container";
+import Container from "../Container";
 
 export default function UploadLanding() {
   return (

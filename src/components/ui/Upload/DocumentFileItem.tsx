@@ -1,8 +1,8 @@
 import { FileText, X } from "lucide-react";
-import Container from "../ui/Container";
+import Container from "../Container";
 import { FileInfo } from "@/hooks/useFileManager";
 import { Lang, Domain } from "@/types";
-import Combobox from "../ui/Combobox";
+import Combobox from "../Combobox";
 import { FileItemData } from "./FileList";
 
 type DocumentFileItemProps = {

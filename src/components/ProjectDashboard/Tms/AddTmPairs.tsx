@@ -1,10 +1,10 @@
-import UploadTmForm from "@/components/ProjectDashboard/Tms/UploadTmForm";
+import UploadForm from "@/components/ui/Upload/UploadForm";
 import Container from "../../ui/Container";
-import { Layers } from "lucide-react";
+import { Layers, Sheet } from "lucide-react";
 import Combobox from "@/components/ui/Combobox";
 import { Earth } from "lucide-react";
 import { useTmFileFormat } from "@/hooks/useTmFileFormat";
-import UploadTmTitle from "./UploadTmTitle";
+import UploadTitle from "../../ui/Upload/UploadTitle";
 import { EXCEL_MIME_TYPES, MIME_TYPES } from "@/types/Files";
 import { useSelectTm } from "@/hooks/useSelectTm";
 import { useTmUpload } from "@/hooks/useTmUpload";
@@ -47,7 +47,7 @@ export default function AddTmPairs() {
   );
 
   return (
-    <UploadTmTitle
+    <UploadTitle
       title="Add segments to TM"
       tmFormat={tmFormat}
       toggleTmFormat={toggleTmFormat}
@@ -55,12 +55,12 @@ export default function AddTmPairs() {
       setSourceFile={setSourceFile}
       setTargetFile={setTargetFile}
     >
-      <UploadTmForm
+      <UploadForm
         handleSubmit={tmFormat === "sheet" ? handleSubmitExcel : handleSubmit}
         isLoading={isLoading || isLoadingExcel}
         buttonText="Add segments"
       >
-        <UploadTmForm.Header title="Upload segments to a TM">
+        <UploadForm.Header title="Upload segments to a TM">
           <Container className="flex items-center gap-2">
             <Layers className="w-4 h-4 text-muted-foreground" />
             <span className="text-sm text-muted-foreground">TM:</span>
@@ -84,10 +84,10 @@ export default function AddTmPairs() {
               className="w-48 h-8"
             />
           </Container>
-        </UploadTmForm.Header>
+        </UploadForm.Header>
 
         {tmFormat === "sheet" ? (
-          <UploadTmForm.UploadSingle
+          <UploadForm.UploadSingle
             file={{
               file,
               setFile,
@@ -105,13 +105,16 @@ export default function AddTmPairs() {
               },
               langItems,
             }}
-            titles={{
+            content={{
               uploadTitle: "Excel sheet containing source and target segments",
               fileTitle: "Source Document",
+              uploadInstructions:
+                "1st column: source segments, 2nd column: target segments",
+              icon: Sheet,
             }}
           />
         ) : (
-          <UploadTmForm.UploadDouble
+          <UploadForm.UploadDouble
             source={{
               file: sourceFile,
               setFile: setSourceFile,
@@ -131,7 +134,7 @@ export default function AddTmPairs() {
             langItems={langItems}
           />
         )}
-      </UploadTmForm>
-    </UploadTmTitle>
+      </UploadForm>
+    </UploadTitle>
   );
 }

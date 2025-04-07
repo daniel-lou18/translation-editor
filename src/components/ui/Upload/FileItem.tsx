@@ -1,8 +1,8 @@
 import { FileText, X } from "lucide-react";
-import Container from "../../ui/Container";
+import Container from "../Container";
 import { ComponentType, PropsWithChildren } from "react";
 import { cn } from "@/lib/utils";
-function MemoryFileItem({ children }: PropsWithChildren) {
+function FileItem({ children }: PropsWithChildren) {
   return (
     <Container className="rounded-lg border border-gray-200 overflow-hidden relative">
       <Container className="h-[200px] bg-cat-memory/70 rounded-lg p-3 flex flex-col">
@@ -58,8 +58,8 @@ function Footer({
   );
 }
 
-MemoryFileItem.Header = Header;
-MemoryFileItem.Body = Body;
-MemoryFileItem.Footer = Footer;
+FileItem.Header = Header;
+FileItem.Body = Body;
+FileItem.Footer = Footer;
 
-export default MemoryFileItem;
+export default FileItem;

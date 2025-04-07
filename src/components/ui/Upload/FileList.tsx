@@ -1,4 +1,4 @@
-import Container from "../ui/Container";
+import Container from "../Container";
 import { ReactNode } from "react";
 import { FileInfo } from "@/hooks/useFileManager";
 import { Lang, Domain } from "@/types";

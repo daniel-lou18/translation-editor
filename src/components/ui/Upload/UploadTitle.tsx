@@ -1,11 +1,11 @@
-import Container from "../../ui/Container";
-import PageTitle from "../../ui/PageTitle";
+import Container from "../Container";
+import PageTitle from "../PageTitle";
 import PageControls from "@/components/ui/PageControls";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { PropsWithChildren } from "react";
 import { TmFormats } from "@/hooks/useTmFileFormat";
 
-type UploadTmProps = PropsWithChildren<{
+type UploadProps = PropsWithChildren<{
   title: string;
   tmFormat: string;
   toggleTmFormat: (format: string) => void;
@@ -14,13 +14,13 @@ type UploadTmProps = PropsWithChildren<{
   setTargetFile: React.Dispatch<React.SetStateAction<File | null>>;
 }>;
 
-export default function UploadTmTitle({
+export default function UploadTitle({
   title,
   children,
   tmFormat,
   toggleTmFormat,
   tmFormats,
-}: UploadTmProps) {
+}: UploadProps) {
   return (
     <Container>
       <Container className="flex justify-between mb-6">

@@ -1,4 +1,4 @@
-import UploadLanding from "@/components/Upload/UploadLanding";
+import UploadLanding from "@/components/ui/Upload/UploadLanding";
 
 export default function UploadPage() {
   return (

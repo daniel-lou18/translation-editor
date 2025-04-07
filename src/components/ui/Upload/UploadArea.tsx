@@ -1,42 +1,42 @@
 import { cn } from "@/lib/utils";
-import { FileText, Layers } from "lucide-react";
-import { useState } from "react";
-import Container from "../ui/Container";
+import { ComponentType, useState } from "react";
+import Container from "../Container";
+import { LucideIcon, FileText } from "lucide-react";
 
 type UploadAreaProps = {
-  type: "document" | "memory";
   accept: string;
   title: string;
   description: string;
   onFilesSelect: (files: File[]) => void;
+  icon?: LucideIcon | ComponentType<{ className?: string }>;
   className?: string;
 };
 
 export default function UploadArea({
-  type,
   accept,
   title,
   description,
   onFilesSelect,
+  icon: Icon = FileText,
   className,
 }: UploadAreaProps) {
-  const [draggingArea, setDraggingArea] = useState<
-    "document" | "memory" | null
-  >(null);
+  const [draggingArea, setDraggingArea] = useState<"active" | "inactive">(
+    "inactive"
+  );
 
-  const handleDragOver = (e: React.DragEvent, type: "document" | "memory") => {
+  const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
-    setDraggingArea(type);
+    setDraggingArea("active");
   };
 
   const handleDragLeave = (e: React.DragEvent) => {
     e.preventDefault();
-    setDraggingArea(null);
+    setDraggingArea("inactive");
   };
 
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
-    setDraggingArea(null);
+    setDraggingArea("inactive");
 
     const droppedFiles = Array.from(e.dataTransfer.files);
     onFilesSelect(droppedFiles);
@@ -51,23 +51,19 @@ export default function UploadArea({
 
   return (
     <Container
-      onDragOver={(e) => handleDragOver(e, type)}
+      onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
-      onDrop={(e) => handleDrop(e)}
+      onDrop={handleDrop}
       className={cn(
-        "border-2 border-dashed rounded-lg p-6 transition-all duration-200",
-        "bg-cat-target/70 hover:bg-cat-target",
-        draggingArea === type && "border-cat-accent bg-cat-accent/10",
+        "bg-gradient-to-br from-muted/50 to-cat-memory border-2 border-dashed border-muted-foreground/30 hover:to-purple-50 hover:border-muted-foreground/50 transition-all duration-200 rounded-lg",
+        draggingArea === "active" &&
+          "from-muted to-purple-100 border-muted-foreground/50",
         "flex flex-col items-center justify-center gap-3 h-[300px]",
         className
       )}
     >
       <Container className="w-12 h-12 rounded-full bg-cat-accent/10 flex items-center justify-center">
-        {type === "document" ? (
-          <FileText className="w-6 h-6 text-cat-accent" />
-        ) : (
-          <Layers className="w-6 h-6 text-cat-accent" />
-        )}
+        {<Icon className="w-6 h-6 text-primary" />}
       </Container>
 
       <Container className="text-center">

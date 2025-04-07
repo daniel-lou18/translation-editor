@@ -12,6 +12,7 @@ import { Segment, SegmentType } from "@/types/Segment";
 import { TmSegmentPair } from "@/types/Tm";
 import { Translation } from "@/types/Translation";
 import { isNumeric } from "./formatters";
+import { MimeType } from "@/types/Files";
 
 export function calculateProgress(
   segments: Segment[],

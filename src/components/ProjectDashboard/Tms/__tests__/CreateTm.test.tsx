@@ -7,8 +7,8 @@ import { useLangsDomain } from "@/hooks/useLangsDomain";
 import { useTmExcelUpload } from "@/hooks/useTmExcelUpload";
 
 // Mock child components
-vi.mock("../UploadTmForm", () => {
-  const UploadTmForm = ({
+vi.mock("../UploadForm", () => {
+  const UploadForm = ({
     children,
     handleSubmit,
     isLoading,
@@ -20,14 +20,14 @@ vi.mock("../UploadTmForm", () => {
     </form>
   );
 
-  UploadTmForm.Header = ({ children, title }: any) => (
+  UploadForm.Header = ({ children, title }: any) => (
     <div>
       <h2>{title}</h2>
       {children}
     </div>
   );
 
-  UploadTmForm.UploadSingle = ({ file, langConfig, titles }: any) => (
+  UploadForm.UploadSingle = ({ file, langConfig, titles }: any) => (
     <div>
       <div>{titles.uploadTitle}</div>
       <div>{titles.fileTitle}</div>
@@ -40,7 +40,7 @@ vi.mock("../UploadTmForm", () => {
     </div>
   );
 
-  UploadTmForm.UploadDouble = ({ source, target, langItems }: any) => (
+  UploadForm.UploadDouble = ({ source, target, langItems }: any) => (
     <div>
       <div>Source File</div>
       <div>Target File</div>
@@ -57,10 +57,10 @@ vi.mock("../UploadTmForm", () => {
     </div>
   );
 
-  return { default: UploadTmForm };
+  return { default: UploadForm };
 });
 
-vi.mock("../UploadTmTitle", () => ({
+vi.mock("../UploadTitle", () => ({
   default: ({
     children,
     title,

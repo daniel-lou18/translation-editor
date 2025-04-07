@@ -1,11 +1,11 @@
 import Container from "../../ui/Container";
 import PageTitle from "../../ui/PageTitle";
-import UploadTmForm from "../Tms/UploadTmForm";
+import UploadForm from "../../ui/Upload/UploadForm";
 import { MIME_TYPES } from "@/types/Files";
 import Combobox from "@/components/ui/Combobox";
 import { useLangsDomain } from "@/hooks/useLangsDomain";
 import { useDocumentUpload } from "@/hooks/useDocumentUpload";
-import { Earth, Layers } from "lucide-react";
+import { Earth, FileText, Layers } from "lucide-react";
 import { useSelectTm } from "@/hooks/useSelectTm";
 
 export type UploadDocumentProps = {
@@ -40,15 +40,15 @@ export default function UploadDocument({
       <PageTitle
         title={mode === "ai" ? "Translate with AI" : "Start new translation"}
       />
-      <UploadTmForm
+      <UploadForm
         handleSubmit={handleSubmit}
         isLoading={isLoading}
         buttonText="Translate"
       >
-        <UploadTmForm.Header title="Upload source document to translate">
+        <UploadForm.Header title="Upload source document to translate">
           {mode === "ai" && (
             <Container className="flex items-center gap-2">
-              <Layers className="w-4 h-4 text-muted-foreground" />
+              <FileText className="w-4 h-4 text-muted-foreground" />
               <span className="text-sm text-muted-foreground">TM:</span>
               <Combobox
                 name="tm"
@@ -71,9 +71,9 @@ export default function UploadDocument({
               className="w-48 h-8"
             />
           </Container>
-        </UploadTmForm.Header>
+        </UploadForm.Header>
 
-        <UploadTmForm.UploadSingle
+        <UploadForm.UploadSingle
           file={{
             file,
             setFile,
@@ -91,12 +91,12 @@ export default function UploadDocument({
             },
             langItems,
           }}
-          titles={{
+          content={{
             uploadTitle: "Source Document",
             fileTitle: "Source Document",
           }}
         />
-      </UploadTmForm>
+      </UploadForm>
     </Container>
   );
 }
