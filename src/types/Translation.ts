@@ -2,6 +2,15 @@ import { LangCode } from ".";
 import { Document, DocumentWithSourceSegments } from "./Document";
 import { Segment } from "./Segment";
 
+export type TranslationStatus =
+  | "not_started"
+  | "in_progress"
+  | "completed"
+  | "approved"
+  | "rejected"
+  | "canceled"
+  | "archived";
+
 export type SegmentStatus = "translated" | "untranslated";
 
 export type SelectTranslation = {
@@ -17,7 +26,7 @@ export type Translation = {
   id: number;
   documentId: number;
   targetLang: LangCode;
-  status: string | null;
+  status: TranslationStatus | null;
   createdAt: string;
   updatedAt: string;
   targetSegments: TargetSegment[];
@@ -29,7 +38,7 @@ export type FormattedTranslation = {
   fileName: string;
   progress: number;
   targetLang: LangCode;
-  status: string | null;
+  status: TranslationStatus | null;
   createdAt: string;
   updatedAt: string;
   targetSegments: TargetSegment[];

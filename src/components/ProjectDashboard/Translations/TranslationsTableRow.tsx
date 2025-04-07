@@ -1,5 +1,4 @@
 import { TableRow, TableCell } from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress-bar";
 import { Globe } from "lucide-react";
 import Container from "@/components/ui/Container";
@@ -7,6 +6,8 @@ import TableRowMenu from "@/components/ui/Table/TableRowMenu";
 import { FormattedTranslation } from "@/types/Translation";
 import { TableRowMenuProps } from "@/components/ui/Table/TableRowMenu";
 import { useRoute } from "@/hooks/useRoute";
+import TranslationStatusBadge from "@/components/ui/TranslationStatusBadge";
+import { translationStatusConfig } from "@/config/translationsTable";
 
 type TranslationsTableRowProps = {
   data: FormattedTranslation;
@@ -59,18 +60,10 @@ export default function TranslationsTableRow({
           navigateToTranslation({ projectId, documentId, translationId: id })
         }
       >
-        <Badge
-          variant="outline"
-          className={`${
-            status === "Completed"
-              ? "bg-green-300"
-              : status === "In Progress"
-              ? "bg-yellow-300"
-              : ""
-          }`}
-        >
-          {status}
-        </Badge>
+        <TranslationStatusBadge
+          status={status}
+          translationStatusConfig={translationStatusConfig}
+        />
       </TableCell>
       <TableCell
         onClick={() =>

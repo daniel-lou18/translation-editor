@@ -1,13 +1,16 @@
 import {
   LangCode,
   SelectTranslation,
-  Translation,
   TranslationWithDocument,
   TranslationWithSegments,
   UpdatedId,
 } from "@/types";
 import { ApiService } from "./ApiService";
-import { TranslationWithJoinedSegments, Update } from "@/types/Dtos";
+import {
+  TranslationWithJoinedSegments,
+  Update,
+  UpdateTranslationDto,
+} from "@/types/Dtos";
 
 export default class TranslationService extends ApiService {
   constructor() {
@@ -56,6 +59,15 @@ export default class TranslationService extends ApiService {
     });
   }
 
+  async updateTranslation(
+    translationId: string,
+    updates: UpdateTranslationDto
+  ): Promise<UpdatedId> {
+    return this.put(`/translations/${translationId}`, {
+      updates,
+    });
+  }
+
   private transformSegments(data: TranslationWithJoinedSegments) {
     return {
       ...data,
@@ -76,7 +88,7 @@ export default class TranslationService extends ApiService {
   async updateSegments(
     translationId: string,
     updates: Update[]
-  ): Promise<UpdatedId[]> {
+  ): Promise<UpdatedId> {
     return this.put(`/translations/${translationId}/segments`, {
       updates,
     });

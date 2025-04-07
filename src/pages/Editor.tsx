@@ -5,8 +5,10 @@ import NoContent from "@/components/ui/Error/NoFileContent";
 import EditorContextProvider from "@/contexts/editorContext";
 import ResourcesContextProvider from "@/contexts/resourcesContext";
 import { useGetTranslationSegments } from "@/hooks/useGetTranslationSegments";
+import { useRoute } from "@/hooks/useRoute";
 
 export default function EditorPage() {
+  const { translationId } = useRoute();
   const { segments, isLoading, isError, error } = useGetTranslationSegments();
 
   if (isLoading) return <TextEditorSkeleton />;
@@ -20,7 +22,7 @@ export default function EditorPage() {
     );
 
   return (
-    <EditorContextProvider initialSegments={segments} key={segments?.[0]?.id}>
+    <EditorContextProvider initialSegments={segments} key={translationId || ""}>
       <ResourcesContextProvider>
         <TextEditor />
       </ResourcesContextProvider>

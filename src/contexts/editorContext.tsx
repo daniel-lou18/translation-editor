@@ -125,6 +125,7 @@ export default function EditorContextProvider({
   children,
   initialSegments = [],
 }: EditorContextProviderProps) {
+  console.log(initialSegments);
   const [
     { segments, activeSegmentId, allSegmentsConfirmed, pendingChanges },
     dispatch,

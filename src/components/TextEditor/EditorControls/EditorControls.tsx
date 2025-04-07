@@ -3,6 +3,8 @@ import {
   Bot,
   CaseLower,
   CaseUpper,
+  CheckCheck,
+  CloudUpload,
   CornerRightDown,
   Download,
   Eraser,
@@ -10,6 +12,7 @@ import {
   FileCheck,
   FileSearch,
   FileX,
+  Loader,
   Lock,
   SquareCheckBig,
   WandSparkles,
@@ -17,7 +20,7 @@ import {
 import { Button } from "../../ui/button";
 import { useEditor } from "@/contexts/editorContext";
 import { useReformulate } from "@/hooks/useReformulate";
-import { useQueryClient } from "@tanstack/react-query";
+import { useMutationState, useQueryClient } from "@tanstack/react-query";
 import { TranslationMemoryMatches } from "@/types";
 import { useExportTranslation } from "@/hooks/useExportTranslation";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
@@ -41,6 +44,7 @@ import NoFileContent from "@/components/ui/Error/NoFileContent";
 import { getFileType } from "@/types/Files";
 import DocxViewer from "@/components/ui/DocViewer/DocxViewer";
 import DocViewerSkeleton from "@/components/ui/DocViewer/DocViewerSkeleton";
+import { useRoute } from "@/hooks/useRoute";
 
 export default function EditorControls() {
   const {
@@ -54,7 +58,16 @@ export default function EditorControls() {
   } = useEditor();
   const segment = getActiveSegment();
   const { currentDocument, currentTranslation } = useCurrentProject();
+  const { translationId } = useRoute();
   const queryClient = useQueryClient();
+
+  const data = useMutationState({
+    filters: { mutationKey: ["save-segments", translationId] },
+  });
+  const isSavingSegments = data.some(
+    (mutation) => mutation.status === "pending"
+  );
+
   const matches = queryClient.getQueryData<TranslationMemoryMatches>([
     "allMatches",
   ]);
@@ -380,14 +393,22 @@ export default function EditorControls() {
             </Tooltip>
           </IconsContainer>
         </Container>
-
-        <DropdownButton
-          buttonData={{
-            label: "Download",
-            icon: <Download className="w-4 h-4" />,
-          }}
-          menuData={downloadData}
-        />
+        <Container className="flex items-center gap-2">
+          <Button variant="ghost" className="h-8 w-8 text-muted-foreground">
+            {isSavingSegments ? (
+              <CloudUpload className="w-4 h-4 animate-pulse" />
+            ) : (
+              <CheckCheck className="w-4 h-4" />
+            )}
+          </Button>
+          <DropdownButton
+            buttonData={{
+              label: "Download",
+              icon: <Download className="w-4 h-4" />,
+            }}
+            menuData={downloadData}
+          />
+        </Container>
       </EditorbarContainer>
       <Tmbar />
     </TooltipProvider>

@@ -10,7 +10,7 @@ export function useEditorSync(
   dispatch: Dispatch<EditorAction>
 ) {
   const stateRef = useRef(state);
-  const { mutate } = useSaveSegments();
+  const { mutate, isLoading } = useSaveSegments();
 
   useEffect(() => {
     stateRef.current = state;
@@ -25,15 +25,16 @@ export function useEditorSync(
       );
 
       mutate(changedSegments, {
-        onSuccess: () => dispatch({ type: "SYNC_COMPLETED" }),
+        onSuccess: () => {
+          dispatch({ type: "SYNC_COMPLETED" });
+        },
       });
     };
 
-    const intervalId = setInterval(syncChanges, 15000);
+    const intervalId = setInterval(syncChanges, 3000);
 
     return () => {
-      syncChanges();
       clearInterval(intervalId);
     };
-  }, [dispatch, mutate]);
+  }, [dispatch, mutate, isLoading]);
 }

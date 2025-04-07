@@ -95,7 +95,7 @@ export type Segment = {
 
 export type SegmentWithTranslation = Segment & { translation: Translation };
 
-export type UpdatedId = { updatedId: number };
+export type UpdatedId = { translationId: number };
 
 export type LangCode = LangCodeMap[keyof LangCodeMap];
 

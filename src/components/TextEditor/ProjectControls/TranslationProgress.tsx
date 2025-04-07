@@ -13,9 +13,9 @@ export default function TranslationProgress({
   const progress = (current / total) * 100;
 
   return (
-    <Container className="flex gap-2 items-center flex-1">
+    <Container className="flex gap-4 items-center">
       <ProgressBar progress={progress} />
-      <Container className="flex-1 text-muted-foreground text-sm">
+      <Container className="text-muted-foreground text-sm whitespace-nowrap">
         {current} of {total} segments ({Math.round(progress)}%){" "}
       </Container>
     </Container>

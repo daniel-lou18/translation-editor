@@ -4,7 +4,6 @@ import { TableCell, TableRow } from "@/components/ui/table";
 import { useExportTranslation } from "@/hooks/useExportTranslation";
 import { NavigationParams, useRoute } from "@/hooks/useRoute";
 import { EXPORT_FORMATS } from "@/config/translationsTable";
-
 const navigate =
   (navigateToTranslation: (params: NavigationParams) => void) =>
   (translation: FormattedTranslation) =>

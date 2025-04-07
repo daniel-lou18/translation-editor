@@ -55,6 +55,7 @@ export default function Combobox<T extends string>({
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
+          size="sm"
           variant={buttonVariant}
           role="combobox"
           aria-expanded={open}
@@ -63,7 +64,7 @@ export default function Combobox<T extends string>({
           {selectedItem
             ? shortenString(selectedItem.label)
             : defaultLabel || `Select ${name.split("_").join(" ")}`}
-          <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
+          <ChevronsUpDown className="ml-2 h-3 w-3 opacity-50" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="min-w-[150px] p-0">
