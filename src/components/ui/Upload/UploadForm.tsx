@@ -12,7 +12,10 @@ import Combobox from "@/components/ui/Combobox";
 type UploadFormProps = PropsWithChildren<{
   handleSubmit: (e: React.FormEvent<HTMLFormElement>) => Promise<void>;
   isLoading: boolean;
-  buttonText?: string;
+  buttonConfig: {
+    text?: string;
+    disabled: boolean;
+  };
 }>;
 
 function createDescription(acceptedTypes: MimeType[], additionalText?: string) {
@@ -25,14 +28,16 @@ function UploadForm({
   children,
   handleSubmit,
   isLoading,
-  buttonText = "Upload",
+  buttonConfig,
 }: UploadFormProps) {
   return (
     <form onSubmit={handleSubmit}>
       <Container className="my-8 rounded-lg border border-border bg-card overflow-hidden">
         {children}
       </Container>
-      <UploadButton isProcessing={isLoading}>{buttonText}</UploadButton>
+      <UploadButton isProcessing={isLoading} disabled={buttonConfig.disabled}>
+        {buttonConfig.text || "Upload"}
+      </UploadButton>
       {isLoading && <Overlay />}
     </form>
   );
@@ -129,7 +134,6 @@ function UploadSingle({ file, langConfig, content }: UploadSingleProps) {
             content.uploadInstructions
           )}
           onFilesSelect={(files) => file.setFile(files[0])}
-          className="h-[200px]"
           icon={content.icon}
         />
       )}
@@ -139,7 +143,7 @@ function UploadSingle({ file, langConfig, content }: UploadSingleProps) {
 
 function UploadDouble({ source, target, langItems }: UploadDoubleProps) {
   return (
-    <Container className={`relative p-4 grid grid-cols-2 gap-4`}>
+    <Container className={`relative p-6 grid grid-cols-2 gap-4`}>
       {source.file ? (
         <FileItem>
           <FileItem.Header onRemoveFile={source.removeFile}>
@@ -163,7 +167,6 @@ function UploadDouble({ source, target, langItems }: UploadDoubleProps) {
           title="Source Document"
           description={createDescription(source.acceptedTypes)}
           onFilesSelect={(files) => source.setFile(files[0])}
-          className="h-[200px]"
         />
       )}
 
@@ -190,12 +193,11 @@ function UploadDouble({ source, target, langItems }: UploadDoubleProps) {
           title="Target Document"
           description={createDescription(target.acceptedTypes)}
           onFilesSelect={(files) => target.setFile(files[0])}
-          className="h-[200px]"
         />
       )}
 
-      <Container className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-full p-2 shadow-lg">
-        <ArrowRight size={32} className="text-gray-500" />
+      <Container className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-full p-2 shadow-lg border border-input">
+        <ArrowRight size={32} className="text-muted-foreground" />
       </Container>
     </Container>
   );

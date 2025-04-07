@@ -58,7 +58,13 @@ export default function AddTmPairs() {
       <UploadForm
         handleSubmit={tmFormat === "sheet" ? handleSubmitExcel : handleSubmit}
         isLoading={isLoading || isLoadingExcel}
-        buttonText="Add segments"
+        buttonConfig={{
+          text: "Add segments",
+          disabled:
+            isLoading ||
+            isLoadingExcel ||
+            (tmFormat === "sheet" ? !file : !sourceFile || !targetFile),
+        }}
       >
         <UploadForm.Header title="Upload segments to a TM">
           <Container className="flex items-center gap-2">

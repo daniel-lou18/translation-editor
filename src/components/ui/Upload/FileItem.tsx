@@ -2,12 +2,11 @@ import { FileText, X } from "lucide-react";
 import Container from "../Container";
 import { ComponentType, PropsWithChildren } from "react";
 import { cn } from "@/lib/utils";
+
 function FileItem({ children }: PropsWithChildren) {
   return (
-    <Container className="rounded-lg border border-gray-200 overflow-hidden relative">
-      <Container className="h-[200px] bg-cat-memory/70 rounded-lg p-3 flex flex-col">
-        {children}
-      </Container>
+    <Container className="min-h-[250px] bg-gradient-to-br from-muted/50 to-cat-memory rounded-lg p-3 flex flex-col rounded-lg border border-border overflow-hidden relative">
+      {children}
     </Container>
   );
 }

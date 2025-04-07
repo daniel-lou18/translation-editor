@@ -43,7 +43,10 @@ export default function UploadDocument({
       <UploadForm
         handleSubmit={handleSubmit}
         isLoading={isLoading}
-        buttonText="Translate"
+        buttonConfig={{
+          text: "Translate",
+          disabled: isLoading,
+        }}
       >
         <UploadForm.Header title="Upload source document to translate">
           {mode === "ai" && (

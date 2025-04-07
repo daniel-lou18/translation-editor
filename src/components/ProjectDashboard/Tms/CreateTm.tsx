@@ -59,7 +59,13 @@ export default function CreateTm() {
       <UploadForm
         handleSubmit={tmFormat === "sheet" ? handleSubmitExcel : handleSubmit}
         isLoading={isLoading || isLoadingExcel}
-        buttonText="Create TM"
+        buttonConfig={{
+          text: "Create TM",
+          disabled:
+            isLoading ||
+            isLoadingExcel ||
+            (tmFormat === "sheet" ? !file : !sourceFile || !targetFile),
+        }}
       >
         <UploadForm.Header title="Upload source and target segments to create a new TM">
           <Container className="flex items-center gap-2">

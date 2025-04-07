@@ -58,7 +58,7 @@ export default function UploadArea({
         "bg-gradient-to-br from-muted/50 to-cat-memory border-2 border-dashed border-muted-foreground/30 hover:to-purple-50 hover:border-muted-foreground/50 transition-all duration-200 rounded-lg",
         draggingArea === "active" &&
           "from-muted to-purple-100 border-muted-foreground/50",
-        "flex flex-col items-center justify-center gap-3 h-[300px]",
+        "flex flex-col items-center justify-center gap-3 min-h-[250px]",
         className
       )}
     >
