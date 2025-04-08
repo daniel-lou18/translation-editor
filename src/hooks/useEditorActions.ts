@@ -1,4 +1,4 @@
-import { Action as EditorAction } from "@/contexts/editorContext";
+import { Action as EditorAction } from "@/contexts/editorContextV1";
 import { SegmentStatus } from "@/types";
 import { Dispatch, useCallback } from "react";
 

@@ -8,11 +8,7 @@ export function useGetTranslationSegments() {
     queryKey: ["segments", translationId],
     queryFn: () => getSegmentsData(translationId),
     enabled: !!translationId,
-    staleTime: 0,
-    refetchOnMount: true,
   });
-
-  console.log(data);
 
   async function getSegmentsData(translationId: string | undefined) {
     if (!translationId) {

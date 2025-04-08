@@ -1,6 +1,6 @@
 import { reformulationService } from "@/services/reformulationService";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useEditor } from "@/contexts/editorContext";
+import { useEditor } from "@/contexts/editorContextV1";
 export function useReformulate() {
   const { activeSegmentId } = useEditor();
   const queryClient = useQueryClient();

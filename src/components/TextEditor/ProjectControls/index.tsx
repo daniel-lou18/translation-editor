@@ -19,11 +19,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useGetTranslationSegments } from "@/hooks/useGetTranslationSegments";
 
 export default function ProjectControls() {
-  const { segments, getCompletedSegments } = useEditor();
+  const { segments } = useGetTranslationSegments();
   const totalSegments = segments.length;
-  const completedSegments = getCompletedSegments();
+  const completedSegments = segments.filter(
+    (segment) => segment.status === "translated"
+  ).length;
   const { navigateToTranslation } = useRoute();
   const {
     projects,

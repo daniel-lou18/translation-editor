@@ -1,4 +1,4 @@
-import { useEditor } from "@/contexts/editorContext";
+import { useEditor } from "@/contexts/editorContextV1";
 import { ChangeEvent, KeyboardEvent } from "react";
 
 export function useSegmentHandlers() {

@@ -1,7 +1,7 @@
 import {
   Action as EditorAction,
   InitialState as EditorState,
-} from "@/contexts/editorContext";
+} from "@/contexts/editorContextV1";
 import { Dispatch, useEffect, useRef } from "react";
 import { useSaveSegments } from "./useSaveSegments";
 

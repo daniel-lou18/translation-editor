@@ -10,10 +10,10 @@ export default function TextEditor() {
     <>
       <Container className="grid grid-cols-12 border-b border-border">
         <ProjectControls />
-        <EditorControls />
+        {/* <EditorControls /> */}
         {/* <SearchForm placeholder="Search resources" className="col-span-3" /> */}
         <TranslationSegments />
-        <SideMenu />
+        {/* <SideMenu /> */}
       </Container>
     </>
   );

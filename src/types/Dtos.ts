@@ -18,15 +18,15 @@ export type TranslationWithJoinedSegments = {
   segments: JoinedSegment[];
 };
 
-export type Update = {
+export type SegmentUpdate = {
   sourceSegmentId: number;
   targetText: string | null;
-  status: string | null;
+  status?: string | null;
 };
 
 export type UpdateSegmentsDTO = {
   translationId: string;
-  updates: Update[];
+  updates: SegmentUpdate[];
 };
 
 export type TmSegmentMatch = {

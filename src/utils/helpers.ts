@@ -211,3 +211,25 @@ export function shortenFileName(fileName: string, maxLength = 20) {
       }`
     : fileName;
 }
+
+export function createDebouncedFunction<F extends (...args: any[]) => void>(
+  func: F,
+  delay: number
+) {
+  let timeoutId: ReturnType<typeof setTimeout> | null = null;
+
+  const debouncedFunction = (...args: Parameters<F>) => {
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+    timeoutId = setTimeout(() => func(...args), delay);
+  };
+
+  debouncedFunction.cancel = () => {
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+  };
+
+  return debouncedFunction;
+}

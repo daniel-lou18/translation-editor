@@ -2,7 +2,7 @@ import { reformulationService } from "@/services/reformulationService";
 import { LangCodesDomain } from "@/types";
 import { TextSegment } from "@/types/Dtos";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useEditor } from "@/contexts/editorContext";
+import { useEditor } from "@/contexts/editorContextV1";
 
 export function useImprove() {
   const { activeSegmentId } = useEditor();
