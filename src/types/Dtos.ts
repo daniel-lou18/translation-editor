@@ -5,7 +5,7 @@ import {
   DocumentWithSourceSegments,
 } from "./Document";
 import { Tm } from "./Tm";
-import { TargetSegment, Translation } from "./Translation";
+import { SegmentStatus, TargetSegment, Translation } from "./Translation";
 
 export type JoinedSegment = {
   sourceSegment: SourceSegment;
@@ -20,8 +20,8 @@ export type TranslationWithJoinedSegments = {
 
 export type SegmentUpdate = {
   sourceSegmentId: number;
-  targetText: string | null;
-  status?: string | null;
+  targetText?: string | null;
+  status?: SegmentStatus;
 };
 
 export type UpdateSegmentsDTO = {

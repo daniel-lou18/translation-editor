@@ -1,4 +1,4 @@
-import { LangCode } from ".";
+import { LangCode, SegmentStatus } from ".";
 
 export type ImmutableSegmentContext = {
   id: number;
@@ -12,7 +12,7 @@ export type ImmutableSegmentContext = {
 
 export type MutableSegmentData = {
   targetText: string | null;
-  status: string | null;
+  status: SegmentStatus | null;
 };
 
 export type Segment = ImmutableSegmentContext & MutableSegmentData;
@@ -21,7 +21,7 @@ export type SegmentType = {
   id: number;
   sourceText: string;
   targetText: string | null;
-  status: string | null;
+  status: SegmentStatus | null;
 };
 
 export type EditorSegmentType = SegmentType & {

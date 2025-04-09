@@ -11,9 +11,9 @@ export function useSaveSegments() {
 
   const { mutate, data, isPending, isError, error } = useMutation({
     mutationKey: ["save-segments", translationId],
-    mutationFn: (segmentUpdate: SegmentUpdate) =>
-      updateSegments(translationId, [segmentUpdate]),
-    onMutate: async (segmentUpdate) => {
+    mutationFn: (segmentUpdates: SegmentUpdate[]) =>
+      updateSegments(translationId, segmentUpdates),
+    onMutate: async (segmentUpdates) => {
       if (!translationId) return;
 
       await queryClient.cancelQueries({
@@ -26,24 +26,20 @@ export function useSaveSegments() {
       ]);
       if (!prevData) return undefined;
 
-      const prevSegmentIdx = prevData.segments?.findIndex(
-        (segment) => segment.sourceSegmentId === segmentUpdate.sourceSegmentId
-      );
-
-      if (prevSegmentIdx === -1) return undefined;
-
-      const updatedSegment = {
-        ...prevData.segments[prevSegmentIdx],
-        ...segmentUpdate,
-      };
+      const updatedSegments = prevData.segments.map((segment) => {
+        const update = segmentUpdates.find(
+          (update) => update.sourceSegmentId === segment.sourceSegmentId
+        );
+        if (!update) return segment;
+        return { ...segment, ...update };
+      });
 
       queryClient.setQueryData<TranslationWithSegments>(
         ["segments", translationId],
         (prevState) => {
           if (!prevState) return prevData;
-          const newSegments = [...prevState.segments];
-          newSegments[prevSegmentIdx] = updatedSegment;
-          return { ...prevState, segments: newSegments };
+
+          return { ...prevState, segments: updatedSegments };
         }
       );
 

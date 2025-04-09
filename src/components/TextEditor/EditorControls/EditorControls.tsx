@@ -18,7 +18,7 @@ import {
   WandSparkles,
 } from "lucide-react";
 import { Button } from "../../ui/button";
-import { useEditor } from "@/contexts/editorContext";
+import { useEditor } from "@/contexts/editorContextV1";
 import { useReformulate } from "@/hooks/useReformulate";
 import { useMutationState, useQueryClient } from "@tanstack/react-query";
 import { TranslationMemoryMatches } from "@/types";

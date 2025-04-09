@@ -6,7 +6,7 @@ import { Dispatch, useEffect, useRef } from "react";
 import { useSaveSegments } from "./useSaveSegments";
 
 export function useEditorSync(
-  state: EditorState,
+  state: Omit<EditorState, "isInitialized">,
   dispatch: Dispatch<EditorAction>
 ) {
   const stateRef = useRef(state);
@@ -31,7 +31,7 @@ export function useEditorSync(
       });
     };
 
-    const intervalId = setInterval(syncChanges, 3000);
+    const intervalId = setInterval(syncChanges, 750);
 
     return () => {
       clearInterval(intervalId);

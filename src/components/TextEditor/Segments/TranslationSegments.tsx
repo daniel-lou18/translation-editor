@@ -14,6 +14,19 @@ import ContentContainer from "@/components/ui/Editor/ContentContainer";
 import { useGetTranslationSegments } from "@/hooks/useGetTranslationSegments";
 import { useSaveSegments } from "@/hooks/useSaveSegments";
 import { createDebouncedFunction } from "@/utils/helpers";
+import { SegmentUpdate } from "@/types/Dtos";
+import { Segment } from "@/types/Segment";
+import { SegmentStatus } from "@/types";
+import { useSemanticMatches } from "@/hooks/useSemanticMatches";
+import { useSegmentHandlers } from "@/hooks/useSegmentHandlers";
+import { useAutoTranslation } from "@/hooks/useAutoTranslation";
+
+function toggleStatus(status: SegmentStatus | null | undefined): SegmentStatus {
+  if (status === "untranslated" || status === undefined || status === null) {
+    return "translated";
+  }
+  return "untranslated";
+}
 
 export default function TranslationSegments() {
   const { activeSegmentId, setActiveId } = useEditor();
@@ -22,53 +35,112 @@ export default function TranslationSegments() {
   const activeSegment =
     segments.find((segment) => segment.sourceSegmentId === activeSegmentId) ??
     null;
-  const [localChanges, setLocalChanges] = useState<Record<number, string>>({});
 
-  console.log(activeSegmentId);
+  const [localChanges, setLocalChanges] = useState<
+    Record<number, SegmentUpdate>
+  >({});
+  // Ref to keep track of the latest localChanges for the debounced function
+  const localChangesRef = useRef(localChanges);
 
-  const debouncedSaveSegmentsRef = useRef(
-    createDebouncedFunction(
-      (sourceSegmentId: number, targetText: string) =>
-        saveSegments({ sourceSegmentId, targetText }),
-      750
-    )
+  // Update the ref whenever localChanges state changes
+  useEffect(() => {
+    localChangesRef.current = localChanges;
+  }, [localChanges]);
+
+  const debouncedSaveRef = useRef(
+    createDebouncedFunction(() => {
+      const updatesToSave = Object.values(localChangesRef.current);
+      if (updatesToSave.length > 0) {
+        console.log("Saving updates:", updatesToSave);
+        saveSegments(updatesToSave);
+      }
+    }, 750)
   );
 
-  const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    if (!activeSegment || !debouncedSaveSegmentsRef.current) return;
+  const handleTextChange = (value: string, sourceSegmentId: number) => {
     setLocalChanges((prevState) => ({
       ...prevState,
-      [activeSegment.sourceSegmentId]: e.target.value,
+      [sourceSegmentId]: {
+        ...prevState[sourceSegmentId],
+        sourceSegmentId: sourceSegmentId,
+        targetText: value,
+      },
     }));
-    debouncedSaveSegmentsRef.current(
-      activeSegment.sourceSegmentId,
-      e.target.value
-    );
+    debouncedSaveRef.current();
+  };
+
+  const handleStatusChange = (segment: Segment, newStatus?: SegmentStatus) => {
+    setLocalChanges((prevState) => {
+      const currentLocal = prevState[segment.sourceSegmentId];
+      let statusToSet: SegmentStatus;
+
+      if (newStatus) {
+        statusToSet = newStatus;
+      } else {
+        const statusToToggle = currentLocal?.status ?? segment.status;
+        statusToSet = toggleStatus(statusToToggle);
+      }
+
+      return {
+        ...prevState,
+        [segment.sourceSegmentId]: {
+          ...currentLocal,
+          sourceSegmentId: segment.sourceSegmentId,
+          status: statusToSet,
+          targetText: currentLocal?.targetText ?? segment.targetText,
+        },
+      };
+    });
+    debouncedSaveRef.current();
   };
 
   useEffect(() => {
     return () => {
-      debouncedSaveSegmentsRef.current?.cancel();
+      debouncedSaveRef.current?.cancel();
     };
-  }, [debouncedSaveSegmentsRef]);
+  }, []);
 
-  // const { matches } = useSemanticMatches(activeSegment);
-  // const {
-  //   autoTranslation,
-  //   isPending: isLoading,
-  //   isError,
-  // } = useAutoTranslation(activeSegment, matches);
-  // const { onChange, onClick, onStatusChange, onKeyDown } = useSegmentHandlers();
+  const { matches } = useSemanticMatches(activeSegment);
+  const {
+    autoTranslation,
+    isPending: isLoading,
+    isError,
+  } = useAutoTranslation(activeSegment, matches);
 
-  // const renderAutoTranslation = useCallback(
-  //   (id: number) => {
-  //     if (activeSegmentId !== id) return null;
-  //     if (isLoading) return "Loading translation...";
-  //     if (isError) return "Could not get auto-translation";
-  //     return autoTranslation || null;
-  //   },
-  //   [activeSegmentId, autoTranslation, isLoading, isError]
-  // );
+  const onKeyDown = (
+    e: KeyboardEvent<HTMLTextAreaElement>,
+    segment: Segment,
+    autoTranslation: string | null
+  ) => {
+    if (e.key === "Tab") {
+      e.preventDefault();
+      onTab(segment.sourceSegmentId, autoTranslation);
+    }
+    if (e.key === "Enter") {
+      e.preventDefault();
+      onEnter(segment);
+    }
+  };
+
+  const onTab = (segmentId: number, autoTranslation: string | null) => {
+    if (!autoTranslation) return;
+    handleTextChange(autoTranslation, segmentId);
+  };
+
+  const onEnter = (segment: Segment) => {
+    handleStatusChange(segment, "translated");
+    // toNextSegment();
+  };
+
+  const renderAutoTranslation = useCallback(
+    (id: number) => {
+      if (activeSegmentId !== id) return null;
+      if (isLoading) return "Loading translation...";
+      if (isError) return "Could not get auto-translation";
+      return autoTranslation || null;
+    },
+    [activeSegmentId, autoTranslation, isLoading, isError]
+  );
 
   return (
     <ContentContainer>
@@ -77,18 +149,22 @@ export default function TranslationSegments() {
           key={segment.id}
           data={{
             ...segment,
-            targetText:
-              localChanges[segment.sourceSegmentId] ?? segment.targetText,
             activeId: activeSegmentId,
             index: idx,
-            // placeholder: renderAutoTranslation(segment.id),
+            targetText:
+              localChanges[segment.sourceSegmentId]?.targetText ??
+              segment.targetText,
+            status:
+              localChanges[segment.sourceSegmentId]?.status ?? segment.status,
+            placeholder: renderAutoTranslation(segment.id),
           }}
           handlers={{
-            onChange: handleChange,
+            onChange: (e: ChangeEvent<HTMLTextAreaElement>) =>
+              handleTextChange(e.target.value, segment.sourceSegmentId),
             onClick: () => setActiveId(segment.sourceSegmentId),
-            // onStatusChange: () => onStatusChange(segment.id),
-            // onKeyDown: (e: KeyboardEvent<HTMLTextAreaElement>) =>
-            //   onKeyDown(e, segment.id, autoTranslation ?? null),
+            onStatusChange: () => handleStatusChange(segment),
+            onKeyDown: (e: KeyboardEvent<HTMLTextAreaElement>) =>
+              onKeyDown(e, segment, autoTranslation ?? null),
           }}
         />
       ))}

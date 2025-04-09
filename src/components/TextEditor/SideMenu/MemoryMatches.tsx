@@ -1,6 +1,6 @@
 import { SemanticMatch } from "@/types";
 import { MemoryMatch } from "./MemoryMatch";
-import { useEditor } from "@/contexts/editorContextV1";
+import { useEditor } from "@/contexts/editorContext";
 import Container from "@/components/ui/Container";
 
 type MemoryMatchesProps = {

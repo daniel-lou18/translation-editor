@@ -4,20 +4,20 @@ import { Segment } from "@/types/Segment";
 import { useQuery } from "@tanstack/react-query";
 
 export function useAutoTranslation(
-  segment: Segment,
+  segment: Segment | null,
   matches: SemanticMatch[] | null
 ) {
-  const { id, sourceText, sourceLang, targetLang } = segment;
+  const { id, sourceText, sourceLang, targetLang } = segment || {};
 
   const { data, error, isPending, isError } = useQuery({
     queryKey: ["auto-translation", id],
     queryFn: () => fetchTranslation(sourceText, matches),
-    enabled: !!sourceText && !!matches && !(segment.status === "translated"),
+    enabled: !!sourceText && !!matches && !(segment?.status === "translated"),
     staleTime: 24 * 60 * 60 * 1000, // 1 day in milliseconds
   });
 
   async function fetchTranslation(
-    sourceText: string | null,
+    sourceText: string | null | undefined,
     matches: SemanticMatch[] | null
   ): Promise<string> {
     if (!sourceText) {
