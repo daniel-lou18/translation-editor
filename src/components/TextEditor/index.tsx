@@ -1,16 +1,16 @@
-import TranslationSegments from "@/components/TextEditor/Segments/TranslationSegments";
+import TranslationSegments from "@/components/TextEditor/Segments/TranslationSegmentsV1";
 import Container from "@/components/ui/Container";
 import EditorControls from "@/components/TextEditor/EditorControls/EditorControls";
 import ProjectControls from "@/components/TextEditor/ProjectControls";
 import SideMenu from "./SideMenu";
-import SearchForm from "../ui/SearchForm";
+// import SearchForm from "../ui/SearchForm";
 
 export default function TextEditor() {
   return (
     <>
       <Container className="grid grid-cols-12 border-b border-border">
         <ProjectControls />
-        {/* <EditorControls /> */}
+        <EditorControls />
         {/* <SearchForm placeholder="Search resources" className="col-span-3" /> */}
         <TranslationSegments />
         {/* <SideMenu /> */}

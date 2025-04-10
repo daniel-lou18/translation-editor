@@ -1,7 +1,7 @@
 import ReformulationMatches from "@/components/TextEditor/SideMenu/ReformulationMatches";
 import MemoryMatches from "./MemoryMatches";
 import MatchSkeletons from "./MatchSkeletons";
-import { useEditor } from "@/contexts/editorContext";
+import { useEditor } from "@/contexts/editorContextV1";
 import { useReformulate } from "@/hooks/useReformulate";
 import { useSemanticMatches } from "@/hooks/useSemanticMatches";
 import Glossary from "./Glossary";

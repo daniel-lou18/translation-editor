@@ -51,7 +51,6 @@ export default function TranslationSegments() {
     createDebouncedFunction(() => {
       const updatesToSave = Object.values(localChangesRef.current);
       if (updatesToSave.length > 0) {
-        console.log("Saving updates:", updatesToSave);
         saveSegments(updatesToSave);
       }
     }, 750)

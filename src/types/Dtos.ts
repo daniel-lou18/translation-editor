@@ -20,8 +20,8 @@ export type TranslationWithJoinedSegments = {
 
 export type SegmentUpdate = {
   sourceSegmentId: number;
-  targetText?: string | null;
-  status?: SegmentStatus;
+  targetText: string | null;
+  status: SegmentStatus | null;
 };
 
 export type UpdateSegmentsDTO = {

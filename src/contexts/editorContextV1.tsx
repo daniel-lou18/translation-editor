@@ -12,6 +12,7 @@ import { editorContextUtils, NextSegmentConfig } from "./editorContextUtils";
 import { SegmentStatus } from "@/types";
 import { useGetTranslationSegments } from "@/hooks/useGetTranslationSegments";
 import { useRoute } from "@/hooks/useRoute";
+import { useSaveSegments } from "@/hooks/useSaveSegments";
 
 export type InitialState = {
   isInitialized: boolean;
@@ -19,6 +20,7 @@ export type InitialState = {
   activeSegmentId: number;
   allSegmentsConfirmed: boolean;
   pendingChanges: Set<number>;
+  lastChanged: number;
 };
 
 type EditorContextProviderProps = {
@@ -58,7 +60,8 @@ export type Action =
   | { type: "SET_STATUS"; payload: { id: number; status: SegmentStatus } }
   | { type: "UPDATE_STATUS_ALL" }
   | { type: "SYNC_COMPLETED" }
-  | { type: "RESET_ALL_SEGMENTS" };
+  | { type: "RESET_ALL_SEGMENTS" }
+  | { type: "RESET_INITIAL_STATE" };
 
 const initialState: InitialState = {
   isInitialized: false,
@@ -66,6 +69,7 @@ const initialState: InitialState = {
   activeSegmentId: -1,
   allSegmentsConfirmed: false,
   pendingChanges: new Set(),
+  lastChanged: Date.now(),
 };
 
 const EditorContext = createContext<ContextValue | null>(null);
@@ -73,7 +77,14 @@ const EditorContext = createContext<ContextValue | null>(null);
 function reducer(state: InitialState, action: Action): InitialState {
   switch (action.type) {
     case "INITIALIZE_SEGMENTS":
-      return { ...state, segments: action.payload, isInitialized: true };
+      return {
+        ...state,
+        segments: action.payload,
+        isInitialized: true,
+        lastChanged: Date.now(),
+      };
+    case "RESET_INITIAL_STATE":
+      return initialState;
     case "SET_ACTIVE_ID":
       return { ...state, activeSegmentId: action.payload };
     case "UPDATE_SEGMENTS":
@@ -85,6 +96,7 @@ function reducer(state: InitialState, action: Action): InitialState {
             : segment
         ),
         pendingChanges: state.pendingChanges.add(action.payload.id),
+        lastChanged: Date.now(),
       };
     case "RESET_ALL_SEGMENTS":
       return {
@@ -93,6 +105,7 @@ function reducer(state: InitialState, action: Action): InitialState {
           ...segment,
           targetText: "",
         })),
+        lastChanged: Date.now(),
       };
     case "UPDATE_STATUS":
       return {
@@ -109,6 +122,7 @@ function reducer(state: InitialState, action: Action): InitialState {
             : segment
         ),
         pendingChanges: state.pendingChanges.add(action.payload),
+        lastChanged: Date.now(),
       };
     case "SET_STATUS":
       return {
@@ -118,6 +132,7 @@ function reducer(state: InitialState, action: Action): InitialState {
             ? { ...segment, status: action.payload.status }
             : segment
         ),
+        lastChanged: Date.now(),
       };
     case "UPDATE_STATUS_ALL":
       return {
@@ -127,6 +142,7 @@ function reducer(state: InitialState, action: Action): InitialState {
           status: state.allSegmentsConfirmed ? "untranslated" : "translated",
         })),
         allSegmentsConfirmed: !state.allSegmentsConfirmed,
+        lastChanged: Date.now(),
       };
     case "SYNC_COMPLETED":
       console.log("sync completed", Date.now());
@@ -149,11 +165,12 @@ export default function EditorContextProvider({
       allSegmentsConfirmed,
       pendingChanges,
       isInitialized,
+      lastChanged,
     },
     dispatch,
   ] = useReducer(reducer, initialState);
-
-  console.log("providersegments", segments);
+  const actions = useEditorActions(dispatch);
+  const utils = editorContextUtils(segments, activeSegmentId, actions);
 
   const {
     segments: remoteSegments,
@@ -162,25 +179,40 @@ export default function EditorContextProvider({
     error,
   } = useGetTranslationSegments();
 
+  const { mutate } = useSaveSegments();
+
   const { translationId } = useRoute();
 
   useEffect(() => {
-    if (!isLoading && !isInitialized) {
+    if (!translationId) return;
+
+    // Force a final sync before resetting
+    if (pendingChanges.size > 0) {
+      const changedSegments = segments.filter((segment) =>
+        pendingChanges.has(segment.id)
+      );
+      mutate(changedSegments);
+    }
+
+    actions.resetInitialState();
+  }, [translationId]);
+
+  useEffect(() => {
+    if (!isLoading && remoteSegments.length > 0 && !isInitialized) {
       actions.initializeSegments(remoteSegments);
     }
-    if (!isLoading && translationId) {
-      console.log("changing route");
-      actions.initializeSegments(remoteSegments);
-    }
-  }, [isLoading, isInitialized, translationId]);
+  }, [isLoading, remoteSegments, isInitialized]);
 
   useEditorSync(
-    { segments, activeSegmentId, allSegmentsConfirmed, pendingChanges },
+    {
+      segments,
+      activeSegmentId,
+      allSegmentsConfirmed,
+      pendingChanges,
+      lastChanged,
+    },
     dispatch
   );
-
-  const actions = useEditorActions(dispatch);
-  const utils = editorContextUtils(segments, activeSegmentId, actions);
 
   return (
     <EditorContext.Provider
@@ -189,6 +221,7 @@ export default function EditorContextProvider({
         activeSegmentId,
         allSegmentsConfirmed,
         pendingChanges,
+        lastChanged,
         ...actions,
         ...utils,
       }}

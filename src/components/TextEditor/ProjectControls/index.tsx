@@ -1,4 +1,4 @@
-import { useEditor } from "@/contexts/editorContext";
+import { useEditor } from "@/contexts/editorContextV1";
 import TranslationProgress from "./TranslationProgress";
 import SelectProject from "./SelectProject";
 import { useRoute } from "@/hooks/useRoute";
@@ -19,14 +19,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useGetTranslationSegments } from "@/hooks/useGetTranslationSegments";
 
 export default function ProjectControls() {
-  const { segments } = useGetTranslationSegments();
-  const totalSegments = segments.length;
-  const completedSegments = segments.filter(
-    (segment) => segment.status === "translated"
-  ).length;
+  const { segments, getCompletedSegments } = useEditor();
   const { navigateToTranslation } = useRoute();
   const {
     projects,
@@ -124,8 +119,8 @@ export default function ProjectControls() {
         <Separator orientation="vertical" className="h-6" />
         <Container className="flex-1 flex items-center gap-6">
           <TranslationProgress
-            current={completedSegments}
-            total={totalSegments}
+            current={getCompletedSegments()}
+            total={segments.length}
           />
           <Select value={currentTranslation?.status || "open"}>
             <SelectTrigger className="h-8 min-w-24 w-auto gap-2 text-xs border-border">

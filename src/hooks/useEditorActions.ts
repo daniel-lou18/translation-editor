@@ -11,6 +11,7 @@ export type EditorActions = {
   setStatus: (id: number, status: SegmentStatus) => void;
   handleStatusChangeAll: () => void;
   handleResetAllSegments: () => void;
+  resetInitialState: () => void;
 };
 
 export function useEditorActions(
@@ -19,6 +20,9 @@ export function useEditorActions(
   return {
     initializeSegments: useCallback((segments: Segment[]) => {
       dispatch({ type: "INITIALIZE_SEGMENTS", payload: segments });
+    }, []),
+    resetInitialState: useCallback(() => {
+      dispatch({ type: "RESET_INITIAL_STATE" });
     }, []),
     handleSegmentChange: useCallback(
       (id: number) => dispatch({ type: "SET_ACTIVE_ID", payload: id }),
