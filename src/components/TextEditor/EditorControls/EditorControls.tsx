@@ -3,8 +3,6 @@ import {
   Bot,
   CaseLower,
   CaseUpper,
-  CheckCheck,
-  CloudUpload,
   CornerRightDown,
   Download,
   Eraser,
@@ -12,15 +10,15 @@ import {
   FileCheck,
   FileSearch,
   FileX,
-  Loader,
   Lock,
+  Printer,
   SquareCheckBig,
   WandSparkles,
 } from "lucide-react";
 import { Button } from "../../ui/button";
 import { useEditor } from "@/contexts/editorContextV1";
 import { useReformulate } from "@/hooks/useReformulate";
-import { useMutationState, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { TranslationMemoryMatches } from "@/types";
 import { useExportTranslation } from "@/hooks/useExportTranslation";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
@@ -44,7 +42,7 @@ import NoFileContent from "@/components/ui/Error/NoFileContent";
 import { getFileType } from "@/types/Files";
 import DocxViewer from "@/components/ui/DocViewer/DocxViewer";
 import DocViewerSkeleton from "@/components/ui/DocViewer/DocViewerSkeleton";
-import { useRoute } from "@/hooks/useRoute";
+import { Separator } from "@/components/ui/separator";
 
 export default function EditorControls() {
   const {
@@ -58,15 +56,7 @@ export default function EditorControls() {
   } = useEditor();
   const segment = getActiveSegment();
   const { currentDocument, currentTranslation } = useCurrentProject();
-  const { translationId } = useRoute();
   const queryClient = useQueryClient();
-
-  const data = useMutationState({
-    filters: { mutationKey: ["save-segments", translationId] },
-  });
-  const isSavingSegments = data.some(
-    (mutation) => mutation.status === "pending"
-  );
 
   const matches = queryClient.getQueryData<TranslationMemoryMatches>([
     "allMatches",
@@ -173,7 +163,7 @@ export default function EditorControls() {
   return (
     <TooltipProvider>
       <EditorbarContainer>
-        <Container className="flex">
+        <Container className="flex items-center">
           <IconsContainer>
             <Tooltip>
               <TooltipTrigger asChild>
@@ -220,6 +210,8 @@ export default function EditorControls() {
               </TooltipContent>
             </Tooltip>
           </IconsContainer>
+
+          <Separator orientation="vertical" className="h-6 mx-2" />
 
           <IconsContainer>
             <Tooltip>
@@ -289,6 +281,8 @@ export default function EditorControls() {
               </TooltipContent>
             </Tooltip>
           </IconsContainer>
+
+          <Separator orientation="vertical" className="h-6 mx-2" />
 
           <IconsContainer>
             <Tooltip>
@@ -362,6 +356,8 @@ export default function EditorControls() {
             </Tooltip>
           </IconsContainer>
 
+          <Separator orientation="vertical" className="h-6 mx-2" />
+
           <IconsContainer>
             <Dialog>
               <Tooltip>
@@ -383,6 +379,21 @@ export default function EditorControls() {
 
             <Tooltip>
               <TooltipTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className="h-8 w-8"
+                  onClick={() => window.print()}
+                >
+                  <Printer />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Print translation</p>
+              </TooltipContent>
+            </Tooltip>
+
+            <Tooltip>
+              <TooltipTrigger asChild>
                 <Button variant="ghost" className="h-8 w-8">
                   <FileSearch />
                 </Button>
@@ -394,19 +405,13 @@ export default function EditorControls() {
           </IconsContainer>
         </Container>
         <Container className="flex items-center gap-2">
-          <Button variant="ghost" className="h-8 w-8 text-muted-foreground">
-            {isSavingSegments ? (
-              <CloudUpload className="w-4 h-4 animate-pulse" />
-            ) : (
-              <CheckCheck className="w-4 h-4" />
-            )}
-          </Button>
           <DropdownButton
             buttonData={{
               label: "Download",
               icon: <Download className="w-4 h-4" />,
             }}
             menuData={downloadData}
+            className="h-8 bg-transparent border-cat-accent/30"
           />
         </Container>
       </EditorbarContainer>

@@ -7,18 +7,10 @@ import SelectTranslation from "./SelectTranslation";
 import { useCurrentProject } from "@/hooks/useCurrentProject";
 import SelectDocument from "./SelectDocument";
 import { useCallback } from "react";
-import { Separator } from "@/components/ui/separator";
 import TopbarContainer from "@/components/ui/Editor/TopbarContainer";
 import ErrorMessage from "@/components/ui/Error/ErrorMessage";
-import { translationStatusConfig } from "@/config/translationsTable";
 import Container from "@/components/ui/Container";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { ArrowRight } from "lucide-react";
 
 export default function ProjectControls() {
   const { segments, getCompletedSegments } = useEditor();
@@ -103,46 +95,24 @@ export default function ProjectControls() {
           currentProject={currentProject}
           onSelect={handleProjectSelect}
         />
-        {/* <Separator orientation="vertical" className="h-6" /> */}
+        <ArrowRight size={16} className="text-muted-foreground" />
         <SelectDocument
           documents={currentDocuments || {}}
           currentDocument={currentDocument}
           onSelect={handleDocumentSelect}
         />
-        {/* <Separator orientation="vertical" className="h-6" /> */}
+        <ArrowRight size={16} className="text-muted-foreground" />
         <SelectTranslation
           currentDocument={currentDocument}
           translations={currentTranslations || {}}
           currentTranslation={currentTranslation}
           onSelect={handleTranslationSelect}
         />
-        <Separator orientation="vertical" className="h-6" />
-        <Container className="flex-1 flex items-center gap-6">
+        <Container className="flex-1 flex items-center gap-6 ml-4">
           <TranslationProgress
             current={getCompletedSegments()}
             total={segments.length}
           />
-          <Select value={currentTranslation?.status || "open"}>
-            <SelectTrigger className="h-8 min-w-24 w-auto gap-2 text-xs border-border">
-              <SelectValue>
-                <Container className="flex items-center">
-                  {currentTranslation?.status
-                    ? translationStatusConfig[currentTranslation.status].icon
-                    : null}
-                  {currentTranslation?.status
-                    ? translationStatusConfig[currentTranslation.status].text
-                    : null}
-                </Container>
-              </SelectValue>
-            </SelectTrigger>
-            <SelectContent>
-              {Object.entries(translationStatusConfig).map(([key, status]) => (
-                <SelectItem key={key} value={key}>
-                  {status.text}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
         </Container>
       </>
     );

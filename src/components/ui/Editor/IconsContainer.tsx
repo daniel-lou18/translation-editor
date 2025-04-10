@@ -3,7 +3,7 @@ import Container from "../Container";
 
 export default function IconsContainer({ children }: PropsWithChildren) {
   return (
-    <Container className="h-9 inline-flex items-center rounded-md border border-border p-0.5 mr-3 bg-white">
+    <Container className="inline-flex text-slate-700 items-center">
       {children}
     </Container>
   );

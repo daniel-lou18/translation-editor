@@ -8,7 +8,7 @@ import { createDebouncedFunction } from "@/utils/helpers";
 import { Segment } from "@/types/Segment";
 
 export function useEditorSync(
-  state: Omit<EditorState, "isInitialized">,
+  state: EditorState,
   dispatch: Dispatch<EditorAction>
 ) {
   const stateRef = useRef(state);
@@ -25,10 +25,11 @@ export function useEditorSync(
           dispatch({ type: "SYNC_COMPLETED" });
         },
       });
-    }, 750)
+    }, 250)
   );
 
   useEffect(() => {
+    if (!stateRef.current.isInitialized) return;
     if (stateRef.current.pendingChanges.size === 0) return;
     if (stateRef.current.segments.length === 0) return; // Don't sync during reset
 

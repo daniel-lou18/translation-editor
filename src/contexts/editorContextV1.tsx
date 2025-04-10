@@ -33,8 +33,11 @@ type Utilities = {
   getCompletedSegments: () => number;
 };
 
-type ContextValue = Omit<InitialState, "isInitialized"> &
-  Utilities &
+type ContextValue = InitialState & {
+  isLoading: boolean;
+  isError: boolean;
+  error: Error | null;
+} & Utilities &
   EditorActions;
 
 export type Action =
@@ -84,7 +87,7 @@ function reducer(state: InitialState, action: Action): InitialState {
         lastChanged: Date.now(),
       };
     case "RESET_INITIAL_STATE":
-      return initialState;
+      return { ...initialState, segments: state.segments };
     case "SET_ACTIVE_ID":
       return { ...state, activeSegmentId: action.payload };
     case "UPDATE_SEGMENTS":
@@ -210,6 +213,7 @@ export default function EditorContextProvider({
       allSegmentsConfirmed,
       pendingChanges,
       lastChanged,
+      isInitialized,
     },
     dispatch
   );
@@ -222,6 +226,10 @@ export default function EditorContextProvider({
         allSegmentsConfirmed,
         pendingChanges,
         lastChanged,
+        isInitialized,
+        isLoading,
+        isError,
+        error,
         ...actions,
         ...utils,
       }}
