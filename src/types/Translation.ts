@@ -9,6 +9,7 @@ export type TranslationStatus =
   | "approved"
   | "rejected"
   | "canceled"
+  | "on_hold"
   | "archived";
 
 export type SegmentStatus = "translated" | "untranslated";

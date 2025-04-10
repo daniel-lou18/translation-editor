@@ -4,7 +4,8 @@ import {
   CheckCircle,
   Loader,
   PauseCircle,
-  SpellCheck,
+  PencilOff,
+  ThumbsUp,
   XCircle,
 } from "lucide-react";
 export const EXPORT_FORMATS = {
@@ -33,6 +34,7 @@ export const translationStatusConfig: Record<
 > = {
   not_started: {
     text: "not started",
+    icon: <PencilOff className="h-4 w-4 mr-1" strokeWidth={1.5} />,
   },
   in_progress: {
     text: "in progress",
@@ -46,7 +48,9 @@ export const translationStatusConfig: Record<
   },
   approved: {
     text: "approved",
-    icon: <SpellCheck className="h-4 w-4 mr-1" strokeWidth={1.5} />,
+    icon: (
+      <ThumbsUp className="h-4 w-4 text-green-500 mr-1" strokeWidth={1.5} />
+    ),
   },
   rejected: {
     text: "rejected",
@@ -62,11 +66,6 @@ export const translationStatusConfig: Record<
   },
   archived: {
     text: "archived",
-    icon: (
-      <Archive
-        className="h-4 w-4 text-muted-foreground mr-1"
-        strokeWidth={1.5}
-      />
-    ),
+    icon: <Archive className="h-4 w-4 mr-1" strokeWidth={1.5} />,
   },
 };

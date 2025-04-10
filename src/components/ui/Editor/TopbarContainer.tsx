@@ -1,8 +1,7 @@
 import Container from "../Container";
 import { PropsWithChildren } from "react";
-import Logo from "./Logo";
-import NavbarRight from "../Layout/NavbarRight";
 import { cn } from "@/lib/utils";
+
 type TopbarContainerProps = PropsWithChildren & {
   className?: string;
 };
@@ -18,11 +17,7 @@ export default function TopbarContainer({
         className
       )}
     >
-      <Container className="flex flex-1 items-center gap-4">
-        <Logo />
-        {children}
-      </Container>
-      <NavbarRight />
+      {children}
     </Container>
   );
 }
