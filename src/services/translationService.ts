@@ -1,6 +1,7 @@
 import {
   LangCode,
   SelectTranslation,
+  TranslationStatus,
   TranslationWithDocument,
   TranslationWithSegments,
   UpdatedId,
@@ -8,8 +9,9 @@ import {
 import { ApiService } from "./ApiService";
 import {
   TranslationWithJoinedSegments,
-  Update,
+  TranslationUpdate,
   UpdateTranslationDto,
+  SegmentUpdate,
 } from "@/types/Dtos";
 
 export default class TranslationService extends ApiService {
@@ -86,12 +88,19 @@ export default class TranslationService extends ApiService {
   }
 
   async updateSegments(
-    translationId: string,
-    updates: Update[]
+    translationId: number,
+    updates: SegmentUpdate[]
   ): Promise<UpdatedId> {
     return this.put(`/translations/${translationId}/segments`, {
       updates,
     });
+  }
+
+  async updateTranslationStatus(
+    translationId: number,
+    status: TranslationStatus
+  ): Promise<UpdatedId> {
+    return this.put(`/translations/${translationId}`, { updates: { status } });
   }
 }
 

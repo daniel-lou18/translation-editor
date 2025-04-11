@@ -1,17 +1,16 @@
 import { translationService } from "@/services/translationService";
-import { SegmentUpdate, UpdateSegmentsDTO } from "@/types/Dtos";
+import { SegmentUpdateDTO } from "@/types/Dtos";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { TranslationWithSegments, UpdatedId } from "@/types";
 import { toast } from "sonner";
 
-export function useSaveSegments() {
+export function useSaveSegment() {
   const queryClient = useQueryClient();
 
   const { mutate, data, isPending, isError, error } = useMutation({
-    mutationKey: ["save-segments"],
-    mutationFn: ({ translationId, updates }: UpdateSegmentsDTO) =>
-      updateSegments(translationId, updates),
-    onMutate: async ({ translationId, updates }) => {
+    mutationKey: ["save-segment"],
+    mutationFn: (update: SegmentUpdateDTO) => updateSegment(update),
+    onMutate: async ({ translationId, update }) => {
       await queryClient.cancelQueries({
         queryKey: ["segments", translationId],
       });
@@ -22,13 +21,16 @@ export function useSaveSegments() {
       ]);
       if (!prevData) return undefined;
 
-      const updatedSegments = prevData.segments.map((segment) => {
-        const update = updates.find(
-          (update) => update.sourceSegmentId === segment.sourceSegmentId
-        );
-        if (!update) return segment;
-        return { ...segment, ...update };
-      });
+      const updatedSegmentIdx = prevData.segments.findIndex(
+        (segment) => segment.sourceSegmentId === update.sourceSegmentId
+      );
+      if (updatedSegmentIdx === -1) return undefined;
+
+      const updatedSegments = [...prevData.segments];
+      updatedSegments[updatedSegmentIdx] = {
+        ...updatedSegments[updatedSegmentIdx],
+        ...update,
+      };
 
       queryClient.setQueryData<TranslationWithSegments>(
         ["segments", translationId],
@@ -52,6 +54,7 @@ export function useSaveSegments() {
     },
     onSettled: (data, variables, error, context) => {
       if (!context) return;
+      console.log("onSettled", data, variables, error, context);
 
       queryClient.invalidateQueries({
         queryKey: ["segments", context.translationId],
@@ -62,15 +65,15 @@ export function useSaveSegments() {
     },
   });
 
-  async function updateSegments(
-    translationId: number,
-    updates: SegmentUpdate[]
-  ): Promise<UpdatedId> {
+  async function updateSegment({
+    translationId,
+    update,
+  }: SegmentUpdateDTO): Promise<UpdatedId> {
     if (!translationId) {
       throw new Error("Project or translation id is missing");
     }
 
-    return await translationService.updateSegments(translationId, updates);
+    return await translationService.updateSegments(translationId, [update]);
   }
 
   return {

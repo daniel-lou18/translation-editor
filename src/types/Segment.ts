@@ -24,7 +24,7 @@ export type SegmentType = {
   status: SegmentStatus | null;
 };
 
-export type EditorSegmentType = SegmentType & {
+export type EditorSegmentType = Segment & {
   activeId: number;
   index: number;
   placeholder?: string | null;

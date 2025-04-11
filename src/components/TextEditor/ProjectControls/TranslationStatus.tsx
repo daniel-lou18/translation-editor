@@ -15,14 +15,16 @@ type TranslationStatusProps = {
     TranslationStatusType,
     { text: string; icon?: React.ReactNode }
   >;
+  onStatusChange: (status: TranslationStatusType) => void;
 };
 
 export default function TranslationStatus({
   status,
   statusConfig,
+  onStatusChange,
 }: TranslationStatusProps) {
   return (
-    <Select value={status}>
+    <Select value={status} onValueChange={onStatusChange}>
       <SelectTrigger className="h-8 min-w-24 w-auto gap-2 text-xs border-border">
         <SelectValue>
           <Container className="flex items-center">

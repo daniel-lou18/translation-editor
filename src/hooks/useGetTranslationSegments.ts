@@ -5,7 +5,7 @@ import { useRoute } from "./useRoute";
 export function useGetTranslationSegments() {
   const { translationId } = useRoute();
   const { data, isPending, isError, error, dataUpdatedAt } = useQuery({
-    queryKey: ["segments", translationId],
+    queryKey: ["segments", Number(translationId)],
     queryFn: () => getSegmentsData(translationId),
     enabled: !!translationId,
   });

@@ -3,12 +3,13 @@ import { useAutoTranslation } from "@/hooks/useAutoTranslation";
 import { useCallback, KeyboardEvent, ChangeEvent } from "react";
 import { useSemanticMatches } from "@/hooks/useSemanticMatches";
 import { useSegmentHandlers } from "@/hooks/useSegmentHandlers";
-
-import { EditorSegment } from "@/components/ui/Editor/EditorSegment";
 import ContentContainer from "@/components/ui/Editor/ContentContainer";
+import { EditorSegment } from "@/components/ui/Editor/EditorSegmentV2";
+import { useSaveSegment } from "@/hooks/useSaveSegment";
 
 export default function TranslationSegments() {
   const { segments, activeSegmentId, getActiveSegment } = useEditor();
+  const { mutate: saveSegment } = useSaveSegment();
   const activeSegment = getActiveSegment();
   const { matches } = useSemanticMatches(activeSegment);
   const {
@@ -46,6 +47,7 @@ export default function TranslationSegments() {
             onStatusChange: () => onStatusChange(segment.id),
             onKeyDown: (e: KeyboardEvent<HTMLTextAreaElement>) =>
               onKeyDown(e, segment.id, autoTranslation ?? null),
+            onSave: saveSegment,
           }}
         />
       ))}

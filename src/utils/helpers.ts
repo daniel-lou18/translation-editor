@@ -231,5 +231,13 @@ export function createDebouncedFunction<F extends (...args: any[]) => void>(
     }
   };
 
+  debouncedFunction.flush = (...args: Parameters<F>) => {
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+      timeoutId = null;
+    }
+    func(...args);
+  };
+
   return debouncedFunction;
 }

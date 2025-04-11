@@ -8,7 +8,7 @@ import { Link } from "react-router";
 import PageControls from "../../ui/PageControls";
 import { useProjects } from "@/hooks/useProjects";
 import { Folders } from "lucide-react";
-import { ChangeEvent, useMemo, useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { useSearch } from "@/hooks/useSearch";
 
 export default function DashboardProjects() {

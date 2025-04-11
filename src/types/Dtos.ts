@@ -5,7 +5,12 @@ import {
   DocumentWithSourceSegments,
 } from "./Document";
 import { Tm } from "./Tm";
-import { SegmentStatus, TargetSegment, Translation } from "./Translation";
+import {
+  SegmentStatus,
+  TargetSegment,
+  Translation,
+  TranslationStatus,
+} from "./Translation";
 
 export type JoinedSegment = {
   sourceSegment: SourceSegment;
@@ -24,9 +29,19 @@ export type SegmentUpdate = {
   status: SegmentStatus | null;
 };
 
+export type SegmentUpdateDTO = {
+  translationId: number;
+  update: SegmentUpdate;
+};
+
 export type UpdateSegmentsDTO = {
-  translationId: string;
+  translationId: number;
   updates: SegmentUpdate[];
+};
+
+export type TranslationUpdate = {
+  translationId: string;
+  status: TranslationStatus;
 };
 
 export type TmSegmentMatch = {

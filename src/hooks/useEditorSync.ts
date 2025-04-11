@@ -2,7 +2,7 @@ import {
   Action as EditorAction,
   InitialState as EditorState,
 } from "@/contexts/editorContextV1";
-import { Dispatch, useEffect, useRef } from "react";
+import { Dispatch, useEffect, useMemo, useRef } from "react";
 import { useSaveSegments } from "./useSaveSegments";
 import { createDebouncedFunction } from "@/utils/helpers";
 import { Segment } from "@/types/Segment";
@@ -14,18 +14,30 @@ export function useEditorSync(
   const stateRef = useRef(state);
   const { mutate } = useSaveSegments();
 
+  const pendingChangesKey = useMemo(
+    () => [...state.pendingChanges].sort().join(","),
+    [state.pendingChanges]
+  );
+
   useEffect(() => {
     stateRef.current = state;
   }, [state]);
 
   const debouncedMutateRef = useRef(
     createDebouncedFunction((changedSegments: Segment[]) => {
-      mutate(changedSegments, {
-        onSuccess: () => {
-          dispatch({ type: "SYNC_COMPLETED" });
+      if (!stateRef.current.translation) return;
+      mutate(
+        {
+          translationId: stateRef.current.translation.id,
+          segmentUpdates: changedSegments,
         },
-      });
-    }, 250)
+        {
+          onSuccess: () => {
+            dispatch({ type: "SYNC_COMPLETED" });
+          },
+        }
+      );
+    }, 1500)
   );
 
   useEffect(() => {
@@ -38,7 +50,7 @@ export function useEditorSync(
     );
 
     debouncedMutateRef.current(changedSegments);
-  }, [state.lastChanged]);
+  }, [pendingChangesKey]);
 
   // useEffect(() => {
   //   const syncChanges = () => {
